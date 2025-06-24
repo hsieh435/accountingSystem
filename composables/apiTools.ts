@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from "axios";
-import { showAxiosErrorMsg } from "@/tools/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
