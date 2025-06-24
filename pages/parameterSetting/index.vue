@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Welcome to the Homepage!</h1>
-    <p>This is the main page of your Nuxt application.</p>
+    <h1>0000</h1>
+    <p>11111</p>
   </div>
 </template>
 <script setup lang="ts">

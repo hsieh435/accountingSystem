@@ -1,10 +1,10 @@
-// import { encryptString, decryptString } from "@/composables/crypto";
+import { encryptString, decryptString } from "@/composables/crypto";
 
 
 
 // set localStorage item
 export function setLocalStorageItem(key: string, storageValue: string) {
-  // localStorage.setItem(key, encryptString(storageValue));
+  localStorage.setItem(key, encryptString(storageValue));
 }
 
 
@@ -12,7 +12,7 @@ export function setLocalStorageItem(key: string, storageValue: string) {
 // get localStorage item
 export function getLocalStorageItem(key: string) {
   const data = localStorage.getItem(key);
-  // return data !== null ? decryptString(data) : "";
+  return data !== null ? decryptString(data) : "";
 }
 
 
@@ -34,7 +34,7 @@ export function clearLocalStorageKey(isReturn: boolean) {
 
 // 取得 localStorage associationIdOperating
 export function getAssociationOperating() {
-  // return getLocalStorageItem("associationIdOperating") || getLocalStorageItem("userAssociationId") || "";
+  return getLocalStorageItem("associationIdOperating") || getLocalStorageItem("userAssociationId") || "";
 }
 
 

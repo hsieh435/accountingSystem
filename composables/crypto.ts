@@ -1,4 +1,4 @@
-// import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 
 
 //
@@ -9,16 +9,16 @@
 // pad：Pkcs7 前端 Pkcs7 對應 後端 Pkcs5
 //
 
-// const key = "d7b85f6e214abcde";
-// const KEY = CryptoJS.enc.Utf8.parse(key);
+const key = "d7b85f6e214abcde";
+const KEY = CryptoJS.enc.Utf8.parse(key);
 
 
 
-// export const encryptString = (plaintext: string) => {
+export function encryptString(plaintext: string) {
 
-//   const ciphertext = CryptoJS.AES.encrypt(plaintext, KEY, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString();
-//   return ciphertext;
-// };
+  const ciphertext = CryptoJS.AES.encrypt(plaintext, KEY, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString();
+  return ciphertext;
+};
 
 
 
@@ -26,13 +26,11 @@
 // AES 解密
 // @param jsonStr
 // decryptString
-// export const decryptString = (jsonStr: string) => {
-// export function decryptString(jsonStr: string) {
+export function decryptString(jsonStr: string) {
 
-//   const plaintext = CryptoJS.AES.decrypt(jsonStr, KEY, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
-
-//   return plaintext;
-// };
+  const plaintext = CryptoJS.AES.decrypt(jsonStr, KEY, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
+  return plaintext;
+};
 
 
 

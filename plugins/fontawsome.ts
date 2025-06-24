@@ -3,7 +3,7 @@
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSignInAlt, faRotate, faBars, faXmark, faPenToSquare, faCaretUp, faCaretDown, faCaretLeft, faCaretRight, faUnlock, faLock, faPlus, faBan, faUserSlash, faTrashCan, faPlay, faGear, faUser, faFingerprint, faEnvelope, faKey, faCheck, faExchangeAlt, faCopy, faDownload, faBinoculars, faEye, faEyeSlash, faStoreSlash, faMagnifyingGlass, faSignOutAlt, faLayerGroup, faArchive, faSync, faExpand, faCompress, faSliders, faSort, faListCheck, faPrint, faScrewdriverWrench, faFileImport, faCalculator, faFileSignature, faRotateLeft, faChevronDown, faChevronUp, faBookmark, faCircleXmark, faStamp, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt, faRotate, faBars, faXmark, faPenToSquare, faCaretUp, faCaretDown, faCaretLeft, faCaretRight, faUnlock, faLock, faPlus, faBan, faUserSlash, faTrashCan, faPlay, faGear, faUser, faFingerprint, faEnvelope, faKey, faCheck, faExchangeAlt, faCopy, faDownload, faBinoculars, faEye, faEyeSlash, faStoreSlash, faMagnifyingGlass, faSignOutAlt, faLayerGroup, faArchive, faSync, faExpand, faCompress, faSliders, faSort, faListCheck, faPrint, faScrewdriverWrench, faFileImport, faCalculator, faFileSignature, faRotateLeft, faChevronDown, faChevronUp, faBookmark, faCircleXmark, faStamp, faUpload, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faSave, faMinusSquare, faFolderOpen, faImages, faClipboard, faComment, faMessage, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 // import { fab } from "@fortawesome/free-brands-svg-icons";
 
@@ -13,7 +13,7 @@ import { faSave, faMinusSquare, faFolderOpen, faImages, faClipboard, faComment, 
 // fal => Light
 // fab => free-brands-svg-icons
 
-//
+// <font-awesome-icon :icon="['fas', 'right-to-bracket']" />
 
 
 library.add(
@@ -67,6 +67,7 @@ library.add(
   faCircleXmark,
   faStamp,
   faUpload,
+  faRightToBracket,
   faSave,
   faPenToSquare,
   faMinusSquare,

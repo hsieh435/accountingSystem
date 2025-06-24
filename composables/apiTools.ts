@@ -1,5 +1,6 @@
-import { AxiosResponse, AxiosError } from "axios";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import type { AxiosResponse } from "axios";
+import { AxiosError } from "axios";
+import { showAxiosErrorMsg } from "~/composables/swalDialog";
 
 
 
