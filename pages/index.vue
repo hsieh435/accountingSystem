@@ -20,8 +20,14 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from "vue";
 // import { setLocalStorageItem, getLocalStorageItem } from "@/composables/tools"
 import { encryptString } from "@/composables/crypto"
+
+
+
+declare function definePageMeta(meta: any): void;
+
 
 const account = ref<string>("");
 const password = ref<string>("");
@@ -31,6 +37,8 @@ const password = ref<string>("");
 definePageMeta({
   layout: "empty"
 })
+
+
 
 function handleLogin() {
   // encryptString

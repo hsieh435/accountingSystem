@@ -1,1 +1,1 @@
-import service from "@/config/axiosConfig";
+import service from "@/plugins/axiosConfig";
