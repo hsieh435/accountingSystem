@@ -11,13 +11,17 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 ////////////////////////////// fontawsome
-import FontAwesomeIcon from "~/plugins/fontawsome";
+import FontAwesomeIcon from "~/plugins/fontawesome/index";
 
 
+
+////////////////////////////// SweetAlert2
+import SweetAlert2Plugin from "@/plugins/sweetalert2/index";
 
 
 
 ////////////////////////////// 自定義元件
+import buttonGroup from "@/components/ui/buttonGroup.vue"
 // import myLoading from "./components/ui/loading/myLoading";
 // import myPagination from "./components/ui/pagination/myPagination.vue";
 // import tableButton from "./components/ui/button/tableButton.vue";
@@ -39,8 +43,14 @@ app
   // .use(store)
   // .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
-  .use(axios)
-  .mount("#app");
+  .component("buttonGroup", buttonGroup) // 註冊自定義按鈕組件;
+  .use(axios);
+
+// If you need SweetAlert2 globally, import it and assign to globalProperties:
+import Swal from "sweetalert2";
+app.config.globalProperties.$swal = Swal;
+
+app.mount("#app");
 
 
 // app.use(myLoading);
