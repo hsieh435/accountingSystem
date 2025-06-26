@@ -43,7 +43,7 @@ app
   // .use(store)
   // .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
-  .component("buttonGroup", buttonGroup) // 註冊自定義按鈕組件;
+  .component("buttonGroup", buttonGroup)
   .use(axios);
 
 // If you need SweetAlert2 globally, import it and assign to globalProperties:

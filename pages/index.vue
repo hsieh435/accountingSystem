@@ -21,7 +21,7 @@
           <!-- <button class="w-auto bg-green-500 text-white rounded-lg hover:bg-green-600 transition mx-2 px-2 py-1" @click="handleLogin()" type="button">
             <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span class="mx-1">新增使用者</span>
           </button> -->
-          <buttonGroup :showCreate="true" :createText="'新增使用者'"></buttonGroup>
+          <buttonGroup showCreate createText="新增使用者"></buttonGroup>
         </div>
       </div>
     </div>
@@ -29,9 +29,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-// import { setLocalStorageItem, getLocalStorageItem } from "@/composables/tools"
 import { encryptString } from "@/composables/crypto"
 import { showAxiosToast } from "@/composables/swalDialog"
+import { navigateTo } from 'nuxt/app'
 
 
 
@@ -49,12 +49,14 @@ definePageMeta({
 
 
 
-function handleLogin() {
+async function handleLogin() {
   console.log("account:", account.value);
   console.log("password:", encryptString(password.value));
   // 在此加入 API 呼叫與驗證邏輯
 
   showAxiosToast({ message: "登入成功", });
+
+  await navigateTo("/dashboard");
 };
 </script>
 <style lang="scss" scoped></style>

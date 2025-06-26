@@ -1,6 +1,8 @@
 <template>
   <div>
     <NuxtPage />
+
+    00000000
   </div>
 </template>
 <script setup lang="ts">

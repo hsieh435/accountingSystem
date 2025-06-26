@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-06-24 22:34:19
+-- Started on 2025-06-26 19:51:36
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -515,6 +515,7 @@ atm	ATM 提款
 currency	取得現金
 insurance	保險費
 else_type	其他
+interest	利息
 \.
 
 
@@ -619,7 +620,7 @@ ALTER TABLE ONLY public."user"
     ADD CONSTRAINT user_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-06-24 22:34:19
+-- Completed on 2025-06-26 19:51:37
 
 --
 -- PostgreSQL database dump complete
