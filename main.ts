@@ -21,7 +21,7 @@ import SweetAlert2Plugin from "@/plugins/sweetalert2/index";
 
 
 ////////////////////////////// 自定義元件
-import buttonGroup from "@/components/ui/buttonGroup.vue"
+// import buttonGroup from "@/components/ui/buttonGroup.vue"
 // import myLoading from "./components/ui/loading/myLoading";
 // import myPagination from "./components/ui/pagination/myPagination.vue";
 // import tableButton from "./components/ui/button/tableButton.vue";
@@ -43,12 +43,12 @@ app
   // .use(store)
   // .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
-  .component("buttonGroup", buttonGroup)
+  // .component("buttonGroup", buttonGroup)
   .use(axios);
 
 // If you need SweetAlert2 globally, import it and assign to globalProperties:
-import Swal from "sweetalert2";
-app.config.globalProperties.$swal = Swal;
+// import Swal from "sweetalert2";
+// app.config.globalProperties.$swal = Swal;
 
 app.mount("#app");
 

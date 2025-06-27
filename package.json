@@ -29,6 +29,8 @@
   "devDependencies": {
     "@nuxt/types": "^2.18.1",
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
-    "@types/crypto-js": "^4.2.2"
+    "@types/crypto-js": "^4.2.2",
+    "sass": "^1.89.1",
+    "sass-loader": "^16.0.5"
   }
 }

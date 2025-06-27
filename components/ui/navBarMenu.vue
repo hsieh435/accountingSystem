@@ -1,82 +1,110 @@
 <template>
-  <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <a class="flex items-center space-x-3 rtl:space-x-reverse" href="#">
-        <img class="h-8" alt="Flowbite Logo" src="https://flowbite.com/docs/images/logo.svg" />
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-      </a>
-      <button
-        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-        data-collapse-toggle="navbar-dropdown" type="button" aria-controls="navbar-dropdown" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M1 1h15M1 7h15M1 13h15" />
-        </svg>
-      </button>
-      <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-        <ul
-          class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-          <li>
-            <a class="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-              aria-current="page" href="#">Home</a>
-          </li>
-          <li>
-            <button
-              class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
-              id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar">Dropdown
-              <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="m1 1 4 4 4-4" />
-              </svg></button>
-            <!-- Dropdown menu -->
-            <div
-              class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
-              id="dropdownNavbar">
-              <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
-                <li>
-                  <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    href="#">Dashboard</a>
-                </li>
-                <li>
-                  <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    href="#">Settings</a>
-                </li>
-                <li>
-                  <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    href="#">Earnings</a>
-                </li>
-              </ul>
-              <div class="py-1">
-                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  href="#">Sign out</a>
-              </div>
-            </div>
-          </li>
-          <li>
-            <a class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              href="#">Services</a>
-          </li>
-          <li>
-            <a class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              href="#">Pricing</a>
-          </li>
-          <li>
-            <a class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              href="#">Contact</a>
-          </li>
+  <nav class="nav">
+    <ul class="nav__menu">
+      <!-- <li class="nav__menu-item"><a>Home</a></li> -->
+      <li class="nav__menu-item"><a>Services</a>
+        <ul class="nav__submenu">
+          <li class="nav__submenu-item"> <a>Web Design</a></li>
+          <li class="nav__submenu-item"> <a>Web Development</a></li>
+          <li class="nav__submenu-item"> <a>Web Hosting</a></li>
         </ul>
-      </div>
-    </div>
-  </nav>
+      </li>
+      <li class="nav__menu-item"><a>About</a>
+        <ul class="nav__submenu">
+          <li class="nav__submenu-item"> <a>Our Company</a></li>
+          <li class="nav__submenu-item"> <a>Our Team</a></li>
+          <li class="nav__submenu-item"> <a>Our Reach</a></li>
+        </ul>
+      </li>
+    </ul>
+    </nav>
 </template>
 <script setup lang="ts">
-  import { defineComponent, ref } from "vue";
+// import { defineComponent, ref } from "vue";
 
 
 
 
 </script>
-<!-- https://tailwindcss.com/plus/ui-blocks/application-ui/navigation/navbars -->
-<!-- https://flowbite.com/docs/components/navbar/ -->
+<style lang="scss" scoped>
+// html {
+//   box-sizing: border-box;
+// }
+
+// *, *:before, *:after {
+//   box-sizing: border-box;
+// }
+
+// body {
+//   margin: 0;
+//   font-family: "Open Sans", sans-serif;
+//   font-size: 16px;
+//   line-height: 1.5;
+//   background: rgb(39, 174, 96);
+// }
+
+nav {
+  width: 100%;
+  height: 45px;
+  position: relative;
+  background: rgb(30, 132, 73);
+  color: rgb(240, 240, 240);
+}
+
+nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h1 {
+  width: 500px;
+  margin: 100px auto 20px;
+  color: rgb(240, 240, 240);
+  text-align: center;
+}
+
+.nav {
+  width: 100%;
+  margin: 0 auto;
+  background: rgb(30, 132, 73);
+  color: rgb(240, 240, 240);
+}
+.nav a {
+  display: block;
+  padding: 0 16px;
+  line-height: inherit;
+  cursor: pointer;
+}
+.nav__menu {
+  line-height: 45px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.nav__menu-item {
+  display: inline-block;
+  position: relative;
+}
+.nav__menu-item:hover {
+  background-color: rgb(155, 89, 182);
+}
+.nav__menu-item:hover .nav__submenu {
+  display: block;
+}
+.nav__submenu {
+  font-weight: 300;
+  text-transform: none;
+  display: none;
+  position: absolute;
+  width: 220px;
+  background-color: rgb(155, 89, 182);
+}
+.nav__submenu-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<!-- https://freefrontend.com/css-code-examples/ -->
+<!-- https://codepen.io/jurbank/pen/DqByKy -->
+<!-- https://codepen.io/mikerojas87/pen/xxvJPp -->

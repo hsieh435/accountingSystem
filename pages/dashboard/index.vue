@@ -1,15 +1,19 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    1234567890
+  <div class="flex items-start justify-start min-h-screen bg-gray-100">
+    <!-- 00000000 -->
+    <NuxtLayout name="front-end">
+      <span>abcdefghij</span>
+    </NuxtLayout>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-const email = ref<string>("");
+const account = ref<string>("");
 const password = ref<string>("");
 
 
 
+declare function definePageMeta(meta: any): void;
 // definePageMeta({
 //   layout: "frontEnd"
 // })
@@ -17,7 +21,7 @@ const password = ref<string>("");
 
 
 async function handleLogin() {
-  console.log("登入資訊:", { email: email.value, password: password.value });
+  console.log(100);
   // 在此加入 API 呼叫與驗證邏輯
 };
 </script>

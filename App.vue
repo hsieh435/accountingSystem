@@ -7,8 +7,5 @@
   </div>
 </template>
 <script setup lang="ts">
-// ...script section if needed...
 </script>
-<style>
-/* ...optional styles... */
-</style>
+<style lang="scss" scoped></style>

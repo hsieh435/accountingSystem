@@ -1,7 +1,6 @@
 <template>
   <div class="flex items-center justify-center">
 
-
     <template v-if="props.showFilming">
       <div class="w-auto">
         <span class="mx-3"><span class="text-danger mx-1">∗</span>{{ props.filmingText }}</span>
@@ -10,14 +9,14 @@
 
 
     <template v-if="props.showCreate">
-      <button class="w-auto bg-green-500 hover:bg-green-600 text-white font-bold rounded py-2 px-4">
+      <button class="bg-green-500 hover:bg-green-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickCreateButton()" type="button" :disabled="props.createDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span>{{ props.createText }}</span>
       </button>
     </template> 
 
 
     <template v-if="props.showSave">
-      <button class="w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold rounded py-2 px-4">
+      <button class="bg-blue-500 hover:bg-blue-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickSaveButton()" type="button" :disabled="props.saveDisable">
         <font-awesome-icon class="mx-1" :icon="['far', 'save']" /><span>{{ props.saveText }}</span>
       </button>
     </template> 
@@ -25,7 +24,7 @@
 
 
     <template v-if="props.showRemove">
-      <button class="w-auto bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+      <button class="bg-red-500 hover:bg-red-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickRemoveButton()" type="button" :disabled="props.removeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" /><span class="mx-1">{{ props.removeText }}</span>
       </button>
     </template> 
@@ -34,7 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { withDefaults, defineProps, defineEmits } from 'vue';
+import { withDefaults, defineProps, defineEmits } from "vue";
 
 
 
