@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center">
+  <div class="flex justify-center items-center">
 
     <template v-if="props.showFilming">
       <div class="w-auto">

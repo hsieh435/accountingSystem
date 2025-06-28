@@ -1,9 +1,8 @@
 <template>
-  <buttonGroup :showCreate="true" :createText="'新增使用者'" @dataCreate="handleLogin()" />
+  <ui-buttonGroup :showCreate="true" :createText="'新增使用者'" @dataCreate="handleLogin()" />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import buttonGroup from "@/components/ui/buttonGroup.vue";
 import Swal from "sweetalert2";
 
 

@@ -23,3 +23,4 @@ if (route.path.includes(".well-known")) {
   })
 }
 </script>
+<style lang="scss" scoped></style>

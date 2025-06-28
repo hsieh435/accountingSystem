@@ -1,4 +1,3 @@
-<!-- filepath: d:\CODING\accountingSystem\App.vue -->
 <template>
   <div id="app">
     <NuxtLayout>

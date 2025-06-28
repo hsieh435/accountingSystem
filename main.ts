@@ -15,11 +15,6 @@ import FontAwesomeIcon from "~/plugins/fontawesome/index";
 
 
 
-////////////////////////////// SweetAlert2
-import SweetAlert2Plugin from "@/plugins/sweetalert2/index";
-
-
-
 ////////////////////////////// 自定義元件
 // import buttonGroup from "@/components/ui/buttonGroup.vue"
 // import myLoading from "./components/ui/loading/myLoading";
@@ -43,7 +38,6 @@ app
   // .use(store)
   // .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
-  // .component("buttonGroup", buttonGroup)
   .use(axios);
 
 // If you need SweetAlert2 globally, import it and assign to globalProperties:

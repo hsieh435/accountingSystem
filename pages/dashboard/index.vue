@@ -1,8 +1,11 @@
 <template>
-  <div class="flex items-start justify-start min-h-screen bg-gray-100">
+  <div class="flex justify-start items-start min-h-screen bg-gray-100">
     <!-- 00000000 -->
     <NuxtLayout name="front-end">
-      <span>abcdefghij</span>
+      <!-- <span>abcdefghij</span> -->
+
+      <ui-select-tradeCategorySelect></ui-select-tradeCategorySelect>
+
     </NuxtLayout>
   </div>
 </template>
@@ -10,13 +13,6 @@
 import { ref } from "vue";
 const account = ref<string>("");
 const password = ref<string>("");
-
-
-
-declare function definePageMeta(meta: any): void;
-// definePageMeta({
-//   layout: "frontEnd"
-// })
 
 
 
