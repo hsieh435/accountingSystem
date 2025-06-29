@@ -105,6 +105,7 @@ export function getCurrentMonth() {
 export function getCurrentDate() {
   return new Date().getDate();
 }
+
 // 取得當下時間戳
 export function getCurrentTimestamp() {
   return new Date().getTime();
