@@ -1,8 +1,8 @@
 <!-- layouts/empty.vue -->
 <template>
-  <div>
-    <NuxtPage />
-  </div>
+  <NuxtPage />
+  123456789
+  <slot />
 </template>
 <script setup lang="ts"></script>
 <style lang="scss" scoped></style>

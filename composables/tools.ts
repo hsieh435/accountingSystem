@@ -135,17 +135,7 @@ export function currencyFormat(numberGot: any) {
 
 
 // 數字，限制只能為正整數，並移除開頭 0
-export function settingNaturalNumber({
-  valueGot,
-  hasRange = false,
-  minNumber = 0,
-  maxNumber = 0,
-}: {
-  valueGot: number | string;
-  hasRange?: boolean;
-  minNumber?: number;
-  maxNumber?: number;
-}) {
+export function settingNaturalNumber({ valueGot, hasRange = false, minNumber = 0, maxNumber = 0 }: { valueGot: number | string; hasRange?: boolean; minNumber?: number; maxNumber?: number }) {
   const newNumber = (valueGot + "").replace(/^0+/, "");
   if (hasRange) {
     if (minNumber <= Number(newNumber) && Number(newNumber) <= maxNumber) {

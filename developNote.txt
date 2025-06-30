@@ -4,3 +4,18 @@
 2.表格設計
 
 3.各別資料 swal 視窗
+
+4.API 研究
+
+
+
+
+
+
+
+git ls-files | wc -l
+72
+
+git ls-files | xargs cat | wc -l
+16234
+

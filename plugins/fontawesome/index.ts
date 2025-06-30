@@ -4,8 +4,8 @@
 import { defineNuxtPlugin } from "nuxt/app";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSignInAlt, faRotate, faBars, faXmark, faPenToSquare, faCaretUp, faCaretDown, faCaretLeft, faCaretRight, faUnlock, faLock, faPlus, faBan, faUserSlash, faTrashCan, faPlay, faGear, faUser, faFingerprint, faEnvelope, faKey, faCheck, faExchangeAlt, faCopy, faDownload, faBinoculars, faEye, faEyeSlash, faStoreSlash, faMagnifyingGlass, faSignOutAlt, faLayerGroup, faArchive, faSync, faExpand, faCompress, faSliders, faSort, faListCheck, faPrint, faScrewdriverWrench, faFileImport, faCalculator, faFileSignature, faRotateLeft, faChevronDown, faChevronUp, faBookmark, faCircleXmark, faStamp, faUpload, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { faSave, faMinusSquare, faFolderOpen, faImages, faClipboard, faComment, faMessage, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import { faRightToBracket, faHouse, faCaretRight, faPlus, faMagnifyingGlass, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faSave } from "@fortawesome/free-regular-svg-icons";
 // import { fab } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -14,70 +14,18 @@ import { faSave, faMinusSquare, faFolderOpen, faImages, faClipboard, faComment, 
 // fal => Light
 // fab => free-brands-svg-icons
 
-// <font-awesome-icon :icon="['fas', 'right-to-bracket']" />
+//
 
 
 library.add(
-  faSignInAlt,
-  faRotate,
-  faBars,
-  faXmark,
-  faCaretUp,
-  faCaretDown,
-  faCaretLeft,
-  faCaretRight,
-  faUnlock,
-  faLock,
-  faPlus,
-  faBan,
-  faUserSlash,
-  faTrashCan,
-  faPlay,
-  faGear,
-  faUser,
-  faFingerprint,
-  faEnvelope,
-  faKey,
-  faCheck,
-  faExchangeAlt,
-  faCopy,
-  faDownload,
-  faBinoculars,
-  faEye,
-  faEyeSlash,
-  faStoreSlash,
-  faMagnifyingGlass,
-  faSignOutAlt,
-  faLayerGroup,
-  faArchive,
-  faSync,
-  faExpand,
-  faCompress,
-  faSliders,
-  faSort,
-  faListCheck,
-  faPrint,
-  faScrewdriverWrench,
-  faFileImport,
-  faCalculator,
-  faFileSignature,
-  faRotateLeft,
-  faChevronDown,
-  faChevronUp,
-  faBookmark,
-  faCircleXmark,
-  faStamp,
-  faUpload,
   faRightToBracket,
-  faSave,
+  faHouse,
+  faCaretRight,
+  faPlus,
+  faMagnifyingGlass,
   faPenToSquare,
-  faMinusSquare,
-  faFolderOpen,
-  faImages,
-  faClipboard,
-  faComment,
-  faMessage,
-  faPaperPlane
+  faSave,
+  faTrashCan,
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -85,5 +33,5 @@ config.autoAddCss = false;
 // Important for Vue applications
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon)
+  nuxtApp.vueApp.component("font-awesome-icon", FontAwesomeIcon)
 })

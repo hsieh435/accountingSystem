@@ -12,7 +12,7 @@
       <button class="bg-green-500 hover:bg-green-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickCreateButton()" type="button" :disabled="props.createDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span>{{ props.createText }}</span>
       </button>
-    </template> 
+    </template>
 
 
     <template v-if="props.showSave">
@@ -21,6 +21,12 @@
       </button>
     </template> 
 
+
+    <template v-if="props.showSearch">
+      <button class="btn btn-sm btn-success mx-1 px-1" @click="clickSearchButton()" type="button" :disabled="props.searchDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'magnifying-glass']" /><span class="mx-1">{{ props.searchText }}</span>
+      </button>
+    </template>
 
 
     <template v-if="props.showRemove">

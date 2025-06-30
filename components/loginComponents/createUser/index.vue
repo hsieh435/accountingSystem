@@ -1,8 +1,7 @@
 <template>
-  <ui-buttonGroup :showCreate="true" :createText="'新增使用者'" @dataCreate="handleLogin()" />
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Swal from "sweetalert2";
 
 
@@ -14,8 +13,23 @@ const userSsecondPassword = ref<string>("");
 
 
 
-async function handleLogin(apiMsg?: string) {
-  console.log(100);
+
+onMounted(async () => {
+  // console.log("onMounted props:", props);
+  await searchingUser()
+});
+
+
+
+async function searchingUser() {
+
+  await createUserDate()
+  
+}
+
+
+
+async function createUserDate(apiMsg?: string) {
   
   Swal.fire({
     title: "新增使用者資料",
@@ -37,13 +51,13 @@ async function handleLogin(apiMsg?: string) {
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${userPassword.value}" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${userPassword.value}" type="password" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userSsecondPassword" value="${userSsecondPassword.value}" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userSsecondPassword" value="${userSsecondPassword.value}" type="password" />
         </div>
 
       </div>

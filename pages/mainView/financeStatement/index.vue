@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>Welcome to the Homepage!</h1>
-    <p>This is the main page of your Nuxt application.</p>
+    <h1>Welcome to financeStatement!</h1>
   </div>
 </template>
 <script setup lang="ts">

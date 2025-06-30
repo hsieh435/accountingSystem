@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>0000</h1>
-    <p>11111</p>
+    <h1>Welcome to the userSetting!</h1>
   </div>
 </template>
 <script setup lang="ts">

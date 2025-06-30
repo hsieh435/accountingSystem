@@ -9,17 +9,15 @@ export default defineNuxtPlugin(() => {
       ? config.public.apiBase
       : "http://localhost:8080/api",
     timeout: 5000,
-    headers: {
-      "Content-Type": "application/json;charset=utf-8"
-    }
+    headers: { "Content-Type": "application/json;charset=utf-8" }
   })
 
-  axiosInstance.interceptors.request.use((req) => {
-    const token = useCookie("token").value
+  axiosInstance.interceptors.request.use((res) => {
+    const token = useCookie("token").value;
     if (token) {
-      req.headers.Authorization = `Bearer ${token}`
+      res.headers.Authorization = `Bearer ${token}`;
     }
-    return req
+    return res;
   })
 
   return {
