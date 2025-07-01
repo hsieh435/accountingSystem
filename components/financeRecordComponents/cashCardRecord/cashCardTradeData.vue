@@ -1,5 +1,6 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center bg-gray-100">
+    cashCardTradeData
   </div>
 </template>
 <script setup lang="ts">

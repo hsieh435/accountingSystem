@@ -1,3 +1,8 @@
+<template>
+  <div>
+    <UNavigationMenu class="w-full justify-start bg-sky-200" :unmount-on-hide="false" :items="items" trailing-icon="i-lucide-arrow-down" content-orientation="vertical" />
+  </div>
+</template>
 <script setup lang="ts">
 import { ref } from "vue";
 import type { NavigationMenuItem } from "@nuxt/ui";
@@ -6,11 +11,12 @@ const items = ref<NavigationMenuItem[]>([
   {
     label: "Guide",
     icon: "i-lucide-book-open",
-    to: "/getting-started",
+    // to: "/getting-started",
     children: [
       {
         label: "Introduction",
-        icon: "i-lucide-house"
+        icon: "i-lucide-house",
+        to: "mainView/userSetting",
       },
       {
         label: "Installation",
@@ -33,65 +39,62 @@ const items = ref<NavigationMenuItem[]>([
   {
     label: "Composables",
     icon: "i-lucide-database",
-    to: "/composables",
+    // to: "/composables",
     children: [
       {
         label: "defineShortcuts",
         icon: "i-lucide-file-text",
-        to: "/composables/define-shortcuts"
+        // to: "/composables/define-shortcuts"
       },
       {
         label: "useOverlay",
         icon: "i-lucide-file-text",
-        to: "/composables/use-overlay"
+        // to: "/composables/use-overlay"
       },
       {
         label: "useToast",
         icon: "i-lucide-file-text",
-        to: "/composables/use-toast"
+        // to: "/composables/use-toast"
       }
     ]
   },
   {
     label: "Components",
     icon: "i-lucide-box",
-    to: "/components",
+    // to: "/components",
     // active: true,
     children: [
       {
         label: "Link",
         icon: "i-lucide-file-text",
-        to: "/components/link"
+        // to: "/components/link"
       },
       {
         label: "Modal",
         icon: "i-lucide-file-text",
-        to: "/components/modal"
+        // to: "/components/modal"
       },
       {
         label: "NavigationMenu",
         icon: "i-lucide-file-text",
-        to: "/components/navigation-menu"
+        // to: "/components/navigation-menu"
       },
       {
         label: "Pagination",
         icon: "i-lucide-file-text",
-        to: "/components/pagination"
+        // to: "/components/pagination"
       },
       {
         label: "Popover",
         icon: "i-lucide-file-text",
-        to: "/components/popover"
+        // to: "/components/popover"
       },
       {
         label: "Progress",
         icon: "i-lucide-file-text",
-        to: "/components/progress"
+        // to: "/components/progress"
       }
     ]
   }
 ])
 </script>
-<template>
-  <UNavigationMenu class="w-full justify-start bg-sky-200" :unmount-on-hide="false" :items="items" trailing-icon="i-lucide-arrow-down" content-orientation="vertical" />
-</template>

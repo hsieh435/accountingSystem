@@ -54,7 +54,7 @@ async function handleLogin() {
 
   showAxiosToast({ message: "登入成功", });
 
-  await navigateTo("/mainView");
+  navigateTo("/mainView");
 };
 </script>
 <style lang="scss" scoped></style>

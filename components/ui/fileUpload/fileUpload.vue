@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center bg-gray-100">
 
     <input id="upload" type="file">
     <label type="button" for="upload" class="uploadStyle">

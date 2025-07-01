@@ -35,26 +35,23 @@ export default {
 <script setup lang="ts">
 const emits = defineEmits(["update:visible", "closeDialog"]);
 
-withDefaults(
-  defineProps({
-    title: string,
-    width: string,
-    height: string,
-    top: string,
-    headerColor: string,
-    visible: boolean,
-    closeable: boolean,
-  }),
-  {
-    title: "提示",
-    width: "50%",
-    height: "",
-    top: "15vh",
-    headerColor: "#8ec31f",
-    visible: false,
-    closeable: true,
-  },
-);
+const props = withDefaults(defineProps<{
+  title?: string,
+  width?: string,
+  height?: string,
+  top?: string,
+  headerColor?: string,
+  visible?: boolean,
+  closeable?: boolean,
+}>(), {
+  title: "提示",
+  width: "50%",
+  height: "",
+  top: "15vh",
+  headerColor: "#8ec31f",
+  visible: false,
+  closeable: true,
+});
 
 const handleClose = () => {
   // 直接修改父元件 visible 的值

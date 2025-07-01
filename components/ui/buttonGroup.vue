@@ -39,7 +39,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { withDefaults, defineProps, defineEmits } from "vue";
 
 
 
