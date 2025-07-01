@@ -56,7 +56,7 @@ async function createUserDate(apiMsg?: string) {
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
+          <span class="col-start-1 col-end-3 text-right">重複密碼：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userSsecondPassword" value="${userSsecondPassword.value}" type="password" />
         </div>
 

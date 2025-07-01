@@ -9,30 +9,42 @@
 
 
     <template v-if="props.showCreate">
-      <button class="bg-green-500 hover:bg-green-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickCreateButton()" type="button" :disabled="props.createDisable">
+      <UButton class="mx-2 px-2 py-1" color="secondary" @click="clickCreateButton()" :disabled="props.createDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />{{ props.createText }}
+      </UButton>
+      <!-- <button class="bg-green-500 hover:bg-green-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickCreateButton()" type="button" :disabled="props.createDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span>{{ props.createText }}</span>
-      </button>
+      </button> -->
     </template>
 
 
     <template v-if="props.showSave">
-      <button class="bg-blue-500 hover:bg-blue-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickSaveButton()" type="button" :disabled="props.saveDisable">
+      <UButton class="mx-2 px-2 py-1" color="primary" @click="clickCreateButton()" :disabled="props.saveDisable">
+        <font-awesome-icon class="mx-1" :icon="['far', 'save']" />{{ props.saveText }}
+      </UButton>
+      <!-- <button class="bg-blue-500 hover:bg-blue-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickSaveButton()" type="button" :disabled="props.saveDisable">
         <font-awesome-icon class="mx-1" :icon="['far', 'save']" /><span>{{ props.saveText }}</span>
-      </button>
+      </button> -->
     </template> 
 
 
     <template v-if="props.showSearch">
-      <button class="btn btn-sm btn-success mx-1 px-1" @click="clickSearchButton()" type="button" :disabled="props.searchDisable">
+      <UButton class="mx-2 px-2 py-1" color="success" @click="clickSearchButton()"  :disabled="props.searchDisable">
+        <font-awesome-icon class="mx-1" :icon="['far', 'save']" />{{ props.searchText }}
+      </UButton>
+      <!-- <button class="btn btn-sm btn-success mx-1 px-1" @click="clickSearchButton()" type="button" :disabled="props.searchDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'magnifying-glass']" /><span class="mx-1">{{ props.searchText }}</span>
-      </button>
+      </button> -->
     </template>
 
 
     <template v-if="props.showRemove">
-      <button class="bg-red-500 hover:bg-red-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickRemoveButton()" type="button" :disabled="props.removeDisable">
+      <UButton class="mx-2 px-2 py-1" color="error" @click="clickRemoveButton()" :disabled="props.removeDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" />{{ props.removeText }}
+      </UButton>
+      <!-- <button class="bg-red-500 hover:bg-red-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickRemoveButton()" type="button" :disabled="props.removeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" /><span class="mx-1">{{ props.removeText }}</span>
-      </button>
+      </button> -->
     </template> 
 
 

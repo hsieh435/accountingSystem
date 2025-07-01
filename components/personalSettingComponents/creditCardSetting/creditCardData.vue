@@ -1,5 +1,6 @@
 <template>
   <div class="flex items-center justify-center bg-gray-100">
+    creditCardData
   </div>
 </template>
 <script setup lang="ts">

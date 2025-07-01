@@ -9,6 +9,9 @@
 
 
 
+https://tailwindcss.com/
+
+https://ui.nuxt.com/
 
 
 

@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h1>Welcome to the cashCardSetting!</h1>
-    <personalSettingComponents-cashCardSetting-cashCardTable />
-  </div>
+  <personalSettingComponents-cashCardSetting-cashCardTable />
 </template>
 <script setup lang="ts">
 
