@@ -16,7 +16,11 @@ const userNewPasswordSecond = ref<string>("");
 
 
 async function userPasswordChange(apiMsg?: string) {
-  
+  // console.log(userAccount.value);
+  // console.log(userOldPassword.value);
+  // console.log(userNewPassword.value);
+  // console.log(userNewPasswordSecond.value);
+
   Swal.fire({
     title: "重設使用者密碼",
     html: `

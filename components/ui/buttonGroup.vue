@@ -19,7 +19,7 @@
 
 
     <template v-if="props.showSave">
-      <UButton class="mx-2 px-2 py-1" color="primary" @click="clickCreateButton()" :disabled="props.saveDisable">
+      <UButton class="mx-2 px-2 py-1" color="primary" @click="clickSaveButton()" :disabled="props.saveDisable">
         <font-awesome-icon class="mx-1" :icon="['far', 'save']" />{{ props.saveText }}
       </UButton>
       <!-- <button class="bg-blue-500 hover:bg-blue-600 transition text-white font-bold rounded-lg mx-2 px-2 py-1" @click="clickSaveButton()" type="button" :disabled="props.saveDisable">

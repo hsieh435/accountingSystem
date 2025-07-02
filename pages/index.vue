@@ -15,9 +15,9 @@
         </div>
 
         <div class="flex justify-center items-center">
-          <button class="bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition mx-2 px-2 py-1" @click="handleLogin()" type="button">
-            <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
-          </button>
+          <UButton class="mx-2 px-2 py-1" color="secondary" @click="handleLogin()">
+            <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />登入
+          </UButton>
           <loginComponents-resetPassword />
         </div>
       </div>
@@ -53,7 +53,6 @@ async function handleLogin() {
   // 在此加入 API 呼叫與驗證邏輯
 
   showAxiosToast({ message: "登入成功", });
-
   navigateTo("/mainView");
 };
 </script>
