@@ -4,8 +4,8 @@
 import { defineNuxtPlugin } from "nuxt/app";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faRightToBracket, faHouse, faCaretRight, faPlus, faMagnifyingGlass, faPenToSquare, faTrashCan, faSliders } from "@fortawesome/free-solid-svg-icons";
-import { faSave,  } from "@fortawesome/free-regular-svg-icons";
+import { faRightToBracket, faHouse, faCaretRight, faPlus, faMagnifyingGlass, faPenToSquare, faTrashCan, faSliders, faBinoculars } from "@fortawesome/free-solid-svg-icons";
+import { faSave } from "@fortawesome/free-regular-svg-icons";
 // import { fab } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -27,6 +27,7 @@ library.add(
   faSave,
   faTrashCan,
   faSliders,
+  faBinoculars
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";

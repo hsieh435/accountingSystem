@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-01 21:27:55
+-- Started on 2025-07-03 19:33:11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -442,10 +442,11 @@ COPY pgagent.pga_jobsteplog (jslid, jsljlgid, jsljstid, jslstatus, jslresult, js
 --
 
 COPY public.account_types (type_id, type_name) FROM stdin;
-stock	證券帳戶
 creditCard	信用卡
-currency	存款帳戶
 cashFlow	現金
+cashCard	儲值票卡
+currencyAccount	存款帳戶
+stockAccount	證券帳戶
 \.
 
 
@@ -536,19 +537,19 @@ COPY public.credit_card_trade (trade_id, credit_card_id, trade_datetime, credit_
 --
 
 COPY public.function (function_group_id, function_id, function_name, url, sort) FROM stdin;
-financeStatement	inoutStatement	收支報表	/inoutStatement	1
 personalSetting	userSetting	使用者資料	/userSetting	1
 financeRecord	cashFlowRecord	現金收支	/cashFlowRecord	1
-financeRecord	creditCardRecord	信用卡紀錄	/creditCardRecord	4
 financeRecord	stockAccountRecord	證券帳戶收支	/stockAccountRecord	3
-personalSetting	cashFlowSetting	現金	/cashFlowSetting	2
-financeRecord	depositAccountRecord	存款帳戶收支	/depositAccountRecord	2
-financeRecord	cashCardRecord	儲值票卡紀錄	/cashCardRecord	5
-personalSetting	cashCardSetting	儲值票卡資料	/cashCardSetting	6
-personalSetting	creditCardSetting	信用卡資料	/creditCardSetting	5
-personalSetting	stockAccountSetting	證券帳戶資料	/stockAccountSetting	4
-personalSetting	currencyAccountsSetting	存款帳戶資料	/currencyAccountsSetting	3
-parameterSetting	tradeTypeSetting	支出類型	/tradeTypeSetting	1
+parameterSetting	tradeTypeSetting	支出類型設定	/tradeTypeSetting	1
+personalSetting	stockAccountSetting	證券帳戶資料設定	/stockAccountSetting	4
+financeStatement	financeStatement	財務報表	/financeStatement	1
+personalSetting	currencyAccountsSetting	存款帳戶資料設定	/currencyAccountsSetting	3
+financeRecord	currencyAccountRecord	存款帳戶收支	/currencyAccountRecord	2
+financeRecord	creditCardRecord	信用卡收支	/creditCardRecord	4
+personalSetting	creditCardSetting	信用卡資料設定	/creditCardSetting	5
+personalSetting	cashFlowSetting	現金資料設定	/cashFlowSetting	2
+personalSetting	cashCardSetting	儲值票卡資料設定	/cashCardSetting	6
+financeRecord	cashCardRecord	儲值票卡收支	/cashCardRecord	5
 \.
 
 
@@ -755,7 +756,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-07-01 21:27:55
+-- Completed on 2025-07-03 19:33:11
 
 --
 -- PostgreSQL database dump complete

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-start items-center bg-gray-100 w-full">
-    <financeRecordComponents-accountRecordSearching :accountTypeId="'stock'" :accountTypeName="'證券帳戶'" />
+    <financeRecordComponents-accountRecordSearching :accountTypeId="'stockAccount'" :accountTypeName="'證券帳戶'" />
 
 
 

@@ -1,6 +1,7 @@
 <template>
-  <div class="flex items-center justify-center bg-gray-100">
-    <!-- <personalSettingComponents-creditCardSetting-creditCardData /> -->
+  <div class="flex justify-start items-center w-full">
+    <personalSettingComponents-creditCardSetting-creditCardData />
+    <personalSettingComponents-creditCardSetting-creditCardData />
   </div>
 </template>
 <script setup lang="ts">

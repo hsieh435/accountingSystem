@@ -2,33 +2,40 @@
   <div class="flex justify-center items-center">
 
     <template v-if="props.showFilming">
-      <span class="mx-3"><span class="text-danger mx-1">∗</span>{{ props.filmingText }}</span>
+      <span class="mx-3"><span class="text-red-600 mx-1">∗</span>{{ props.filmingText }}</span>
     </template>
 
 
     <template v-if="props.showCreate">
-      <UButton class="cursor-pointer mx-2 px-2 py-1" color="secondary" @click="clickCreateButton()" :disabled="props.createDisable">
+      <UButton class="bg-green-600 hover:bg-green-500 cursor-pointer mx-2 px-2 py-1" @click="clickCreateButton()" :disabled="props.createDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />{{ props.createText }}
       </UButton>
     </template>
 
 
     <template v-if="props.showSave">
-      <UButton class="cursor-pointer mx-2 px-2 py-1" color="primary" @click="clickSaveButton()" :disabled="props.saveDisable">
+      <UButton class="bg-green-600 hover:bg-green-500 cursor-pointer mx-2 px-2 py-1" @click="clickSaveButton()" :disabled="props.saveDisable">
         <font-awesome-icon class="mx-1" :icon="['far', 'save']" />{{ props.saveText }}
       </UButton>
-    </template> 
+    </template>
+
+
+    <template v-if="props.showView">
+      <UButton class="bg-blue-600 hover:bg-blue-500 cursor-pointer mx-2 px-2 py-1" @click="clickViewButton()" :disabled="props.viewDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'binoculars']" />{{ props.viewText }}
+      </UButton>
+    </template>
 
 
     <template v-if="props.showSearch">
-      <UButton class="cursor-pointer mx-2 px-2 py-1" color="neutral" @click="clickSearchButton()" :disabled="props.searchDisable" type="button">
+      <UButton class="bg-zinc-600 hover:bg-zinc-500 cursor-pointer mx-2 px-2 py-1" @click="clickSearchButton()" :disabled="props.searchDisable" type="button">
         <font-awesome-icon class="mx-1" :icon="['fas', 'magnifying-glass']" />{{ props.searchText }}
       </UButton>
     </template>
 
 
     <template v-if="props.showRemove">
-      <UButton class="cursor-pointer mx-2 px-2 py-1" color="error" @click="clickRemoveButton()" :disabled="props.removeDisable">
+      <UButton class="bg-red-600 hover:bg-red-500 cursor-pointer mx-2 px-2 py-1" @click="clickRemoveButton()" :disabled="props.removeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" />{{ props.removeText }}
       </UButton>
     </template> 
@@ -49,6 +56,9 @@ const props = withDefaults(defineProps<{
   showSave?: boolean;
   saveText?: string;
   saveDisable?: boolean;
+  showView?: boolean;
+  viewText?: string;
+  viewDisable?: boolean;
   showSearch?: boolean;
   searchText?: string;
   searchDisable?: boolean;
@@ -76,6 +86,9 @@ const props = withDefaults(defineProps<{
   showSave: false,
   saveText: "儲存",
   saveDisable: false,
+  showView: false,
+  viewText: "檢視",
+  viewDisable: false,
   showSearch: false,
   searchText: "查詢",
   searchDisable: false,
@@ -95,7 +108,7 @@ const props = withDefaults(defineProps<{
   closeText: "關閉",
   closeDisable: false
 });
-const emits = defineEmits(["dataCreate", "dataSave", "dataSearch", "dataSend", "dataPrint", "dataCopy", "dataRemove", "dataClose"]);
+const emits = defineEmits(["dataCreate", "dataSave", "dataView", "dataSearch", "dataSend", "dataPrint", "dataCopy", "dataRemove", "dataClose"]);
 
 
 
@@ -107,6 +120,11 @@ async function clickCreateButton() {
 
 async function clickSaveButton() {
   emits("dataSave");
+}
+
+
+async function clickViewButton() {
+  emits("dataView");  
 }
 
 
