@@ -1,11 +1,114 @@
 <template>
-  <div class="flex items-center justify-center bg-gray-100">
-  </div>
+  <ui-buttonGroup :showSave="true" :saveText="'儲值票卡資料'" @dataSave="userPasswordChange()" />
 </template>
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
+import Swal from "sweetalert2";
 
 
+
+const userAccount = ref<string>("");
+const userName = ref<string>("");
+const userOldPassword = ref<string>("");
+const userNewPassword = ref<string>("");
+const userNewPasswordSecond = ref<string>("");
+
+
+
+async function userPasswordChange(apiMsg?: string) {
+  // console.log(userAccount.value);
+  // console.log(userOldPassword.value);
+  // console.log(userNewPassword.value);
+  // console.log(userNewPasswordSecond.value);
+
+  Swal.fire({
+    title: "重設使用者密碼",
+    html: `
+      <div class="d-flex flex-row items-center rounded-md">
+        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+
+        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userAccount" value="${userAccount.value}" />
+        </div>
+
+
+        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userOldPassword" value="${userOldPassword.value}" type="password" />
+        </div>
+
+
+        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">新密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPassword" value="${userNewPassword.value}" type="password" />
+        </div>
+
+        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
+        </div>
+
+      </div>
+    `,
+    confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
+    showCancelButton: true,
+    cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
+    confirmButtonColor: "#007fff",
+    cancelButtonColor: "#ff4337",
+    color: "#000",
+    background: "#fff",
+    allowOutsideClick: false,
+    didOpen: () => {
+      if (apiMsg) {
+        Swal.showValidationMessage(apiMsg);
+        return false;
+      }
+    },
+    preConfirm: () => {
+      const errors: string[] = [];
+
+      userAccount.value = (document.getElementById("userAccount") as HTMLInputElement).value;
+      userOldPassword.value = (document.getElementById("userOldPassword") as HTMLInputElement).value;
+      userNewPassword.value = (document.getElementById("userNewPassword") as HTMLInputElement).value;
+      userNewPasswordSecond.value = (document.getElementById("userNewPasswordSecond") as HTMLInputElement).value;
+
+      // 驗證單位代碼與單位名稱
+      if (!userAccount.value) {
+        errors.push("請填寫使用者帳號");
+      }
+
+      if (!userName.value) {
+        errors.push("請填寫使用者名稱");
+      }
+
+      if (!userOldPassword.value) {
+        errors.push("請填寫使用者密碼");
+      }
+
+      if (userNewPassword.value !== userNewPasswordSecond.value) {
+        errors.push("兩次密碼不同");
+      }
+
+      if (errors.length > 0) {
+        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
+        return false;
+      }
+
+      return {
+        userAccount: userAccount.value,
+        userOldPassword: userOldPassword.value,
+        userNewPassword: userNewPassword.value,
+      };
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      console.log("result:", result.value);
+
+    }
+  });
+};
 
 
 </script>
+<style lang="scss" scoped></style>

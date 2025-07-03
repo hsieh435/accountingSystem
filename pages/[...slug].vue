@@ -1,12 +1,12 @@
 <template>
   <div class="flex items-center justify-center min-h-screen w-full">
-    <h1>404 - Page Not Found</h1>
-    <!-- <UError
+    <!-- <h1>404 - Page Not Found</h1> -->
+    <UError
       redirect="/mainView"
       :error="{
         statusMessage: 'Page not found',
         message: 'The page you are looking for does not exist.'
-        }" /> -->
+        }" />
   </div>
 </template>
 <script setup lang="ts">
@@ -39,7 +39,7 @@ definePageMeta({
 
 onMounted(() => {
   console.log("404 Page Not Found");
-  // navigateTo("/mainView");
+  navigateTo("/mainView");
 });
 
 

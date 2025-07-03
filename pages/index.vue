@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex justify-center items-center">
-          <UButton class="mx-2 px-2 py-1" color="secondary" @click="handleLogin()">
+          <UButton class="mx-2 px-2 py-1" color="secondary" @click="handleLogin()" type="button">
             <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />登入
           </UButton>
           <loginComponents-resetPassword />
@@ -48,8 +48,8 @@ definePageMeta({
 
 
 async function handleLogin() {
-  console.log("account:", account.value);
-  console.log("password:", encryptString(password.value));
+  // console.log("account:", account.value);
+  // console.log("password:", encryptString(password.value));
   // 在此加入 API 呼叫與驗證邏輯
 
   showAxiosToast({ message: "登入成功", });

@@ -7,5 +7,11 @@
 
 
 
+declare function definePageMeta(meta: any): void;
+definePageMeta({
+  breadcrumb: "財務報表",
+})
+
+
 </script>
 <style lang="scss" scoped></style>

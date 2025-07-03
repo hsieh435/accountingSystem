@@ -1,16 +1,27 @@
 <template>
-  <div class="w-64 flex justify-center items-center">
-  </div>
+  <UInput v-model="dateString" type="date" />
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-const date = ref<string>("");
+import { ref, onMounted, watch } from "vue";
+import { getCurrentYMD } from "@/composables/tools"
 
 
 
-async function handleLogin() {
-  console.log(100);
-  // 在此加入 API 呼叫與驗證邏輯
-};
+const props = withDefaults(defineProps<{ dateSelect?: string; hasDefault?: boolean }>(), { dateSelect: "", hasDefault: false });
+const emits = defineEmits(["sendbackDate"]);
+
+
+
+const dateString = ref<string>("");
+
+
+
+onMounted(async () => {
+  dateString.value = props.hasDefault === true ? props.dateSelect || "" : getCurrentYMD();
+});
+
+
+
+
 </script>
 <style lang="scss" scoped></style>

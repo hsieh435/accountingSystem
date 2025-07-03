@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import type { NavigationMenuItem } from "@nuxt/ui";
+import { NavigationMenuItem } from "@nuxt/ui";
 
 const items = ref<NavigationMenuItem[]>([
   {

@@ -11,12 +11,19 @@
     </div>
 
     <div class="flex gap-2 mt-8">
-      <ui-buttonGroup :showSave="true" :saveText="'修改'" @dataSave="submitData()" />
+      <ui-buttonGroup :showSave="true" :saveText="'修改'" @dataSave="submitUserData()" />
     </div>
   </UForm>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+
+
+
+declare function definePageMeta(meta: any): void;
+definePageMeta({
+  breadcrumb: "使用者資料設定",
+})
 
 
 
@@ -27,7 +34,7 @@ const items = [
 ];
 
 // const toast = useToast();
-async function submitData() {
+async function submitUserData() {
   console.log(100);
 }
 

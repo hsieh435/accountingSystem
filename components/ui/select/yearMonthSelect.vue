@@ -9,7 +9,6 @@ const date = ref<string>("");
 
 
 async function handleLogin() {
-  console.log(100);
   // 在此加入 API 呼叫與驗證邏輯
 };
 </script>

@@ -15,10 +15,23 @@ https://ui.nuxt.com/
 
 
 
+Spring Boot
+
+https://ithelp.ithome.com.tw/users/20112118/ironman/7542
+
+https://medium.com/learning-from-jhipster/spring-boot/home
+
+https://ithelp.ithome.com.tw/users/20107338/ironman/1445
+
+
+
+netstat -aon|findstr 8080
+taskkill /pid xxxxx /f
+
+
 
 git ls-files | wc -l
-72
+81
 
 git ls-files | xargs cat | wc -l
-16234
-
+17829
