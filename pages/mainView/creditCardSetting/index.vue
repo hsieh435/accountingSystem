@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-start items-center w-full">
     <personalSettingComponents-creditCardSetting-creditCardData />
-    <personalSettingComponents-creditCardSetting-creditCardData />
+    <personalSettingComponents-creditCardSetting-creditCardData :creditCardId="'123456'" />
   </div>
 </template>
 <script setup lang="ts">

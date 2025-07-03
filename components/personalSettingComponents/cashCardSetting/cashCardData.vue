@@ -7,8 +7,8 @@
   </template>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { getCurrentYMD } from "@/composables/tools";
+import { reactive } from "vue";
+import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
 import Swal from "sweetalert2";
 
 
@@ -98,9 +98,9 @@ async function cashCardDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
+    confirmButtonText: props.cashCardId ? "修改" : "新增",
     showCancelButton: true,
-    cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
+    cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
     cancelButtonColor: "#ff4337",
     color: "#000",
@@ -114,6 +114,10 @@ async function cashCardDataHandling(apiMsg?: string) {
     },
     preConfirm: () => {
       const errors: string[] = [];
+
+      if (!props.cashCardId) {
+        dataParams.cashCardId = getCurrentTimestamp() + "";
+      }
 
       dataParams.cashCardName = (document.getElementById("cashCardName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);

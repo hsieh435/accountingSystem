@@ -20,11 +20,14 @@ onMounted(() => {
 
   // console.log("Current route:", route.name);
   // console.log("Current path:", route.path);
-  // console.log("route:", route);
-  // console.log(route.matched);
+  console.log("route:", route);
+  console.log(route.matched);
   // console.log("router:", router);
 
-  items.value.push({ label: String(route.matched[0].meta.breadcrumb || ""), to: route.path });
+  if (route.matched[0].name !== "mainView") {
+    items.value.push({ label: String(route.matched[0].meta.breadcrumb || ""), to: route.path });
+  }
+
 });
 
 </script>

@@ -7,8 +7,8 @@
   </template>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { getCurrentYMD } from "@/composables/tools";
+import { reactive } from "vue";
+import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
 import Swal from "sweetalert2";
 
 
@@ -42,7 +42,7 @@ async function cashCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.creditCardId ? "修改儲值票卡資料" : "新增儲值票卡資料",
+    title: props.creditCardId ? "修改信用卡資料" : "新增信用卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
@@ -63,9 +63,13 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" ${props.creditCardId ? "disabled" : ""} />
+        </div>
+
+        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" />
-          <input class="col-span-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" ${props.creditCardId ? "disabled" : ""} />
         </div>
 
 
@@ -91,9 +95,9 @@ async function cashCardDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
+    confirmButtonText: props.creditCardId ? "修改" : "新增",
     showCancelButton: true,
-    cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
+    cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
     cancelButtonColor: "#ff4337",
     color: "#000",
@@ -107,6 +111,10 @@ async function cashCardDataHandling(apiMsg?: string) {
     },
     preConfirm: () => {
       const errors: string[] = [];
+
+      if (!props.creditCardId) {
+        dataParams.creditCardId = getCurrentTimestamp() + "";
+      }
 
       dataParams.creditCardName = (document.getElementById("creditCardName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
