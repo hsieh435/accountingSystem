@@ -22,7 +22,8 @@ import { ref } from "vue";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "使用者資料設定",
+  functionTitle: "個人設定",
+  subTitle: "使用者資料設定",
 })
 
 

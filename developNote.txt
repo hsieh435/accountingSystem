@@ -9,6 +9,16 @@
 
 
 
+Nuxt.js 3
+
+https://ithelp.ithome.com.tw/users/20130500/ironman/6236
+
+https://ithelp.ithome.com.tw/users/20159686/ironman/7564
+
+
+
+UI/UX
+
 https://tailwindcss.com/
 
 https://ui.nuxt.com/
@@ -31,7 +41,7 @@ taskkill /pid xxxxx /f
 
 
 git ls-files | wc -l
-81
+71
 
 git ls-files | xargs cat | wc -l
-17829
+18719

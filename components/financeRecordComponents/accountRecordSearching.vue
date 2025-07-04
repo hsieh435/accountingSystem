@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-start items-center bg-gray-100">
+  <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full">
     <div class="flex items-center mx-3 my-2">
       <span>{{ props.accountTypeName ? props.accountTypeName + "：" : "" }}</span>
       <ui-select-accountSelect :selectId="props.accountTypeId" :selectTitle="props.accountTypeName" @sendbackRecord="settingAccountId" />

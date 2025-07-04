@@ -1,23 +1,25 @@
 <template>
-  <div class="flex justify-start items-center bg-gray-100 w-full">
+  <div class="flex justify-start items-center w-full">
     <financeRecordComponents-accountRecordSearching :accountTypeId="'stockAccount'" :accountTypeName="'證券帳戶'" />
-
-
-
 
     <!-- <financeRecordComponents-stockAccountRecord-stockAccountTradeData /> -->
   </div>
 </template>
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
-
+import { ref } from "vue";
+import { IStockAccountRecordList } from "@/models/index";
 
 
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "證券帳戶收支",
+  functionTitle: "財務收支",
+  subTitle: "證券帳戶收支",
 })
+
+
+
+const stockAccountRecord = ref<IStockAccountRecordList[]>([]);
 
 </script>
 <style lang="scss" scoped></style>

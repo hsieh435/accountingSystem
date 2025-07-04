@@ -1,5 +1,5 @@
-// import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
+
 
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -9,6 +9,11 @@ export default defineNuxtConfig({
   css: ["@/assets/css/main.css", "sweetalert2/dist/sweetalert2.min.css"],
   modules: ["@nuxtjs/tailwindcss", "@vesp/nuxt-fontawesome", "@nuxt/ui"],
   imports: {
-    autoImport: true
+    autoImport: true,
   },
+  app: {
+    head: {
+      title: "記帳系統",
+    },
+  }
 })

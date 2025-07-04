@@ -1,14 +1,14 @@
 <template>
   <template v-if="props.currencyAccountId">
-    <ui-buttonGroup showView :viewText="'檢視存款帳戶'" @dataView="cashCardDataHandling()" />
+    <ui-buttonGroup showView :viewText="'檢視存款帳戶'" @dataView="searchingCurrencyAccountData()" />
   </template>
   <template v-if="!props.currencyAccountId">
-    <ui-buttonGroup showCreate :createText="'新增存款帳戶'" @dataCreate="cashCardDataHandling()" />
+    <ui-buttonGroup showCreate :createText="'新增存款帳戶'" @dataCreate="currencyAccountDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
-import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
+import { reactive, onMounted } from "vue";
+import { getCurrentYMD } from "@/composables/tools";
 import Swal from "sweetalert2";
 
 
@@ -17,14 +17,16 @@ const props = withDefaults(defineProps<{ currencyAccountId?: string; userId?: st
 const emits = defineEmits(["dataReseaching"]);
 
 
+
 const dataParams = reactive<{
   currencyAccountId: string;
   userId: string;
   currencyAccountName: string;
   currencyAccountBankNo: string;
   currencyAccountBankName: string;
-  currencyAccountScheme: string;
   startingAmount: number;
+  minimumValueAllow: number;
+  isSalaryAccount: boolean;
   createdDate: string;
 }>({
   currencyAccountId: props.currencyAccountId || "",
@@ -32,14 +34,23 @@ const dataParams = reactive<{
   currencyAccountName: "",
   currencyAccountBankNo: "",
   currencyAccountBankName: "",
-  currencyAccountScheme: "",
   startingAmount: 0,
+  minimumValueAllow: 0,
+  isSalaryAccount: true,
   createdDate: getCurrentYMD(),
 });
 
 
-async function cashCardDataHandling(apiMsg?: string) {
-  // console.log(dataParams);
+
+async function searchingCurrencyAccountData() {
+  // 在這裡可以加入 API 呼叫來獲取存款帳戶資料
+  // currencyAccountDataHandling();  
+}
+
+
+
+async function currencyAccountDataHandling(apiMsg?: string) {
+  console.log(dataParams);
 
   Swal.fire({
     title: props.currencyAccountId ? "修改存款帳戶資料" : "新增存款帳戶資料",
@@ -48,48 +59,59 @@ async function cashCardDataHandling(apiMsg?: string) {
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">存款帳戶：</span>
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountId" value="${dataParams.currencyAccountId}" ${props.currencyAccountId ? `disabled` : ""} />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountName" value="${dataParams.currencyAccountName}" />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
           <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.currencyAccountId ? "disabled" : ""} />
         </div>
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.currencyAccountId ? "disabled" : ""} />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountId ? "disabled" : ""} />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountScheme" value="${dataParams.currencyAccountScheme}" ${props.currencyAccountId ? "disabled" : ""} />
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">最小允許金額：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllow" value="${dataParams.minimumValueAllow}" type="number" />
+        </div>
+        
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">薪資帳戶：</span>
+          <div class="flex justify-start items-center">
+            <input id="isSalaryAccountY" name="isSalaryAccount" type="radio" value="${true}" />
+            <label class="ms-1 me-5" for="isSalaryAccountY">是</label>
+
+            <input id="isSalaryAccountN" name="isSalaryAccount" type="radio" value="${false}" />
+            <label class="ms-1 me-5" for="isSalaryAccountN">否</label>
+          </div>
         </div>
 
 
         ${props.currencyAccountId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
         </div>` : 
         ""}
-
 
       </div>
     `,
@@ -102,6 +124,17 @@ async function cashCardDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+      
+      const yesRadio = document.getElementById("isSalaryAccountY") as HTMLInputElement;
+      const noRadio = document.getElementById("isSalaryAccountN") as HTMLInputElement;
+      
+      if (dataParams.isSalaryAccount === true) {
+        yesRadio.checked = true;
+      } else {
+        noRadio.checked = true;
+      }
+
+
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;
@@ -110,20 +143,28 @@ async function cashCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.currencyAccountId) {
-        dataParams.currencyAccountId = getCurrentTimestamp() + "";
-      }
-
+      dataParams.currencyAccountId = (document.getElementById("currencyAccountId") as HTMLInputElement).value;
       dataParams.currencyAccountName = (document.getElementById("currencyAccountName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.currencyAccountScheme = (document.getElementById("currencyAccountScheme") as HTMLInputElement).value;
+      dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);
+      dataParams.isSalaryAccount = ((document.querySelector(`input[name="isSalaryAccount"]:checked`) as HTMLInputElement).value === "true");
 
 
-      // 驗證單位代碼與單位名稱
+      if (!dataParams.currencyAccountId) {
+        errors.push("請填寫存款帳戶號碼");
+      }
+
       if (!dataParams.currencyAccountName) {
         errors.push("請填寫存款帳戶名稱");
       }
 
+      if (isNaN(dataParams.startingAmount)) {
+        errors.push("請填寫帳戶初始金額");
+      }
+
+      if (isNaN(dataParams.minimumValueAllow)) {
+        errors.push("請填寫帳戶最小允許金額");
+      }
 
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
@@ -134,7 +175,7 @@ async function cashCardDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
+      console.log("result:", result.value);
 
     }
   });

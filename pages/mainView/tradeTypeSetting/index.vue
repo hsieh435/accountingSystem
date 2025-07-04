@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center bg-gray-100">
+  <div class="flex justify-center items-center">
     <parameterSettingComponents-tradeTypeComponents-tradeTypeData />
   </div>
 </template>
@@ -10,8 +10,10 @@ import { defineComponent, ref } from "vue";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "支出類型設定",
+  functionTitle: "參數設定",
+  subTitle: "支出類型設定",
 })
+
 
 
 </script>

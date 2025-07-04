@@ -6,14 +6,20 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
+import { ICashCardList } from "@/models/index";
 
 
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "儲值票卡資料設定",
+  functionTitle: "個人設定",
+  subTitle: "儲值票卡資料設定",
 })
+
+
+
+const cashCardList = ref<ICashCardList[]>([]);
 
 
 </script>

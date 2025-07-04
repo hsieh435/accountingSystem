@@ -1,9 +1,9 @@
 <template>
   <template v-if="props.creditCardId">
-    <ui-buttonGroup showView :viewText="'檢視信用卡'" @dataView="cashCardDataHandling()" />
+    <ui-buttonGroup showView :viewText="'檢視信用卡'" @dataView="searchingCreditCardData()" />
   </template>
   <template v-if="!props.creditCardId">
-    <ui-buttonGroup showCreate :createText="'新增信用卡'" @dataCreate="cashCardDataHandling()" />
+    <ui-buttonGroup showCreate :createText="'新增信用卡'" @dataCreate="creditCardDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ creditCardId?: string; userId?: string; }>(), { creditCardId: "", userId: "" });
 const emits = defineEmits(["dataReseaching"]);
+
 
 
 const dataParams = reactive<{
@@ -38,7 +39,14 @@ const dataParams = reactive<{
 });
 
 
-async function cashCardDataHandling(apiMsg?: string) {
+async function searchingCreditCardData() {
+  // 在這裡可以加入 API 呼叫來獲取信用卡資料
+  // creditCardDataHandling();
+}
+
+
+
+async function creditCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
@@ -49,49 +57,48 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         ${props.creditCardId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardId" value="${dataParams.creditCardId}" disabled />
         </div>` : 
         ""}
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">信用卡名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardName" value="${dataParams.creditCardName}" />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
           <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" ${props.creditCardId ? "disabled" : ""} />
         </div>
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" ${props.creditCardId ? "disabled" : ""} />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">信用額度：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardScheme" value="${dataParams.creditCardScheme}" ${props.creditCardId ? "disabled" : ""} />
         </div>
 
 
         ${props.creditCardId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
         </div>` : 
         ""}
-
 
       </div>
     `,
@@ -121,9 +128,8 @@ async function cashCardDataHandling(apiMsg?: string) {
       dataParams.creditCardScheme = (document.getElementById("creditCardScheme") as HTMLInputElement).value;
 
 
-      // 驗證單位代碼與單位名稱
       if (!dataParams.creditCardName) {
-        errors.push("請填寫儲值票卡名稱");
+        errors.push("請填寫信用卡名稱");
       }
 
       if (isNaN(dataParams.creditPerMonth) || dataParams.creditPerMonth <= 0) {

@@ -1,6 +1,6 @@
 <template>
   <template v-if="props.cashCardId">
-    <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="cashCardDataHandling()" />
+    <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="searchingCashCardData()" />
   </template>
   <template v-if="!props.cashCardId">
     <ui-buttonGroup showCreate :createText="'新增儲值票卡'" @dataCreate="cashCardDataHandling()" />
@@ -39,6 +39,15 @@ const dataParams = reactive<{
 });
 
 
+
+async function searchingCashCardData() {
+  // 在這裡可以加入 API 呼叫來獲取儲值票卡資料
+  // cashCardDataHandling();
+  
+}
+
+
+
 async function cashCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
@@ -50,51 +59,50 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         ${props.cashCardId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="cashCardId" value="${dataParams.cashCardId}" disabled />
         </div>` : 
         ""}
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="cashCardName" value="${dataParams.cashCardName}" />
         </div>
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardId ? "disabled" : ""} />
         </div>
 
 
         ${props.cashCardId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currentAmount" value="${dataParams.currentAmount}" type="number" />
         </div>` : 
         ""}
 
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">儲值最小值：</span>
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">最小儲值金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllow" value="${dataParams.minimumValueAllow}" type="number" />
         </div>
 
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">儲值最大值：</span>
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">最大儲值金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="maximumValueAllow" value="${dataParams.maximumValueAllow}" type="number" />
         </div>
 
 
         ${props.cashCardId ? `
-        <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" type="text" disabled />
         </div>` : 
         ""}
-
 
       </div>
     `,
@@ -127,9 +135,8 @@ async function cashCardDataHandling(apiMsg?: string) {
         Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);
       dataParams.maximumValueAllow = Number((document.getElementById("maximumValueAllow") as HTMLInputElement).value);
-      // dataParams.createdDate = props.cashCardId ? getCurrentYMD(): (document.getElementById("createdDate") as HTMLInputElement).value;
 
-      // 驗證單位代碼與單位名稱
+
       if (!dataParams.cashCardName) {
         errors.push("請填寫儲值票卡名稱");
       }

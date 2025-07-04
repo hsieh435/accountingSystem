@@ -34,16 +34,14 @@ import { navigateTo } from "nuxt/app";
 
 
 declare function definePageMeta(meta: any): void;
+definePageMeta({
+  layout: false, 
+})
+
 
 
 const account = ref<string>("");
 const password = ref<string>("");
-
-
-
-definePageMeta({
-  layout: false, 
-})
 
 
 

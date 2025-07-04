@@ -1,12 +1,12 @@
 <template>
   <div class="flex items-center justify-center min-h-screen w-full">
     <!-- <h1>404 - Page Not Found</h1> -->
-    <UError
+    <!-- <UError
       redirect="/mainView"
       :error="{
         statusMessage: 'Page not found',
         message: 'The page you are looking for does not exist.'
-        }" />
+        }" /> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -30,17 +30,18 @@ if (route.path.includes(".well-known")) {
 }
 
 
-declare function definePageMeta(meta: any): void;
 
-definePageMeta({
-  layout: "empty-layout",
-})
+// declare function definePageMeta(meta: any): void;
+// definePageMeta({
+//   layout: "empty-layout",
+// })
+
 
 
 onMounted(() => {
-  console.log("404 Page Not Found");
   navigateTo("/mainView");
 });
+
 
 
 </script>

@@ -1,22 +1,27 @@
 <template>
-  <div class="flex justify-start items-center bg-gray-100 w-full">
+  <div class="flex justify-start items-center w-full">
     <financeRecordComponents-accountRecordSearching />
-
-
-
 
     <!-- <financeRecordComponents-cashFlowRecord-cashFlowTradeData /> -->
   </div>
 </template>
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
+import { ICashFlowRecordList } from "@/models/index";
 
 
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "現金收支",
-})
+  functionTitle: "財務收支",
+  subTitle: "現金收支",
+});
+
+
+
+const cashFlowRecord = ref<ICashFlowRecordList[]>([]);
+
+
 
 </script>
 <style lang="scss" scoped></style>

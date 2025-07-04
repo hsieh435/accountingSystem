@@ -9,7 +9,8 @@
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  breadcrumb: "財務報表",
+  functionTitle: "財務報表",
+  subTitle: "財務報表",
 })
 
 
