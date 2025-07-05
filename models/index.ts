@@ -6,9 +6,9 @@ export interface ICashCardList {
   cashCardName: string;
   startingAmount: number;
   presentAmount: number;
-  minimum_value_allowed: number;
-  maximum_value_allowed: number;
-  createDatetime: string;
+  minimumValueAllowed: number;
+  maximumValueAllowed: number;
+  createDate: string;
 }
 
 // 儲值票卡收支紀錄 interface
@@ -107,7 +107,7 @@ export interface IStockAccountList {
   accountName: string;
   accountType: string;
   accountBankCode: string;
-  accountBank: string;
+  accountBankName: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -122,12 +122,12 @@ export interface IStockAccountRecordList {
   accountUser: string;
   incomingOutgoing: string;
   buySell: string;
-  stock_no: string;
-  stock_name: string;
-  price_per_share: number;
+  stockNo: string;
+  stockName: string;
+  pricePerShare: number;
   quantity: number;
-  handling_fee: number;
-  transaction_tax: number;
+  handlingFee: number;
+  transactionTax: number;
   totalPrice: number;
   tradeDescription: string;
   tradeNote: string;

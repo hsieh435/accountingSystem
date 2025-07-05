@@ -52,7 +52,7 @@ const props = withDefaults(
     currentPage: 1,
     dataPerpage: 1,
     pageArrayGot: () => [20, 30, 50],
-    totalDataQuanity: 500,
+    totalDataQuanity: 0,
     showPageSendArea: true,
     showFilter: true,
     isSearchingDisabled: false,
