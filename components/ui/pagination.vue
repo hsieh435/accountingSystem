@@ -13,12 +13,12 @@
     </div>
 
 
-    <div class="flex justify-start items-center">
+    <template v-if="props.showFilter">
       <div class="flex justify-start items-center mx-2">
         <font-awesome-icon class="mx-1" :icon="['fas', 'sliders']" />
         <UInput class="mx-1" v-model="keyWord" :type="'search'" color="neutral" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
       </div>      
-    </div>
+    </template>
 
   </div>
 </template>

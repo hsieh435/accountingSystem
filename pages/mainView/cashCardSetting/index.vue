@@ -14,6 +14,7 @@
           <table class="border-separate border border-gray-400 w-full table-fixed">
             <thead>
               <tr>
+                <td class="border border-gray-300">NO.</td>
                 <th class="border border-gray-300">票卡名稱</th>
                 <th class="border border-gray-300">目前金額</th>
                 <th class="border border-gray-300">最小儲值金額</th>
@@ -24,13 +25,14 @@
             </thead>
             <tbody>
               <tr v-for="card in tableData" :key="card.cashCardId">
+                <td class="border border-gray-300">{{ card.no }}</td>
                 <td class="border border-gray-300">{{ card.cashCardName }}</td>
                 <td class="border border-gray-300">{{ card.presentAmount }}</td>
                 <td class="border border-gray-300">{{ card.minimumValueAllowed }}</td>
                 <td class="border border-gray-300">{{ card.maximumValueAllowed }}</td>
                 <td class="border border-gray-300">{{ card.createDate }}</td>
                 <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="'123456'" />
+                  <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="card.cashCardId" />
                   <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeAccountData()" />
                 </td>
               </tr>

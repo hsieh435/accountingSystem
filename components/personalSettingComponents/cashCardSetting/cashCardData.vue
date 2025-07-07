@@ -1,8 +1,8 @@
 <template>
-  <template v-if="props.cashCardId">
+  <template v-if="props.cashCardIdGot">
     <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="searchingCashCardData()" />
   </template>
-  <template v-if="!props.cashCardId">
+  <template v-if="!props.cashCardIdGot">
     <ui-buttonGroup showCreate :createText="'新增儲值票卡'" @dataCreate="cashCardDataHandling()" />
   </template>
 </template>
@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ cashCardId?: string; userId?: string; }>(), { cashCardId: "", userId: "" });
+const props = withDefaults(defineProps<{ cashCardIdGot?: string; userIdGot?: string; }>(), { cashCardIdGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -28,8 +28,8 @@ const dataParams = reactive<{
   maximumValueAllow: number;
   createdDate: string;
 }>({
-  cashCardId: props.cashCardId || "",
-  userId: props.userId || "",
+  cashCardId: props.cashCardIdGot || "",
+  userId: props.userIdGot || "",
   cashCardName: "",
   startingAmount: 0,
   currentAmount: 0,
@@ -52,13 +52,13 @@ async function cashCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.cashCardId ? "修改儲值票卡資料" : "新增儲值票卡資料",
+    title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
-        ${props.cashCardId ? `
+        ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="cashCardId" value="${dataParams.cashCardId}" disabled />
@@ -74,11 +74,11 @@ async function cashCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
         </div>
 
 
-        ${props.cashCardId ? `
+        ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currentAmount" value="${dataParams.currentAmount}" type="number" />
@@ -97,7 +97,7 @@ async function cashCardDataHandling(apiMsg?: string) {
         </div>
 
 
-        ${props.cashCardId ? `
+        ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" type="text" disabled />
@@ -106,7 +106,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.cashCardId ? "修改" : "新增",
+    confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
@@ -123,14 +123,14 @@ async function cashCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.cashCardId) {
+      if (!props.cashCardIdGot) {
         dataParams.cashCardId = getCurrentTimestamp() + "";
       }
 
       dataParams.cashCardName = (document.getElementById("cashCardName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.currentAmount =
-        props.cashCardId ?
+        props.cashCardIdGot ?
         Number((document.getElementById("currentAmount") as HTMLInputElement).value) :
         Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);

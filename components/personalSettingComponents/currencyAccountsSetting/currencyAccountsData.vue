@@ -1,8 +1,8 @@
 <template>
-  <template v-if="props.currencyAccountId">
+  <template v-if="props.currencyAccountIdGot">
     <ui-buttonGroup showView :viewText="'檢視存款帳戶'" @dataView="searchingCurrencyAccountData()" />
   </template>
-  <template v-if="!props.currencyAccountId">
+  <template v-if="!props.currencyAccountIdGot">
     <ui-buttonGroup showCreate :createText="'新增存款帳戶'" @dataCreate="currencyAccountDataHandling()" />
   </template>
 </template>
@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ currencyAccountId?: string; userId?: string; }>(), { currencyAccountId: "", userId: "" });
+const props = withDefaults(defineProps<{ currencyAccountIdGot?: string; userIdGot?: string; }>(), { currencyAccountIdGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -29,8 +29,8 @@ const dataParams = reactive<{
   isSalaryAccount: boolean;
   createdDate: string;
 }>({
-  currencyAccountId: props.currencyAccountId || "",
-  userId: props.userId || "",
+  currencyAccountId: props.currencyAccountIdGot || "",
+  userId: props.userIdGot || "",
   currencyAccountName: "",
   currencyAccountBankNo: "",
   currencyAccountBankName: "",
@@ -53,7 +53,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
   console.log(dataParams);
 
   Swal.fire({
-    title: props.currencyAccountId ? "修改存款帳戶資料" : "新增存款帳戶資料",
+    title: props.currencyAccountIdGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
@@ -61,7 +61,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountId" value="${dataParams.currencyAccountId}" ${props.currencyAccountId ? `disabled` : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountId" value="${dataParams.currencyAccountId}" ${props.currencyAccountIdGot ? `disabled` : ""} />
         </div>
 
 
@@ -73,18 +73,18 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.currencyAccountId ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.currencyAccountId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -106,7 +106,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        ${props.currencyAccountId ? `
+        ${props.currencyAccountIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
@@ -115,7 +115,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.currencyAccountId ? "修改" : "新增",
+    confirmButtonText: props.currencyAccountIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",

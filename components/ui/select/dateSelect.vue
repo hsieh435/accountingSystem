@@ -7,7 +7,7 @@ import { getCurrentYMD } from "@/composables/tools"
 
 
 
-const props = withDefaults(defineProps<{ dateSelect?: string; hasDefault?: boolean }>(), { dateSelect: "", hasDefault: false });
+const props = withDefaults(defineProps<{ dateSelect?: string; }>(), { dateSelect: "", });
 const emits = defineEmits(["sendbackDate"]);
 
 
@@ -17,9 +17,12 @@ const dateString = ref<string>("");
 
 
 onMounted(async () => {
-  dateString.value = props.hasDefault === true ? props.dateSelect || "" : getCurrentYMD();
+  dateString.value = props.dateSelect || getCurrentYMD();
 });
 
+watch(() => dateString.value, () => {
+  emits("sendbackDate", dateString.value);
+}, { immediate: true });
 
 
 

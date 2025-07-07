@@ -1,6 +1,7 @@
 
 // 儲值票卡列表 interface
 export interface ICashCardList {
+  no?: number;
   cashCardId: string;
   cashCardUser: string;
   cashCardName: string;
@@ -13,8 +14,10 @@ export interface ICashCardList {
 
 // 儲值票卡收支紀錄 interface
 export interface ICashCardRecordList {
+  no?: number;
   tradeId: string;
   cashCardId: string;
+  cashCardName: string;
   accountType: string;
   tradeDatetime: string;
   incomingOutgoing: string;
@@ -34,6 +37,7 @@ export interface ICashFlowData {
 
 // 現金收支紀錄 interface
 export interface ICashFlowRecordList {
+  no?: number;
   tradeId: string;
   userId: string;
   tradeDatetime: string;
@@ -47,6 +51,7 @@ export interface ICashFlowRecordList {
 
 // 信用卡列表 interface
 export interface ICreditCardList {
+  no?: number;
   creditcardId: string;
   creditcardUser: string;
   creditcardName: string;
@@ -59,6 +64,7 @@ export interface ICreditCardList {
 
 // 信用卡收支紀錄 interface
 export interface ICreditCardRecordList {
+  no?: number;
   tradeId: string;
   creditCardId: string;
   tradeDatetime: string;
@@ -73,6 +79,7 @@ export interface ICreditCardRecordList {
 
 // 存款帳戶列表 interface
 export interface ICurrencyAccountList {
+  no?: number;
   accountId: string;
   userId: string;
   accountName: string;
@@ -88,6 +95,7 @@ export interface ICurrencyAccountList {
 
 // 存款帳戶收支紀錄 interface
 export interface IcurrencyAccountRecordList {
+  no?: number;
   tradeId: string;
   accountId: string;
   tradeDatetime: string;
@@ -102,6 +110,7 @@ export interface IcurrencyAccountRecordList {
 
 // 證券帳戶列表 interface
 export interface IStockAccountList {
+  no?: number;
   accountId: string;
   userId: string;
   accountName: string;
@@ -116,6 +125,7 @@ export interface IStockAccountList {
 
 // 證券帳戶收支紀錄 interface
 export interface IStockAccountRecordList {
+  no?: number;
   tradeId: string;
   accountId: string;
   tradeDatetime: string;

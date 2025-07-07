@@ -14,6 +14,7 @@
           <table class="border-separate border border-gray-400 w-full table-fixed">
             <thead>
               <tr>
+                <th class="border border-gray-300">NO.</th>
                 <th class="border border-gray-300">帳戶名稱</th>
                 <th class="border border-gray-300">銀行代號 / 銀行名稱</th>
                 <th class="border border-gray-300">目前金額</th>
@@ -23,14 +24,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="card in tableData" :key="card.accountId">
-                <td class="border border-gray-300">{{ card.accountName }}</td>
-                <td class="border border-gray-300">{{ card.accountBankCode }} / {{ card.accountBankName }}</td>
-                <td class="border border-gray-300">{{ card.presentAmount }}</td>
-                <td class="border border-gray-300">{{ card.isSalaryAccount }}</td>
-                <td class="border border-gray-300">{{ card.createdDate }}</td>
+              <tr v-for="account in tableData" :key="account.accountId">
+                <td class="border border-gray-300">{{ account.no }}</td>
+                <td class="border border-gray-300">{{ account.accountName }}</td>
+                <td class="border border-gray-300">{{ account.accountBankCode }} / {{ account.accountBankName }}</td>
+                <td class="border border-gray-300">{{ account.presentAmount }}</td>
+                <td class="border border-gray-300">{{ account.isSalaryAccount }}</td>
+                <td class="border border-gray-300">{{ account.createdDate }}</td>
                 <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-currencyAccountsSetting-currencyAccountsData :currencyAccountId="'123456'" />
+                  <personalSettingComponents-currencyAccountsSetting-currencyAccountsData :currencyAccountIdGot="account.accountId" />
                   <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeAccountData()" />
                 </td>
               </tr>
@@ -44,9 +46,6 @@
         </div>
       </template>
     </div>
-
-    <!-- <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="'123456'" /> -->
-    <!-- <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeAccountData()" /> -->
   </div>
 </template>
 <script setup lang="ts">

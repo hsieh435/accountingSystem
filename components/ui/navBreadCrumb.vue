@@ -19,8 +19,8 @@ const router = useRouter();
 onMounted(() => {
   // console.log("Current route:", route.name);
   // console.log("Current path:", route.path);
-  console.log("route:", route);
-  console.log(route.matched);
+  // console.log("route:", route);
+  // console.log(route.matched);
   // console.log("router:", router);
 
   getbreadcrumbItemList();

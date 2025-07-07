@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <personalSettingComponents-creditCardSetting-creditCardData />
+      <personalSettingComponents-creditCardSetting-creditCardData :userIdGot="''" />
     </div>
 
     <div class="mx-5">
@@ -13,6 +13,7 @@
           <table class="border-separate border border-gray-400 w-full table-fixed">
             <thead>
               <tr>
+                <th class="border border-gray-300">NO.</th>
                 <th class="border border-gray-300">信用卡名稱</th>
                 <th class="border border-gray-300">發卡銀行代號 / 銀行名稱</th>
                 <th class="border border-gray-300">發卡機構</th>
@@ -23,14 +24,14 @@
             </thead>
             <tbody>
               <tr v-for="card in tableData" :key="card.creditcardId">
+                <td class="border border-gray-300">{{ card.no }}</td>
                 <td class="border border-gray-300">{{ card.creditcardName }}</td>
                 <td class="border border-gray-300">{{ card.creditcardBankCode }} / {{ card.creditcardBankName }}</td>
                 <td class="border border-gray-300">{{ card.creditcardScheme }}</td>
                 <td class="border border-gray-300">{{ card.creditPerMonth }}</td>
                 <td class="border border-gray-300">{{ card.createdDate }}</td>
                 <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-creditCardSetting-creditCardData
-                    :creditCardId="'123456'" />
+                  <personalSettingComponents-creditCardSetting-creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
                   <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeAccountData()" />
                 </td>
               </tr>

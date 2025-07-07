@@ -1,8 +1,8 @@
 <template>
-  <template v-if="props.creditCardId">
+  <template v-if="props.creditCardIdGot">
     <ui-buttonGroup showView :viewText="'檢視信用卡'" @dataView="searchingCreditCardData()" />
   </template>
-  <template v-if="!props.creditCardId">
+  <template v-if="!props.creditCardIdGot">
     <ui-buttonGroup showCreate :createText="'新增信用卡'" @dataCreate="creditCardDataHandling()" />
   </template>
 </template>
@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ creditCardId?: string; userId?: string; }>(), { creditCardId: "", userId: "" });
+const props = withDefaults(defineProps<{ creditCardIdGot?: string; userIdGot?: string; }>(), { creditCardIdGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -28,8 +28,8 @@ const dataParams = reactive<{
   creditPerMonth: number;
   createdDate: string;
 }>({
-  creditCardId: props.creditCardId || "",
-  userId: props.userId || "",
+  creditCardId: props.creditCardIdGot || "",
+  userId: props.userIdGot || "",
   creditCardName: "",
   creditCardBankNo: "",
   creditCardBankName: "",
@@ -50,13 +50,13 @@ async function creditCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.creditCardId ? "修改信用卡資料" : "新增信用卡資料",
+    title: props.creditCardIdGot ? "修改信用卡資料" : "新增信用卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
-        ${props.creditCardId ? `
+        ${props.creditCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardId" value="${dataParams.creditCardId}" disabled />
@@ -72,12 +72,12 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" ${props.creditCardId ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" ${props.creditCardId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -89,11 +89,11 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardScheme" value="${dataParams.creditCardScheme}" ${props.creditCardId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardScheme" value="${dataParams.creditCardScheme}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
-        ${props.creditCardId ? `
+        ${props.creditCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
@@ -102,7 +102,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.creditCardId ? "修改" : "新增",
+    confirmButtonText: props.creditCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
@@ -119,7 +119,7 @@ async function creditCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.creditCardId) {
+      if (!props.creditCardIdGot) {
         dataParams.creditCardId = getCurrentTimestamp() + "";
       }
 

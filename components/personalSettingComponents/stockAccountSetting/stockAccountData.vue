@@ -1,8 +1,8 @@
 <template>
-  <template v-if="props.stockAccountId">
+  <template v-if="props.stockAccountIGot">
     <ui-buttonGroup showView :viewText="'檢視證券帳戶'" @dataView="searchingStockAccountData()" />
   </template>
-  <template v-if="!props.stockAccountId">
+  <template v-if="!props.stockAccountIGot">
     <ui-buttonGroup showCreate :createText="'新增證券帳戶'" @dataCreate="stockAccountDataHandling()" />
   </template>
 </template>
@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ stockAccountId?: string; userId?: string; }>(), { stockAccountId: "", userId: "" });
+const props = withDefaults(defineProps<{ stockAccountIGot?: string; userIdGot?: string; }>(), { stockAccountIGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -28,8 +28,8 @@ const dataParams = reactive<{
   startingAmount: number;
   createdDate: string;
 }>({
-  stockAccountId: props.stockAccountId || "",
-  userId: props.userId || "",
+  stockAccountId: props.stockAccountIGot || "",
+  userId: props.userIdGot || "",
   accountName: "",
   currencyAccountBankNo: "",
   currencyAccountBankName: "",
@@ -51,7 +51,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.stockAccountId ? "修改存款帳戶資料" : "新增存款帳戶資料",
+    title: props.stockAccountIGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
@@ -59,7 +59,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="stockAccountId" value="${dataParams.stockAccountId}" ${props.stockAccountId ? `disabled` : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="stockAccountId" value="${dataParams.stockAccountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
@@ -71,18 +71,18 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.stockAccountId ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.stockAccountId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.stockAccountId ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
 
@@ -92,7 +92,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        ${props.stockAccountId ? `
+        ${props.stockAccountIGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
@@ -101,7 +101,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.stockAccountId ? "修改" : "新增",
+    confirmButtonText: props.stockAccountIGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",

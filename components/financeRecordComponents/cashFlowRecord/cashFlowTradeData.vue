@@ -1,7 +1,10 @@
-<template>
-  <div class="flex justify-center items-center bg-gray-100">
-    cashFlowTradeData
-  </div>
+<template>  
+  <template v-if="props.tradeIdGot">
+    <ui-buttonGroup showView :viewText="'檢視現金收支'" @dataView="searchingCashFlowRecord()" />
+  </template>
+  <template v-if="!props.tradeIdGot">
+    <ui-buttonGroup showCreate :createText="'新增現金收支'" @dataCreate="cashFlowRecordDataHandling()" />
+  </template>
 </template>
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
@@ -9,4 +12,21 @@ import { defineComponent, ref } from "vue";
 
 
 
+const props = withDefaults(defineProps<{ tradeIdGot?: string; }>(), { tradeIdGot: "", });
+const emits = defineEmits(["dataReseaching"]);
+
+
+
+
+async function searchingCashFlowRecord() {
+  // cashFlowRecordDataHandling();  
+}
+
+
+async function cashFlowRecordDataHandling(apiMsg?: string) {
+  // console.log(dataParams);
+}
+
+
 </script>
+<style lang="scss" scoped></style>

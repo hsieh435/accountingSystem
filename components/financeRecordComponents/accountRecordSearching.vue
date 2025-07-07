@@ -12,16 +12,17 @@
 
     <div class="flex items-center mx-3 my-2">
       <span>時間區間：</span>
-      <ui-select-dateSelect @sendbackRecord="settingSettingDate" />
+      <ui-select-dateSelect :dateSelect="searchParams.startingDate" @sendbackRecord="settingSettingDate" />
       <span>～</span>
-      <ui-select-dateSelect @sendbackRecord="settingEndDate" />
+      <ui-select-dateSelect :dateSelect="searchParams.endDate" @sendbackRecord="settingEndDate" />
     </div>
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
+import { getCurrentYear } from "@/composables/tools";
 
 
 
@@ -35,8 +36,8 @@ const emits = defineEmits(["sendbackRecord"]);
 const searchParams = reactive<{ accountId: string; tradeTypeId: string; startingDate: string; endDate: string; }>({
   accountId: "",
   tradeTypeId: "",
-  startingDate: "",
-  endDate: "",
+  startingDate: getCurrentYear() + "-01-01",
+  endDate: getCurrentYear() + "-12-31",
 });
 
 

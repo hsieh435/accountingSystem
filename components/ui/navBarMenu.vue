@@ -7,12 +7,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-// import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { NavigationMenuItem } from "@nuxt/ui";
 
 
 
+// const route = useRoute();
 // const router = useRouter();
+// console.log("getRoute:", route);
 // console.log("getRoutes:", router.getRoutes());
 
 
