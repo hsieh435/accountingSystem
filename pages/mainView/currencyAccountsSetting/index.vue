@@ -7,42 +7,111 @@
     <div class="mx-5">
       <template v-if="currencyAccountList.length > 0">
         <ui-pagination
-        :totalDataQuanity="currencyAccountList.length"
-        :searchingPlaceholder="'搜尋帳戶名稱'">
-        </ui-pagination>
+          :totalDataQuanity="currencyAccountList.length"
+          :searchingPlaceholder="'搜尋帳戶名稱'"
+        />
         <template v-if="currencyAccountListFiltered.length > 0">
-          <table class="border-separate border border-gray-400 w-full table-fixed">
-            <thead>
-              <tr>
-                <th class="border border-gray-300">NO.</th>
-                <th class="border border-gray-300">帳戶名稱</th>
-                <th class="border border-gray-300">銀行代號 / 銀行名稱</th>
-                <th class="border border-gray-300">目前金額</th>
-                <th class="border border-gray-300">薪資帳戶</th>
-                <th class="border border-gray-300">建立時間</th>
-                <th class="border border-gray-300">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="account in tableData" :key="account.accountId">
-                <td class="border border-gray-300">{{ account.no }}</td>
-                <td class="border border-gray-300">{{ account.accountName }}</td>
-                <td class="border border-gray-300">{{ account.accountBankCode }} / {{ account.accountBankName }}</td>
-                <td class="border border-gray-300">{{ account.presentAmount }}</td>
-                <td class="border border-gray-300">{{ account.isSalaryAccount }}</td>
-                <td class="border border-gray-300">{{ account.createdDate }}</td>
-                <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-currencyAccountsSetting-currencyAccountsData :currencyAccountIdGot="account.accountId" />
-                  <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeAccountData()" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table
+              class="min-w-full table-auto border-collapse border border-gray-200"
+            >
+              <thead class="bg-gray-100">
+                <tr class="border border-gray-200">
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    NO.
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    帳戶名稱
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    銀行代號 / 銀行名稱
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    目前金額
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    薪資帳戶
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    建立時間
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="hover:bg-gray-50 border border-gray-200"
+                  v-for="account in tableData"
+                  :key="account.accountId"
+                >
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.no }}
+                  </td>
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.accountName }}
+                  </td>
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.accountBankCode }} /
+                    {{ account.accountBankName }}
+                  </td>
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.presentAmount }}
+                  </td>
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.isSalaryAccount }}
+                  </td>
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    {{ account.createdDate }}
+                  </td>
+                  <td
+                    class="flex justify-center items-center text-sm text-gray-600 sticky right-0 z-10 px-4 py-2 border border-gray-200"
+                  >
+                    <personalSettingComponents-currencyAccountsSetting-currencyAccountsData
+                      :currencyAccountIdGot="account.accountId"
+                    />
+                    <ui-buttonGroup
+                      showRemove
+                      :createText="'刪除帳戶'"
+                      @dataRemove="removeCurrencyAccountData()"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </template>
       </template>
       <template v-else-if="currencyAccountList.length === 0">
-        <div class="flex justify-start items-center h-full">
-          <span class="text-gray-500">沒有帳戶資料</span>
+        <div class="flex justify-start items-center h-full text-gray-500">
+          無帳戶資料
         </div>
       </template>
     </div>
@@ -52,23 +121,19 @@
 import { ref } from "vue";
 import { ICurrencyAccountList } from "@/models/index";
 
-
-
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   functionTitle: "個人設定",
   subTitle: "存款帳戶資料設定",
-})
-
-
+});
 
 const currencyAccountList = ref<ICurrencyAccountList[]>([]);
 const currencyAccountListFiltered = ref<ICurrencyAccountList[]>([]);
 const tableData = ref<ICurrencyAccountList[]>([]);
 
-
-async function removeAccountData() {
+async function removeCurrencyAccountData() {
   //
 }
 </script>
+
 <style lang="scss" scoped></style>

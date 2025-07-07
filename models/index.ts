@@ -21,6 +21,7 @@ export interface ICashCardRecordList {
   accountType: string;
   tradeDatetime: string;
   incomingOutgoing: string;
+  tradeCategory: string;
   tradeAmount: number;
   tradeDescription: string;
   tradeNote: string;

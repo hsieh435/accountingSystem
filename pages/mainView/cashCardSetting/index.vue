@@ -6,49 +6,114 @@
 
     <div class="mx-5">
       <template v-if="cashCardList.length > 0">
-        <ui-pagination 
+        <ui-pagination
           :totalDataQuanity="cashCardList.length"
-          :searchingPlaceholder="'搜尋儲值票名稱'">
-        </ui-pagination>
+          :searchingPlaceholder="'搜尋儲值票名稱'"
+        />
         <template v-if="cashCardListFiltered.length > 0">
-          <table class="border-separate border border-gray-400 w-full table-fixed">
-            <thead>
-              <tr>
-                <td class="border border-gray-300">NO.</td>
-                <th class="border border-gray-300">票卡名稱</th>
-                <th class="border border-gray-300">目前金額</th>
-                <th class="border border-gray-300">最小儲值金額</th>
-                <th class="border border-gray-300">最大儲值金額</th>
-                <th class="border border-gray-300">建立時間</th>
-                <th class="border border-gray-300">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="card in tableData" :key="card.cashCardId">
-                <td class="border border-gray-300">{{ card.no }}</td>
-                <td class="border border-gray-300">{{ card.cashCardName }}</td>
-                <td class="border border-gray-300">{{ card.presentAmount }}</td>
-                <td class="border border-gray-300">{{ card.minimumValueAllowed }}</td>
-                <td class="border border-gray-300">{{ card.maximumValueAllowed }}</td>
-                <td class="border border-gray-300">{{ card.createDate }}</td>
-                <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="card.cashCardId" />
-                  <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeAccountData()" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </template>
-        <template v-else-if="cashCardList.length === 0">
-          <div class="flex justify-start items-center h-full">
-            <span class="text-gray-500">沒有儲值票卡資料</span>
+          <div class="overflow-x-auto">
+            <table
+              class="min-w-full table-auto border-collapse border border-gray-200"
+            >
+              <thead class="bg-gray-100">
+                <tr class="border border-gray-200">
+                  <td
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    NO.
+                  </td>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    票卡名稱
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    目前金額
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    最小儲值金額
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    最大儲值金額
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    建立時間
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="hover:bg-gray-50 border border-gray-200"
+                  v-for="card in tableData"
+                  :key="card.cashCardId"
+                >
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.no }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.cashCardName }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.presentAmount }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.minimumValueAllowed }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.maximumValueAllowed }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.createDate }}
+                  </td>
+                  <td
+                    class="flex justify-center items-center text-sm text-gray-600 sticky right-0 z-10 px-4 py-2 border border-gray-200"
+                  >
+                    <personalSettingComponents-cashCardSetting-cashCardData
+                      :cashCardId="card.cashCardId"
+                    />
+                    <ui-buttonGroup
+                      showRemove
+                      :createText="'刪除儲值票卡'"
+                      @dataRemove="removeCashCard()"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </template>
       </template>
+      <template v-else-if="cashCardList.length === 0">
+        <div class="flex justify-start items-center h-full text-gray-500">
+          無儲值票卡資料
+        </div>
+      </template>
     </div>
-
-    <!-- <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="'123456'" /> -->
-    <!-- <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeAccountData()" /> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -117,9 +182,11 @@ const data = ref([
   },
 ]);
 
-cashCardList.value = data.value;
+// cashCardList.value = data.value;
+// cashCardListFiltered.value = cashCardList.value;
+// tableData.value = cashCardListFiltered.value;
 
-async function removeAccountData() {
+async function removeCashCard() {
   //
 }
 </script>

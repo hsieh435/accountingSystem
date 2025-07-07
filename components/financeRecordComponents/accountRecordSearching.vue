@@ -26,8 +26,6 @@ import { getCurrentYear } from "@/composables/tools";
 
 
 
-
-
 const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName?: string; }>(), { accountTypeId: "", accountTypeName: "請選擇" });
 const emits = defineEmits(["sendbackRecord"]);
 
@@ -69,8 +67,6 @@ async function settingEndDate(dateSendback: string) {
 
 async function searchingRecord() {
   console.log("searchParams:", searchParams);
-  
-
 
   emits("sendbackRecord");  
 }

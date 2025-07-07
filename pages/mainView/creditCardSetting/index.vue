@@ -1,53 +1,133 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <personalSettingComponents-creditCardSetting-creditCardData :userIdGot="''" />
+      <personalSettingComponents-creditCardSetting-creditCardData
+        :userIdGot="''"
+      />
     </div>
 
     <div class="mx-5">
       <template v-if="creditCardList.length > 0">
         <ui-pagination
           :totalDataQuanity="creditCardList.length"
-          :searchingPlaceholder="'搜尋信用卡名稱'" />
+          :searchingPlaceholder="'搜尋信用卡名稱'"
+        />
         <template v-if="creditCardListFiltered.length > 0">
-          <table class="border-separate border border-gray-400 w-full table-fixed">
-            <thead>
-              <tr>
-                <th class="border border-gray-300">NO.</th>
-                <th class="border border-gray-300">信用卡名稱</th>
-                <th class="border border-gray-300">發卡銀行代號 / 銀行名稱</th>
-                <th class="border border-gray-300">發卡機構</th>
-                <th class="border border-gray-300">每月額度</th>
-                <th class="border border-gray-300">建立時間</th>
-                <th class="border border-gray-300">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="card in tableData" :key="card.creditcardId">
-                <td class="border border-gray-300">{{ card.no }}</td>
-                <td class="border border-gray-300">{{ card.creditcardName }}</td>
-                <td class="border border-gray-300">{{ card.creditcardBankCode }} / {{ card.creditcardBankName }}</td>
-                <td class="border border-gray-300">{{ card.creditcardScheme }}</td>
-                <td class="border border-gray-300">{{ card.creditPerMonth }}</td>
-                <td class="border border-gray-300">{{ card.createdDate }}</td>
-                <td class="border border-gray-300 flex justify-center items-center">
-                  <personalSettingComponents-creditCardSetting-creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
-                  <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeAccountData()" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table
+              class="min-w-full table-auto border-collapse border border-gray-200"
+            >
+              <thead class="bg-gray-100">
+                <tr class="border border-gray-200">
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    NO.
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    信用卡名稱
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    發卡銀行代號 / 銀行名稱
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    發卡機構
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    發卡機構
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    每月額度
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    每月額度
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    建立時間
+                  </th>
+                  <th
+                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
+                  >
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="hover:bg-gray-50 border border-gray-200"
+                  v-for="card in tableData"
+                  :key="card.creditcardId"
+                >
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.no }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.creditcardName }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.creditcardBankCode }} /
+                    {{ card.creditcardBankName }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.creditcardScheme }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.creditPerMonth }}
+                  </td>
+                  <td
+                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
+                  >
+                    {{ card.createdDate }}
+                  </td>
+                  <td
+                    class="flex justify-center items-center text-sm text-gray-600 sticky right-0 z-10 px-4 py-2 border border-gray-200"
+                  >
+                    <personalSettingComponents-creditCardSetting-creditCardData
+                      :creditCardIdGot="card.creditcardId"
+                      :userIdGot="''"
+                    />
+                    <ui-buttonGroup
+                      showRemove
+                      :createText="'刪除信用卡'"
+                      @dataRemove="removeCreditcardData()"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </template>
       </template>
       <template v-else-if="creditCardList.length === 0">
-        <div class="flex justify-start items-center h-full">
-          <span class="text-gray-500">沒有信用卡資料</span>
+        <div class="flex justify-start items-center h-full text-gray-500">
+          無信用卡資料
         </div>
       </template>
     </div>
-
-    <!-- <personalSettingComponents-cashCardSetting-cashCardData :cashCardId="'123456'" /> -->
-    <!-- <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeAccountData()" /> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -64,7 +144,7 @@ const creditCardList = ref<any[]>([]);
 const creditCardListFiltered = ref<ICreditCardList[]>([]);
 const tableData = ref<ICreditCardList[]>([]);
 
-async function removeAccountData() {
+async function removeCreditcardData() {
   //
 }
 </script>

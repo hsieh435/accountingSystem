@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-07 19:22:49
+-- Started on 2025-07-07 21:32:38
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -119,7 +119,8 @@ CREATE TABLE public.cashcard_trade (
     cashcard_id character varying NOT NULL,
     account_type character varying,
     trade_datetime timestamp with time zone,
-    incoming_outgoing character varying,
+    incoming_outgoing character varying NOT NULL,
+    trade_category character varying,
     trade_amount numeric(15,2) NOT NULL,
     trade_description text,
     trade_note text
@@ -482,7 +483,7 @@ COPY public.cashcard_list (cashcard_id, cashcard_user, cashcard_name, starting_a
 -- Data for Name: cashcard_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cashcard_trade (trade_id, cashcard_id, account_type, trade_datetime, incoming_outgoing, trade_amount, trade_description, trade_note) FROM stdin;
+COPY public.cashcard_trade (trade_id, cashcard_id, account_type, trade_datetime, incoming_outgoing, trade_category, trade_amount, trade_description, trade_note) FROM stdin;
 \.
 
 
@@ -797,7 +798,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-07-07 19:22:49
+-- Completed on 2025-07-07 21:32:38
 
 --
 -- PostgreSQL database dump complete
