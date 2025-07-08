@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
+import { ICreditCardList } from "@/models/index";
 import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
 import Swal from "sweetalert2";
 
@@ -18,23 +19,16 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<{
-  creditCardId: string;
-  userId: string;
-  creditCardName: string;
-  creditCardBankNo: string;
-  creditCardBankName: string;
-  creditCardScheme: string;
-  creditPerMonth: number;
-  createdDate: string;
-}>({
-  creditCardId: props.creditCardIdGot || "",
-  userId: props.userIdGot || "",
-  creditCardName: "",
-  creditCardBankNo: "",
-  creditCardBankName: "",
-  creditCardScheme: "",
+const dataParams = reactive<ICreditCardList>({
+  creditcardId: props.creditCardIdGot || "",
+  creditcardUser: "",
+  creditcardName: "",
+  creditcardBankCode: "",
+  creditcardBankName: "",
+  creditcardSchema: "",
   creditPerMonth: 0,
+  alertValue: 0,
+  openAlert: false,
   createdDate: getCurrentYMD(),
 });
 
@@ -58,26 +52,26 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         ${props.creditCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardId" value="${dataParams.creditCardId}" disabled />
-        </div>` : 
+          <span class="col-start-1 col-end-3 text-right">信用卡ID：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardId" value="${dataParams.creditcardId}" disabled />
+        </div>` :
         ""}
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">信用卡名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardName" value="${dataParams.creditCardName}" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardName" value="${dataParams.creditcardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankNo" value="${dataParams.creditCardBankNo}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardBankName" value="${dataParams.creditCardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankName" value="${dataParams.creditcardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -89,7 +83,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardScheme" value="${dataParams.creditCardScheme}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardSchema" value="${dataParams.creditcardSchema}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -120,15 +114,15 @@ async function creditCardDataHandling(apiMsg?: string) {
       const errors: string[] = [];
 
       if (!props.creditCardIdGot) {
-        dataParams.creditCardId = getCurrentTimestamp() + "";
+        dataParams.creditcardId = getCurrentTimestamp() + "";
       }
 
-      dataParams.creditCardName = (document.getElementById("creditCardName") as HTMLInputElement).value;
+      dataParams.creditcardName = (document.getElementById("creditcardName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
-      dataParams.creditCardScheme = (document.getElementById("creditCardScheme") as HTMLInputElement).value;
+      dataParams.creditcardSchema = (document.getElementById("creditcardSchema") as HTMLInputElement).value;
 
 
-      if (!dataParams.creditCardName) {
+      if (!dataParams.creditcardName) {
         errors.push("請填寫信用卡名稱");
       }
 

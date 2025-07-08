@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive, onMounted } from "vue";
+import { ICurrencyAccountList } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
 import Swal from "sweetalert2";
 
@@ -18,24 +19,18 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<{
-  currencyAccountId: string;
-  userId: string;
-  currencyAccountName: string;
-  currencyAccountBankNo: string;
-  currencyAccountBankName: string;
-  startingAmount: number;
-  minimumValueAllow: number;
-  isSalaryAccount: boolean;
-  createdDate: string;
-}>({
-  currencyAccountId: props.currencyAccountIdGot || "",
+const dataParams = reactive<ICurrencyAccountList>({
+  accountId: props.currencyAccountIdGot || "",
   userId: props.userIdGot || "",
-  currencyAccountName: "",
-  currencyAccountBankNo: "",
-  currencyAccountBankName: "",
+  accountType: "",
+  accountName: "",
+  accountBankCode: "",
+  accountBankName: "",
   startingAmount: 0,
-  minimumValueAllow: 0,
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
   isSalaryAccount: true,
   createdDate: getCurrentYMD(),
 });
@@ -61,24 +56,24 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountId" value="${dataParams.currencyAccountId}" ${props.currencyAccountIdGot ? `disabled` : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountId" value="${dataParams.accountId}" ${props.currencyAccountIdGot ? `disabled` : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountName" value="${dataParams.currencyAccountName}" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountName" value="${dataParams.accountName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankName" value="${dataParams.accountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -90,7 +85,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">最小允許金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllow" value="${dataParams.minimumValueAllow}" type="number" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
         
 
@@ -143,18 +138,18 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      dataParams.currencyAccountId = (document.getElementById("currencyAccountId") as HTMLInputElement).value;
-      dataParams.currencyAccountName = (document.getElementById("currencyAccountName") as HTMLInputElement).value;
+      dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
+      dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
       dataParams.isSalaryAccount = ((document.querySelector(`input[name="isSalaryAccount"]:checked`) as HTMLInputElement).value === "true");
 
 
-      if (!dataParams.currencyAccountId) {
+      if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");
       }
 
-      if (!dataParams.currencyAccountName) {
+      if (!dataParams.accountName) {
         errors.push("請填寫存款帳戶名稱");
       }
 
@@ -162,7 +157,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         errors.push("請填寫帳戶初始金額");
       }
 
-      if (isNaN(dataParams.minimumValueAllow)) {
+      if (isNaN(dataParams.minimumValueAllowed)) {
         errors.push("請填寫帳戶最小允許金額");
       }
 

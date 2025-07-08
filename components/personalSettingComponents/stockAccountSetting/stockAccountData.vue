@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
+import { IStockAccountList } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
 import Swal from "sweetalert2";
 
@@ -18,23 +19,18 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<{
-  stockAccountId: string;
-  userId: string;
-  accountName: string;
-  currencyAccountBankNo: string;
-  currencyAccountBankName: string;
-  minimumValueAllow: number;
-  startingAmount: number;
-  createdDate: string;
-}>({
-  stockAccountId: props.stockAccountIGot || "",
+const dataParams = reactive<IStockAccountList>({
+  accountId: props.stockAccountIGot || "",
   userId: props.userIdGot || "",
   accountName: "",
-  currencyAccountBankNo: "",
-  currencyAccountBankName: "",
-  minimumValueAllow: 0,
+  accountType: "",
+  accountBankCode: "",
+  accountBankName: "",
   startingAmount: 0,
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
   createdDate: getCurrentYMD(),
 });
 
@@ -59,7 +55,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="stockAccountId" value="${dataParams.stockAccountId}" ${props.stockAccountIGot ? `disabled` : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
@@ -71,12 +67,12 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankNo" value="${dataParams.currencyAccountBankNo}" ${props.stockAccountIGot ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currencyAccountBankName" value="${dataParams.currencyAccountBankName}" ${props.stockAccountIGot ? "disabled" : ""} />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankName" value="${dataParams.accountBankName}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
 
@@ -88,7 +84,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">最小允許金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllow" value="${dataParams.minimumValueAllow}" type="number" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
@@ -118,13 +114,13 @@ async function stockAccountDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      dataParams.stockAccountId = (document.getElementById("stockAccountId") as HTMLInputElement).value;
+      dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
 
 
-      if (!dataParams.stockAccountId) {
+      if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");
       }
 
@@ -136,7 +132,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
         errors.push("請填寫帳戶初始金額");
       }
 
-      if (isNaN(dataParams.minimumValueAllow)) {
+      if (isNaN(dataParams.minimumValueAllowed)) {
         errors.push("請填寫帳戶最小允許金額");
       }
 

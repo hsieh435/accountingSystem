@@ -17,6 +17,8 @@ export interface ICashCardList {
   presentAmount: number;
   minimumValueAllowed: number;
   maximumValueAllowed: number;
+  alertValue: number;
+  openAlert: boolean;
   createDate: string;
 }
 
@@ -66,8 +68,10 @@ export interface ICreditCardList {
   creditcardName: string;
   creditcardBankCode: string;
   creditcardBankName: string;
-  creditcardScheme: string;
+  creditcardSchema: string;
   creditPerMonth: number;
+  alertValue: number;
+  openAlert: boolean;
   createdDate: string;
 }
 
@@ -98,6 +102,8 @@ export interface ICurrencyAccountList {
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
+  alertValue: number;
+  openAlert: boolean;
   isSalaryAccount: boolean;
   createdDate: string;
 }
@@ -129,6 +135,8 @@ export interface IStockAccountList {
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
+  alertValue: number;
+  openAlert: boolean;
   createdDate: string;
 }
 
@@ -150,4 +158,11 @@ export interface IStockAccountRecordList {
   totalPrice: number;
   tradeDescription: string;
   tradeNote: string;
+}
+
+// 證券帳戶收支類型
+export interface IStockAccountTradeCategory {
+  categoryCode: number;
+  categoryName: string;
+  sort: number;
 }

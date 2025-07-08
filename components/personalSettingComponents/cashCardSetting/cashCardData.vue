@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
+import { ICashCardList } from "@/models/index";
 import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
 import Swal from "sweetalert2";
 
@@ -18,24 +19,17 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<{
-  cashCardId: string;
-  userId: string;
-  cashCardName: string;
-  startingAmount: number;
-  currentAmount: number;
-  minimumValueAllow: number;
-  maximumValueAllow: number;
-  createdDate: string;
-}>({
+const dataParams = reactive<ICashCardList>({
   cashCardId: props.cashCardIdGot || "",
-  userId: props.userIdGot || "",
+  cashCardUser: "",
   cashCardName: "",
   startingAmount: 0,
-  currentAmount: 0,
-  minimumValueAllow: 0,
-  maximumValueAllow: 0,
-  createdDate: getCurrentYMD(),
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  maximumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
+  createDate: getCurrentYMD(),
 });
 
 
@@ -81,26 +75,26 @@ async function cashCardDataHandling(apiMsg?: string) {
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="currentAmount" value="${dataParams.currentAmount}" type="number" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="presentAmount" value="${dataParams.presentAmount}" type="number" />
         </div>` : 
         ""}
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">最小儲值金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllow" value="${dataParams.minimumValueAllow}" type="number" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">最大儲值金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="maximumValueAllow" value="${dataParams.maximumValueAllow}" type="number" />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" type="text" disabled />
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createDate" value="${dataParams.createDate}" type="text" disabled />
         </div>` : 
         ""}
 
@@ -129,12 +123,12 @@ async function cashCardDataHandling(apiMsg?: string) {
 
       dataParams.cashCardName = (document.getElementById("cashCardName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.currentAmount =
+      dataParams.presentAmount =
         props.cashCardIdGot ?
-        Number((document.getElementById("currentAmount") as HTMLInputElement).value) :
+        Number((document.getElementById("presentAmount") as HTMLInputElement).value) :
         Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllow = Number((document.getElementById("minimumValueAllow") as HTMLInputElement).value);
-      dataParams.maximumValueAllow = Number((document.getElementById("maximumValueAllow") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
+      dataParams.maximumValueAllowed = Number((document.getElementById("maximumValueAllowed") as HTMLInputElement).value);
 
 
       if (!dataParams.cashCardName) {
@@ -145,15 +139,15 @@ async function cashCardDataHandling(apiMsg?: string) {
         errors.push("請填寫儲值票卡初始金額");
       }
 
-      if (isNaN(dataParams.minimumValueAllow)) {
+      if (isNaN(dataParams.minimumValueAllowed)) {
         errors.push("請填寫儲值票卡最小儲值金額");
       }
 
-      if (isNaN(dataParams.maximumValueAllow)) {
+      if (isNaN(dataParams.maximumValueAllowed)) {
         errors.push("請填寫儲值票卡最大儲值金額");
       }
 
-      if (dataParams.maximumValueAllow <= dataParams.minimumValueAllow) {
+      if (dataParams.maximumValueAllowed <= dataParams.minimumValueAllowed) {
         errors.push("儲值票卡最小儲值金額必須小於最大儲值金額");
       }
 
