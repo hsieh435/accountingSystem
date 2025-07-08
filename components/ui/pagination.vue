@@ -13,17 +13,36 @@
     </div>
 
 
+    
+      <template v-if="props.showSortSelect && sortMethodGot.length > 0">
+        <div class="d-flex flex-row justify-content-start align-items-center mx-2">
+          <font-awesome-icon class="mx-1" :icon="['fas', 'sort']" />
+          <select class="form-select form-select-sm w-auto mx-1" @change="clickSortSelect" v-model="sortSelectValue">
+            <template v-for="(sort, sortIndex) in sortMethodGot" :key="sortIndex">
+              <option :value="sort.value">{{ sort.sortText }}</option>
+            </template>
+          </select>
+        </div>
+      </template>
+
     <template v-if="props.showFilter">
       <div class="flex justify-start items-center mx-2">
         <font-awesome-icon class="mx-1" :icon="['fas', 'sliders']" />
         <UInput class="mx-1" v-model="keyWord" :type="'search'" color="neutral" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
       </div>      
     </template>
+    
+    
+    
+    <!-- <template v-if="props.showCheckBox">
+      <UCheckbox v-model="isCheckBoxPicked" :label="props.checkBoxTitle" />
+    </template> -->
 
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
+import { ISortArray } from "@/models/index";
 
 
 
@@ -44,7 +63,7 @@ const props = withDefaults(
     checkBoxTitle?: string;
     checkBoxValue?: boolean;
     showSortSelect?: boolean;
-    // sortMethod?: ISortArray[];
+    sortMethod?: ISortArray[];
     showFilterSelect?: boolean;
     // filterMethod?: IFilterArray[];
   }>(),
@@ -63,11 +82,12 @@ const props = withDefaults(
     checkBoxTitle: "",
     checkBoxValue: false,
     showSortSelect: false,
-    // sortMethod: () => [],
+    sortMethod: () => [],
     showFilterSelect: false,
     // filterMethod: () => [],
   },
 );
+const emits = defineEmits(["tableSliceChange", "checkboxChange", "sortSelectChange", "filterChange"]);
 
 
 // 目前頁數
@@ -88,6 +108,16 @@ const pageTarget = ref<number>(1);
 // 關鍵字
 const keyWord = ref<string>("");
 const keyWordPlaceholder = ref<string>("");
+
+
+
+const sortMethodGot = ref<ISortArray[]>([]);
+const sortSelectValue = ref<number>(0);
+
+const filterValue = ref<string>("");
+
+
+const isCheckBoxPicked = ref<boolean>(false);
 
 
 
@@ -112,6 +142,16 @@ onMounted(() => {
   pageTarget.value = currentPage.value;
 
   keyWordPlaceholder.value = props.searchingPlaceholder ? props.searchingPlaceholder : "";
+
+  
+  sortMethodGot.value = JSON.parse(JSON.stringify(props.sortMethod));
+  for (let i = 0; i < sortMethodGot.value.length; i++) {
+    sortMethodGot.value[i]["value"] = i;
+  }
+  sortSelectValue.value = sortMethodGot.value.length > 0 ? sortMethodGot.value[0].value || 0 : 0;
+
+
+  isCheckBoxPicked.value = props.checkBoxValue;
 });
 
 
@@ -122,6 +162,14 @@ watch([currentPage, itemsPerPage, keyWord], () => {
   console.log("keyWord:", keyWord.value);
 });
 
+watch(isCheckBoxPicked, () => {
+  emits("checkboxChange", isCheckBoxPicked.value);
+});
 
+
+
+async function clickSortSelect() {
+  emits("sortSelectChange", sortMethodGot.value[sortSelectValue.value].sortId, sortMethodGot.value[sortSelectValue.value].code);
+}
 
 </script>

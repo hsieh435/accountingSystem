@@ -1,4 +1,12 @@
 
+// 資料排序方式 interface
+export interface ISortArray {
+  code?: number;
+  sortId: string;
+  sortText: string;
+  value?: number;
+}
+
 // 儲值票卡列表 interface
 export interface ICashCardList {
   no?: number;
@@ -17,7 +25,7 @@ export interface ICashCardRecordList {
   no?: number;
   tradeId: string;
   cashCardId: string;
-  cashCardName: string;
+  cashCardName?: string;
   accountType: string;
   tradeDatetime: string;
   incomingOutgoing: string;

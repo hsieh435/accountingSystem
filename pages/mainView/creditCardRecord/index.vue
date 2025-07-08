@@ -1,11 +1,11 @@
 <template>
   <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
-      <financeRecordComponents-accountRecordSearching :accountTypeId="'creditCard'" :accountTypeName="'信用卡'" />
+    <div class="flex justify-start items-center">
+      <accountRecordSearching :accountTypeId="'creditCard'" :accountTypeName="'信用卡'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">
-      <financeRecordComponents-creditCardRecord-creditCardTradeData />
+      <creditCardTradeData :creditCardIdGot="'123456'" />
     </div>
     <div class="mx-5">
       <template v-if="creditCardRecord.length > 0">
@@ -14,28 +14,28 @@
           :showFilter="false" />
         <template v-if="creditCardRecordFiltered.length > 0">
           <div class="overflow-x-auto">
-            <table class="min-w-full table-auto border-collapse border border-gray-200">
-              <thead class="bg-gray-100">
-                <tr>
-                  <th class="text-left text-sm text-gray-600 px-4 py-2">NO.</th>
-                  <th class="text-left text-sm text-gray-600 px-4 py-2">日期時間</th>
-                  <th class="text-left text-sm text-gray-600 px-4 py-2">項目</th>
-                  <th class="text-left text-sm text-gray-600 px-4 py-2">金額</th>
-                  <!-- <th class="text-left text-sm text-gray-600 px-4 py-2">剩餘額度</th> -->
-                  <th class="text-left text-sm text-gray-600 px-4 py-2">內容</th>
-                  <th class="text-left text-sm text-gray-600 px-4 py-2 sticky right-0 bg-gray-100 z-10">操作</th>
+            <table :class="tailwindStyles.tableClasses">
+              <thead :class="tailwindStyles.theadClasses">
+                <tr :class="tailwindStyles.trClasses">
+                  <th :class="tailwindStyles.thClasses">NO.</th>
+                  <th :class="tailwindStyles.thClasses">日期時間</th>
+                  <th :class="tailwindStyles.thClasses">項目</th>
+                  <th :class="tailwindStyles.thClasses">金額</th>
+                  <th :class="tailwindStyles.thClasses">剩餘額度</th>
+                  <th :class="tailwindStyles.thClasses">內容</th>
+                  <th :class="tailwindStyles.thLastClasses">操作</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover:bg-gray-50" v-for="record in tableData" :key="record.tradeId">
-                  <td class="text-sm text-gray-700 px-4 py-2">{{ record.no }}</td>
-                  <td class="text-sm text-gray-700 px-4 py-2">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</td>
-                  <td class="text-sm text-gray-700 px-4 py-2">{{ record.tradeCategory }}</td>
-                  <td class="text-sm text-gray-700 px-4 py-2">{{ currencyFormat(record.tradeAmount) }}</td>
-                  <!-- <td class="text-sm text-gray-700 px-4 py-2">{{ currencyFormat(record.tradeAmount) }}</td> -->
-                  <td class="text-sm text-gray-700 px-4 py-2">{{ record.tradeDescription }}</td>
-                  <td class="text-sm text-blue-600 sticky right-0 bg-white z-10 px-4 py-2">
-                    <financeRecordComponents-creditCardRecord-creditCardTradeData :tradeIdGot="record.tradeId" />
+                <tr :class="tailwindStyles.trClasses" v-for="record in tableData" :key="record.tradeId">
+                  <td :class="tailwindStyles.tdClasses">{{ record.no }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</td>
+                  <td :class="tailwindStyles.tdClasses">0</td>
+                  <td :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</td>
+                  <td :class="tailwindStyles.tdLastClasses">
+                    <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId"  />
                   </td>
                 </tr>
               </tbody>
@@ -44,15 +44,16 @@
         </template>
       </template>
       <template v-else-if="creditCardRecord.length === 0">
-        <div class="flex justify-start items-center h-full text-gray-500">無交易資料</div>
+        <span :class="tailwindStyles.noDataClasses">無交易資料</span>
       </template>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { ICreditCardRecordList } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat } from "@/composables/tools";
+import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
@@ -63,9 +64,17 @@ definePageMeta({
 });
 
 
+
+const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecordComponents/accountRecordSearching.vue"));
+const creditCardTradeData = defineAsyncComponent(() => import("@/components/financeRecordComponents/creditCardRecord/creditCardTradeData.vue"));
+
+
+
 const creditCardRecord = ref<ICreditCardRecordList[]>([]);
 const creditCardRecordFiltered = ref<ICreditCardRecordList[]>([]);
 const tableData = ref<ICreditCardRecordList[]>([]);
+
+
 
 </script>
 <style lang="scss" scoped></style>

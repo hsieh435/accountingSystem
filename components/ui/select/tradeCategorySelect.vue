@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-start items-center">
-    <select class="block border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white mx-1 px-2 py-1" v-model="tradeTypeId">
+    <select class="block border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white mx-1 px-2 py-1" v-model="tradeCategoryId">
       <option value="">請選擇</option>
       <option value="category1">Category 1</option>
       <option value="category2">Category 2</option>
@@ -14,20 +14,22 @@ import { ref, onMounted, watch } from "vue";
 
 
 
-const emits = defineEmits(["sendbackTradeTypeId"]);
+const props = withDefaults(defineProps<{ tradeCategoryGot?: string; }>(), { tradeCategoryGot: "", });
+const emits = defineEmits(["sendbackTradeCategory"]);
 
 
 
-const tradeTypeId = ref<string>("");
+const tradeCategoryId = ref<string>("");
 
 
 
 onMounted(async () => {
+  tradeCategoryId.value = props.tradeCategoryGot || "";
   await searchingTradeType();
 });
 
-watch(tradeTypeId, () => {
-  emits("sendbackTradeTypeId", tradeTypeId.value);
+watch(tradeCategoryId, () => {
+  emits("sendbackTradeCategory", tradeCategoryId.value);
 });
 
 

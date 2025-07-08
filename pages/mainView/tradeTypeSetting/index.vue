@@ -1,10 +1,10 @@
 <template>
   <div class="flex justify-center items-center">
-    <parameterSettingComponents-tradeTypeComponents-tradeTypeData />
+    <tradeTypeData />
   </div>
 </template>
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 
 
 
@@ -13,6 +13,10 @@ definePageMeta({
   functionTitle: "參數設定",
   subTitle: "支出類型設定",
 })
+
+
+
+const tradeTypeData = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeTypeComponents/tradeTypeData.vue"));
 
 
 

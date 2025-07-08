@@ -1,14 +1,5 @@
 <template>
-  <div class="flex justify-start items-center">
-    <!-- <span class="block text-sm font-medium text-gray-700 mx-1">{{ props.selectTitle }}：</span> -->
-    <select class="block border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white mx-1 px-2 py-1" v-model="schemaId" :disabled="isSelectDisabled" >
-      <option value="">請選擇{{ props.selectTitle }}</option>
-      <option value="category1">Category 1</option>
-      <option value="category2">Category 2</option>
-      <option value="category3">Category 3</option>
-      <!-- <option v-for="item in items" :key="item.value" :value="item.value">{{ item.label }}</option> -->
-    </select>
-  </div>
+  <UInputMenu v-model="schemaId" value-key="id" :items="items" placeholder="請搜尋" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -42,5 +33,26 @@ watch(schemaId, () => {
 async function searchingAccountLists() {
   // 在此加入 API 呼叫與驗證邏輯
 };
+
+
+
+const items = ref([
+  {
+    label: "category 1",
+    id: "1"
+  },
+  {
+    label: "category 2",
+    id: "2"
+  },
+  {
+    label: "category 3",
+    id: "3"
+  },
+  {
+    label: "category 4",
+    id: "4"
+  }
+]);
 </script>
 <style lang="scss" scoped></style>

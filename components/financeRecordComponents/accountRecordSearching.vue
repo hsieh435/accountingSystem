@@ -2,26 +2,25 @@
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full">
     <div class="flex items-center mx-3 my-2">
       <span>{{ props.accountTypeName ? props.accountTypeName + "：" : "" }}</span>
-      <ui-select-accountSelect :selectId="props.accountTypeId" :selectTitle="props.accountTypeName" @sendbackRecord="settingAccountId" />
+      <accountSelect :selectTargetId="props.accountTypeId" :selectTitle="props.accountTypeName" @sendbackRecord="settingAccountId" />
     </div>
 
     <div class="flex items-center mx-3 my-2">
-      <span>出納類型：</span>
-      <ui-select-tradeTypeSelect @sendbackTradeTypeId="settingTradeTypeId" />
+      <span>出納類型：</span><tradeCategorySelect @sendbackTradeTypeId="settingTradeTypeId" />
     </div>
 
     <div class="flex items-center mx-3 my-2">
       <span>時間區間：</span>
-      <ui-select-dateSelect :dateSelect="searchParams.startingDate" @sendbackRecord="settingSettingDate" />
+      <dateSelect :dateSelect="searchParams.startingDate" @sendbackRecord="settingSettingDate" />
       <span>～</span>
-      <ui-select-dateSelect :dateSelect="searchParams.endDate" @sendbackRecord="settingEndDate" />
+      <dateSelect :dateSelect="searchParams.endDate" @sendbackRecord="settingEndDate" />
     </div>
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { defineAsyncComponent, reactive } from "vue";
 import { getCurrentYear } from "@/composables/tools";
 
 
@@ -31,8 +30,14 @@ const emits = defineEmits(["sendbackRecord"]);
 
 
 
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
+const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
+
+
+
 const searchParams = reactive<{ accountId: string; tradeTypeId: string; startingDate: string; endDate: string; }>({
-  accountId: "",
+  accountId: props.accountTypeId || "",
   tradeTypeId: "",
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",

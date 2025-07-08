@@ -1,39 +1,31 @@
 <template>
-  <div class="flex justify-start items-center">
-    <!-- <span class="block text-sm font-medium text-gray-700 mx-1">{{ props.selectTitle }}：</span> -->
-    <select class="block border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white mx-1 px-2 py-1" v-model="accountId" :disabled="isSelectDisabled" >
-      <option value="">請選擇{{ props.selectTitle }}</option>
-      <option value="category1">Category 1</option>
-      <option value="category2">Category 2</option>
-      <option value="category3">Category 3</option>
-      <!-- <option v-for="item in items" :key="item.value" :value="item.value">{{ item.label }}</option> -->
-    </select>
-  </div>
+  <UInputMenu v-model="accountId" value-key="id" :items="items" placeholder="請搜尋" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 
 
 
-
-const props = withDefaults(defineProps<{ selectId?: string; selectTitle?: string }>(), { selectId: "", selectTitle: "", });
+const props = withDefaults(defineProps<{ selectTargetId?: string; selectTitle?: string; accountIdGot?: string; isDisable?: boolean }>(), { selectTargetId: "", selectTitle: "", accountIdGot: "", isDisable: false });
 const emits = defineEmits(["sendbackAccountId"]);
 
 
 
 const accountId = ref<string>("");
-const isSelectDisabled = ref<boolean>(true);
+const isSelectDisabled = ref<boolean>(false);
 
 
 
 onMounted(async () => {
-  if (props.selectId) {
+  if (props.selectTargetId) {
     await searchingAccountLists();
-    isSelectDisabled.value = false;
+    isSelectDisabled.value = props.isDisable;
+    accountId.value = props.accountIdGot;
   }
 });
 
 watch(accountId, () => {
+  console.log("accountId:", accountId.value);
   emits("sendbackAccountId", accountId.value);
 });
 
@@ -42,5 +34,25 @@ watch(accountId, () => {
 async function searchingAccountLists() {
   // 在此加入 API 呼叫與驗證邏輯
 };
+
+
+const items = ref([
+  {
+    label: "category 1",
+    id: "1"
+  },
+  {
+    label: "category 2",
+    id: "2"
+  },
+  {
+    label: "category 3",
+    id: "3"
+  },
+  {
+    label: "category 4",
+    id: "4"
+  }
+]);
 </script>
 <style lang="scss" scoped></style>

@@ -1,106 +1,39 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <personalSettingComponents-cashCardSetting-cashCardData />
+      <cashCardData />
     </div>
 
     <div class="mx-5">
       <template v-if="cashCardList.length > 0">
         <ui-pagination
           :totalDataQuanity="cashCardList.length"
-          :searchingPlaceholder="'搜尋儲值票名稱'"
-        />
+          :searchingPlaceholder="'搜尋儲值票名稱'" />
         <template v-if="cashCardListFiltered.length > 0">
           <div class="overflow-x-auto">
-            <table
-              class="min-w-full table-auto border-collapse border border-gray-200"
-            >
-              <thead class="bg-gray-100">
-                <tr class="border border-gray-200">
-                  <td
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    NO.
-                  </td>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    票卡名稱
-                  </th>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    目前金額
-                  </th>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    最小儲值金額
-                  </th>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    最大儲值金額
-                  </th>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    建立時間
-                  </th>
-                  <th
-                    class="text-left text-sm text-gray-600 px-4 py-2 border border-gray-200"
-                  >
-                    操作
-                  </th>
+            <table :class="tailwindStyles.tableClasses">
+              <thead :class="tailwindStyles.theadClasses">
+                <tr :class="tailwindStyles.trClasses">
+                  <td :class="tailwindStyles.thClasses">NO.</td>
+                  <th :class="tailwindStyles.thClasses">票卡名稱</th>
+                  <th :class="tailwindStyles.thClasses">目前金額</th>
+                  <th :class="tailwindStyles.thClasses">最小儲值金額</th>
+                  <th :class="tailwindStyles.thClasses">最大儲值金額</th>
+                  <th :class="tailwindStyles.thClasses">建立時間</th>
+                  <th :class="tailwindStyles.thLastClasses">操作</th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  class="hover:bg-gray-50 border border-gray-200"
-                  v-for="card in tableData"
-                  :key="card.cashCardId"
-                >
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.no }}
-                  </td>
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.cashCardName }}
-                  </td>
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.presentAmount }}
-                  </td>
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.minimumValueAllowed }}
-                  </td>
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.maximumValueAllowed }}
-                  </td>
-                  <td
-                    class="text-sm text-gray-700 px-4 py-2 border border-gray-200"
-                  >
-                    {{ card.createDate }}
-                  </td>
-                  <td
-                    class="flex justify-center items-center text-sm text-gray-600 sticky right-0 z-10 px-4 py-2 border border-gray-200"
-                  >
-                    <personalSettingComponents-cashCardSetting-cashCardData
-                      :cashCardId="card.cashCardId"
-                    />
-                    <ui-buttonGroup
-                      showRemove
-                      :createText="'刪除儲值票卡'"
-                      @dataRemove="removeCashCard()"
-                    />
+                <tr :class="tailwindStyles.trClasses" v-for="card in tableData" :key="card.cashCardId">
+                  <td :class="tailwindStyles.tdClasses">{{ card.no }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ card.cashCardName }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ card.createDate }}</td>
+                  <td :class="tailwindStyles.tdLastClasses">
+                    <cashCardData :cashCardId="card.cashCardId" />
+                    <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard()" />
                   </td>
                 </tr>
               </tbody>
@@ -109,22 +42,29 @@
         </template>
       </template>
       <template v-else-if="cashCardList.length === 0">
-        <div class="flex justify-start items-center h-full text-gray-500">
-          無儲值票卡資料
-        </div>
+        <span :class="tailwindStyles.noDataClasses">無儲值票卡資料</span>
       </template>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { ICashCardList } from "@/models/index";
+import { tailwindStyles } from "@/assets/css/tailwindStyles";
+
+
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   functionTitle: "個人設定",
   subTitle: "儲值票卡資料設定",
 });
+
+
+
+const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardSetting/cashCardData.vue"));
+
+
 
 const cashCardList = ref<any[]>([]);
 const cashCardListFiltered = ref<ICashCardList[]>([]);
