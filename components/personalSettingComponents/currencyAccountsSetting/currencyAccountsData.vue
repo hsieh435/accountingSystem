@@ -87,19 +87,25 @@ async function currencyAccountDataHandling(apiMsg?: string) {
           <span class="col-start-1 col-end-3 text-right">最小允許金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
-        
+
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">薪資帳戶：</span>
-          <div class="flex justify-start items-center">
-            <input id="isSalaryAccountY" name="isSalaryAccount" type="radio" value="${true}" />
-            <label class="ms-1 me-5" for="isSalaryAccountY">是</label>
-
-            <input id="isSalaryAccountN" name="isSalaryAccount" type="radio" value="${false}" />
-            <label class="ms-1 me-5" for="isSalaryAccountN">否</label>
-          </div>
+          <span class="col-start-1 col-end-3 text-right">警示金額：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
+
+        <div class="flex justify-center items-center w-full my-2">
+          <div class="mx-2">
+            <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
+            <label for="isSalaryAccount">薪資帳戶</label>
+          </div>          
+          <div class="mx-2">
+            <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
+            <label for="openAlert">開啟警示</label>
+          </div>
+        </div>
+        
 
         ${props.currencyAccountIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -119,15 +125,12 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+
+      const isSalaryAccountCheckbox = document.getElementById("isSalaryAccount") as HTMLInputElement;
+      isSalaryAccountCheckbox.checked = dataParams.isSalaryAccount;
       
-      const yesRadio = document.getElementById("isSalaryAccountY") as HTMLInputElement;
-      const noRadio = document.getElementById("isSalaryAccountN") as HTMLInputElement;
-      
-      if (dataParams.isSalaryAccount === true) {
-        yesRadio.checked = true;
-      } else {
-        noRadio.checked = true;
-      }
+      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
+      openAlertCheckbox.checked = dataParams.openAlert;
 
 
       if (apiMsg) {
@@ -142,23 +145,25 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
-      dataParams.isSalaryAccount = ((document.querySelector(`input[name="isSalaryAccount"]:checked`) as HTMLInputElement).value === "true");
+      dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
+      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
+      dataParams.isSalaryAccount = Boolean((document.getElementById("isSalaryAccount") as HTMLInputElement).checked);
 
 
       if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");
       }
-
       if (!dataParams.accountName) {
         errors.push("請填寫存款帳戶名稱");
       }
-
       if (isNaN(dataParams.startingAmount)) {
         errors.push("請填寫帳戶初始金額");
       }
-
       if (isNaN(dataParams.minimumValueAllowed)) {
         errors.push("請填寫帳戶最小允許金額");
+      }
+      if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
+        errors.push("請填寫帳戶警示金額");
       }
 
       if (errors.length > 0) {

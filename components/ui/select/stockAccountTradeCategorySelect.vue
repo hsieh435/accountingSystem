@@ -1,7 +1,9 @@
 <template>
   <div class="flex justify-start items-center">
     <select :class="tailwindStyles.selectClasses" v-model="tradeCategoryId">
-      <option v-for="category in tradeCategoryArray" :key="category.value" :value="category.value">{{ category.label }}</option>
+      <option v-for="category in tradeCategoryArray" :key="category.value" :value="category.value">
+        {{ category.label }}
+      </option>
     </select>
   </div>
 </template>
@@ -11,7 +13,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
-const props = withDefaults(defineProps<{ tradeCategoryGot?: string; sellectAll?: boolean; }>(), { tradeCategoryGot: "", sellectAll: true });
+const props = withDefaults(defineProps<{ tradeCategoryGot?: string; sellectAll?: boolean }>(), { tradeCategoryGot: "", sellectAll: true });
 const emits = defineEmits(["sendbackTradeCategory"]);
 
 
@@ -27,12 +29,16 @@ onMounted(async () => {
 });
 
 watch(tradeCategoryId, () => {
+  // console.log("tradeCategoryId:", tradeCategoryId.value);
   emits("sendbackTradeCategory", tradeCategoryId.value);
 });
 
 
 
+
+
 async function searchingTradeType() {
+  
 
   // .map
   tradeCategoryArray.value = [
@@ -47,5 +53,8 @@ async function searchingTradeType() {
   }
 
 };
+
+
+
 </script>
 <style lang="scss" scoped></style>

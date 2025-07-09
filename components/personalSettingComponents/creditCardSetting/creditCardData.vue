@@ -82,6 +82,18 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">警示金額：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="alertValue" value="${dataParams.alertValue}" type="number" />
+        </div>
+
+
+        <div class="flex justify-center items-center w-full my-2">
+          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
+          <label class="mx-1" for="openAlert">開啟警示</label>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardSchema" value="${dataParams.creditcardSchema}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
@@ -105,6 +117,10 @@ async function creditCardDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
+      openAlertCheckbox.checked = dataParams.openAlert;
+
+
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;
@@ -120,14 +136,18 @@ async function creditCardDataHandling(apiMsg?: string) {
       dataParams.creditcardName = (document.getElementById("creditcardName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
       dataParams.creditcardSchema = (document.getElementById("creditcardSchema") as HTMLInputElement).value;
+      dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
+      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
 
 
       if (!dataParams.creditcardName) {
         errors.push("請填寫信用卡名稱");
       }
-
       if (isNaN(dataParams.creditPerMonth) || dataParams.creditPerMonth <= 0) {
         errors.push("請填寫信用卡信用額度");
+      }
+      if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
+        errors.push("請填寫信用卡警示金額");
       }
 
       if (errors.length > 0) {

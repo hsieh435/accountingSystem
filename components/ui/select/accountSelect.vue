@@ -1,18 +1,26 @@
 <template>
-  <UInputMenu v-model="accountId" value-key="id" :items="items" placeholder="請搜尋" />
+  <div class="flex justify-start items-center">
+    <select :class="tailwindStyles.selectClasses" v-model="accountId">
+      <option v-for="account in accountArray" :key="account.value" :value="account.value">
+        {{ account.label }}
+      </option>
+    </select>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
+import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
-const props = withDefaults(defineProps<{ selectTargetId?: string; selectTitle?: string; accountIdGot?: string; isDisable?: boolean }>(), { selectTargetId: "", selectTitle: "", accountIdGot: "", isDisable: false });
+const props = withDefaults(defineProps<{ selectTargetId?: string; selectTitle?: string; accountIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), { selectTargetId: "", selectTitle: "", accountIdGot: "", sellectAll: true, isDisable: false });
 const emits = defineEmits(["sendbackAccountId"]);
 
 
 
 const accountId = ref<string>("");
 const isSelectDisabled = ref<boolean>(false);
+const accountArray = ref<{ label: string; value: string; }[]>([]);
 
 
 
@@ -32,27 +40,23 @@ watch(accountId, () => {
 
 
 async function searchingAccountLists() {
-  // 在此加入 API 呼叫與驗證邏輯
+
+
+  // .map
+  accountArray.value = [
+    { label: "account 1", value: "1" },
+    { label: "account 2", value: "2" },
+    { label: "account 3", value: "3" },
+    { label: "account 4", value: "4" }
+  ];
+
+  if (props.sellectAll) {
+    accountArray.value.unshift({ label: "所有帳戶", value: "" });
+  }
+
 };
 
 
-const items = ref([
-  {
-    label: "category 1",
-    id: "1"
-  },
-  {
-    label: "category 2",
-    id: "2"
-  },
-  {
-    label: "category 3",
-    id: "3"
-  },
-  {
-    label: "category 4",
-    id: "4"
-  }
-]);
+
 </script>
 <style lang="scss" scoped></style>
