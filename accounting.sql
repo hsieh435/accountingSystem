@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-08 20:26:06
+-- Started on 2025-07-09 22:03:26
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -262,7 +262,7 @@ CREATE TABLE public.currency_accounts_trade (
     account_type character varying,
     incoming_outgoing character varying,
     trade_category character varying,
-    trade_amount numeric(14,2),
+    trade_amount numeric(15,2),
     trade_description text,
     trade_note text
 );
@@ -314,12 +314,12 @@ CREATE TABLE public.stock_account_trade (
     buy_sell character varying NOT NULL,
     stock_no character varying NOT NULL,
     stock_name character varying NOT NULL,
-    price_per_share numeric(14,2) NOT NULL,
+    price_per_share numeric(15,2) NOT NULL,
     quantity integer NOT NULL,
-    total_price numeric(14,2) NOT NULL,
-    handling_fee numeric(14,2) NOT NULL,
-    transaction_tax numeric(14,2) NOT NULL,
-    trade_price numeric(14,2) NOT NULL,
+    total_price numeric(15,2) NOT NULL,
+    handling_fee numeric(15,2) NOT NULL,
+    transaction_tax numeric(15,2) NOT NULL,
+    trade_price numeric(15,2) NOT NULL,
     trade_description text,
     trade_note text
 );
@@ -387,7 +387,7 @@ ALTER TABLE public.trade_category OWNER TO postgres;
 CREATE TABLE public.user_data (
     user_id character varying(20) NOT NULL,
     user_name character varying(20) NOT NULL,
-    user_password character varying,
+    user_password character varying NOT NULL,
     created_date timestamp with time zone
 );
 
@@ -649,6 +649,11 @@ COPY public.stock_accounts_list (account_id, user_id, account_name, account_type
 --
 
 COPY public.stockaccount_trade_category (category_code, category_name, sort) FROM stdin;
+else	其他	99
+interest	利息	50
+dividend	配息	3
+buy	買入	1
+sell	賣出	2
 \.
 
 
@@ -839,7 +844,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-07-08 20:26:06
+-- Completed on 2025-07-09 22:03:26
 
 --
 -- PostgreSQL database dump complete
