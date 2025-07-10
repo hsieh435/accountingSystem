@@ -97,6 +97,11 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "mainView/financeStatement",
       },
+      {
+        label: "證券投資報表",
+        icon: "i-lucide-file-text",
+        to: "mainView/stockInvestmentStatement",
+      },
     ]
   },
   {
@@ -107,12 +112,12 @@ const items = ref<NavigationMenuItem[]>([
       {
         label: "收支類型設定",
         icon: "i-lucide-file-text",
-        to: "mainView/tradeTypeSetting",
+        to: "mainView/tradeCategorySetting",
       },
       {
-        label: "證券帳戶收支類型設定",
+        label: "帳戶類型設定",
         icon: "i-lucide-file-text",
-        to: "mainView/stockAccountTradeCategorySetting",
+        to: "mainView/accountTypeSetting",
       },
     ]
   }

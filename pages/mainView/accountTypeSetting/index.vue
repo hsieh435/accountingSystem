@@ -37,7 +37,7 @@
         </template>
       </template>
       <template v-else-if="tradeCategoryList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
+        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
       </template>
     </div>
   </div>
@@ -53,7 +53,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   functionTitle: "參數設定",
-  subTitle: "支出類型設定",
+  subTitle: "帳戶類型設定",
 })
 
 
