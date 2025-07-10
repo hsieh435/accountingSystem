@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center mx-3 my-2">
-      <span>出納類型：</span><tradeCategorySelect @sendbackTradeTypeId="settingTradeTypeId" />
+      <span>收支類型：</span><tradeCategorySelect @sendbackTradeTypeId="settingTradeTypeId" />
     </div>
 
     <div class="flex items-center mx-3 my-2">
@@ -45,13 +45,6 @@ const searchParams = reactive<{ accountId: string; tradeTypeId: string; starting
 
 
 
-const items = [
-  { label: "Option 1", value: "option-1" },
-  { label: "Option 2", value: "option-2" },
-  { label: "Option 3", value: "option-3" },
-];
-
-
 async function settingAccountId(accountIdSendback: string) {
   searchParams.accountId = accountIdSendback;
 }
@@ -72,7 +65,6 @@ async function settingEndDate(dateSendback: string) {
 
 async function searchingRecord() {
   console.log("searchParams:", searchParams);
-
   emits("sendbackRecord");  
 }
 

@@ -8,7 +8,8 @@
       <template v-if="cashCardList.length > 0">
         <ui-pagination
           :totalDataQuanity="cashCardList.length"
-          :searchingPlaceholder="'搜尋儲值票名稱'" />
+          :searchingPlaceholder="'搜尋儲值票名稱'"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="cashCardListFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
@@ -50,6 +51,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { ICashCardList } from "@/models/index";
+import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -65,6 +67,10 @@ definePageMeta({
 const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardSetting/cashCardData.vue"));
 
 
+
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
 
 const cashCardList = ref<any[]>([]);
 const cashCardListFiltered = ref<ICashCardList[]>([]);
@@ -122,9 +128,33 @@ const data = ref([
   },
 ]);
 
-// cashCardList.value = data.value;
-// cashCardListFiltered.value = cashCardList.value;
-// tableData.value = cashCardListFiltered.value;
+
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await cashCardListFilterEvent();
+}
+
+
+
+async function cashCardListFilterEvent() {
+  // cashCardList.value = data.value;
+  // cashCardListFiltered.value = cashCardList.value;
+  // tableData.value = cashCardListFiltered.value;
+  
+  cashCardListFiltered.value = searchWord.value.length > 0
+  ? cashCardList.value.filter((row: ICashCardList) => {
+    return row.cashCardName.toLowerCase().includes(searchWord.value.toLowerCase())
+  })
+  : cashCardList.value;
+  
+  tableData.value = sliceArray(cashCardListFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+
 
 async function removeCashCard() {
   //

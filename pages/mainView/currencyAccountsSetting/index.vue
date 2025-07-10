@@ -8,7 +8,8 @@
       <template v-if="currencyAccountList.length > 0">
         <ui-pagination
           :totalDataQuanity="currencyAccountList.length"
-          :searchingPlaceholder="'搜尋帳戶名稱'" />
+          :searchingPlaceholder="'搜尋帳戶名稱'"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="currencyAccountListFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
@@ -50,6 +51,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { ICurrencyAccountList } from "@/models/index";
+import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -65,13 +67,45 @@ definePageMeta({
 const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsSetting/currencyAccountsData.vue"));
 
 
+
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const currencyAccountList = ref<ICurrencyAccountList[]>([]);
 const currencyAccountListFiltered = ref<ICurrencyAccountList[]>([]);
 const tableData = ref<ICurrencyAccountList[]>([]);
 
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await currencyAccountListFilterEvent();
+}
+
+
+
+async function currencyAccountListFilterEvent() {
+  currencyAccountListFiltered.value = searchWord.value.length > 0
+  ? currencyAccountList.value.filter((row: ICurrencyAccountList) => {
+    return row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+    row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+    row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
+  })
+  : currencyAccountList.value;
+  
+  tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+
+
 async function removeCurrencyAccountData() {
   //
 }
-</script>
 
+
+
+</script>
 <style lang="scss" scoped></style>

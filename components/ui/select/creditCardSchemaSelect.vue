@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-start items-center">
-    <select :class="tailwindStyles.selectClasses" v-model="schemaId">
+    <select :class="tailwindStyles.selectClasses" v-model="schemaId" :disabled="props.isAble">
       <option v-for="schema in schemaArray" :key="schema.value" :value="schema.value">{{ schema.label }}</option>
     </select>
   </div>
@@ -11,7 +11,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
-const props = withDefaults(defineProps<{ selectId?: string; sellectAll?: boolean }>(), { selectId: "", sellectAll: true, });
+const props = withDefaults(defineProps<{ selectId?: string; sellectAll?: boolean; isAble?: boolean }>(), { selectId: "", sellectAll: true, isAble: false });
 const emits = defineEmits(["sendbackSchemaId"]);
 
 

@@ -56,7 +56,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易日期：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div id="tradeDatetimeComponent"></div>
         </div>
 
@@ -96,7 +96,6 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     didOpen: () => {
 
 
-      // 初始化票卡選擇器
       let creditCardAccountSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
         selectId: "creditCard",
         selectTitle: "信用卡",
@@ -108,8 +107,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       });
       creditCardAccountSelect.mount("#accountSelectComponent");
 
-
-      // 初始化日期時間選擇器      
+  
       let cashCardTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
@@ -119,7 +117,6 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       cashCardTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      // 初始化收支項目選擇器
       let cashCardTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
         tradeCategoryId: dataParams.tradeCategory,
         onSendbackTradeCategory: (tradeCategoryId: string) => {
@@ -146,13 +143,11 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
 
       if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易日期");
+        errors.push("請填寫交易時間");
       }
-
       if (!dataParams.tradeCategory) {
         errors.push("請選擇收支項目");
       }
-
       if (dataParams.tradeAmount < 0) {
         errors.push("交易金額不得為負");
       }

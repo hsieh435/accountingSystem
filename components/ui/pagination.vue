@@ -15,7 +15,7 @@
 
     
       <template v-if="props.showSortSelect && sortMethodGot.length > 0">
-        <div class="d-flex flex-row justify-content-start align-items-center mx-2">
+        <div class="d-flex flex-row justify-start items-center mx-2">
           <font-awesome-icon class="mx-1" :icon="['fas', 'sort']" />
           <select class="form-select form-select-sm w-auto mx-1" @change="clickSortSelect" v-model="sortSelectValue">
             <template v-for="(sort, sortIndex) in sortMethodGot" :key="sortIndex">
@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { ISortArray } from "@/models/index";
-
 
 
 
@@ -160,6 +159,7 @@ watch([currentPage, itemsPerPage, keyWord], () => {
   console.log("currentPage:", currentPage.value);
   console.log("itemsPerPage:", itemsPerPage.value);
   console.log("keyWord:", keyWord.value);
+  emits("tableSliceChange", currentPage.value, itemsPerPage.value, keyWord.value);
 });
 
 watch(isCheckBoxPicked, () => {

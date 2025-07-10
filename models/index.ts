@@ -148,7 +148,7 @@ export interface IStockAccountRecordList {
   tradeDatetime: string;
   accountUser: string;
   incomingOutgoing: string;
-  buySell: string;
+  tradeCategory: string;
   stockNo: string;
   stockName: string;
   pricePerShare: number;
@@ -161,8 +161,9 @@ export interface IStockAccountRecordList {
 }
 
 // 證券帳戶收支類型
-export interface IStockAccountTradeCategory {
-  categoryCode: number;
+export interface ITradeCategory {
+  no?: number;
+  categoryCode: string;
   categoryName: string;
   sort: number;
 }

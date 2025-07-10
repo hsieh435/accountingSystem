@@ -1,5 +1,5 @@
 <template>
-  <UForm ref="form">
+  <!-- <UForm ref="form">
     <div class="grid grid-cols-3 gap-2">
       <UFormField  label="Input" name="input">
         <UInput placeholder="john@lennon.com" />
@@ -13,7 +13,10 @@
     <div class="flex gap-2 mt-8">
       <ui-buttonGroup :showSave="true" :saveText="'修改'" @dataSave="submitUserData()" />
     </div>
-  </UForm>
+  </UForm> -->
+  <div>
+    
+  </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";

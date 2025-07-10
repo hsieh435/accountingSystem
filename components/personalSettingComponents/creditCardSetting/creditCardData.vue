@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, createApp, defineAsyncComponent } from "vue";
 import { ICreditCardList } from "@/models/index";
 import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
 import Swal from "sweetalert2";
@@ -16,6 +16,10 @@ import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ creditCardIdGot?: string; userIdGot?: string; }>(), { creditCardIdGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
+
+
+
+const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
 
 
 
@@ -35,7 +39,7 @@ const dataParams = reactive<ICreditCardList>({
 
 async function searchingCreditCardData() {
   // 在這裡可以加入 API 呼叫來獲取信用卡資料
-  // creditCardDataHandling();
+  creditCardDataHandling();
 }
 
 
@@ -47,7 +51,7 @@ async function creditCardDataHandling(apiMsg?: string) {
     title: props.creditCardIdGot ? "修改信用卡資料" : "新增信用卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         ${props.creditCardIdGot ? `
@@ -59,43 +63,37 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">信用卡名稱：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardName" value="${dataParams.creditcardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行代碼：</span>
           <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankName" value="${dataParams.creditcardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">信用額度：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡機構：</span>
+          <div id="creditcardSchemaSelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="alertValue" value="${dataParams.alertValue}" type="number" />
-        </div>
-
-
-        <div class="flex justify-center items-center w-full my-2">
-          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">開啟警示</label>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡機構：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardSchema" value="${dataParams.creditcardSchema}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -105,6 +103,12 @@ async function creditCardDataHandling(apiMsg?: string) {
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
         </div>` : 
         ""}
+
+
+        <div class="flex justify-center items-center w-full my-2">
+          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
+          <label class="mx-1" for="openAlert">開啟警示</label>
+        </div>
 
       </div>
     `,
@@ -117,6 +121,19 @@ async function creditCardDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+      
+      let creditCardSchemaSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue")), {
+        selectId: "cashCard",
+        sellectAll: false,
+        isAble: dataParams.creditcardId ? true : false,
+        onSendbackSchemaId: (schemaId: string) => {
+          dataParams.creditcardSchema = schemaId;
+          // console.log("schemaId:", schemaId);
+        },
+      });
+      creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
+
+
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
       openAlertCheckbox.checked = dataParams.openAlert;
 
@@ -135,13 +152,21 @@ async function creditCardDataHandling(apiMsg?: string) {
 
       dataParams.creditcardName = (document.getElementById("creditcardName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
-      dataParams.creditcardSchema = (document.getElementById("creditcardSchema") as HTMLInputElement).value;
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
 
 
       if (!dataParams.creditcardName) {
         errors.push("請填寫信用卡名稱");
+      }
+      if (!dataParams.creditcardBankCode) {
+        errors.push("請填寫發卡銀行代碼");
+      }
+      if (!dataParams.creditcardBankName) {
+        errors.push("請填寫發卡銀行名稱");
+      }
+      if (!dataParams.creditcardSchema) {
+        errors.push("請選擇發卡機構");
       }
       if (isNaN(dataParams.creditPerMonth) || dataParams.creditPerMonth <= 0) {
         errors.push("請填寫信用卡信用額度");

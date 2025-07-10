@@ -25,7 +25,7 @@ const dataParams = reactive<IStockAccountRecordList>({
   tradeDatetime: "",
   accountUser: "",
   incomingOutgoing: "",
-  buySell: "",
+  tradeCategory: "",
   stockNo: "",
   stockName: "",
   pricePerShare: 0,
@@ -60,7 +60,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易日期：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div id="tradeDatetimeComponent"></div>
         </div>
 
@@ -68,6 +68,12 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
           <div class="col-span-4" id="incomeOutgoSelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
+          <div class="col-span-4" id="stockAccountTradeCategorySelectComponent"></div>
         </div>
 
 
@@ -134,7 +140,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
     allowOutsideClick: false,
     didOpen: () => {
 
-      // 初始化存款帳戶選擇器
+
       let stockAccountSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
         selectId: "stockAccount",
         selectTitle: "證券帳戶",
@@ -145,8 +151,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       });
       stockAccountSelect.mount("#accountSelectComponent");
 
-
-      // 初始化日期時間選擇器      
+    
       let currencyAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
@@ -156,7 +161,6 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      // 初始化收支選擇器
       let currencyAccountIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
         tradeCategoryGot: dataParams.incomingOutgoing,
         onSendbackIncomeExpense: (type: string) => {
@@ -166,14 +170,13 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       currencyAccountIncomeOutgo.mount("#incomeOutgoSelectComponent");
 
 
-      // 初始化收支項目選擇器
-      // let currencyAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
-      //   tradeCategoryId: dataParams.tradeCategory,
-      //   onSendbackTradeCategory: (tradeCategoryId: string) => {
-      //     dataParams.tradeCategory = tradeCategoryId;
-      //   },
-      // });
-      // currencyAccountCategory.mount("#tradeCategorySelectComponent");
+      let currencyAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")), {
+        tradeCategoryGot: dataParams.tradeCategory,
+        onSendbackTradeCategory: (tradeCategoryId: string) => {
+          dataParams.tradeCategory = tradeCategoryId;
+        },
+      });
+      currencyAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
 
       
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
@@ -217,19 +220,15 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       if (!dataParams.accountId) {
         errors.push("請選擇存款帳戶");
       }
-
       if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易日期");
+        errors.push("請填寫交易時間");
       }
-
       if (!dataParams.incomingOutgoing) {
         errors.push("請選擇收支");
       }
-
-      // if (!dataParams.tradeCategory) {
-      //   errors.push("請選擇收支項目");
-      // }
-
+      if (!dataParams.tradeCategory) {
+        errors.push("請選擇交易項目");
+      }
       if (dataParams.pricePerShare < 0) {
         errors.push("每股金額不得為負");
       }

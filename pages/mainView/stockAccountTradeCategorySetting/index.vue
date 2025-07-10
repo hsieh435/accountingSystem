@@ -37,7 +37,7 @@
         </template>
       </template>
       <template v-else-if="tradeCategoryList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+        <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
       </template>
     </div>
   </div>

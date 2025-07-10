@@ -11,7 +11,8 @@
       <template v-if="cashCardRecord.length > 0">
         <ui-pagination 
           :totalDataQuanity="cashCardRecordFiltered.length"
-          :showFilter="false" />
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="cashCardRecordFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
@@ -19,7 +20,7 @@
                 <tr :class="tailwindStyles.trClasses">
                   <th :class="tailwindStyles.thClasses">NO.</th>
                   <th :class="tailwindStyles.thClasses">票卡名稱</th>
-                  <th :class="tailwindStyles.thClasses">日期時間</th>
+                  <th :class="tailwindStyles.thClasses">交易時間</th>
                   <th :class="tailwindStyles.thClasses">收支</th>
                   <th :class="tailwindStyles.thClasses">項目</th>
                   <th :class="tailwindStyles.thClasses">金額</th>
@@ -56,7 +57,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { ICashCardRecordList } from "@/models/index";
-import { yearMonthDayTimeFormat, currencyFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -74,10 +75,30 @@ const cashCardTradeData = defineAsyncComponent(() => import("@/components/financ
 
 
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const cashCardRecord = ref<ICashCardRecordList[]>([]);
 const cashCardRecordFiltered = ref<ICashCardRecordList[]>([]);
 const tableData = ref<ICashCardRecordList[]>([]);
 
+
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await cashCardRecordFilterEvent();
+}
+
+
+
+async function cashCardRecordFilterEvent() {
+  cashCardRecordFiltered.value = cashCardRecord.value;  
+  tableData.value = sliceArray(cashCardRecordFiltered.value, currentPage.value, itemsPerPage.value);
+}
 
 
 </script>

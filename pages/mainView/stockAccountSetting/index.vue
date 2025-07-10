@@ -8,7 +8,8 @@
       <template v-if="stockAccountList.length > 0">
         <ui-pagination
           :totalDataQuanity="stockAccountList.length"
-          :searchingPlaceholder="'搜尋帳戶名稱'" />
+          :searchingPlaceholder="'搜尋帳戶名稱'"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="stockAccountListFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
@@ -48,6 +49,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { IStockAccountList } from "@/models/index";
+import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -64,12 +66,44 @@ const stockAccountData = defineAsyncComponent(() => import("@/components/persona
 
 
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const stockAccountList = ref<IStockAccountList[]>([]);
 const stockAccountListFiltered = ref<IStockAccountList[]>([]);
 const tableData = ref<IStockAccountList[]>([]);
 
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await stockAccountListFilterEvent();
+}
+
+
+
+async function stockAccountListFilterEvent() {
+  stockAccountListFiltered.value = searchWord.value.length > 0
+  ? stockAccountList.value.filter((row: IStockAccountList) => {
+    return row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+    row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+    row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
+  })
+  : stockAccountList.value;
+  
+  tableData.value = sliceArray(stockAccountListFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+
+
 async function removeStockAccountData() {
   //
 }
+
+
+
 </script>
 <style lang="scss" scoped></style>

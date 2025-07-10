@@ -49,7 +49,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易日期：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div id="tradeDatetimeComponent"></div>
         </div>
 
@@ -95,7 +95,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     didOpen: () => {
 
 
-      // 初始化日期時間選擇器      
       let cashCardTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
@@ -105,7 +104,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       cashCardTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      // 初始化收支選擇器
       let cashCardIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
         tradeCategoryGot: dataParams.incomingOutgoing,
         onSendbackIncomeExpense: (type: string) => {
@@ -115,7 +113,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       cashCardIncomeOutgo.mount("#incomeOutgoSelectComponent");
 
 
-      // 初始化收支項目選擇器
       let cashCardTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
         tradeCategoryId: dataParams.tradeCategory,
         onSendbackTradeCategory: (tradeCategoryId: string) => {
@@ -142,17 +139,14 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
 
       if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易日期");
+        errors.push("請填寫交易時間");
       }
-
       if (!dataParams.incomingOutgoing) {
         errors.push("請選擇收支");
       }
-
       if (!dataParams.tradeCategory) {
         errors.push("請選擇收支項目");
       }
-
       if (dataParams.tradeAmount < 0) {
         errors.push("交易金額不得為負");
       }

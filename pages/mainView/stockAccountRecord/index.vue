@@ -12,14 +12,15 @@
       <template v-if="stockAccountRecord.length > 0">
         <ui-pagination 
           :totalDataQuanity="stockAccountRecordFiltered.length"
-          :showFilter="false" />
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="stockAccountRecordFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
               <thead :class="tailwindStyles.theadClasses">
                 <tr :class="tailwindStyles.trClasses">
                   <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">日期時間</th>
+                  <th :class="tailwindStyles.thClasses">交易時間</th>
                   <th :class="tailwindStyles.thClasses">買/賣</th>
                   <th :class="tailwindStyles.thClasses">股票</th>
                   <th :class="tailwindStyles.thClasses">金額</th>
@@ -63,7 +64,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { IStockAccountRecordList } from "@/models/index";
-import { yearMonthDayTimeFormat, currencyFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -81,9 +82,31 @@ const stockAccountTradeData = defineAsyncComponent(() => import("@/components/fi
 
 
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const stockAccountRecord = ref<IStockAccountRecordList[]>([]);
 const stockAccountRecordFiltered = ref<IStockAccountRecordList[]>([]);
 const tableData = ref<IStockAccountRecordList[]>([]);
+
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await stockAccountRecordFilterEvent();
+}
+
+
+
+async function stockAccountRecordFilterEvent() {
+  stockAccountRecordFiltered.value = stockAccountRecord.value;  
+  tableData.value = sliceArray(stockAccountRecordFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+
 
 </script>
 <style lang="scss" scoped></style>

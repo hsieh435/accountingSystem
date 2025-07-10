@@ -31,7 +31,7 @@ const dataParams = reactive<ICurrencyAccountList>({
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  isSalaryAccount: true,
+  isSalaryAccount: false,
   createdDate: getCurrentYMD(),
 });
 
@@ -51,59 +51,59 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     title: props.currencyAccountIdGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">存款帳戶號碼：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountId" value="${dataParams.accountId}" ${props.currencyAccountIdGot ? `disabled` : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">存款帳戶名稱：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountName" value="${dataParams.accountName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行代碼：</span>
           <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行名稱：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankName" value="${dataParams.accountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">初始金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountIdGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">最小允許金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-center items-center w-full my-2">
           <div class="mx-2">
-            <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
-            <label for="isSalaryAccount">薪資帳戶</label>
-          </div>          
-          <div class="mx-2">
             <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
             <label for="openAlert">開啟警示</label>
           </div>
+          <div class="mx-2">
+            <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
+            <label for="isSalaryAccount">薪資帳戶</label>
+          </div>          
         </div>
         
 
@@ -155,6 +155,12 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       }
       if (!dataParams.accountName) {
         errors.push("請填寫存款帳戶名稱");
+      }
+      if (!dataParams.accountBankCode) {
+        errors.push("請填寫銀行代碼");
+      }
+      if (!dataParams.accountBankName) {
+        errors.push("請填寫銀行名稱");
       }
       if (isNaN(dataParams.startingAmount)) {
         errors.push("請填寫帳戶初始金額");

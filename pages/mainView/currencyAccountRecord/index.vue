@@ -11,14 +11,15 @@
       <template v-if="currencyAccountRecord.length > 0">
         <ui-pagination 
           :totalDataQuanity="currencyAccountRecordFiltered.length"
-          :showFilter="false" />
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="currencyAccountRecordFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
               <thead :class="tailwindStyles.theadClasses">
                 <tr :class="tailwindStyles.trClasses">
                   <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">日期時間</th>
+                  <th :class="tailwindStyles.thClasses">交易時間</th>
                   <th :class="tailwindStyles.thClasses">收支</th>
                   <th :class="tailwindStyles.thClasses">項目</th>
                   <th :class="tailwindStyles.thClasses">金額</th>
@@ -54,7 +55,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { IcurrencyAccountRecordList } from "@/models/index";
-import { yearMonthDayTimeFormat, currencyFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -72,10 +73,29 @@ const currencyAccountTradeData = defineAsyncComponent(() => import("@/components
 
 
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const currencyAccountRecord = ref<IcurrencyAccountRecordList[]>([]);
 const currencyAccountRecordFiltered = ref<IcurrencyAccountRecordList[]>([]);
 const tableData = ref<IcurrencyAccountRecordList[]>([]);
 
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await currencyAccountRecordFilterEvent();
+}
+
+
+
+async function currencyAccountRecordFilterEvent() {
+  currencyAccountRecordFiltered.value = currencyAccountRecord.value;  
+  tableData.value = sliceArray(currencyAccountRecordFiltered.value, currentPage.value, itemsPerPage.value);
+}
 
 
 </script>

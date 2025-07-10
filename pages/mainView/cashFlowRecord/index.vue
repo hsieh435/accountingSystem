@@ -7,14 +7,15 @@
       <template v-if="cashFlowRecord.length > 0">
         <ui-pagination 
           :totalDataQuanity="cashFlowRecordFiltered.length"
-          :showFilter="false" />
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
         <template v-if="cashFlowRecordFiltered.length > 0">
           <div class="overflow-x-auto">
             <table :class="tailwindStyles.tableClasses">
               <thead :class="tailwindStyles.theadClasses">
                 <tr>
                   <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">日期時間</th>
+                  <th :class="tailwindStyles.thClasses">交易時間</th>
                   <th :class="tailwindStyles.thClasses">收支</th>
                   <th :class="tailwindStyles.thClasses">項目</th>
                   <th :class="tailwindStyles.thClasses">金額</th>
@@ -50,7 +51,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
 import { ICashFlowRecordList } from "@/models/index";
-import { yearMonthDayTimeFormat, currencyFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -66,10 +67,29 @@ const cashFlowTradeData = defineAsyncComponent(() => import("@/components/financ
 
 
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+const searchWord = ref<string>("");
+
 const cashFlowRecord = ref<ICashFlowRecordList[]>([]);
 const cashFlowRecordFiltered = ref<ICashFlowRecordList[]>([]);
 const tableData = ref<ICashFlowRecordList[]>([]);
 
+
+
+async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
+  currentPage.value = currentPageSendback;
+  itemsPerPage.value = itemsPerPageSendback;
+  searchWord.value = keyWord.trim();
+  await cashFlowRecordFilterEvent();
+}
+
+
+
+async function cashFlowRecordFilterEvent() {
+  cashFlowRecordFiltered.value = cashFlowRecord.value;  
+  tableData.value = sliceArray(cashFlowRecordFiltered.value, currentPage.value, itemsPerPage.value);
+}
 
 
 </script>

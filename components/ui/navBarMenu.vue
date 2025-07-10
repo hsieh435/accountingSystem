@@ -21,90 +21,99 @@ import { NavigationMenuItem } from "@nuxt/ui";
 
 const items = ref<NavigationMenuItem[]>([
   {
-    label: "Guide",
+    label: "個人設定",
     icon: "i-lucide-file-text",
-    // to: "/getting-started",
     children: [
       {
-        label: "Introduction",
+        label: "使用者資料",
         icon: "i-lucide-file-text",
         to: "mainView/userSetting",
       },
       {
-        label: "Installation",
-        icon: "i-lucide-file-text"
+        label: "現金資料設定",
+        icon: "i-lucide-file-text",
+        to: "mainView/cashFlowSetting",
       },
       {
-        label: "Icons",
+        label: "儲值票卡資料設定",
         icon: "i-lucide-file-text",
+        to: "mainView/cashCardSetting",
       },
       {
-        label: "Colors",
+        label: "信用卡資料設定",
         icon: "i-lucide-file-text",
+        to: "mainView/cashCardSetting",
       },
       {
-        label: "Theme",
+        label: "存款帳戶資料設定",
         icon: "i-lucide-file-text",
+        to: "mainView/currencyAccountsSetting",
+      },
+      {
+        label: "證券帳戶資料設定",
+        icon: "i-lucide-file-text",
+        to: "mainView/stockAccountSetting",
       }
     ]
   },
   {
-    label: "Composables",
+    label: "財務收支",
     icon: "i-lucide-file-text",
-    // to: "/composables",
     children: [
       {
-        label: "defineShortcuts",
+        label: "現金收支",
         icon: "i-lucide-file-text",
-        // to: "/composables/define-shortcuts"
+        to: "mainView/cashFlowRecord",
       },
       {
-        label: "useOverlay",
+        label: "儲值票卡收支",
         icon: "i-lucide-file-text",
-        // to: "/composables/use-overlay"
+        to: "mainView/cashCardRecord",
       },
       {
-        label: "useToast",
+        label: "信用卡收支",
         icon: "i-lucide-file-text",
-        // to: "/composables/use-toast"
+        to: "mainView/creditCardRecord",
+      },
+      {
+        label: "存款帳戶收支",
+        icon: "i-lucide-file-text",
+        to: "mainView/currencyAccountRecord",
+      },
+      {
+        label: "證券帳戶收支",
+        icon: "i-lucide-file-text",
+        to: "mainView/stockAccountRecord",
       }
     ]
   },
   {
-    label: "Components",
+    label: "財務報表",
     icon: "i-lucide-file-text",
     // active: true,
     children: [
       {
-        label: "Link",
+        label: "財務報表",
         icon: "i-lucide-file-text",
-        // to: "/components/link"
+        to: "mainView/financeStatement",
+      },
+    ]
+  },
+  {
+    label: "參數設定",
+    icon: "i-lucide-file-text",
+    // active: true,
+    children: [
+      {
+        label: "收支類型設定",
+        icon: "i-lucide-file-text",
+        to: "mainView/tradeTypeSetting",
       },
       {
-        label: "Modal",
+        label: "證券帳戶收支類型設定",
         icon: "i-lucide-file-text",
-        // to: "/components/modal"
+        to: "mainView/stockAccountTradeCategorySetting",
       },
-      {
-        label: "NavigationMenu",
-        icon: "i-lucide-file-text",
-        // to: "/components/navigation-menu"
-      },
-      {
-        label: "Pagination",
-        icon: "i-lucide-file-text",
-        // to: "/components/pagination"
-      },
-      {
-        label: "Popover",
-        icon: "i-lucide-file-text",
-        // to: "/components/popover"
-      },
-      {
-        label: "Progress",
-        icon: "i-lucide-file-text",
-        // to: "/components/progress"
-      }
     ]
   }
 ])
