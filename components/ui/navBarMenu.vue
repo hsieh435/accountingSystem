@@ -154,4 +154,8 @@ const items = ref<NavigationMenuItem[]>([
     ]
   }
 ])
+
+
+
 </script>
+<style lang="scss" scoped></style>

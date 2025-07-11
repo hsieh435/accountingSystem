@@ -114,5 +114,4 @@ async function submitUserData(apiMsg?: string) {
 
 </script>
 <style lang="scss" scoped></style>
-
 <!-- https://ui.nuxt.com/components/form -->

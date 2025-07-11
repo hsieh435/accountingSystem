@@ -172,4 +172,7 @@ async function clickSortSelect() {
   emits("sortSelectChange", sortMethodGot.value[sortSelectValue.value].sortId, sortMethodGot.value[sortSelectValue.value].code);
 }
 
+
+
 </script>
+<style lang="scss" scoped></style>

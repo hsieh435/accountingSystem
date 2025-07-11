@@ -18,7 +18,7 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<ITradeCategory>({
+const dataParams = reactive<any>({
   categoryCode: props.categoryCodeGot || "",
   categoryName: "",
   sort: 0,
