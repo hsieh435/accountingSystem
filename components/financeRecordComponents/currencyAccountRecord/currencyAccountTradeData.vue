@@ -14,7 +14,6 @@ import Swal from "sweetalert2";
 
 
 
-
 const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot: string }>(), { tradeIdGot: "", bankIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 

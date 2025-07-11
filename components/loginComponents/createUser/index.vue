@@ -13,7 +13,6 @@ const userSsecondPassword = ref<string>("");
 
 
 
-
 onMounted(async () => {
   // console.log("onMounted props:", props);
   await searchingUser()
@@ -22,15 +21,13 @@ onMounted(async () => {
 
 
 async function searchingUser() {
-
-  await createUserDate()
-  
+  await createUserDate();  
 }
 
 
 
 async function createUserDate(apiMsg?: string) {
-  
+
   Swal.fire({
     title: "新增使用者資料",
     html: `

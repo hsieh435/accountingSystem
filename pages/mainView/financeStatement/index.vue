@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h1>Welcome to financeStatement!</h1>
+    <statisticalChart />
   </div>
 </template>
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
 
 
 
@@ -12,6 +13,11 @@ definePageMeta({
   functionTitle: "財務報表",
   subTitle: "財務報表",
 })
+
+
+
+const statisticalChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/statisticalChart.vue"));
+
 
 
 </script>

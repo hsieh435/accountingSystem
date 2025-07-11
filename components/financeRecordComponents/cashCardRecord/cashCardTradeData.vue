@@ -36,7 +36,6 @@ const dataParams = reactive<ICashCardRecordList>({
 
 async function searchingCashCardRecord() {
   // cashCardRecordDataHandling();
-  
 }
 
 

@@ -1,7 +1,6 @@
 <template>
   <div class="w-full">
     <ui-navBarMenu></ui-navBarMenu>
-    <ui-navBreadCrumb></ui-navBreadCrumb>
     <slot />
   </div>
 </template>

@@ -131,10 +131,10 @@ const data = ref([
 
 
 
-async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
-  currentPage.value = currentPageSendback;
-  itemsPerPage.value = itemsPerPageSendback;
-  searchWord.value = keyWord.trim();
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; keyWord: string }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
+  searchWord.value = sliceData.keyWord.trim();
   await cashCardListFilterEvent();
 }
 

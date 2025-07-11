@@ -1,25 +1,11 @@
 <template>
-  <!-- <UForm ref="form">
-    <div class="grid grid-cols-3 gap-2">
-      <UFormField  label="Input" name="input">
-        <UInput placeholder="john@lennon.com" />
-      </UFormField>
-
-      <UFormField label="Select" name="select">
-        <USelect :items="items" class="w-48" />
-      </UFormField>
-    </div>
-
-    <div class="flex gap-2 mt-8">
-      <ui-buttonGroup :showSave="true" :saveText="'修改'" @dataSave="submitUserData()" />
-    </div>
-  </UForm> -->
-  <div>
-    
-  </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import { IUserData } from "@/models/index";
+import { navigateTo } from "nuxt/app";
+import Swal from "sweetalert2";
+
 
 
 
@@ -27,22 +13,106 @@ declare function definePageMeta(meta: any): void;
 definePageMeta({
   functionTitle: "個人設定",
   subTitle: "使用者資料設定",
-})
+});
 
 
 
-const items = [
-  { label: "Option 1", value: "option-1" },
-  { label: "Option 2", value: "option-2" },
-  { label: "Option 3", value: "option-3" },
-];
+const dataParams = reactive<IUserData>({
+  userId: "",
+  userName: "",
+  userPassword: "",
+});
+const secondPassword = ref<string>("");
 
-// const toast = useToast();
-async function submitUserData() {
-  console.log(100);
-}
+
+
+onMounted(() => {
+  submitUserData();
+});
+
+
+
+async function submitUserData(apiMsg?: string) {
+  // console.log(dataParams);
+
+  Swal.fire({
+    title: "編輯使用者資料",
+    html: `
+      <div class="d-flex flex-row items-center rounded-md">
+        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">交易代碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userId" value="${dataParams.userId}" disabled />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">交易名稱：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${dataParams.userPassword}" />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">排序：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="secondPassword" value="${secondPassword.value}" type="number" />
+        </div>
+
+      </div>
+    `,
+    confirmButtonText: "修改",
+    showCancelButton: true,
+    cancelButtonText: "取消",
+    confirmButtonColor: "#007fff",
+    cancelButtonColor: "#ff4337",
+    color: "#000",
+    background: "#fff",
+    allowOutsideClick: false,
+    didOpen: () => {
+
+  
+      if (apiMsg) {
+        Swal.showValidationMessage(apiMsg);
+        return false;
+      }
+    },
+    preConfirm: () => {
+      const errors: string[] = [];
+
+      dataParams.userId = (document.getElementById("userId") as HTMLInputElement).value;
+      dataParams.userPassword = (document.getElementById("userPassword") as HTMLInputElement).value;
+      secondPassword.value = (document.getElementById("secondPassword") as HTMLInputElement).value;
+
+
+      if (!dataParams.userPassword) {
+        errors.push("請填寫密碼");
+      }
+      if (dataParams.userPassword !== secondPassword.value) {
+        errors.push("兩次密碼輸入不一致");
+      }
+
+      if (errors.length > 0) {
+        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
+        return false;
+      }
+
+      return { dataParams };
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      console.log("result:", result);
+      navigateTo("/mainView");
+
+    } else {
+      console.log("取消編輯使用者資料");
+      navigateTo("/mainView");
+    }
+  });
+};
 
 
 </script>
 <style lang="scss" scoped></style>
+
 <!-- https://ui.nuxt.com/components/form -->

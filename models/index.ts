@@ -1,4 +1,12 @@
 
+// 使用者資料 interface
+export interface IUserData {
+  userId: string;
+  userName: string;
+  userPassword: string;
+}
+
+
 // 資料排序方式 interface
 export interface ISortArray {
   code?: number;
@@ -165,5 +173,10 @@ export interface ITradeCategory {
   no?: number;
   categoryCode: string;
   categoryName: string;
+  isCashflowAble: boolean;
+  isCashcardAble: boolean;
+  isCreditcardAble: boolean;
+  isCuaccountAble: boolean;
+  isStaccountAble: boolean;
   sort: number;
 }

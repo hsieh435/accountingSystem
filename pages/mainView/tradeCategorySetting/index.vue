@@ -37,7 +37,7 @@
         </template>
       </template>
       <template v-else-if="tradeCategoryList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+        <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
       </template>
     </div>
   </div>
@@ -64,7 +64,6 @@ const tradeCategory = defineAsyncComponent(() => import("@/components/parameterS
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
-const searchWord = ref<string>("");
 
 const tradeCategoryList = ref<ITradeCategory[]>([]);
 const tradeCategoryListFiltered = ref<ITradeCategory[]>([]);
@@ -72,10 +71,9 @@ const tableData = ref<ITradeCategory[]>([]);
 
 
 
-async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
-  currentPage.value = currentPageSendback;
-  itemsPerPage.value = itemsPerPageSendback;
-  searchWord.value = keyWord.trim();
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
   await tradeCategoryListFilterEvent();
 }
 

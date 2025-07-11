@@ -73,7 +73,6 @@ const creditCardTradeData = defineAsyncComponent(() => import("@/components/fina
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
-const searchWord = ref<string>("");
 
 const creditCardRecord = ref<ICreditCardRecordList[]>([]);
 const creditCardRecordFiltered = ref<ICreditCardRecordList[]>([]);
@@ -81,11 +80,9 @@ const tableData = ref<ICreditCardRecordList[]>([]);
 
 
 
-
-async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
-  currentPage.value = currentPageSendback;
-  itemsPerPage.value = itemsPerPageSendback;
-  searchWord.value = keyWord.trim();
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
   await cashCardRecordFilterEvent();
 }
 
@@ -95,7 +92,6 @@ async function cashCardRecordFilterEvent() {
   creditCardRecordFiltered.value = creditCardRecord.value;  
   tableData.value = sliceArray(creditCardRecordFiltered.value, currentPage.value, itemsPerPage.value);
 }
-
 
 
 

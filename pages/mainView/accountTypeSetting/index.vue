@@ -64,7 +64,6 @@ const tradeCategory = defineAsyncComponent(() => import("@/components/parameterS
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
-const searchWord = ref<string>("");
 
 const tradeCategoryList = ref<ITradeCategory[]>([]);
 const tradeCategoryListFiltered = ref<ITradeCategory[]>([]);
@@ -72,10 +71,9 @@ const tableData = ref<ITradeCategory[]>([]);
 
 
 
-async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
-  currentPage.value = currentPageSendback;
-  itemsPerPage.value = itemsPerPageSendback;
-  searchWord.value = keyWord.trim();
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; keyWord: string }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
   await tradeCategoryListFilterEvent();
 }
 

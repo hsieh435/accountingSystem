@@ -84,7 +84,6 @@ const stockAccountTradeData = defineAsyncComponent(() => import("@/components/fi
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
-const searchWord = ref<string>("");
 
 const stockAccountRecord = ref<IStockAccountRecordList[]>([]);
 const stockAccountRecordFiltered = ref<IStockAccountRecordList[]>([]);
@@ -92,10 +91,9 @@ const tableData = ref<IStockAccountRecordList[]>([]);
 
 
 
-async function settingTableSlice(currentPageSendback: number, itemsPerPageSendback: number, keyWord: string) {
-  currentPage.value = currentPageSendback;
-  itemsPerPage.value = itemsPerPageSendback;
-  searchWord.value = keyWord.trim();
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
   await stockAccountRecordFilterEvent();
 }
 

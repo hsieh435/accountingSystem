@@ -103,15 +103,15 @@ async function currencyAccountDataHandling(apiMsg?: string) {
           <div class="mx-2">
             <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
             <label for="isSalaryAccount">薪資帳戶</label>
-          </div>          
+          </div>
         </div>
-        
+
 
         ${props.currencyAccountIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` : 
+        </div>` :
         ""}
 
       </div>

@@ -156,10 +156,10 @@ onMounted(() => {
 
 
 watch([currentPage, itemsPerPage, keyWord], () => {
-  console.log("currentPage:", currentPage.value);
-  console.log("itemsPerPage:", itemsPerPage.value);
-  console.log("keyWord:", keyWord.value);
-  emits("tableSliceChange", currentPage.value, itemsPerPage.value, keyWord.value);
+  // console.log("currentPage:", currentPage.value);
+  // console.log("itemsPerPage:", itemsPerPage.value);
+  // console.log("keyWord:", keyWord.value);
+  emits("tableSliceChange", { currentPage, itemsPerPage, keyWord });
 });
 
 watch(isCheckBoxPicked, () => {
