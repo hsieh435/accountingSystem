@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-10 21:47:23
+-- Started on 2025-07-11 23:55:31
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -643,16 +643,23 @@ COPY public.stock_accounts_list (account_id, user_id, account_name, account_type
 --
 
 COPY public.trade_category (category_code, category_name, is_cashflow_able, is_cashcard_able, is_creditcard_able, is_cuaccount_able, is_staccount_able, sort) FROM stdin;
-currency	取得現金	t	f	f	f	f	10
-atmDeposit	ATM 存入	f	f	f	t	t	50
-transferOut	轉帳轉出	f	f	f	t	t	56
-transferIn	轉帳進入	f	f	f	t	t	55
 atmWithdraw	ATM 提款	f	f	f	t	t	51
-buy	買入	f	f	f	f	t	60
-sell	賣出	f	f	f	f	t	70
-dividend	配息	f	f	f	f	t	75
-else	其他	f	f	f	f	t	100
-interest	利息	f	f	f	t	t	20
+else	其他	t	t	t	t	t	100
+education	教育費	t	t	t	t	f	9
+currency	取得現金	t	f	f	f	f	30
+interest	帳戶利息	f	f	f	t	t	40
+miscellaneous	雜支	t	t	t	t	f	20
+transferIn	轉帳進入	f	f	f	t	t	52
+transferOut	轉帳轉出	f	f	f	t	t	53
+buy	股票買入	f	f	f	f	t	70
+sell	股票賣出	f	f	f	f	t	71
+dividend	股票配息	f	f	f	f	t	72
+books	書籍費	t	t	t	t	f	8
+atmDeposit	ATM 存入	f	f	f	t	t	50
+insurance	保險費	t	f	t	t	f	13
+creditcardBill	信用卡帳單	t	f	f	f	f	12
+addValue	票卡儲值	t	f	f	f	f	11
+investments	投資	t	f	f	f	f	10
 salary	薪資	t	f	f	t	f	1
 food	伙食費	t	t	t	t	f	2
 clothing	治裝費	t	t	t	t	f	3
@@ -660,8 +667,6 @@ transportation	交通費	t	t	t	t	f	4
 medical	醫藥費	t	t	t	t	f	5
 phoneBill	電話費	t	t	t	t	f	6
 entertainment	娛樂費	t	t	t	t	f	7
-insurance	保險費	t	f	t	t	f	8
-miscellaneous	雜支	t	t	t	t	f	40
 \.
 
 
@@ -803,12 +808,12 @@ ALTER TABLE ONLY public.stock_accounts_list
 
 
 --
--- TOC entry 4886 (class 2606 OID 19130)
+-- TOC entry 4886 (class 2606 OID 19350)
 -- Name: trade_category trade_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.trade_category
-    ADD CONSTRAINT trade_category_pkey PRIMARY KEY (category_code, category_name);
+    ADD CONSTRAINT trade_category_pkey PRIMARY KEY (category_code);
 
 
 --
@@ -820,7 +825,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-07-10 21:47:23
+-- Completed on 2025-07-11 23:55:31
 
 --
 -- PostgreSQL database dump complete
