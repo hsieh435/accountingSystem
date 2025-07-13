@@ -11,7 +11,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
-const props = withDefaults(defineProps<{ tradeCategoryGot?: string; sellectAll?: boolean; }>(), { tradeCategoryGot: "", sellectAll: true });
+const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?: string; sellectAll?: boolean; }>(), { accountType: "", tradeCategoryGot: "", sellectAll: true });
 const emits = defineEmits(["sendbackTradeCategory"]);
 
 

@@ -1,5 +1,5 @@
 <template>
-  <UInput v-model="dateString" type="datetime-local" />
+  <UInput v-model="dateString" type="datetime-local" :min="props.minimumGot ? props.minimumGot : ''" :max="props.maximumGot ? props.maximumGot : ''" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -7,7 +7,7 @@ import { getCurrentTimestamp, yearMonthDayTimeFormat} from "@/composables/tools"
 
 
 
-const props = withDefaults(defineProps<{ dateTimeGot?: string; }>(), { dateTimeGot: "", });
+const props = withDefaults(defineProps<{ dateTimeGot?: string; hasRange?: boolean; minimumGot?: string; maximumGot?: string; }>(), { dateTimeGot: "", hasRange: false, minimumGot: "", maximumGot: "" });
 const emits = defineEmits(["sendbackDateTime"]);
 
 

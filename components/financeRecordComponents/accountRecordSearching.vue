@@ -6,14 +6,14 @@
     </div>
 
     <div class="flex items-center mx-3 my-2">
-      <span>收支類型：</span><tradeCategorySelect @sendbackTradeTypeId="settingTradeTypeId" />
+      <span>收支類型：</span><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeTypeId="settingTradeTypeId" />
     </div>
 
     <div class="flex items-center mx-3 my-2">
       <span>時間區間：</span>
-      <dateSelect :dateSelect="searchParams.startingDate" @sendbackRecord="settingSettingDate" />
+      <dateSelect :dateSelect="searchParams.startingDate" :maximumGot="searchParams.endDate" @sendbackRecord="settingSettingDate" />
       <span>～</span>
-      <dateSelect :dateSelect="searchParams.endDate" @sendbackRecord="settingEndDate" />
+      <dateSelect :dateSelect="searchParams.endDate" :minimumGot="searchParams.startingDate" @sendbackRecord="settingEndDate" />
     </div>
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />

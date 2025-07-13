@@ -1,0 +1,11 @@
+@use "tailwindcss";
+@use "@nuxt/ui";
+@use "@/assets/css/colors";
+
+
+
+input:disabled,
+select:disabled {
+  background-color: rgb(225, 225, 225);
+  cursor: not-allowed;
+}
