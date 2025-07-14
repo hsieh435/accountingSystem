@@ -36,3 +36,7 @@ git ls-files | wc -l
 
 git ls-files | xargs cat | wc -l
 18719
+
+
+.env
+API_BASE_URL=http://localhost:3600/

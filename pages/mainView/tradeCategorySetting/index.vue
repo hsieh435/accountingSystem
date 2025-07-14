@@ -43,10 +43,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
+import { defineAsyncComponent, ref, onMounted } from "vue";
 import { ITradeCategory } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -71,10 +72,33 @@ const tableData = ref<ITradeCategory[]>([]);
 
 
 
+onMounted(async () => {
+  await searchingTradeCategoryList();
+});
+
+
+
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
   await tradeCategoryListFilterEvent();
+}
+
+
+
+async function searchingTradeCategoryList() {
+  try {
+    const res = await $fetch("http://localhost:3600/tradeCategory", {
+      method: "GET",
+    });
+    console.log("res:", JSON.parse(JSON.stringify(res)));    
+    // Assign the response data to tradeCategoryList
+    tradeCategoryList.value = res as ITradeCategory[];
+    await tradeCategoryListFilterEvent();
+    
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 

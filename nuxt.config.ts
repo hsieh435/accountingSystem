@@ -15,5 +15,5 @@ export default defineNuxtConfig({
     head: {
       title: "記帳系統",
     },
-  }
+  },
 })
