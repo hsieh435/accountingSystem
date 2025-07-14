@@ -154,12 +154,29 @@ onMounted(() => {
 });
 
 
+watch(props, () => {
+  // console.log("watch props:", props);
+  perPageArray.value = props.pageArrayGot.map((item) => ({ label: `${item} 筆 / 頁`, value: item }));
+
+  itemsPerPage.value = perPageArray.value.some(item => item.value === props.dataPerpage) ? props.dataPerpage : perPageArray.value[0].value;
+
+  totalPages.value = Math.ceil(props.totalDataQuanity / itemsPerPage.value);
+  currentPage.value =
+    props.currentPage * itemsPerPage.value > props.totalDataQuanity && props.totalDataQuanity > 0
+      ? Math.ceil(props.totalDataQuanity / itemsPerPage.value)
+      : props.currentPage;
+
+  if (props.totalDataQuanity === 0) {
+    totalPages.value = 0;
+    currentPage.value = 1;
+    itemsPerPage.value = perPageArray.value[0].value;
+  }
+  pageTarget.value = currentPage.value;
+});
+
 
 watch([currentPage, itemsPerPage, keyWord], () => {
-  // console.log("currentPage:", currentPage.value);
-  // console.log("itemsPerPage:", itemsPerPage.value);
-  // console.log("keyWord:", keyWord.value);
-  emits("tableSliceChange", { currentPage, itemsPerPage, keyWord });
+  emits("tableSliceChange", { currentPage: currentPage.value, itemsPerPage: itemsPerPage.value, keyWord: keyWord.value });
 });
 
 watch(isCheckBoxPicked, () => {

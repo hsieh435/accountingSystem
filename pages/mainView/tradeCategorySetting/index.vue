@@ -4,9 +4,11 @@
       <tradeCategory />
     </div>
 
-    <div class="mx-5">
+    <div class="mx-5 my-3">
       <template v-if="tradeCategoryList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="tradeCategoryList.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
@@ -91,7 +93,7 @@ async function searchingTradeCategoryList() {
     const res = await $fetch("http://localhost:3600/tradeCategory", {
       method: "GET",
     });
-    console.log("res:", JSON.parse(JSON.stringify(res)));    
+    // console.log("res:", JSON.parse(JSON.stringify(res)));    
     // Assign the response data to tradeCategoryList
     tradeCategoryList.value = res as ITradeCategory[];
     await tradeCategoryListFilterEvent();
@@ -106,6 +108,8 @@ async function searchingTradeCategoryList() {
 async function tradeCategoryListFilterEvent() {
   tradeCategoryListFiltered.value = tradeCategoryList.value;  
   tableData.value = sliceArray(tradeCategoryListFiltered.value, currentPage.value, itemsPerPage.value);
+  // console.log("tradeCategoryListFiltered:", tradeCategoryListFiltered.value);
+  // console.log("tableData:", tableData.value);
 }
 
 
