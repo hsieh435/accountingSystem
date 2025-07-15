@@ -147,6 +147,11 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
       dataParams.categoryCode = (document.getElementById("categoryCode") as HTMLInputElement).value;
       dataParams.categoryName = (document.getElementById("categoryName") as HTMLInputElement).value;
+      dataParams.isCashflowAble = (document.getElementById("isCashflowAble") as HTMLInputElement).checked;
+      dataParams.isCashcardAble = (document.getElementById("isCashcardAble") as HTMLInputElement).checked;
+      dataParams.isCreditcardAble = (document.getElementById("isCreditcardAble") as HTMLInputElement).checked;
+      dataParams.isCuaccountAble = (document.getElementById("isCuaccountAble") as HTMLInputElement).checked;
+      dataParams.isStaccountAble = (document.getElementById("isStaccountAble") as HTMLInputElement).checked;
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
 
 
