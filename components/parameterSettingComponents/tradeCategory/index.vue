@@ -8,7 +8,9 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
+import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/apiService";
 import { ITradeCategory } from "@/models/index";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 
@@ -32,8 +34,24 @@ const dataParams = reactive<ITradeCategory>({
 
 
 async function searchingCategoryCode() {
-  // categoryCodeDataHandling();
-  
+  // console.log("props:", props.categoryCodeGot);
+
+  try {
+    const res = await fetchTradeCategory(props.categoryCodeGot);
+    // console.log("res:", res);
+    dataParams.categoryCode = res.data.categoryCode;
+    dataParams.categoryName = res.data.categoryName;
+    dataParams.isCashflowAble = res.data.isCashflowAble;
+    dataParams.isCashcardAble = res.data.isCashcardAble;
+    dataParams.isCreditcardAble = res.data.isCreditcardAble;
+    dataParams.isCuaccountAble = res.data.isCuaccountAble;
+    dataParams.isStaccountAble = res.data.isStaccountAble;
+    dataParams.sort = res.data.sort;
+
+    await categoryCodeDataHandling();
+  } catch (error) {
+    // showAxiosErrorMsg({ message: (error as Error).message });
+  }  
 }
 
 
@@ -151,8 +169,13 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
-
+      console.log("result:", result.value.dataParams);
+      try {
+        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value.dataParams);
+        await categoryCodeDataHandling();
+      } catch (error) {
+        // showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 };

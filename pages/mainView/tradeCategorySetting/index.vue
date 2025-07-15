@@ -23,11 +23,11 @@
                   <th :class="tailwindStyles.thLastClasses">操作</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody :class="tailwindStyles.tbodyClasses">
                 <tr :class="tailwindStyles.trClasses" v-for="account in tableData" :key="account.categoryCode">
-                  <td :class="tailwindStyles.thClasses">{{ account.no }}</td>
-                  <td :class="tailwindStyles.thClasses">{{ account.categoryCode }}</td>
-                  <td :class="tailwindStyles.thClasses">{{ account.categoryName }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ account.no }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</td>
+                  <td :class="tailwindStyles.tdClasses">{{ account.categoryName }}</td>
                   <td :class="tailwindStyles.tdLastClasses">
                     <tradeCategory :categoryCodeGot="account.categoryCode" />
                     <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
@@ -46,10 +46,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
+import { fetchTradeCategoryList, fetchCreateTradeCategory, fetchUpdateTradeCategory, fetchDeleteTradeCategory } from "@/server/apiService";
 import { ITradeCategory } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
 
 
@@ -90,12 +91,9 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function searchingTradeCategoryList() {
   try {
-    const res = await $fetch("http://localhost:3600/tradeCategory", {
-      method: "GET",
-    });
-    // console.log("res:", JSON.parse(JSON.stringify(res)));    
-    // Assign the response data to tradeCategoryList
-    tradeCategoryList.value = res as ITradeCategory[];
+    const res = await fetchTradeCategoryList();
+    // console.log("res:", res);
+    tradeCategoryList.value = res.data;
     await tradeCategoryListFilterEvent();
     
   } catch (error) {
@@ -117,6 +115,18 @@ async function tradeCategoryListFilterEvent() {
 async function removeTradeCategory(categoryCode: string) {
   console.log("categoryCode:", categoryCode);
   
+  const confirmResult = await showConfirmDialog({
+    message: "確定刪除該交易類別嗎？",
+    confirmButtonMsg: "刪除",
+    executionApi: fetchDeleteTradeCategory,
+    apiParams: categoryCode,
+  });
+
+  if (confirmResult) {
+    await searchingTradeCategoryList();
+  }
+
+
 }
 
 

@@ -1,75 +1,22 @@
-# Nuxt Minimal Starter
+# Project
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+一個記帳系統，支援交易紀錄、報表分析、登入驗證等功能。
 
-## Setup
 
-Make sure to install dependencies:
+## 功能特色
 
-```bash
-# npm
-npm install
+- 使用者登入 / JWT 驗證
+- 收入支出管理
+- PostgreSQL 整合
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+## 安裝方式
 
 ```bash
-# npm
+git clone https://github.com/hsieh435/accountingSystem.git
+cd accountingSystem
+npm i
 npm run dev
 
-# pnpm
-pnpm dev
 
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+使用技術
+Nuxt 3 + Tailwind
