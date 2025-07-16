@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <tradeCategory />
+      <tradeCategory @dataReseaching="searchingTradeCategoryList" />
     </div>
 
     <div class="mx-5 my-3">
@@ -29,7 +29,7 @@
                   <td :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</td>
                   <td :class="tailwindStyles.tdClasses">{{ account.categoryName }}</td>
                   <td :class="tailwindStyles.tdLastClasses">
-                    <tradeCategory :categoryCodeGot="account.categoryCode" />
+                    <tradeCategory :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
                     <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
                   </td>
                 </tr>
@@ -46,7 +46,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchTradeCategoryList, fetchCreateTradeCategory, fetchUpdateTradeCategory, fetchDeleteTradeCategory } from "@/server/apiService";
+import { fetchTradeCategoryList, fetchDeleteTradeCategory } from "@/server/tradeCategoryApi/index";
 import { ITradeCategory } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";

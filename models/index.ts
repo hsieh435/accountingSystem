@@ -1,11 +1,17 @@
 
+// API response interface
+export interface IResponse {
+  data?: any;
+  returnCode: number;
+  message: string;
+}
+
 // 使用者資料 interface
 export interface IUserData {
   userId: string;
   userName: string;
   userPassword: string;
 }
-
 
 // 資料排序方式 interface
 export interface ISortArray {

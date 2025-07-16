@@ -1,4 +1,5 @@
 import type { AxiosResponse, AxiosError } from "axios";
+import { IResponse } from "@/models/index";
 import Swal from "sweetalert2";
 
 
@@ -69,18 +70,27 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
 
-      try {
-        const res: AxiosResponse = await executionApi(apiParams);
-        if (res.status === 200) {
-          console.log(executionApi.name, res.data.data);
-          showAxiosToast({ message: res.data.message });
-          return true;
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-          return false;
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as AxiosError).message });
+      // try {
+      //   const res: AxiosResponse = await executionApi(apiParams);
+      //   if (res.status === 200) {
+      //     console.log(executionApi.name, res.data.data);
+      //     showAxiosToast({ message: res.data.message });
+      //     return true;
+      //   } else {
+      //     showAxiosErrorMsg({ message: res.data.message });
+      //     return false;
+      //   }
+      // } catch (error) {
+      //   showAxiosErrorMsg({ message: (error as AxiosError).message });
+      //   return false;
+      // }
+
+      const res = await executionApi(apiParams) as IResponse;
+      if (res.returnCode === 0) {
+        showAxiosToast({ message: res.message });
+        return true;
+      } else {
+        showAxiosErrorMsg({ message: res.message });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {

@@ -8,9 +8,9 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/apiService";
-import { ITradeCategory } from "@/models/index";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/tradeCategoryApi/index";
+import { IResponse, ITradeCategory } from "@/models/index";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 
@@ -111,7 +111,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
+    confirmButtonText: props.categoryCodeGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
@@ -174,12 +174,18 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value.dataParams);
+      // console.log("result:", result.value.dataParams);
       try {
-        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value.dataParams);
-        await categoryCodeDataHandling();
+        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value.dataParams) as IResponse;
+        console.log("res:", res);
+        if (res.returnCode === 0) {
+          showAxiosToast({ message: res.message });
+          emits("dataReseaching");
+        } else {
+          categoryCodeDataHandling(res.message);
+        } 
       } catch (error) {
-        // showAxiosErrorMsg({ message: (error as Error).message });
+        showAxiosErrorMsg({ message: (error as Error).message });
       }
     }
   });

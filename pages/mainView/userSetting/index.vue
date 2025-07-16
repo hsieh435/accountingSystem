@@ -43,20 +43,26 @@ async function submitUserData(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">交易代碼：</span>
+          <span class="col-start-1 col-end-3 text-right">使用者代碼：</span>
           <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userId" value="${dataParams.userId}" disabled />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">交易名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${dataParams.userPassword}" />
+          <span class="col-start-1 col-end-3 text-right">使用者姓名：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userName" value="${dataParams.userName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">排序：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="secondPassword" value="${secondPassword.value}" type="number" />
+          <span class="col-start-1 col-end-3 text-right">密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${dataParams.userPassword}" type="password" />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="secondPassword" value="${secondPassword.value}" type="password" />
         </div>
 
       </div>
@@ -101,11 +107,11 @@ async function submitUserData(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
+      console.log("result:", result.value.dataParams);
       navigateTo("/mainView");
 
     } else {
-      console.log("取消編輯使用者資料");
+      // console.log("取消編輯使用者資料");
       navigateTo("/mainView");
     }
   });

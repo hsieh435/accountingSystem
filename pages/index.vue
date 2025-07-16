@@ -6,7 +6,7 @@
         
         <div class="my-4">
           <label class="block text-gray-600 mb-1">帳號：</label>
-          <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="account" type="search" required />
+          <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="accountId" type="search" required />
         </div>
 
         <div class="mb-6">
@@ -27,9 +27,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import { IResponse } from "@/models/index";
 import { encryptString } from "@/composables/crypto"
+import { fetchUserLogin } from "@/server/userDataApi/index";
 import { showAxiosToast } from "@/composables/swalDialog"
 import { navigateTo } from "nuxt/app";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { setLocalStorageItem } from "@/composables/tools"
 
 
 
@@ -40,18 +44,30 @@ definePageMeta({
 
 
 
-const account = ref<string>("");
+const accountId = ref<string>("");
 const password = ref<string>("");
 
 
 
 async function handleLogin() {
-  // console.log("account:", account.value);
-  // console.log("password:", encryptString(password.value));
   // 在此加入 API 呼叫與驗證邏輯
+  try {
+    const res = await fetchUserLogin({
+      userId: accountId.value,
+      password: encryptString(password.value),
+    }) as IResponse;
+    console.log("res:", res);
+    if (res.returnCode === 0) {
+      showAxiosToast({ message: res.message });      
+      setLocalStorageItem("userToken", res.data.jwt);
+      navigateTo("/mainView");
+    } else {
+      showAxiosErrorMsg({ message: res.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 
-  showAxiosToast({ message: "登入成功", });
-  navigateTo("/mainView");
 };
 </script>
 <style lang="scss" scoped></style>

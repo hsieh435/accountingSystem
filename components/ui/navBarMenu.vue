@@ -152,6 +152,17 @@ const items = ref<NavigationMenuItem[]>([
         to: "/mainView/accountTypeSetting",
       },
     ]
+  },
+  {
+    label: "其他",
+    icon: "i-lucide-file-text",
+    children: [
+      {
+        label: "測試區",
+        icon: "i-lucide-file-text",
+        to: "/mainView/testArea",
+      }
+    ]
   }
 ])
 
