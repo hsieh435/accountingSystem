@@ -25,6 +25,12 @@ https://tailwindcss.com/
 https://ui.nuxt.com/
 
 
+資料視覺化
+
+chart js
+
+D3.js
+
 
 netstat -aon|findstr 8080
 taskkill /pid xxxxx /f
