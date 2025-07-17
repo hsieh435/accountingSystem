@@ -10,6 +10,7 @@ import { defineAsyncComponent } from "vue";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "財務報表",
   subTitle: "證券投資報表",
 })

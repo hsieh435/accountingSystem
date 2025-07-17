@@ -56,9 +56,10 @@ import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "參數設定",
   subTitle: "支出類型設定",
-})
+});
 
 
 

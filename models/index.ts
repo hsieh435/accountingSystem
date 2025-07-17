@@ -10,7 +10,8 @@ export interface IResponse {
 export interface IUserData {
   userId: string;
   userName: string;
-  userPassword: string;
+  userOldPassword: string;
+  userNewPassword: string;
 }
 
 // 資料排序方式 interface

@@ -10,6 +10,7 @@ import { fetchStockList, fetchEachStockList } from "@/server/outSideWebApi/index
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "其他",
   subTitle: "測試區",
 })

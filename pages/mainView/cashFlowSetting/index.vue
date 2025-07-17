@@ -10,6 +10,7 @@ import { ICashFlowData } from "@/models/index";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "個人設定",
   subTitle: "現金資料設定",
 })

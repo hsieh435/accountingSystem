@@ -52,6 +52,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "參數設定",
   subTitle: "帳戶類型設定",
 })

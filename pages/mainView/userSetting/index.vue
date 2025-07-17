@@ -2,8 +2,12 @@
 </template>
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import { IUserData } from "@/models/index";
+import { IUserData, IResponse } from "@/models/index";
 import { navigateTo } from "nuxt/app";
+import { jwtTokenEncoded } from "@/server";
+import { fetchUserDataChange } from "@/server/userDataApi";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { encryptString } from "@/composables/crypto";
 import Swal from "sweetalert2";
 
 
@@ -11,6 +15,7 @@ import Swal from "sweetalert2";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "個人設定",
   subTitle: "使用者資料設定",
 });
@@ -20,13 +25,16 @@ definePageMeta({
 const dataParams = reactive<IUserData>({
   userId: "",
   userName: "",
-  userPassword: "",
+  userOldPassword: "",
+  userNewPassword: "",
 });
 const secondPassword = ref<string>("");
 
 
 
 onMounted(() => {
+  dataParams.userId = jwtTokenEncoded()?.payload?.userId ?? "";
+  dataParams.userName = jwtTokenEncoded()?.payload?.userName ?? "";
   submitUserData();
 });
 
@@ -38,7 +46,7 @@ async function submitUserData(apiMsg?: string) {
   Swal.fire({
     title: "編輯使用者資料",
     html: `
-      <div class="d-flex flex-row items-center rounded-md">
+      <div class="items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
@@ -55,8 +63,14 @@ async function submitUserData(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userPassword" value="${dataParams.userPassword}" type="password" />
+          <span class="col-start-1 col-end-3 text-right">舊密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">新密碼：</span>
+          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
         </div>
 
 
@@ -87,14 +101,22 @@ async function submitUserData(apiMsg?: string) {
       const errors: string[] = [];
 
       dataParams.userId = (document.getElementById("userId") as HTMLInputElement).value;
-      dataParams.userPassword = (document.getElementById("userPassword") as HTMLInputElement).value;
+      dataParams.userName = (document.getElementById("userName") as HTMLInputElement).value;
+      dataParams.userOldPassword = (document.getElementById("userOldPassword") as HTMLInputElement).value;
+      dataParams.userNewPassword = (document.getElementById("userNewPassword") as HTMLInputElement).value;
       secondPassword.value = (document.getElementById("secondPassword") as HTMLInputElement).value;
 
 
-      if (!dataParams.userPassword) {
-        errors.push("請填寫密碼");
+      if (!dataParams.userName) {
+        errors.push("請填寫使用者姓名");
       }
-      if (dataParams.userPassword !== secondPassword.value) {
+      if (!dataParams.userOldPassword) {
+        errors.push("請填寫舊密碼");
+      }
+      if (!dataParams.userNewPassword || !secondPassword.value) {
+        errors.push("請填寫新密碼");
+      }
+      if ((!dataParams.userNewPassword || !secondPassword.value) && dataParams.userNewPassword !== secondPassword.value) {
         errors.push("兩次密碼輸入不一致");
       }
 
@@ -103,15 +125,29 @@ async function submitUserData(apiMsg?: string) {
         return false;
       }
 
-      return { dataParams };
+      return dataParams;
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value.dataParams);
-      navigateTo("/mainView");
-
+      result.value.userOldPassword = encryptString(result.value.userOldPassword);
+      result.value.userNewPassword = encryptString(result.value.userNewPassword);
+      console.log("result:", result.value);
+      
+      try {
+        const res = await fetchUserDataChange(result.value) as IResponse;
+        console.log("res:", res);
+        if (res.returnCode === 0) {
+          showAxiosToast({ message: res.message });
+          navigateTo("/mainView");
+        } else {
+          showAxiosErrorMsg({ message: res.message });
+        } 
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      } finally {
+        navigateTo("/mainView");
+      }
     } else {
-      // console.log("取消編輯使用者資料");
       navigateTo("/mainView");
     }
   });

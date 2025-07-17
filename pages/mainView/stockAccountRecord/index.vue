@@ -71,6 +71,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "財務收支",
   subTitle: "證券帳戶收支",
 });

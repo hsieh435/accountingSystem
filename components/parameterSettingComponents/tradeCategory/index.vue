@@ -50,7 +50,7 @@ async function searchingCategoryCode() {
 
     await categoryCodeDataHandling();
   } catch (error) {
-    // showAxiosErrorMsg({ message: (error as Error).message });
+    showAxiosErrorMsg({ message: (error as Error).message });
   }  
 }
 
@@ -170,13 +170,13 @@ async function categoryCodeDataHandling(apiMsg?: string) {
         return false;
       }
 
-      return { dataParams };
+      return dataParams;
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
       // console.log("result:", result.value.dataParams);
       try {
-        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value.dataParams) as IResponse;
+        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value) as IResponse;
         console.log("res:", res);
         if (res.returnCode === 0) {
           showAxiosToast({ message: res.message });

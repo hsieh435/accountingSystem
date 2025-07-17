@@ -19,13 +19,13 @@ export function getLocalStorageItem(key: string) {
 
 // logout and remove all localStorage item except some keys
 export function clearLocalStorageKey(isReturn: boolean) {
-  const localStorageToKeep: string[] = ["isOpenNavbar", "isWideDataMode", "openedFunctionGroup"];
+  const localStorageToKeep: string[] = [];
 
   Object.keys(localStorage).forEach(key => {
     if (!localStorageToKeep.includes(key)) localStorage.removeItem(key);
   });
 
-  const url = new URL(window.location.href);
+  const url = new URL(window.location.href);  
   location.href =
     isReturn === true ? `${url.origin}/login?pathname=${encodeURIComponent(url.pathname)}` : `${url.origin}`;
 }

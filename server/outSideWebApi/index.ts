@@ -8,7 +8,7 @@ export async function fetchStockList() {
   console.log("response:", response);
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error("HTTP error! status:" + response.status);
   }
 
   const result = await response.json() as { data: any };
@@ -18,11 +18,11 @@ export async function fetchStockList() {
 
 
 export async function fetchEachStockList(ex_ch: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/outSideWebApi/${ex_ch}2330`, "GET", {});
+  const response = await apiFetch(`/accounting_system_backend/api/outSideWebApi/${ex_ch}`, "GET", {});
 //   console.log("response:", response);
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error("HTTP error! status:" + response.status);
   }
 
   const result = await response.json() as { data: any };

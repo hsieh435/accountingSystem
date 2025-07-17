@@ -1,19 +1,22 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen w-full">
-    <!-- <h1>404 - Page Not Found</h1> -->
-    <!-- <UError
-      redirect="/mainView"
-      :error="{
-        statusMessage: 'Page not found',
-        message: 'The page you are looking for does not exist.'
-        }" /> -->
+  <div class="flex justify-center items-center w-full">
+    <h1>404 - Page Not Found</h1>
   </div>
 </template>
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { navigateTo } from "nuxt/app";
+// import { navigateTo } from "nuxt/app";
 import { useRoute } from "vue-router"
 import { createError } from "h3"
+
+
+
+declare function definePageMeta(meta: any): void;
+definePageMeta({
+  middleware: "auth",
+  functionTitle: "404 Not Found",
+  subTitle: "",
+})
 
 
 
@@ -31,15 +34,8 @@ if (route.path.includes(".well-known")) {
 
 
 
-// declare function definePageMeta(meta: any): void;
-// definePageMeta({
-//   layout: "empty-layout",
-// })
-
-
-
 onMounted(() => {
-  navigateTo("/mainView");
+  // navigateTo("/mainView");
 });
 
 

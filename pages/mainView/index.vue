@@ -8,7 +8,7 @@
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   middleware: "auth",
-  breadcrumb: "首頁"
+  breadcrumb: "首頁",
 })
 
 

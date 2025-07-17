@@ -58,6 +58,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
   functionTitle: "個人設定",
   subTitle: "儲值票卡資料設定",
 });

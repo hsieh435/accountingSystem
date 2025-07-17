@@ -1,0 +1,32 @@
+@use "tailwindcss";
+@use "./colors" as colors;
+
+
+
+.btn {
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+
+  // &:focus {
+  //   outline: none;
+  //   opacity: 0.5;
+  // }
+
+  &:hover {
+    opacity: 0.85;
+    transition: 0.2s ease-in-out;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.btn-noshimehana {
+  background-color: colors.$noshimehana;
+  color: rgb(255, 255, 255);
+}
