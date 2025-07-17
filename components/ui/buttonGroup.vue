@@ -7,16 +7,16 @@
 
 
     <template v-if="props.showCreate">
-      <UButton class="bg-green-600 hover:bg-green-500 cursor-pointer mx-2 px-2 py-1" @click="clickCreateButton()" :disabled="props.createDisable">
-        <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />{{ props.createText }}
-      </UButton>
+      <button class="btn btn-aomidori" @click="clickCreateButton()" :disabled="props.createDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span class="mx-1">{{ props.createText }}</span>
+      </button>
     </template>
 
 
     <template v-if="props.showSave">
-      <UButton class="bg-green-600 hover:bg-green-500 cursor-pointer mx-2 px-2 py-1" @click="clickSaveButton()" :disabled="props.saveDisable">
-        <font-awesome-icon class="mx-1" :icon="['far', 'save']" />{{ props.saveText }}
-      </UButton>
+      <button class="btn btn-aomidori" @click="clickSaveButton()" :disabled="props.saveDisable">
+        <font-awesome-icon class="mx-1" :icon="['far', 'save']" /><span class="mx-1">{{ props.saveText }}</span>
+      </button>
     </template>
 
 

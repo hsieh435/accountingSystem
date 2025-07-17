@@ -1,10 +1,2 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-
-
-
-input:disabled,
-select:disabled {
-  background-color: rgb(225, 225, 225);
-  cursor: not-allowed;
-}

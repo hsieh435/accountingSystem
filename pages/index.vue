@@ -14,9 +14,9 @@
       </div>
 
       <div class="flex justify-center items-center">
-        <UButton class="mx-2 px-2 py-1" color="secondary" @click="handleLogin()" type="button">
-          <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" />登入
-        </UButton>
+        <button class="btn btn-ruri" color="secondary" @click="handleLogin()" type="button">
+          <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
+        </button>
         <loginComponents-resetPassword />
       </div>
     </div>
