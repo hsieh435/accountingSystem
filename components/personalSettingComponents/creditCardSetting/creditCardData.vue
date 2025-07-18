@@ -10,16 +10,13 @@
 import { reactive, createApp, defineAsyncComponent } from "vue";
 import { ICreditCardList } from "@/models/index";
 import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
 
 const props = withDefaults(defineProps<{ creditCardIdGot?: string; userIdGot?: string; }>(), { creditCardIdGot: "", userIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
-
-const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
 
 
 
@@ -54,17 +51,9 @@ async function creditCardDataHandling(apiMsg?: string) {
         <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
-        ${props.creditCardIdGot ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">信用卡ID：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditCardId" value="${dataParams.creditcardId}" disabled />
-        </div>` :
-        ""}
-
-
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardName" value="${dataParams.creditcardName}" />
+          <input class="${tailwindStyles.inputClasses}" id="creditcardName" value="${dataParams.creditcardName}" />
         </div>
 
 
@@ -75,7 +64,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankName" value="${dataParams.creditcardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="creditcardBankName" value="${dataParams.creditcardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
 
@@ -87,28 +76,28 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
-
-
-        ${props.creditCardIdGot ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` : 
-        ""}
 
 
         <div class="flex justify-center items-center w-full my-2">
           <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
           <label class="mx-1" for="openAlert">開啟警示</label>
         </div>
+
+
+        ${props.creditCardIdGot ? `
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
+          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
+        </div>` : 
+        ""}
 
       </div>
     `,
@@ -125,7 +114,7 @@ async function creditCardDataHandling(apiMsg?: string) {
       let creditCardSchemaSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue")), {
         selectId: "cashCard",
         sellectAll: false,
-        isAble: dataParams.creditcardId ? true : false,
+        isAble: props.creditCardIdGot ? true : false,
         onSendbackSchemaId: (schemaId: string) => {
           dataParams.creditcardSchema = schemaId;
           // console.log("schemaId:", schemaId);
@@ -180,11 +169,11 @@ async function creditCardDataHandling(apiMsg?: string) {
         return false;
       }
 
-      return { dataParams };
+      return dataParams;
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
+      console.log("result:", result.value);
 
     }
   });

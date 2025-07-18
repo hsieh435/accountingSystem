@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-start items-center">
     <select :class="tailwindStyles.selectClasses" v-model="accountId">
-      <option v-for="account in accountArray" :key="account.value" :value="account.value">
+      <option v-for="account in accountList" :key="account.value" :value="account.value">
         {{ account.label }}
       </option>
     </select>
@@ -20,7 +20,7 @@ const emits = defineEmits(["sendbackAccountId"]);
 
 const accountId = ref<string>("");
 const isSelectDisabled = ref<boolean>(false);
-const accountArray = ref<{ label: string; value: string; }[]>([]);
+const accountList = ref<{ label: string; value: string; }[]>([]);
 
 
 
@@ -43,7 +43,7 @@ async function searchingAccountLists() {
 
 
   // .map
-  accountArray.value = [
+  accountList.value = [
     { label: "account 1", value: "1" },
     { label: "account 2", value: "2" },
     { label: "account 3", value: "3" },
@@ -51,7 +51,7 @@ async function searchingAccountLists() {
   ];
 
   if (props.sellectAll) {
-    accountArray.value.unshift({ label: "所有帳戶", value: "" });
+    accountList.value.unshift({ label: "所有帳戶", value: "" });
   }
 
 };

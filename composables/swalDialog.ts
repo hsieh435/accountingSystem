@@ -63,8 +63,8 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
     showCancelButton: showCancelButton,
     confirmButtonText: `<i class="bi bi-play-fill mx-1"></i>${confirmButtonMsg}`,
     cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>${cancelButtonText}`,
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
     color: "#000",
     width: message.length > 14 ? "auto" : "",
   }).then(async (result) => {
@@ -86,11 +86,11 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
       // }
 
       const res = await executionApi(apiParams) as IResponse;
-      if (res.returnCode === 0) {
-        showAxiosToast({ message: res.message });
+      if (res.data.returnCode === 0) {
+        showAxiosToast({ message: res.data.message });
         return true;
       } else {
-        showAxiosErrorMsg({ message: res.message });
+        showAxiosErrorMsg({ message: res.data.message });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {

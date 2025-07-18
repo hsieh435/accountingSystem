@@ -10,6 +10,7 @@
 import { defineAsyncComponent, reactive, createApp } from "vue";
 import { IStockAccountRecordList } from "@/models/index";
 import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
@@ -79,53 +80,53 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>股票代號：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="stockNo" value="${dataParams.stockNo}" />
+          <input class="${tailwindStyles.inputClasses}" id="stockNo" value="${dataParams.stockNo}" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>股票名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="stockName" value="${dataParams.stockName}" />
+          <input class="${tailwindStyles.inputClasses}" id="stockName" value="${dataParams.stockName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="pricePerShare" value="${dataParams.pricePerShare}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="pricePerShare" value="${dataParams.pricePerShare}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="quantity" value="${dataParams.quantity}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="quantity" value="${dataParams.quantity}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="handlingFee" value="${dataParams.handlingFee}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="handlingFee" value="${dataParams.handlingFee}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="transactionTax" value="${dataParams.transactionTax}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="transactionTax" value="${dataParams.transactionTax}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>總價：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="totalPrice" value="${currencyFormat(dataParams.totalPrice)}" disabled />
+          <input class="${tailwindStyles.inputClasses}" id="totalPrice" value="${currencyFormat(dataParams.totalPrice)}" disabled />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">備註：</span>
-          <textarea class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="tradeNote" rows="4" maxlength="500" ${dataParams.tradeNote}></textarea>
+          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="4" maxlength="500">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>
@@ -247,16 +248,15 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         return false;
       }
 
-      return { dataParams };
+      return dataParams;
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
+      console.log("result:", result.value);
 
     }
   });
 };
-
 
 
 </script>

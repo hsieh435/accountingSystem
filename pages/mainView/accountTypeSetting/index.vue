@@ -1,8 +1,8 @@
 <template>
   <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
+    <!-- <div class="flex justify-start items-center mx-3 my-2">
       <tradeCategory />
-    </div>
+    </div> -->
 
     <div class="mx-5">
       <template v-if="tradeCategoryList.length > 0">
@@ -59,7 +59,7 @@ definePageMeta({
 
 
 
-const tradeCategory = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategory/index.vue"));
+// const tradeCategory = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategorySetting/index.vue"));
 
 
 

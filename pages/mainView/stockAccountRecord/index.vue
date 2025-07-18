@@ -2,7 +2,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center">
-      <accountRecordSearching :accountTypeId="'stockAccount'" :accountTypeName="'證券帳戶'" />
+      <accountRecordSearching :accountTypeId="'isStaccountAble'" :accountTypeName="'證券帳戶'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">

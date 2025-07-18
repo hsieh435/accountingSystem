@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchTradeCategoryList, fetchDeleteTradeCategory } from "@/server/tradeCategoryApi/index";
-import { ITradeCategory } from "@/models/index";
+import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
@@ -63,7 +63,7 @@ definePageMeta({
 
 
 
-const tradeCategory = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategory/index.vue"));
+const tradeCategory = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategorySetting/index.vue"));
 
 
 
@@ -92,11 +92,14 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function searchingTradeCategoryList() {
   try {
-    const res = await fetchTradeCategoryList();
-    // console.log("res:", res);
-    tradeCategoryList.value = res.data;
-    await tradeCategoryListFilterEvent();
-    
+    const res = await fetchTradeCategoryList() as IResponse;
+    console.log("res:", res);
+    if (res.data.returnCode === 0) {
+      tradeCategoryList.value = res.data;
+      await tradeCategoryListFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }

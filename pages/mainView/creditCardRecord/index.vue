@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center">
-      <accountRecordSearching :accountTypeId="'creditCard'" :accountTypeName="'信用卡'" />
+      <accountRecordSearching :accountTypeId="'isCreditcardAble'" :accountTypeName="'信用卡'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">

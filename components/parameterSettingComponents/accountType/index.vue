@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { ITradeCategory } from "@/models/index";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
@@ -44,19 +45,19 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">帳戶類型代碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : "" } />
+          <input class="${tailwindStyles.inputClasses}" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : "" } />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">帳戶類型名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="categoryName" value="${dataParams.categoryName}" />
+          <input class="${tailwindStyles.inputClasses}" id="categoryName" value="${dataParams.categoryName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">排序：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="sort" value="${dataParams.sort}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="sort" value="${dataParams.sort}" type="number" />
         </div>
 
 
@@ -100,11 +101,11 @@ async function categoryCodeDataHandling(apiMsg?: string) {
         return false;
       }
 
-      return { dataParams };
+      return dataParams;
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result);
+      console.log("result:", result.value);
 
     }
   });

@@ -6,7 +6,7 @@ const baseURL = "http://localhost:3600";
 
 
 
-export async function apiFetch(url: string, method: string, options: RequestInit) {
+export async function apiFetch(url: string, method: string, options?: RequestInit) {
   const userToken = localStorage.getItem("userToken");
 
   return fetch(baseURL + url, {

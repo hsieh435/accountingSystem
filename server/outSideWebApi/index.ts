@@ -1,11 +1,10 @@
 import { apiFetch } from "@/server/index";
-import { IResponse, ITradeCategory } from "@/models/index";
 
 
 
 export async function fetchStockList() {
   const response = await apiFetch("/accounting_system_backend/api/outSideWebApi/stockList", "GET", {});
-  console.log("response:", response);
+  // console.log("response:", response);
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
@@ -26,7 +25,6 @@ export async function fetchEachStockList(ex_ch: string) {
   }
 
   const result = await response.json() as { data: any };
-  console.log("response:", result.data.data);
   return result;
 }
 

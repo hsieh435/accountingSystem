@@ -3,6 +3,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
@@ -29,34 +30,34 @@ async function userPasswordChange(apiMsg?: string) {
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userAccount" value="${userAccount.value}" />
+          <input class="${tailwindStyles.inputClasses}" id="userAccount" value="${userAccount.value}" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userOldPassword" value="${userOldPassword.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="userOldPassword" value="${userOldPassword.value}" type="password" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPassword" value="${userNewPassword.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="userNewPassword" value="${userNewPassword.value}" type="password" />
         </div>
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
         </div>
 
       </div>
     `,
-    confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
+    confirmButtonText: `新增`,
     showCancelButton: true,
-    cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
+    cancelButtonText: `取消`,
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
+    // color: "#000",
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {

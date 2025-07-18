@@ -1,5 +1,9 @@
 <template>
   <div class="w-full">
+    <div class="flex justify-start items-center">
+      <accountRecordSearching :accountTypeId="'isCashflowAble'" :accountTypeName="'持有現金'" /> 
+    </div>
+
     <div class="flex justify-start items-center mx-3 my-2">
       <cashFlowTradeData />
     </div>
@@ -64,6 +68,8 @@ definePageMeta({
 });
 
 
+
+const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecordComponents/accountRecordSearching.vue"));
 const cashFlowTradeData = defineAsyncComponent(() => import("@/components/financeRecordComponents/cashFlowRecord/cashFlowTradeData.vue"));
 
 

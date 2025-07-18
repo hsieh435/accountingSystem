@@ -21,10 +21,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       try {
         const res = await fetchJwtVerification({ token: decryptString(userToken) });
         // console.log("res:", res);
-        if (res.returnCode === 0) {
-          // Handle successful response
+        if (res.data.returnCode === 0) {
+          //
         } else {
-          showAxiosErrorMsg({ message: res.message || "" });
+          showAxiosErrorMsg({ message: res.data.message || "" });
           clearLocalStorageKey(true);
         }
       } catch (error) {

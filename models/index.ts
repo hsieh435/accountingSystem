@@ -6,6 +6,12 @@ export interface IResponse {
   message: string;
 }
 
+// select option interface
+export interface ISelectData {
+  label: string;
+  value: string;
+}
+
 // 使用者資料 interface
 export interface IUserData {
   userId: string;
@@ -20,6 +26,26 @@ export interface ISortArray {
   sortId: string;
   sortText: string;
   value?: number;
+}
+
+// 收支類型 interface
+export interface ITradeCategory {
+  no?: number;
+  categoryCode: string;
+  categoryName: string;
+  isCashflowAble: boolean;
+  isCashcardAble: boolean;
+  isCreditcardAble: boolean;
+  isCuaccountAble: boolean;
+  isStaccountAble: boolean;
+  sort: number;
+}
+
+export interface ICurrency {
+  no?: number;
+  currencyCode: string;
+  currencyName: string;
+  sort: number;
 }
 
 // 儲值票卡列表 interface
@@ -173,17 +199,4 @@ export interface IStockAccountRecordList {
   totalPrice: number;
   tradeDescription: string;
   tradeNote: string;
-}
-
-// 證券帳戶收支類型
-export interface ITradeCategory {
-  no?: number;
-  categoryCode: string;
-  categoryName: string;
-  isCashflowAble: boolean;
-  isCashcardAble: boolean;
-  isCreditcardAble: boolean;
-  isCuaccountAble: boolean;
-  isStaccountAble: boolean;
-  sort: number;
 }

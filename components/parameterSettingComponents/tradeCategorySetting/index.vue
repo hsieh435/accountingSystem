@@ -9,8 +9,9 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/tradeCategoryApi/index";
-import { IResponse, ITradeCategory } from "@/models/index";
+import { ITradeCategory, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
@@ -37,18 +38,21 @@ async function searchingCategoryCode() {
   // console.log("props:", props.categoryCodeGot);
 
   try {
-    const res = await fetchTradeCategory(props.categoryCodeGot);
+    const res = await fetchTradeCategory(props.categoryCodeGot) as IResponse;
     // console.log("res:", res);
-    dataParams.categoryCode = res.data.categoryCode;
-    dataParams.categoryName = res.data.categoryName;
-    dataParams.isCashflowAble = res.data.isCashflowAble;
-    dataParams.isCashcardAble = res.data.isCashcardAble;
-    dataParams.isCreditcardAble = res.data.isCreditcardAble;
-    dataParams.isCuaccountAble = res.data.isCuaccountAble;
-    dataParams.isStaccountAble = res.data.isStaccountAble;
-    dataParams.sort = res.data.sort;
-
-    await categoryCodeDataHandling();
+    if (res.data.returnCode === 0) {
+      dataParams.categoryCode = res.data.categoryCode;
+      dataParams.categoryName = res.data.categoryName;
+      dataParams.isCashflowAble = res.data.isCashflowAble;
+      dataParams.isCashcardAble = res.data.isCashcardAble;
+      dataParams.isCreditcardAble = res.data.isCreditcardAble;
+      dataParams.isCuaccountAble = res.data.isCuaccountAble;
+      dataParams.isStaccountAble = res.data.isStaccountAble;
+      dataParams.sort = res.data.sort;
+      await categoryCodeDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }  
@@ -67,19 +71,19 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易代碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : "" } />
+          <input class="${tailwindStyles.inputClasses}" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : "" } />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易名稱：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="categoryName" value="${dataParams.categoryName}" />
+          <input class="${tailwindStyles.inputClasses}" id="categoryName" value="${dataParams.categoryName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>排序：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="sort" value="${dataParams.sort}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="sort" value="${dataParams.sort}" type="number" />
         </div>
 
 
@@ -178,12 +182,12 @@ async function categoryCodeDataHandling(apiMsg?: string) {
       try {
         const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value) as IResponse;
         console.log("res:", res);
-        if (res.returnCode === 0) {
-          showAxiosToast({ message: res.message });
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
         } else {
-          categoryCodeDataHandling(res.message);
-        } 
+          categoryCodeDataHandling(res.data.message);
+        }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });
       }

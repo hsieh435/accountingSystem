@@ -9,7 +9,7 @@
 
     <div class="w-full flex justify-between items-center bg-stone-200 px-5 py-1">
       <UBreadcrumb :items="breadcrumbItemList" />
-      <button class="btn btn-noshimehana" @click="clearLocalStorageKey(false)" type="button">
+      <button class="btn-noshimehana" @click="clearLocalStorageKey(false)" type="button">
         <span class="mx-2">登出</span><font-awesome-icon class="mx-1" :icon="['fas', 'sign-out-alt']" />
       </button>
     </div>
@@ -81,12 +81,12 @@ const items = ref<NavigationMenuItem[]>([
       {
         label: "儲值票卡資料設定",
         icon: "i-lucide-file-text",
-        to: "/mainView/creditCardSetting",
+        to: "/mainView/cashCardSetting",
       },
       {
         label: "信用卡資料設定",
         icon: "i-lucide-file-text",
-        to: "/mainView/cashCardSetting",
+        to: "/mainView/creditCardSetting",
       },
       {
         label: "存款帳戶資料設定",

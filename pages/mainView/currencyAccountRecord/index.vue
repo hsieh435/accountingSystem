@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center">
-      <accountRecordSearching :accountTypeId="'currencyAccount'" :accountTypeName="'存款帳戶'" />
+      <accountRecordSearching :accountTypeId="'isCuaccountAble'" :accountTypeName="'存款帳戶'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">

@@ -1,12 +1,13 @@
 <template>
-  <div class="flex justify-start items-center">
-    <select :class="tailwindStyles.selectClasses" v-model="schemaId" :disabled="props.isAble">
-      <option v-for="schema in schemaArray" :key="schema.value" :value="schema.value">{{ schema.label }}</option>
-    </select>
-  </div>
+  <select :class="tailwindStyles.selectClasses" v-model="schemaId" :disabled="props.isAble">
+    <option v-for="schema in schemaArray" :key="schema.value" :value="schema.value">{{ schema.label }}</option>
+  </select>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
+import { ISelectData, IResponse } from "@/models/index";
+import { fetchCreditcardSchemaList } from "@/server/parameterApi";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
@@ -18,7 +19,7 @@ const emits = defineEmits(["sendbackSchemaId"]);
 
 const schemaId = ref<string>("");
 const isSelectDisabled = ref<boolean>(true);
-const schemaArray = ref<{ label: string; value: string; }[]>([]);
+const schemaArray = ref<ISelectData[]>([]);
 
 
 
@@ -36,19 +37,25 @@ watch(schemaId, () => {
 
 
 async function searchingSchemaList() {
+  schemaArray.value = [];
 
-  // .map
-  schemaArray.value = [
-    { label: "category 1", value: "1" },
-    { label: "category 2", value: "2" },
-    { label: "category 3", value: "3" },
-    { label: "category 4", value: "4" }
-  ];
-
-  if (props.sellectAll) {
-    schemaArray.value.unshift({ label: "所有發卡機構", value: "" });
+  try {
+    const res = await fetchCreditcardSchemaList() as IResponse;
+    console.log("res:", res);
+    if (res.data.returnCode === 0) {
+      schemaArray.value = res.data.data.map((item: any) => ({
+        label: item.schemaName,
+        value: item.schemaCode
+      }));
+      if (props.sellectAll) {
+        schemaArray.value.unshift({ label: "所有發卡機構", value: "" });
+      }
+    } else {
+      showAxiosErrorMsg({ message: res.data.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
   }
-
 };
 </script>
 <style lang="scss" scoped></style>

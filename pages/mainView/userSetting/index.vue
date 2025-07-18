@@ -6,8 +6,10 @@ import { IUserData, IResponse } from "@/models/index";
 import { navigateTo } from "nuxt/app";
 import { jwtTokenEncoded } from "@/server";
 import { fetchUserDataChange } from "@/server/userDataApi";
+import { setLocalStorageItem } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import { encryptString } from "@/composables/crypto";
+import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
@@ -52,31 +54,31 @@ async function submitUserData(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者代碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userId" value="${dataParams.userId}" disabled />
+          <input class="${tailwindStyles.inputClasses}" id="userId" value="${dataParams.userId}" disabled />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者姓名：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userName" value="${dataParams.userName}" />
+          <input class="${tailwindStyles.inputClasses}" id="userName" value="${dataParams.userName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">舊密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
-          <input class="col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="secondPassword" value="${secondPassword.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses}" id="secondPassword" value="${secondPassword.value}" type="password" />
         </div>
 
       </div>
@@ -84,8 +86,8 @@ async function submitUserData(apiMsg?: string) {
     confirmButtonText: "修改",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
     color: "#000",
     background: "#fff",
     allowOutsideClick: false,
@@ -131,17 +133,18 @@ async function submitUserData(apiMsg?: string) {
     if (result.isConfirmed) {
       result.value.userOldPassword = encryptString(result.value.userOldPassword);
       result.value.userNewPassword = encryptString(result.value.userNewPassword);
-      console.log("result:", result.value);
+      // console.log("result:", result.value);
       
       try {
         const res = await fetchUserDataChange(result.value) as IResponse;
-        console.log("res:", res);
-        if (res.returnCode === 0) {
-          showAxiosToast({ message: res.message });
+        // console.log("res:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          setLocalStorageItem("userToken", res.data.data.jwt);
           navigateTo("/mainView");
         } else {
-          showAxiosErrorMsg({ message: res.message });
-        } 
+          showAxiosErrorMsg({ message: res.data.message });
+        }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });
       } finally {

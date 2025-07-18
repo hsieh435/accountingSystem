@@ -3,7 +3,7 @@
 
 
 
-.btn {
+%btn {
   margin-left: 10px;
   margin-right: 10px;
   padding-left: 5px;
@@ -29,16 +29,43 @@
 }
 
 .btn-noshimehana {
+  @extend %btn;
   background-color: colors.$noshimehana;
   color: rgb(255, 255, 255);
 }
 
 .btn-ruri {
+  @extend %btn;
   background-color: colors.$ruri;
   color: rgb(255, 255, 255);
 }
 
 .btn-aomidori {
+  @extend %btn;
   background-color: colors.$aomidori;
   color: rgb(0, 0, 0);
+}
+
+.btn-gunjyo {
+  @extend %btn;
+  background-color: colors.$gunjyo;
+  color: rgb(255, 255, 255);
+}
+
+.btn-nibi {
+  @extend %btn;
+  background-color: colors.$nibi;
+  color: rgb(255, 255, 255);
+}
+
+.btn-nakabeni {
+  @extend %btn;
+  background-color: colors.$nakabeni;
+  color: rgb(255, 255, 255);
+}
+
+.btn-keshizumi {
+  @extend %btn;
+  background-color: colors.$keshizumi;
+  color: rgb(255, 255, 255);
 }

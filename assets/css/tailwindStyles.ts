@@ -11,6 +11,9 @@ export const tailwindStyles = {
 
 
   selectClasses: "block border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white mx-1 px-2 py-1",
+
+
+  inputClasses: "col-span-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1",
 };
 
 
