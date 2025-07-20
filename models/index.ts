@@ -45,6 +45,7 @@ export interface ICurrency {
   no?: number;
   currencyCode: string;
   currencyName: string;
+  allowDelete?: boolean;
   sort: number;
 }
 

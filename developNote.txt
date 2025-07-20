@@ -27,9 +27,11 @@ https://ui.nuxt.com/
 
 資料視覺化
 
-chart js
-
 D3.js
+
+Chart.js
+
+Plotly.js
 
 
 netstat -aon|findstr 8080

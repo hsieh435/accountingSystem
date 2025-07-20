@@ -18,5 +18,11 @@ npm i
 npm run dev
 
 
-使用技術
+前端使用技術
 Nuxt 3 + Tailwind
+
+後端使用技術
+node.js
+
+資料庫
+pgadmin

@@ -161,6 +161,11 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "/mainView/accountTypeSetting",
       },
+      {
+        label: "貨幣設定",
+        icon: "i-lucide-file-text",
+        to: "/mainView/currencySetting",
+      },
     ]
   },
   {

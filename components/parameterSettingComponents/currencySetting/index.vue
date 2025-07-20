@@ -24,6 +24,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICurrency>({
   currencyCode: props.currencyCodeGot || "",
   currencyName: "",
+  allowDelete: true,
   sort: 0,
 });
 
@@ -49,6 +50,7 @@ async function searchingCategoryCode() {
 }
 
 
+
 async function categoryCodeDataHandling(apiMsg?: string) {
   console.log(dataParams);
 
@@ -56,23 +58,23 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     title: props.currencyCodeGot ? "編輯貨幣資料" : "新增貨幣資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣代碼：</span>
+          <span class="col-start-1 col-end-3 text-right">貨幣代碼：</span>
           <input class="${tailwindStyles.inputClasses}" id="currencyCode" value="${dataParams.currencyCode}" ${props.currencyCodeGot ? "disabled" : "" } />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣名稱：</span>
+          <span class="col-start-1 col-end-3 text-right">貨幣名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="currencyName" value="${dataParams.currencyName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>排序：</span>
+          <span class="col-start-1 col-end-3 text-right">排序：</span>
           <input class="${tailwindStyles.inputClasses}" id="sort" value="${dataParams.sort}" type="number" />
         </div>
 
@@ -120,7 +122,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
+      // console.log("result:", result.value);
       try {
         const res = await (props.currencyCodeGot ? fetchUpdateCurrency : fetchCreateCurrency)(result.value) as IResponse;
         console.log("res:", res);

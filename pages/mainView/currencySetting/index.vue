@@ -20,7 +20,7 @@
                   <th :class="tailwindStyles.thClasses">NO.</th>
                   <th :class="tailwindStyles.thClasses">貨幣代碼</th>
                   <th :class="tailwindStyles.thClasses">貨幣名稱</th>
-                  <!-- <th :class="tailwindStyles.thClasses">匯率</th> -->
+                  <th :class="tailwindStyles.thClasses">可否刪除</th>
                   <th :class="tailwindStyles.thLastClasses">操作</th>
                 </tr>
               </thead>
@@ -29,10 +29,12 @@
                   <td :class="tailwindStyles.tdClasses">{{ currency.no }}</td>
                   <td :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</td>
                   <td :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</td>
-                  <!-- <td :class="tailwindStyles.tdClasses">{{ 0 }}</td> -->
+                  <td :class="tailwindStyles.tdClasses">
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="currency.allowDelete" />
+                  </td>
                   <td :class="tailwindStyles.tdLastClasses">
                     <currencySetting :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencySettingList" />
-                    <ui-buttonGroup showRemove :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
+                    <ui-buttonGroup :showRemove="currency.allowDelete" :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
                   </td>
                 </tr>
               </tbody>
@@ -95,9 +97,9 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function searchingCurrencySettingList() {
   try {
     const res = await fetchCurrencyList() as IResponse;
-    // console.log("res:", res);
+    console.log("res:", res);
     if (res.data.returnCode === 0) {
-      currencyList.value = res.data;
+      currencyList.value = res.data.data;
       await currencyListFilterEvent();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
@@ -119,8 +121,7 @@ async function currencyListFilterEvent() {
 
 
 async function removeCurrency(currencyCode: string) {
-  console.log("currencyCode:", currencyCode);
-
+  // console.log("currencyCode:", currencyCode);
   const confirmResult = await showConfirmDialog({
     message: "確定刪除該貨幣資料嗎？",
     confirmButtonMsg: "刪除",

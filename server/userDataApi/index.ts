@@ -7,6 +7,7 @@ export async function fetchUserLogin(data: { userId: string; password: string })
   const response = 
     await apiFetch("/accounting_system_backend/public/user/login", "POST", { body: JSON.stringify(data) });
 
+  console.log("daresponseta:", response);
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
   }
