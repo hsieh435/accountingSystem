@@ -29,6 +29,7 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
   incomingOutgoing: "",
   tradeCategory: "",
   tradeAmount: 0,
+  currency: "TWD",
   tradeDescription: "",
   tradeNote: "",
 });

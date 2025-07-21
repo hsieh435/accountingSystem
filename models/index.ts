@@ -41,6 +41,7 @@ export interface ITradeCategory {
   sort: number;
 }
 
+// 貨幣列表 interface
 export interface ICurrency {
   no?: number;
   currencyCode: string;
@@ -49,12 +50,44 @@ export interface ICurrency {
   sort: number;
 }
 
+// 現金流 interface
+export interface ICashFlowList {
+  no?: number;
+  cashflowId: string;
+  userId: string;
+  currency: string;
+  startingAmount: number;
+  presentAmount: number;
+  minimumValueAllowed: number;
+  alertValue: number;
+  openAlert: boolean;
+  createDate: string;
+  note: string;
+}
+
+
+// 現金收支紀錄 interface
+export interface ICashFlowRecordList {
+  no?: number;
+  tradeId: string;
+  userId: string;
+  tradeDatetime: string;
+  accountType: string;
+  incomingOutgoing: string;
+  tradeCategory: string;
+  tradeAmount: number;
+  currency: string;
+  tradeDescription: string;
+  tradeNote: string;
+}
+
 // 儲值票卡列表 interface
 export interface ICashCardList {
   no?: number;
   cashCardId: string;
   cashCardUser: string;
   cashCardName: string;
+  currency: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -75,29 +108,7 @@ export interface ICashCardRecordList {
   incomingOutgoing: string;
   tradeCategory: string;
   tradeAmount: number;
-  tradeDescription: string;
-  tradeNote: string;
-}
-
-// 現金流初始資料 interface
-export interface ICashFlowData {
-  userId: string;
-  startingAmount: number;
-  presentAmount: number;
-  minimumValueAllowed: number;
-  createdDate: string;
-}
-
-// 現金收支紀錄 interface
-export interface ICashFlowRecordList {
-  no?: number;
-  tradeId: string;
-  userId: string;
-  tradeDatetime: string;
-  accountType: string;
-  incomingOutgoing: string;
-  tradeCategory: string;
-  tradeAmount: number;
+  currency: string;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -111,7 +122,9 @@ export interface ICreditCardList {
   creditcardBankCode: string;
   creditcardBankName: string;
   creditcardSchema: string;
+  currency: string;
   creditPerMonth: number;
+  expirationDate: string;
   alertValue: number;
   openAlert: boolean;
   createdDate: string;
@@ -127,6 +140,7 @@ export interface ICreditCardRecordList {
   accountType: string;
   tradeCategory: string;
   tradeAmount: number;
+  currency: string;
   billMonth: string;
   tradeDescription: string;
   tradeNote: string;
@@ -141,6 +155,7 @@ export interface ICurrencyAccountList {
   accountType: string;
   accountBankCode: string;
   accountBankName: string;
+  currency: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -161,6 +176,7 @@ export interface IcurrencyAccountRecordList {
   incomingOutgoing: string;
   tradeCategory: string;
   tradeAmount: number;
+  currency: string;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -174,6 +190,7 @@ export interface IStockAccountList {
   accountType: string;
   accountBankCode: string;
   accountBankName: string;
+  currency: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -198,6 +215,7 @@ export interface IStockAccountRecordList {
   handlingFee: number;
   transactionTax: number;
   totalPrice: number;
+  currency: string;
   tradeDescription: string;
   tradeNote: string;
 }

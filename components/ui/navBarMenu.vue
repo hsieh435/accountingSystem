@@ -7,7 +7,7 @@
     <!-- Nuxt 的 <NuxtLink to="/path”></NuxtLink> 標籤，概念相當於 Vue 的 <RouterLink to=”/path”></RouterLink> -->
     <!-- Nuxt 的 <NuxtLayout><NuxtPage></NuxtPage></NuxtLayout> 標籤，概念相當於 Vue 的 <RouterView></RouterView> -->
 
-    <div class="w-full flex justify-between items-center bg-stone-200 px-5 py-1">
+    <div class="flex justify-between items-center w-full bg-stone-200 px-5 py-1">
       <UBreadcrumb :items="breadcrumbItemList" />
       <button class="btn-noshimehana" @click="clearLocalStorageKey(false)" type="button">
         <span class="mx-2">登出</span><font-awesome-icon class="mx-1" :icon="['fas', 'sign-out-alt']" />

@@ -1,39 +1,40 @@
 <template>
-  <div class="flex justify-between items-center px-2 py-2">
+  <div class="flex flex-wrap justify-between items-center px-2">
 
-    <div class="flex justify-start items-center">
+    <div class="flex flex-wrap justify-start items-center me-2 my-1">
       <span>共 {{ props.totalDataQuanity }} 筆</span>
       <USelect v-model="itemsPerPage" :items="perPageArray" class="w-auto mx-2" :label="'123'" />
       
       <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" color="neutral" variant="outline" />
-      
-      <span class="mx-1">前往第</span>
-      <UInputNumber style="width: 120px;" v-model="currentPage" :min="1" :max="totalPages" color="neutral" highlight />
-      <span class="mx-1">頁</span>
+
+      <div class="flex flex-row justify-start items-center my-1">
+        <span class="mx-1">前往第</span>
+        <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" color="neutral" highlight />
+        <span class="mx-1">頁</span>
+      </div>
     </div>
 
 
-    
-      <template v-if="props.showSortSelect && sortMethodGot.length > 0">
-        <div class="d-flex flex-row justify-start items-center mx-2">
-          <font-awesome-icon class="mx-1" :icon="['fas', 'sort']" />
-          <select class="form-select form-select-sm w-auto mx-1" @change="clickSortSelect" v-model="sortSelectValue">
-            <template v-for="(sort, sortIndex) in sortMethodGot" :key="sortIndex">
-              <option :value="sort.value">{{ sort.sortText }}</option>
-            </template>
-          </select>
-        </div>
-      </template>
+    <template v-if="props.showSortSelect && sortMethodGot.length > 0">
+      <div class="flex flex-row justify-start items-center me-2 my-1">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'sort']" />
+        <select class="form-select form-select-sm w-auto mx-1" @change="clickSortSelect" v-model="sortSelectValue">
+          <template v-for="(sort, sortIndex) in sortMethodGot" :key="sortIndex">
+            <option :value="sort.value">{{ sort.sortText }}</option>
+          </template>
+        </select>
+      </div>
+    </template>
 
     <template v-if="props.showFilter">
-      <div class="flex justify-start items-center mx-2">
+      <div class="flex flex-row justify-start items-center me-2 my-1">
         <font-awesome-icon class="mx-1" :icon="['fas', 'sliders']" />
         <UInput class="mx-1" v-model="keyWord" :type="'search'" color="neutral" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
       </div>      
     </template>
-    
-    
-    
+
+
+
     <!-- <template v-if="props.showCheckBox">
       <UCheckbox v-model="isCheckBoxPicked" :label="props.checkBoxTitle" />
     </template> -->

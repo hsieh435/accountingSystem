@@ -13,28 +13,26 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="tradeCategoryListFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">交易代碼</th>
-                  <th :class="tailwindStyles.thClasses">交易名稱</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody :class="tailwindStyles.tbodyClasses">
-                <tr :class="tailwindStyles.trClasses" v-for="account in tableData" :key="account.categoryCode">
-                  <td :class="tailwindStyles.tdClasses">{{ account.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.categoryName }}</td>
-                  <td :class="tailwindStyles.tdLastClasses">
-                    <tradeCategory :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
-                    <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">交易代碼</div>
+                <div :class="tailwindStyles.thClasses">交易名稱</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+            </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.categoryCode">
+                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
+                <div :class="tailwindStyles.tdLastClasses">
+                  <tradeCategory :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
+                  <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>
@@ -95,7 +93,7 @@ async function searchingTradeCategoryList() {
     const res = await fetchTradeCategoryList() as IResponse;
     console.log("res:", res);
     if (res.data.returnCode === 0) {
-      tradeCategoryList.value = res.data;
+      tradeCategoryList.value = res.data.data;
       await tradeCategoryListFilterEvent();
     } else {
       showAxiosErrorMsg({ message: res.data.message });

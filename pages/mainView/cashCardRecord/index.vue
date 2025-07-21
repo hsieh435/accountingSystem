@@ -14,37 +14,35 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="cashCardRecordFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">票卡名稱</th>
-                  <th :class="tailwindStyles.thClasses">交易時間</th>
-                  <th :class="tailwindStyles.thClasses">收支</th>
-                  <th :class="tailwindStyles.thClasses">項目</th>
-                  <th :class="tailwindStyles.thClasses">金額</th>
-                  <th :class="tailwindStyles.thClasses">餘額</th>
-                  <th :class="tailwindStyles.thClasses">內容</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr :class="tailwindStyles.trClasses" v-for="record in tableData" :key="record.tradeId">
-                  <td :class="tailwindStyles.tdClasses">{{ record.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.cashCardName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.incomingOutgoing }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</td>
-                  <td :class="tailwindStyles.tdClasses">0</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</td>
-                  <td :class="tailwindStyles.tdLastClasses">
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">票卡名稱</div>
+                <div :class="tailwindStyles.thClasses">交易時間</div>
+                <div :class="tailwindStyles.thClasses">收支</div>
+                <div :class="tailwindStyles.thClasses">項目</div>
+                <div :class="tailwindStyles.thClasses">金額</div>
+                <div :class="tailwindStyles.thClasses">餘額</div>
+                <div :class="tailwindStyles.thClasses">內容</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+              <div :class="tailwindStyles.tbodyClasses">
+                <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+                  <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ record.cashCardName }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ record.incomingOutgoing }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
+                  <div :class="tailwindStyles.tdClasses">0</div>
+                  <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
+                  <div :class="tailwindStyles.tdLastClasses">
                     <cashCardTradeData :tradeIdGot="record.tradeId" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>

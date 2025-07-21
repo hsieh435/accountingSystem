@@ -1,15 +1,15 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <span>查詢現金流</span>
+      <span>查詢貨幣：</span>
       <currencySelect @sendbackCurrencyId="settingCurrency" />
       <ui-buttonGroup showCreate :createText="'新增現金流'" @dataCreate="cashFlowCreating()" :createDisable="!currencyId" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
-import { ICashFlowData } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { ICashFlowList } from "@/models/index";
 
 
 
@@ -27,18 +27,26 @@ const currencySelect = defineAsyncComponent(() => import("@/components/ui/select
 
 
 const currencyId = ref<string>("");
-const cashFlowData = reactive<ICashFlowData>({  
-  userId: "",
-  startingAmount: 0,
-  presentAmount: 0,
-  minimumValueAllowed: 0,
-  createdDate: "",
+const cashFlowList = ref<ICashFlowList[]>([]);
+const cashFlowListFiltered = ref<ICashFlowList[]>([]);
+const tableData = ref<ICashFlowList[]>([]);
+
+
+
+onMounted(() => {
+  cashFlowSearching();
 });
 
 
 
 async function settingCurrency(currencyIdSendback: string) {
   currencyId.value = currencyIdSendback;
+}
+
+
+
+async function cashFlowSearching() {
+  //
 }
 
 

@@ -27,6 +27,7 @@ const dataParams = reactive<IStockAccountList>({
   accountType: "",
   accountBankCode: "",
   accountBankName: "",
+  currency: "TWD",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,

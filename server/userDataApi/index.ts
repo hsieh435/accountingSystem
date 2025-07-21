@@ -3,11 +3,22 @@ import { IResponse, ITradeCategory } from "@/models/index";
 
 
 
+export async function fetchUserList() {
+  const response = await apiFetch("/accounting_system_backend/api/userList", "GET");
+  if (!response.ok) {
+    throw new Error("HTTP error! status:" + response.status);
+  }
+  const result = await response.json() as { data: number } as IResponse;
+  return result.data.data;
+}
+
+
+
 export async function fetchUserLogin(data: { userId: string; password: string }) {
   const response = 
     await apiFetch("/accounting_system_backend/public/user/login", "POST", { body: JSON.stringify(data) });
 
-  console.log("daresponseta:", response);
+  // console.log("response:", response);
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
   }

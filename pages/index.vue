@@ -18,9 +18,9 @@
           <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
         </button>
         <loginComponents-resetPassword />
+        <loginComponents-createUser />
       </div>
     </div>
-    <!-- <loginComponents-createUser /> -->
   </div>
 </template>
 <script setup lang="ts">

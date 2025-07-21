@@ -11,34 +11,32 @@
           :searchingPlaceholder="'搜尋帳戶名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="currencyAccountListFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">帳戶名稱</th>
-                  <th :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</th>
-                  <th :class="tailwindStyles.thClasses">目前金額</th>
-                  <th :class="tailwindStyles.thClasses">薪資帳戶</th>
-                  <th :class="tailwindStyles.thClasses">建立時間</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr :class="tailwindStyles.trClasses" v-for="account in tableData" :key="account.accountId">
-                  <td :class="tailwindStyles.tdClasses">{{ account.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.accountName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.isSalaryAccount }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ account.createdDate }}</td>
-                  <td :class="tailwindStyles.tdLastClasses">
-                    <currencyAccountsData :currencyAccountIdGot="account.accountId" />
-                    <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeCurrencyAccountData()" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">帳戶名稱</div>
+                <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.thClasses">目前金額</div>
+                <div :class="tailwindStyles.thClasses">薪資帳戶</div>
+                <div :class="tailwindStyles.thClasses">建立時間</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+            </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.isSalaryAccount }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
+                <div :class="tailwindStyles.tdLastClasses">
+                  <currencyAccountsData :currencyAccountIdGot="account.accountId" />
+                  <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeCurrencyAccountData()" />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>

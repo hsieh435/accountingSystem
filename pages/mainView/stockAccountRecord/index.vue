@@ -15,43 +15,41 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="stockAccountRecordFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">交易時間</th>
-                  <th :class="tailwindStyles.thClasses">買/賣</th>
-                  <th :class="tailwindStyles.thClasses">股票</th>
-                  <th :class="tailwindStyles.thClasses">金額</th>
-                  <th :class="tailwindStyles.thClasses">股數</th>
-                  <th :class="tailwindStyles.thClasses">手續費</th>
-                  <th :class="tailwindStyles.thClasses">交易稅</th>
-                  <th :class="tailwindStyles.thClasses">交易總額</th>
-                  <th :class="tailwindStyles.thClasses">帳戶餘額</th>
-                  <th :class="tailwindStyles.thClasses">內容</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr :class="tailwindStyles.trClasses" v-for="record in tableData" :key="record.tradeId">
-                  <td :class="tailwindStyles.tdClasses">{{ record.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.incomingOutgoing }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.stockNo }} / {{ record.stockName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.pricePerShare) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.quantity) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.handlingFee) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.transactionTax) }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currencyFormat(record.totalPrice) }}</td>
-                  <td :class="tailwindStyles.tdClasses">0</td>
-                  <td :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</td>
-                  <td :class="tailwindStyles.tdLastClasses">
-                    <stockAccountTradeData :tradeIdGot="record.tradeId" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">交易時間</div>
+                <div :class="tailwindStyles.thClasses">買/賣</div>
+                <div :class="tailwindStyles.thClasses">股票</div>
+                <div :class="tailwindStyles.thClasses">金額</div>
+                <div :class="tailwindStyles.thClasses">股數</div>
+                <div :class="tailwindStyles.thClasses">手續費</div>
+                <div :class="tailwindStyles.thClasses">交易稅</div>
+                <div :class="tailwindStyles.thClasses">交易總額</div>
+                <div :class="tailwindStyles.thClasses">帳戶餘額</div>
+                <div :class="tailwindStyles.thClasses">內容</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+            </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+                <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.incomingOutgoing }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.stockNo }} / {{ record.stockName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.pricePerShare) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.quantity) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.handlingFee) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.transactionTax) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.totalPrice) }}</div>
+                <div :class="tailwindStyles.tdClasses">0</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
+                <div :class="tailwindStyles.tdLastClasses">
+                  <stockAccountTradeData :tradeIdGot="record.tradeId" />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>

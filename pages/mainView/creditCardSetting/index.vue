@@ -11,34 +11,32 @@
           :searchingPlaceholder="'搜尋信用卡名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="creditCardListFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">信用卡名稱</th>
-                  <th :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</th>
-                  <th :class="tailwindStyles.thClasses">發卡機構</th>
-                  <th :class="tailwindStyles.thClasses">每月額度</th>
-                  <th :class="tailwindStyles.thClasses">建立時間</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr :class="tailwindStyles.trClasses" v-for="card in tableData" :key="card.creditcardId">
-                  <td :class="tailwindStyles.tdClasses">{{ card.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ card.creditcardBankCode }} / {{ card.creditcardBankName }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ card.createdDate }}</td>
-                  <td :class="tailwindStyles.tdLastClasses">
-                    <creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
-                    <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">信用卡名稱</div>
+                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.thClasses">發卡機構</div>
+                <div :class="tailwindStyles.thClasses">每月額度</div>
+                <div :class="tailwindStyles.thClasses">建立時間</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+            </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
+                <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditcardBankCode }} / {{ card.creditcardBankName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
+                <div :class="tailwindStyles.tdLastClasses">
+                  <creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
+                  <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>

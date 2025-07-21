@@ -34,6 +34,7 @@ const dataParams = reactive<IStockAccountRecordList>({
   handlingFee: 0,
   transactionTax: 0,
   totalPrice: 0,
+  currency: "TWD",
   tradeDescription: "",
   tradeNote: "",
 });

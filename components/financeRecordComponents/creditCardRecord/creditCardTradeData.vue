@@ -28,6 +28,7 @@ const dataParams = reactive<ICreditCardRecordList>({
   accountType: "",
   tradeCategory: "",
   tradeAmount: 0,
+  currency: "TWD",
   billMonth: "",
   tradeDescription: "",
   tradeNote: "",

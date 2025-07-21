@@ -13,32 +13,30 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="currencyListFiltered.length > 0">
-          <div class="overflow-x-auto">
-            <table :class="tailwindStyles.tableClasses">
-              <thead :class="tailwindStyles.theadClasses">
-                <tr :class="tailwindStyles.trClasses">
-                  <th :class="tailwindStyles.thClasses">NO.</th>
-                  <th :class="tailwindStyles.thClasses">貨幣代碼</th>
-                  <th :class="tailwindStyles.thClasses">貨幣名稱</th>
-                  <th :class="tailwindStyles.thClasses">可否刪除</th>
-                  <th :class="tailwindStyles.thLastClasses">操作</th>
-                </tr>
-              </thead>
-              <tbody :class="tailwindStyles.tbodyClasses">
-                <tr :class="tailwindStyles.trClasses" v-for="currency in tableData" :key="currency.currencyCode">
-                  <td :class="tailwindStyles.tdClasses">{{ currency.no }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</td>
-                  <td :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</td>
-                  <td :class="tailwindStyles.tdClasses">
-                    <font-awesome-icon :icon="['fas', 'check']" v-if="currency.allowDelete" />
-                  </td>
-                  <td :class="tailwindStyles.tdLastClasses">
-                    <currencySetting :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencySettingList" />
-                    <ui-buttonGroup :showRemove="currency.allowDelete" :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">貨幣代碼</div>
+                <div :class="tailwindStyles.thClasses">貨幣名稱</div>
+                <div :class="tailwindStyles.thClasses">可否刪除</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
+            </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="currency in tableData" :key="currency.currencyCode">
+                <div :class="tailwindStyles.tdClasses">{{ currency.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon :icon="['fas', 'check']" v-if="currency.allowDelete" />
+                </div>
+                <div :class="tailwindStyles.tdLastClasses">
+                  <currencySetting :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencySettingList" />
+                  <ui-buttonGroup :showRemove="currency.allowDelete" :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
       </template>

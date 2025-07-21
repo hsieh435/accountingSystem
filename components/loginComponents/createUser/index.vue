@@ -1,7 +1,9 @@
 <template>
+  <div></div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { fetchUserList } from "@/server/userDataApi";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
@@ -22,7 +24,9 @@ onMounted(async () => {
 
 
 async function searchingUser() {
-  await createUserDate();  
+  if (await fetchUserList() === 0) {
+    await createUserDate();
+  }
 }
 
 
