@@ -44,7 +44,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchTradeCategoryList, fetchDeleteTradeCategory } from "@/server/tradeCategoryApi/index";
+import { fetchTradeCategoryList, fetchDeleteTradeCategory } from "@/server/tradeCategoryApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";

@@ -29,7 +29,7 @@
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</div>
                 <div :class="tailwindStyles.tdClasses">
-                  <font-awesome-icon :icon="['fas', 'check']" v-if="currency.allowDelete" />
+                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="currency.allowDelete" />
                 </div>
                 <div :class="tailwindStyles.tdLastClasses">
                   <currencySetting :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencySettingList" />
@@ -48,7 +48,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchCurrencyList, fetchDeleteCurrency } from "@/server/currencyApi";
+import { fetchCurrencyList, fetchDeleteCurrency } from "./../../../server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -65,7 +65,7 @@ definePageMeta({
 
 
 
-const currencySetting = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencySetting/index.vue"));
+const currencySetting = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencySetting.vue"));
 
 
 

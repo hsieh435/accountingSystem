@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { fetchStockList, fetchEachStockList } from "@/server/outSideWebApi/index";
+import { fetchStockList, fetchEachStockList } from "@/server/outSideWebApi";
 
 
 
@@ -13,9 +13,7 @@ definePageMeta({
   middleware: "auth",
   functionTitle: "其他",
   subTitle: "測試區",
-})
-
-
+});
 
 
 

@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/tradeCategoryApi/index";
+import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/tradeCategoryApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";

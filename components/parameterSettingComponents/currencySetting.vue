@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchEachCurrency, fetchCreateCurrency, fetchUpdateCurrency } from "@/server/currencyApi/index";
+import { fetchEachCurrency, fetchCreateCurrency, fetchUpdateCurrency } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";

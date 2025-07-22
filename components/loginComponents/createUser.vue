@@ -3,8 +3,11 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchUserList } from "@/server/userDataApi";
+import { fetchUserList, fetchUserCategory } from "@/server/userDataApi";
+import { IUserData, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { encryptString } from "@/composables/crypto";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 
@@ -58,7 +61,7 @@ async function createUserDate(apiMsg?: string) {
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">重複密碼：</span>
+          <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
           <input class="${tailwindStyles.inputClasses}" id="userSsecondPassword" value="${userSsecondPassword.value}" type="password" />
         </div>
 
@@ -112,13 +115,23 @@ async function createUserDate(apiMsg?: string) {
       return {
         userAccount: userAccount.value,
         userName: userName.value,
-        userPassword: userPassword.value,
+        userPassword: encryptString(userPassword.value),
       };
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-
+      // console.log("result:", result.value);
+      
+      try {
+        const res = await fetchUserCategory(result.value) as IResponse;
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 };

@@ -1,4 +1,4 @@
-import { apiFetch } from "@/server/index";
+import { apiFetch } from "@/server";
 import { IResponse, ITradeCategory } from "@/models/index";
 
 

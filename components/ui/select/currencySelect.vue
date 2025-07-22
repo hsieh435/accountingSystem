@@ -1,12 +1,10 @@
 <template>
-  <div class="flex justify-start items-center">
-    <select :class="tailwindStyles.selectClasses" v-model="currencyId">
-      <option value="" v-if="props.sellectAll">所有貨幣</option>
-      <option v-for="currency in currencyList" :key="currency.currencyCode" :value="currency.currencyCode" :disabled="props.currencyArray.includes(currency.currencyCode)">
-        {{ currency.currencyCode }} - {{ currency.currencyName }}
-      </option>
-    </select>
-  </div>
+  <select :class="tailwindStyles.selectClasses" v-model="currencyId" :disabled="props.isDisable">
+    <option value="" v-if="props.sellectAll">所有貨幣</option>
+    <option v-for="currency in currencyList" :key="currency.currencyCode" :value="currency.currencyCode" :disabled="props.currencyArray.includes(currency.currencyCode)">
+      {{ currency.currencyCode }} - {{ currency.currencyName }}
+    </option>
+  </select>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -47,7 +45,7 @@ async function searchingCurrencyList() {
   currencyList.value = [];
   try {
     const res = (await fetchCurrencyList()) as IResponse;
-    console.log("fetchCurrencyList:", res);
+    // console.log("fetchCurrencyList:", res);
     if (res.data.returnCode === 0) {
       currencyList.value = res.data.data;
     } else {

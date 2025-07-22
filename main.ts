@@ -1,17 +1,14 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-// import router from "./router";
-// import store from "~/store/index";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-// import { encryptString, decryptString } from "./tools/crypto";
 
 
 
 ////////////////////////////// fontawsome
-import FontAwesomeIcon from "~/plugins/fontawesome/index";
+import FontAwesomeIcon from "@/plugins/fontawesome/index";
 
 
 

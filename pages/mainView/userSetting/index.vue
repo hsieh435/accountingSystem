@@ -134,10 +134,9 @@ async function submitUserData(apiMsg?: string) {
       result.value.userOldPassword = encryptString(result.value.userOldPassword);
       result.value.userNewPassword = encryptString(result.value.userNewPassword);
       // console.log("result:", result.value);
-      
+
       try {
         const res = await fetchUserDataChange(result.value) as IResponse;
-        // console.log("res:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           setLocalStorageItem("userToken", res.data.data.jwt);

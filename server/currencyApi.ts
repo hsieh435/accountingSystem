@@ -58,6 +58,7 @@ export async function fetchUpdateCurrency(data: ICurrency) {
 }
 
 
+
 export async function fetchDeleteCurrency(currencyCode: string) {
   const response =
     await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "DELETE");

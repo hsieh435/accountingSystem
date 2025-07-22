@@ -52,9 +52,9 @@ async function userPasswordChange(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: `新增`,
+    confirmButtonText: "新增",
     showCancelButton: true,
-    cancelButtonText: `取消`,
+    cancelButtonText: "取消",
     // confirmButtonColor: "#007fff",
     // cancelButtonColor: "#ff4337",
     // color: "#000",

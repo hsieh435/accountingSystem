@@ -14,7 +14,7 @@
       </div>
 
       <div class="flex justify-center items-center">
-        <button class="btn-ruri" color="secondary" @click="handleLogin()" type="button">
+        <button class="btn-ruri" @click="handleLogin()" type="button">
           <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
         </button>
         <loginComponents-resetPassword />
@@ -52,7 +52,7 @@ async function handleLogin() {
       userId: accountId.value,
       password: encryptString(password.value),
     }) as IResponse;
-    console.log("res:", res);
+    // console.log("res:", res);
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
       setLocalStorageItem("userToken", res.data.data.jwt);

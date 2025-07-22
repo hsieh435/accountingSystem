@@ -50,7 +50,12 @@ export interface ICurrency {
   sort: number;
 }
 
-// 現金流 interface
+// 現金流列表查詢參數 interface
+export interface ICashFlowListQueryParams {
+  currency: string;
+}
+
+// 現金流列表 interface
 export interface ICashFlowList {
   no?: number;
   cashflowId: string;
@@ -64,7 +69,6 @@ export interface ICashFlowList {
   createDate: string;
   note: string;
 }
-
 
 // 現金收支紀錄 interface
 export interface ICashFlowRecordList {
