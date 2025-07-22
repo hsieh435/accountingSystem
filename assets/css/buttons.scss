@@ -19,12 +19,13 @@
   // }
 
   &:hover {
-    opacity: 0.85;
+    opacity: 0.8;
     transition: 0.2s ease-in-out;
   }
 
   &:disabled {
     opacity: 0.6;
+    transition: 0.2s ease-in-out;
     cursor: not-allowed;
   }
 }
