@@ -48,7 +48,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchCurrencyList, fetchDeleteCurrency } from "./../../../server/currencyApi";
+import { fetchCurrencyList, fetchDeleteCurrency } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";

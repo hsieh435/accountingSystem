@@ -178,7 +178,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      // console.log("result:", result.value.dataParams);
+      // console.log("result:", result.value);
       try {
         const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value) as IResponse;
         console.log("res:", res);

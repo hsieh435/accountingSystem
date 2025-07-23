@@ -31,7 +31,7 @@
                   <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</div>
-                  <div :class="tailwindStyles.tdClasses">{{ card.createDate }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
                   <div :class="tailwindStyles.tdLastClasses">
                     <cashCardData :cashCardId="card.cashCardId" />
                     <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard()" />

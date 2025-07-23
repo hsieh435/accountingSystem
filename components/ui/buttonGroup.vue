@@ -42,7 +42,7 @@
 
 
     <template v-if="props.showRemove">
-      <button class="btn-nakabeni" @click="clickRemoveButton()" :disabled="props.removeDisable">
+      <button class="btn-kurenainoyashio" @click="clickRemoveButton()" :disabled="props.removeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" /><span class="mx-1">{{ props.removeText }}</span>
       </button>
     </template> 

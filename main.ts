@@ -26,10 +26,6 @@ import FontAwesomeIcon from "@/plugins/fontawesome/index";
 const app = createApp(App);
 
 
-// app.config.globalProperties.$encryptString = encryptString; // 全域加密
-// app.config.globalProperties.$decryptString = decryptString; // 全域解密
-
-
 
 app
   // .use(store)

@@ -91,14 +91,14 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-center items-center w-full my-2">
           <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label for="openAlert">開啟警示</label>
+          <label for="openAlert">開啟提醒</label>
         </div>
 
 
@@ -159,7 +159,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
         errors.push("請填寫帳戶最小允許金額");
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
-        errors.push("請填寫帳戶警示金額");
+        errors.push("請填寫提醒金額");
       }
 
       if (errors.length > 0) {

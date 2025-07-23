@@ -66,7 +66,7 @@ export interface ICashFlowList {
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
-  createDate: string;
+  createdDate: string;
   note: string;
 }
 
@@ -98,7 +98,7 @@ export interface ICashCardList {
   maximumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
-  createDate: string;
+  createdDate: string;
 }
 
 // 儲值票卡收支紀錄 interface

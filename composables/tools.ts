@@ -25,7 +25,7 @@ export function clearLocalStorageKey(isReturn: boolean) {
     if (!localStorageToKeep.includes(key)) localStorage.removeItem(key);
   });
 
-  const url = new URL(window.location.href);  
+  const url = new URL(window.location.href);
   location.href =
     isReturn === true ? `${url.origin}/login?pathname=${encodeURIComponent(url.pathname)}` : `${url.origin}`;
 }
@@ -61,12 +61,13 @@ export function jwtTokenEncoded(str: string) {
 
 
 
-// 西元年日期格式 yyyy-mm-dd hh:mm 或 yyyy-mm-dd
+// 西元年日期格式 yyyy / mm / dd hh:mm 或 yyyy / mm / dd
 export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTime: boolean = false): string {
-  if (!dateString) return "";
+  // console.log("dateString:", dateString);
 
+  // if (!dateString) return "";
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return "";
+  if (isNaN(date.getTime()) || !dateString) return "";
 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -74,7 +75,7 @@ export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTi
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  return hasTime ? `${year}-${month}-${day} ${hours}:${minutes}` : `${year}-${month}-${day}`;
+  return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}` : `${year} / ${month} / ${day}`;
 }
 
 
@@ -82,7 +83,6 @@ export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTi
 // 取得今日日期 yyyy-mm-dd
 export function getCurrentYMD() {
   const date = new Date();
-
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const dayofMonth = String(date.getDate()).padStart(2, "0");
 
@@ -91,22 +91,22 @@ export function getCurrentYMD() {
 
 
 
-// 取得當下年分
+// 取得當下年分，type 為 number
 export function getCurrentYear() {
   return new Date().getFullYear();
 }
 
-// 取得當下月分
+// 取得當下月分，type 為 number
 export function getCurrentMonth() {
   return new Date().getMonth() + 1;
 }
 
-// 取得當下日期
+// 取得當下日，type 為 number
 export function getCurrentDate() {
   return new Date().getDate();
 }
 
-// 取得當下時間戳
+// 取得當下時間戳，type 為 number
 export function getCurrentTimestamp() {
   return new Date().getTime();
 }
@@ -115,11 +115,10 @@ export function getCurrentTimestamp() {
 
 // 取得西元年月格式 yyyy-mm
 export function yearMonthFormat(dateString: string) {
-
-  if (!dateString) return "";
+  // if (!dateString) return "";
   let date = new Date(dateString);
 
-  if (isNaN(date.getFullYear()) || isNaN(date.getMonth())) return "";
+  if (isNaN(date.getFullYear()) || isNaN(date.getMonth()) || !dateString) return "";
 
   const month = ("00" + (date.getMonth() + 1)).slice(-2);
   return `${date.getFullYear()}-${month}`;

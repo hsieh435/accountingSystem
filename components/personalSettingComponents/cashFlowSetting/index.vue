@@ -8,15 +8,16 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, onMounted, watch, createApp } from "vue";
-import { fetchCreateCashFlow } from "@/server/cashFlowApi";
-import { ICashFlowList } from "@/models/index";
-import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
+import { fetchCashFlowById, fetchCreateCashFlow, fetchUpdateCashFlow } from "@/server/cashFlowApi";
+import { ICashFlowList, IResponse } from "@/models/index";
+import { getCurrentYMD, getCurrentTimestamp, yearMonthDayTimeFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; currencyIdGot: string; isDisable?: boolean }>(), { cashflowIdIdGot: "", currencyIdGot: "", isDisable: false });
+const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; currencyIdGot?: string; isDisable?: boolean }>(), { cashflowIdIdGot: "", currencyIdGot: "", isDisable: false });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -30,7 +31,7 @@ const dataParams = reactive<ICashFlowList>({
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  createDate: getCurrentYMD(),
+  createdDate: getCurrentYMD(),
   note: "",
 });
 
@@ -49,7 +50,29 @@ watch(props, async () => {
 
 
 async function searchingCashflowData() {
-  // cashflowDataHandling();
+  // console.log("props:", props);
+  try {
+    const res = await fetchCashFlowById(props.cashflowIdIdGot) as IResponse;
+    console.log("res:", res);
+    if (res.data.returnCode === 0) {
+      dataParams.cashflowId = res.data.data.cashflowId;
+      dataParams.userId = res.data.data.userId;
+      dataParams.currency = res.data.data.currency;
+      dataParams.startingAmount = res.data.data.startingAmount;
+      dataParams.presentAmount = res.data.data.presentAmount;
+      dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
+      dataParams.alertValue = res.data.data.alertValue;
+      dataParams.openAlert = res.data.data.openAlert;
+      dataParams.createdDate = res.data.data.createdDate;
+      dataParams.note = res.data.data.note;
+
+      await cashflowDataHandling();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 
@@ -91,13 +114,13 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">開啟警示：</span><div class="mx-2" id="switchComponent"></div>
+          <span class="col-start-1 col-end-3 text-right">開啟提醒：</span><div class="mx-2" id="switchComponent"></div>
         </div>
 
 
@@ -109,8 +132,8 @@ async function cashflowDataHandling(apiMsg?: string) {
 
         ${props.cashflowIdIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createDate" value="${dataParams.createDate}" type="text" disabled />
+          <span class="col-start-1 col-end-3 text-right">建立日期：</span>
+          <input class="${tailwindStyles.inputClasses}" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>` : 
         ""}
 
@@ -164,20 +187,19 @@ async function cashflowDataHandling(apiMsg?: string) {
       dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
-      // dataParams.createDate = (document.getElementById("createDate") as HTMLInputElement).value;
 
 
       if (!dataParams.currency) {
         errors.push("請填寫貨幣");
       }
-      if (isNaN(dataParams.startingAmount) || dataParams.startingAmount <= 0) {
+      if (isNaN(dataParams.startingAmount) || dataParams.startingAmount < 0) {
         errors.push("請填寫初始金額");
       }
       if (isNaN(dataParams.minimumValueAllowed) || dataParams.minimumValueAllowed < 0) {
         errors.push("請填寫最小持有金額");
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
-        errors.push("請填寫警示金額");
+        errors.push("請填寫提醒金額");
       }
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
@@ -188,11 +210,23 @@ async function cashflowDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-
+      // console.log("result:", result.value);
+      try {
+        const res = await (props.cashflowIdIdGot ? fetchUpdateCashFlow : fetchCreateCashFlow)(result.value) as IResponse;
+        console.log("res:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 };
+
 
 
 </script>

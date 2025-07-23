@@ -83,14 +83,14 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-center items-center w-full my-2">
           <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">開啟警示</label>
+          <label class="mx-1" for="openAlert">開啟提醒</label>
         </div>
 
 
@@ -163,7 +163,7 @@ async function creditCardDataHandling(apiMsg?: string) {
         errors.push("請填寫信用卡信用額度");
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
-        errors.push("請填寫信用卡警示金額");
+        errors.push("請填寫提醒金額");
       }
 
       if (errors.length > 0) {

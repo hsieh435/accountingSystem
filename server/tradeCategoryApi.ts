@@ -34,7 +34,6 @@ export async function fetchCreateTradeCategory(data: ITradeCategory) {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Error response:", errorText);
     throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   }
 
@@ -49,7 +48,6 @@ export async function fetchUpdateTradeCategory(data: ITradeCategory) {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Error response:", errorText);
     throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   }
 

@@ -31,7 +31,7 @@ const dataParams = reactive<ICashCardList>({
   maximumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  createDate: getCurrentYMD(),
+  createdDate: getCurrentYMD(),
 });
 
 
@@ -93,21 +93,21 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>警示金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-center items-center w-full my-2">
           <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">開啟警示</label>
+          <label class="mx-1" for="openAlert">開啟提醒</label>
         </div>
 
 
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createDate" value="${dataParams.createDate}" type="text" disabled />
+          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" type="text" disabled />
         </div>` : 
         ""}
 
@@ -166,7 +166,7 @@ async function cashCardDataHandling(apiMsg?: string) {
         errors.push("儲值票卡最小儲值金額必須小於最大儲值金額");
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
-        errors.push("請填寫儲值票卡警示金額");
+        errors.push("請填寫提醒金額");
       }
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));

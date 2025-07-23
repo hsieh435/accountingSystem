@@ -17,7 +17,8 @@ const dateString = ref<string>("");
 
 
 onMounted(async () => {
-  dateString.value = props.dateTimeGot || yearMonthDayTimeFormat(getCurrentTimestamp(), true);  
+  // dateString.value = props.dateTimeGot || yearMonthDayTimeFormat(getCurrentTimestamp(), true);
+  dateString.value = props.dateTimeGot || getCurrentTimestamp() + "";
   // console.log("dateString:", dateString.value);
 });
 

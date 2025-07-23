@@ -45,8 +45,8 @@ export function showAxiosErrorMsg({ message, icon = "error", hasConfirmButton = 
     icon: getSwalIcon(icon),
     title: message,
     showConfirmButton: hasConfirmButton,
-    confirmButtonColor: "#007fff",
-    confirmButtonText: `<i class="bi bi-check-lg mx-1"></i>確定`,
+    // confirmButtonColor: "#007fff",
+    confirmButtonText: `確定`,
     width: "auto",
     color: "#000",
   });
@@ -69,21 +69,6 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
     width: message.length > 14 ? "auto" : "",
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
-
-      // try {
-      //   const res: AxiosResponse = await executionApi(apiParams);
-      //   if (res.status === 200) {
-      //     console.log(executionApi.name, res.data.data);
-      //     showAxiosToast({ message: res.data.message });
-      //     return true;
-      //   } else {
-      //     showAxiosErrorMsg({ message: res.data.message });
-      //     return false;
-      //   }
-      // } catch (error) {
-      //   showAxiosErrorMsg({ message: (error as AxiosError).message });
-      //   return false;
-      // }
 
       const res = await executionApi(apiParams) as IResponse;
       if (res.data.returnCode === 0) {
