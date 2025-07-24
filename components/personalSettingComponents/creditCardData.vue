@@ -123,11 +123,22 @@ async function creditCardDataHandling(apiMsg?: string) {
         },
       });
       creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
+      
+      const creditPerMonth = document.getElementById("creditPerMonth") as HTMLInputElement;
+      const alertValue = document.getElementById("alertValue") as HTMLInputElement;
+      creditPerMonth.addEventListener("change", () => {
+        validateAlertValue()
+      });
+      alertValue.addEventListener("change", () => {
+        validateAlertValue();
+      });
 
+      function validateAlertValue() {
+        // 
+      }
 
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
       openAlertCheckbox.checked = dataParams.openAlert;
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -164,6 +175,9 @@ async function creditCardDataHandling(apiMsg?: string) {
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
         errors.push("請填寫提醒金額");
+      }
+      if (dataParams.alertValue > dataParams.creditPerMonth) {
+        errors.push("提醒金額不得大於信用額度");
       }
 
       if (errors.length > 0) {

@@ -50,17 +50,13 @@ export interface ICurrency {
   sort: number;
 }
 
-// 現金流列表查詢參數 interface
-export interface ICashFlowListQueryParams {
-  currency: string;
-}
-
 // 現金流列表 interface
 export interface ICashFlowList {
   no?: number;
   cashflowId: string;
   userId: string;
   currency: string;
+  currencyName?: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -81,6 +77,7 @@ export interface ICashFlowRecordList {
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
+  currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -92,6 +89,7 @@ export interface ICashCardList {
   cashCardUser: string;
   cashCardName: string;
   currency: string;
+  currencyName?: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -113,6 +111,7 @@ export interface ICashCardRecordList {
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
+  currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -127,6 +126,7 @@ export interface ICreditCardList {
   creditcardBankName: string;
   creditcardSchema: string;
   currency: string;
+  currencyName?: string;
   creditPerMonth: number;
   expirationDate: string;
   alertValue: number;
@@ -145,6 +145,7 @@ export interface ICreditCardRecordList {
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
+  currencyName?: string;
   billMonth: string;
   tradeDescription: string;
   tradeNote: string;
@@ -160,6 +161,7 @@ export interface ICurrencyAccountList {
   accountBankCode: string;
   accountBankName: string;
   currency: string;
+  currencyName?: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -181,6 +183,7 @@ export interface IcurrencyAccountRecordList {
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
+  currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -195,6 +198,7 @@ export interface IStockAccountList {
   accountBankCode: string;
   accountBankName: string;
   currency: string;
+  currencyName?: string;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -220,6 +224,7 @@ export interface IStockAccountRecordList {
   transactionTax: number;
   totalPrice: number;
   currency: string;
+  currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
 }

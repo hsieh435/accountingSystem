@@ -32,7 +32,7 @@
                   <div :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
-                  <div :class="tailwindStyles.tdLastClasses">
+                  <div :class="tailwindStyles.tdClasses">
                     <cashCardData :cashCardId="card.cashCardId" />
                     <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard()" />
                   </div>
@@ -65,7 +65,7 @@ definePageMeta({
 
 
 
-const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardSetting/cashCardData.vue"));
+const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardData.vue"));
 
 
 

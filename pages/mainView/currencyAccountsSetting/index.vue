@@ -31,7 +31,7 @@
                 <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.isSalaryAccount }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
+                <div :class="tailwindStyles.tdClasses">
                   <currencyAccountsData :currencyAccountIdGot="account.accountId" />
                   <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeCurrencyAccountData()" />
                 </div>
@@ -63,7 +63,7 @@ definePageMeta({
 
 
 
-const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsSetting/currencyAccountsData.vue"));
+const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsData.vue"));
 
 
 

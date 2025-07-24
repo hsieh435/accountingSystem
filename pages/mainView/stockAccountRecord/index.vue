@@ -45,7 +45,7 @@
                 <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.totalPrice) }}</div>
                 <div :class="tailwindStyles.tdClasses">0</div>
                 <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
+                <div :class="tailwindStyles.tdClasses">
                   <stockAccountTradeData :tradeIdGot="record.tradeId" />
                 </div>
               </div>

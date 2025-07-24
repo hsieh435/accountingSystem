@@ -27,49 +27,58 @@
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.7;
     cursor: not-allowed;
   }
 }
 
-.btn-noshimehana {
+%btn-text-dark {
   @extend %btn;
+
+  * {
+    color: colors.$kuro;
+  }
+}
+
+%btn-text-light {
+  @extend %btn;
+
+  * {
+    color: colors.$shironeri;
+  }
+}
+
+.btn-noshimehana {
+  @extend %btn-text-light;
   background-color: colors.$noshimehana;
-  color: rgb(255, 255, 255);
 }
 
 .btn-ruri {
-  @extend %btn;
+  @extend %btn-text-light;
   background-color: colors.$ruri;
-  color: rgb(255, 255, 255);
 }
 
 .btn-aomidori {
-  @extend %btn;
+  @extend %btn-text-dark;
   background-color: colors.$aomidori;
-  color: rgb(0, 0, 0);
 }
 
 .btn-gunjyo {
-  @extend %btn;
+  @extend %btn-text-light;
   background-color: colors.$gunjyo;
-  color: rgb(255, 255, 255);
 }
 
 .btn-nibi {
-  @extend %btn;
+  @extend %btn-text-light;
   background-color: colors.$nibi;
-  color: rgb(255, 255, 255);
 }
 
 .btn-kurenainoyashio {
-  @extend %btn;
+  @extend %btn-text-light;
   background-color: colors.$kurenainoyashio;
-  color: rgb(255, 255, 255);
 }
 
 .btn-keshizumi {
-  @extend %btn;
+  @extend %btn-text-light;
   background-color: colors.$keshizumi;
-  color: rgb(255, 255, 255);
 }

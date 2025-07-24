@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <currencySetting @dataReseaching="searchingCurrencySettingList" />
+      <currencyData @dataReseaching="searchingCurrencyList" />
     </div>
 
     <div class="mx-5 my-3">
@@ -31,8 +31,8 @@
                 <div :class="tailwindStyles.tdClasses">
                   <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="currency.allowDelete" />
                 </div>
-                <div :class="tailwindStyles.tdLastClasses">
-                  <currencySetting :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencySettingList" />
+                <div :class="tailwindStyles.tdClasses">
+                  <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
                   <ui-buttonGroup :showRemove="currency.allowDelete" :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
                 </div>
               </div>
@@ -65,7 +65,7 @@ definePageMeta({
 
 
 
-const currencySetting = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencySetting.vue"));
+const currencyData = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencyData.vue"));
 
 
 
@@ -79,7 +79,7 @@ const tableData = ref<ICurrency[]>([]);
 
 
 onMounted(async () => {
-  await searchingCurrencySettingList();
+  await searchingCurrencyList();
 });
 
 
@@ -92,7 +92,7 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 
 
-async function searchingCurrencySettingList() {
+async function searchingCurrencyList() {
   try {
     const res = await fetchCurrencyList() as IResponse;
     console.log("res:", res);
@@ -128,7 +128,7 @@ async function removeCurrency(currencyCode: string) {
   });
 
   if (confirmResult) {
-    await searchingCurrencySettingList();
+    await searchingCurrencyList();
   }
 }
 

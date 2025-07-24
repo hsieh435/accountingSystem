@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center mx-3 my-2">
-      <tradeCategory @dataReseaching="searchingTradeCategoryList" />
+      <tradeCategoryData @dataReseaching="searchingTradeCategoryList" />
     </div>
 
     <div class="mx-5 my-3">
@@ -27,8 +27,8 @@
                 <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
-                  <tradeCategory :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
+                <div :class="tailwindStyles.tdClasses">
+                  <tradeCategoryData :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
                   <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
                 </div>
               </div>
@@ -61,7 +61,7 @@ definePageMeta({
 
 
 
-const tradeCategory = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategorySetting/index.vue"));
+const tradeCategoryData = defineAsyncComponent(() => import("@/components/parameterSettingComponents/tradeCategoryData.vue"));
 
 
 

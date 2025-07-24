@@ -29,7 +29,7 @@
                 <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
+                <div :class="tailwindStyles.tdClasses">
                   <stockAccountData :stockAccountIGot="account.accountId" />
                   <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
                 </div>
@@ -61,7 +61,7 @@ definePageMeta({
 
 
 
-const stockAccountData = defineAsyncComponent(() => import("@/components/personalSettingComponents/stockAccountSetting/stockAccountData.vue"));
+const stockAccountData = defineAsyncComponent(() => import("@/components/personalSettingComponents/stockAccountData.vue"));
 
 
 

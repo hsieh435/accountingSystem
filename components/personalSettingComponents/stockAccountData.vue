@@ -1,56 +1,54 @@
 <template>
-  <template v-if="props.currencyAccountIdGot">
-    <ui-buttonGroup showView :viewText="'檢視存款帳戶'" @dataView="searchingCurrencyAccountData()" />
+  <template v-if="props.stockAccountIGot">
+    <ui-buttonGroup showView :viewText="'檢視證券帳戶'" @dataView="searchingStockAccountData()" />
   </template>
-  <template v-if="!props.currencyAccountIdGot">
-    <ui-buttonGroup showCreate :createText="'新增存款帳戶'" @dataCreate="currencyAccountDataHandling()" />
+  <template v-if="!props.stockAccountIGot">
+    <ui-buttonGroup showCreate :createText="'新增證券帳戶'" @dataCreate="stockAccountDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
-import { ICurrencyAccountList } from "@/models/index";
+import { reactive } from "vue";
+import { IStockAccountList } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ currencyAccountIdGot?: string; userIdGot?: string; }>(), { currencyAccountIdGot: "", userIdGot: "" });
+const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
 
-const dataParams = reactive<ICurrencyAccountList>({
-  accountId: props.currencyAccountIdGot || "",
-  userId: props.userIdGot || "",
-  accountType: "",
+const dataParams = reactive<IStockAccountList>({
+  accountId: props.stockAccountIGot || "",
+  userId: "",
   accountName: "",
+  accountType: "",
   accountBankCode: "",
   accountBankName: "",
-  currency: "TWD",
+  currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  isSalaryAccount: false,
   createdDate: getCurrentYMD(),
 });
 
 
 
-async function searchingCurrencyAccountData() {
-  // 在這裡可以加入 API 呼叫來獲取存款帳戶資料
-  // currencyAccountDataHandling();  
+async function searchingStockAccountData() {
+  stockAccountDataHandling();  
 }
 
 
 
-async function currencyAccountDataHandling(apiMsg?: string) {
-  console.log(dataParams);
+async function stockAccountDataHandling(apiMsg?: string) {
+  // console.log(dataParams);
 
   Swal.fire({
-    title: props.currencyAccountIdGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
+    title: props.stockAccountIGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
@@ -58,7 +56,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountId" value="${dataParams.accountId}" ${props.currencyAccountIdGot ? `disabled` : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
@@ -70,18 +68,18 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" maxlength="3" value="${dataParams.accountBankCode}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.stockAccountIGot ? "disabled" : ""} />
         </div>
 
 
@@ -98,27 +96,21 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-center items-center w-full my-2">
-          <div class="mx-2">
-            <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-            <label for="openAlert">開啟提醒</label>
-          </div>
-          <div class="mx-2">
-            <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
-            <label for="isSalaryAccount">薪資帳戶</label>
-          </div>
+          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
+          <label for="openAlert">開啟提醒</label>
         </div>
 
 
-        ${props.currencyAccountIdGot ? `
+        ${props.stockAccountIGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` :
+        </div>` : 
         ""}
 
       </div>
     `,
-    confirmButtonText: props.currencyAccountIdGot ? "修改" : "新增",
+    confirmButtonText: props.stockAccountIGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     confirmButtonColor: "#007fff",
@@ -128,12 +120,21 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     allowOutsideClick: false,
     didOpen: () => {
 
-      const isSalaryAccountCheckbox = document.getElementById("isSalaryAccount") as HTMLInputElement;
-      isSalaryAccountCheckbox.checked = dataParams.isSalaryAccount;
-      
+      const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
+      const alertValue = document.getElementById("alertValue") as HTMLInputElement;
+      minimumValueAllowed.addEventListener("change", () => {
+        validateAlertValue();
+      });
+      alertValue.addEventListener("change", () => {
+        validateAlertValue();
+      });
+
+      function validateAlertValue() {
+        // 
+      }
+
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
       openAlertCheckbox.checked = dataParams.openAlert;
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -149,7 +150,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
-      dataParams.isSalaryAccount = Boolean((document.getElementById("isSalaryAccount") as HTMLInputElement).checked);
 
 
       if (!dataParams.accountId) {
@@ -172,6 +172,9 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
         errors.push("請填寫提醒金額");
+      }
+      if (dataParams.alertValue < dataParams.minimumValueAllowed) {
+        errors.push("提醒金額不得低於最小允許金額");
       }
 
       if (errors.length > 0) {

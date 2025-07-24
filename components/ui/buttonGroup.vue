@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div class="inline-flex flex justify-center items-center">
 
     <template v-if="props.showFilming">
       <span class="mx-3"><span class="text-red-600 mx-1">∗</span>{{ props.filmingText }}</span>

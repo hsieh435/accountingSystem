@@ -31,7 +31,7 @@
                 <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
+                <div :class="tailwindStyles.tdClasses">
                   <creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
                   <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
                 </div>
@@ -63,7 +63,7 @@ definePageMeta({
 
 
 
-const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardSetting/creditCardData.vue"));
+const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardData.vue"));
 
 
 

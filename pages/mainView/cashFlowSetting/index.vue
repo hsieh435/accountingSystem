@@ -1,57 +1,53 @@
 <template>
-  <div class="w-full">
-    <div class="flex flex-wrap justify-start items-center mx-3 my-2">
-      <span>查詢貨幣：</span>
-      <currencySelect @sendbackCurrencyId="settingCurrency" />
-      <cashFlowSetting :currencyIdGot="currencyId" :isDisable="!currencyId || currencyArray.includes(currencyId)" @dataReseaching="cashFlowSearching()" />
+  <div class="w-full px-3">
+    <div class="flex flex-wrap justify-start items-center my-2">
+    <span>查詢貨幣：</span>
+    <currencySelect @sendbackCurrencyId="settingCurrency" />
+    <cashFlowData :currencyIdGot="currencyId" :isDisable="!currencyId || currencyArray.includes(currencyId)" @dataReseaching="cashFlowSearching()" />
     </div>
 
-    <div class="mx-5 my-3">
-      <template v-if="cashFlowList.length > 0">
-        <ui-pagination
-          :totalDataQuanity="cashFlowListFiltered.length"
-          :showFilter="false"
-          @tableSliceChange="settingTableSlice" />
-        <template v-if="cashFlowListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">貨幣</div>
-                <div :class="tailwindStyles.thClasses">初始金額</div>
-                <div :class="tailwindStyles.thClasses">目前金額</div>
-                <div :class="tailwindStyles.thClasses">提醒金額</div>
-                <div :class="tailwindStyles.thClasses">提醒</div>
-                <div :class="tailwindStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
-              </div>
+    <template v-if="cashFlowList.length > 0">
+      <ui-pagination
+        :totalDataQuanity="cashFlowListFiltered.length"
+        :showFilter="false"
+        @tableSliceChange="settingTableSlice" />
+      <template v-if="cashFlowListFiltered.length > 0">
+        <div :class="tailwindStyles.tableClasses">
+        <div :class="tailwindStyles.theadClasses">
+          <div :class="tailwindStyles.theadtrClasses">
+            <div :class="tailwindStyles.thClasses">NO.</div>
+            <div :class="tailwindStyles.thClasses">貨幣</div>
+            <div :class="tailwindStyles.thClasses">初始金額</div>
+            <div :class="tailwindStyles.thClasses">目前金額</div>
+            <div :class="tailwindStyles.thClasses">提醒金額</div>
+            <div :class="tailwindStyles.thClasses">開啟提醒</div>
+            <div :class="tailwindStyles.thClasses">建立時間</div>
+            <div :class="tailwindStyles.thClasses">操作</div>
+          </div>
+        </div>
+        <div :class="tailwindStyles.tbodyClasses">
+          <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
+            <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
+            <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
+            <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
+            <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
+            <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.alertValue) }}</div>
+            <div :class="tailwindStyles.tdClasses">
+            <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
-                <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <currencySelect :currencyIdGot="cashFlow.currency" isDisable />
-                </div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.alertValue) }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
-                </div>
-                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
-                <div :class="tailwindStyles.tdLastClasses">
-                  <cashFlowSetting :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
-                  <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData(cashFlow.cashflowId)" />
-                </div>
-              </div>
+            <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
+            <div :class="tailwindStyles.tdClasses">
+            <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+            <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData(cashFlow.cashflowId)" />
             </div>
           </div>
-        </template>
+        </div>
+        </div>
       </template>
-      <template v-else-if="cashFlowList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無現金流資料</span>
-      </template>
-    </div>
+    </template>
+    <template v-else-if="cashFlowList.length === 0">
+      <span :class="tailwindStyles.noDataClasses">無現金流資料</span>
+    </template>
   </div>
 </template>
 <script setup lang="ts">
@@ -74,7 +70,7 @@ definePageMeta({
 
 
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
-const cashFlowSetting = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowSetting/index.vue"));
+const cashFlowData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowData.vue"));
 
 
 

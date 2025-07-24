@@ -122,6 +122,24 @@ async function cashCardDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+      
+      const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
+      const maximumValueAllowed = document.getElementById("maximumValueAllowed") as HTMLInputElement;
+      const alertValue = document.getElementById("alertValue") as HTMLInputElement;
+      minimumValueAllowed.addEventListener("change", () => {
+        validateAlertValue();
+      });
+      maximumValueAllowed.addEventListener("change", () => {
+        validateAlertValue();
+      });
+      alertValue.addEventListener("change", () => {
+        validateAlertValue();
+      });
+
+      function validateAlertValue() {
+        //
+      }
+
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
       openAlertCheckbox.checked = dataParams.openAlert;
 
@@ -167,6 +185,9 @@ async function cashCardDataHandling(apiMsg?: string) {
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
         errors.push("請填寫提醒金額");
+      }
+      if (dataParams.alertValue < dataParams.minimumValueAllowed || dataParams.alertValue > dataParams.maximumValueAllowed) {
+        errors.push("提醒金額需介於最小儲值金額與最大儲值金額之間");
       }
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));

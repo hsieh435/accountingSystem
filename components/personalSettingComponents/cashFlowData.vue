@@ -37,15 +37,15 @@ const dataParams = reactive<ICashFlowList>({
 
 
 
-onMounted(() => {
-  // console.log("onMounted props:", props);
-  dataParams.currency = props.currencyIdGot;
-});
+// onMounted(() => {
+//   // console.log("onMounted props:", props);
+//   dataParams.currency = props.currencyIdGot;
+// });
 
-watch(props, async () => {
-  // console.log("watch props:", props);
-  dataParams.currency = props.currencyIdGot;
-});
+// watch(props, async () => {
+//   console.log("watch props:", props);
+//   dataParams.currency = props.currencyIdGot;
+// });
 
 
 
@@ -156,6 +156,18 @@ async function cashflowDataHandling(apiMsg?: string) {
       });
       currencySelect.mount("#currencySelectComponent");
 
+      const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
+      const alertValue = document.getElementById("alertValue") as HTMLInputElement;
+      minimumValueAllowed.addEventListener("change", () => {
+        validateAlertValue();
+      });
+      alertValue.addEventListener("change", () => {
+        validateAlertValue();
+      });
+
+      function validateAlertValue() {
+        // 
+      }
 
       let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
         switchValueGot: dataParams.openAlert,
@@ -164,8 +176,6 @@ async function cashflowDataHandling(apiMsg?: string) {
         },
       });
       switchComponent.mount("#switchComponent");
-
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -200,6 +210,9 @@ async function cashflowDataHandling(apiMsg?: string) {
       }
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
         errors.push("請填寫提醒金額");
+      }
+      if (dataParams.alertValue > dataParams.startingAmount) {
+        errors.push("提醒金額不得低於最小持有金額");
       }
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
