@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-21 21:58:35
+-- Started on 2025-08-05 23:42:14
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -806,11 +806,14 @@ cashDividend	現金股利	f	f	f	f	t	82
 buyShort	買空	f	f	f	f	t	84
 sellShort	賣空	f	f	f	f	t	85
 else	其他	t	t	t	t	t	100
-miscellaneous	雜支	t	t	t	t	f	20
-currencyExchange	換匯	t	f	f	t	f	19
 stockBuy	股票買入	f	f	f	f	t	80
 stockSell	股票賣出	f	f	f	f	t	81
 securitiesLending	融券	f	f	f	f	t	86
+healthInsurance	健保費	t	f	t	t	f	15
+miscellaneous	雜支	t	t	t	t	f	25
+currencyExchange	換匯	t	f	f	t	f	20
+taxRrefund	退稅	t	f	t	t	f	22
+payTaxes	繳稅	t	f	t	t	f	21
 \.
 
 
@@ -1005,7 +1008,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-07-21 21:58:35
+-- Completed on 2025-08-05 23:42:14
 
 --
 -- PostgreSQL database dump complete
