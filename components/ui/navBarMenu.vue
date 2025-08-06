@@ -145,6 +145,11 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "/mainView/stockInvestmentStatement",
       },
+      {
+        label: "信用卡消費分析",
+        icon: "i-lucide-file-text",
+        to: "/mainView/creditCardConsumptionStatement",
+      },
     ]
   },
   {
