@@ -5,12 +5,12 @@
         
       <div class="my-4">
         <label class="block text-gray-600 mb-1">帳號：</label>
-        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="accountId" type="search" required />
+        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="accountId" type="search" v-on:keyup.enter="handleLogin" />
       </div>
 
       <div class="mb-6">
         <label class="block text-gray-600 mb-1">密碼：</label>
-        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="password" type="password" required />
+        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="password" type="password" v-on:keyup.enter="handleLogin" />
       </div>
 
       <div class="flex justify-center items-center">

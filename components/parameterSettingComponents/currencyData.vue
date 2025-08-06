@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "", });
 const emits = defineEmits(["dataReseaching"]);
 
-  
+
 
 const dataParams = reactive<ICurrency>({
   currencyCode: props.currencyCodeGot || "",
@@ -52,7 +52,7 @@ async function searchingCategoryCode() {
 
 
 async function categoryCodeDataHandling(apiMsg?: string) {
-  console.log(dataParams);
+  // console.log(dataParams);
 
   Swal.fire({
     title: props.currencyCodeGot ? "編輯貨幣資料" : "新增貨幣資料",
@@ -89,7 +89,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-  
+
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;

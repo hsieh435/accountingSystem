@@ -122,7 +122,7 @@ async function cashCardDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      
+      const startingAmount = document.getElementById("startingAmount") as HTMLInputElement;
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const maximumValueAllowed = document.getElementById("maximumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
@@ -137,7 +137,16 @@ async function cashCardDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        //
+        // console.log("minimumValueAllowed:", minimumValueAllowed.value);
+        // console.log("maximumValueAllowed:", maximumValueAllowed.value);
+        // console.log("alertValue:", alertValue.value);
+
+        maximumValueAllowed.min = minimumValueAllowed.value;
+        minimumValueAllowed.max = maximumValueAllowed.value;
+        // startingAmount.max = maximumValueAllowed.value;
+        // startingAmount.min = minimumValueAllowed.value;
+        alertValue.max = maximumValueAllowed.value;
+        alertValue.min = minimumValueAllowed.value;
       }
 
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;

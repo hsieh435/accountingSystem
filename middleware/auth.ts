@@ -1,4 +1,4 @@
-import { defineNuxtRouteMiddleware } from "nuxt/app";
+import { defineNuxtRouteMiddleware, navigateTo, abortNavigation } from "nuxt/app";
 import { fetchJwtVerification } from "@/server/generalApi";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { decryptString } from "@/composables/crypto";
@@ -17,20 +17,23 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if (!userToken && to.path !== "") {
       clearLocalStorageKey(false);
+      return abortNavigation();
     } else if (userToken) {
       try {
         const res = await fetchJwtVerification({ token: decryptString(userToken) });
         // console.log("res:", res);
         if (res.data.returnCode === 0) {
-          //
+          navigateTo(to.fullPath);
         } else {
           showAxiosErrorMsg({ message: res.data.message || "" });
           clearLocalStorageKey(true);
+          return abortNavigation();
         }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });
         clearLocalStorageKey(true);
+        return abortNavigation();
       }
     }
   }
-})
+});

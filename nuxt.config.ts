@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-05-15",
   css: ["@/assets/css/index.scss", "sweetalert2/dist/sweetalert2.min.css"],
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: ["@nuxtjs/tailwindcss", "@vesp/nuxt-fontawesome", "@nuxt/ui"],
   imports: {
     autoImport: true,

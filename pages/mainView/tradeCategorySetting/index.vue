@@ -7,11 +7,11 @@
     <div class="mx-5 my-3">
       <template v-if="tradeCategoryList.length > 0">
         <ui-pagination
-          :currentPage="currentPage"
-          :dataPerpage="itemsPerPage"
+          :currentPage="1"
+          :dataPerpage="tradeCategoryList.length"
+          :pageArrayGot="[tradeCategoryList.length]"
           :totalDataQuanity="tradeCategoryList.length"
-          :showFilter="false"
-          @tableSliceChange="settingTableSlice" />
+          :showFilter="false" />
         <template v-if="tradeCategoryListFiltered.length > 0">
           <div :class="tailwindStyles.tableClasses">
             <div :class="tailwindStyles.theadClasses">
@@ -65,9 +65,6 @@ const tradeCategoryData = defineAsyncComponent(() => import("@/components/parame
 
 
 
-const currentPage = ref<number>(1);
-const itemsPerPage = ref<number>(20);
-
 const tradeCategoryList = ref<ITradeCategory[]>([]);
 const tradeCategoryListFiltered = ref<ITradeCategory[]>([]);
 const tableData = ref<ITradeCategory[]>([]);
@@ -80,18 +77,10 @@ onMounted(async () => {
 
 
 
-async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
-  currentPage.value = sliceData.currentPage;
-  itemsPerPage.value = sliceData.itemsPerPage;
-  await tradeCategoryListFilterEvent();
-}
-
-
-
 async function searchingTradeCategoryList() {
   try {
     const res = await fetchTradeCategoryList() as IResponse;
-    console.log("res:", res);
+    // console.log("res:", res);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data;
       await tradeCategoryListFilterEvent();
@@ -107,15 +96,13 @@ async function searchingTradeCategoryList() {
 
 async function tradeCategoryListFilterEvent() {
   tradeCategoryListFiltered.value = tradeCategoryList.value;  
-  tableData.value = sliceArray(tradeCategoryListFiltered.value, currentPage.value, itemsPerPage.value);
-  // console.log("tradeCategoryListFiltered:", tradeCategoryListFiltered.value);
-  // console.log("tableData:", tableData.value);
+  tableData.value = sliceArray(tradeCategoryListFiltered.value);
 }
 
 
 
 async function removeTradeCategory(categoryCode: string) {
-  console.log("categoryCode:", categoryCode);
+  // console.log("categoryCode:", categoryCode);
   
   const confirmResult = await showConfirmDialog({
     message: "確定刪除該交易類別嗎？",
@@ -127,8 +114,6 @@ async function removeTradeCategory(categoryCode: string) {
   if (confirmResult) {
     await searchingTradeCategoryList();
   }
-
-
 }
 
 

@@ -3,15 +3,18 @@
 
     <div class="flex flex-wrap justify-start items-center me-2 my-1">
       <span>共 {{ props.totalDataQuanity }} 筆</span>
-      <USelect v-model="itemsPerPage" :items="perPageArray" class="w-auto mx-2" :label="'123'" />
-      
-      <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" color="neutral" variant="outline" />
+      <USelect v-model="itemsPerPage" :items="perPageArray" class="w-auto mx-2" :disabled="props.totalDataQuanity <= props.pageArrayGot[0]" />
 
-      <div class="flex flex-row justify-start items-center my-1">
-        <span class="mx-1">前往第</span>
-        <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" color="neutral" highlight />
-        <span class="mx-1">頁</span>
-      </div>
+      <template v-if="props.totalDataQuanity > props.pageArrayGot[0]">
+        <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" color="neutral" variant="outline" />
+
+        <div class="flex flex-row justify-start items-center my-1">
+          <span class="mx-1">前往第</span>
+          <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" color="neutral" highlight />
+          <span class="mx-1">頁</span>
+        </div>
+      </template>
+      
     </div>
 
 

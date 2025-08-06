@@ -41,14 +41,14 @@ async function searchingCategoryCode() {
     const res = await fetchTradeCategory(props.categoryCodeGot) as IResponse;
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
-      dataParams.categoryCode = res.data.categoryCode;
-      dataParams.categoryName = res.data.categoryName;
-      dataParams.isCashflowAble = res.data.isCashflowAble;
-      dataParams.isCashcardAble = res.data.isCashcardAble;
-      dataParams.isCreditcardAble = res.data.isCreditcardAble;
-      dataParams.isCuaccountAble = res.data.isCuaccountAble;
-      dataParams.isStaccountAble = res.data.isStaccountAble;
-      dataParams.sort = res.data.sort;
+      dataParams.categoryCode = res.data.data.categoryCode;
+      dataParams.categoryName = res.data.data.categoryName;
+      dataParams.isCashflowAble = res.data.data.isCashflowAble;
+      dataParams.isCashcardAble = res.data.data.isCashcardAble;
+      dataParams.isCreditcardAble = res.data.data.isCreditcardAble;
+      dataParams.isCuaccountAble = res.data.data.isCuaccountAble;
+      dataParams.isStaccountAble = res.data.data.isStaccountAble;
+      dataParams.sort = res.data.data.sort;
       await categoryCodeDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
