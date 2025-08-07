@@ -1,0 +1,51 @@
+@use "./colors" as colors;
+
+
+
+.swal2-popup {
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+// .swal2-title {
+//   color: #007fff;
+//   font-weight: bold;
+// }
+
+
+%swalBtn {
+  font-weight: 300;
+  margin-left: 10px;
+  margin-right: 10px;
+  // margin-top: 2px;
+  // margin-bottom: 2px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 0.375rem;
+
+  &:hover {
+    opacity: 0.8 !important;
+    transition: 0.2s ease-in-out !important;
+  }
+}
+
+.swal2-confirm {
+  @extend %swalBtn;
+
+  background-color: colors.$aomidori !important;
+  color: colors.$kuro !important;
+}
+
+.swal2-cancel {
+  @extend %swalBtn;
+
+  background-color: colors.$kurenainoyashio !important;
+  color: colors.$shironeri !important;
+}
+
+.swal2-html-container {
+  color: colors.$kuro;
+}

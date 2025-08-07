@@ -70,10 +70,10 @@ async function createUserDate(apiMsg?: string) {
     confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
     showCancelButton: true,
     cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
+    // color: "#000",
+    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
       if (apiMsg) {

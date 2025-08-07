@@ -27,6 +27,8 @@ const currencyList = ref<ICurrency[]>([]);
 
 
 onMounted(async () => {
+  // console.log("onMounted props:", props);
+  
   await searchingCurrencyList();
   if (props.currencyIdGot) {
     isSelectDisabled.value = props.isDisable;
@@ -34,7 +36,16 @@ onMounted(async () => {
   }
 });
 
+watch(props, async () => {
+  // console.log("watch props:", props);
+  if (props.currencyIdGot) {
+    isSelectDisabled.value = props.isDisable;
+    currencyId.value = props.currencyIdGot;
+  }
+});
+
 watch(currencyId, () => {
+  // console.log("onMounted watch:", props);
   // console.log("currencyId:", currencyId.value);
   emits("sendbackCurrencyId", currencyId.value);
 });

@@ -61,7 +61,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" ${props.creditCardIdGot ? "disabled" : ""} />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -82,15 +82,18 @@ async function creditCardDataHandling(apiMsg?: string) {
         </div>
 
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+        <div class="flex justify-start items-center grid grid-cols-6 mt-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
+        <div class="flex justify-start items-center grid grid-cols-6 mb-2">
+          <span class="col-start-1 col-end-3 text-right"></span>
+          <span class="col-start-3 col-end-6 text-left text-red-600">（ 每月消費額度累積提醒 ）</span>
+        </div>
 
 
-        <div class="flex justify-center items-center w-full my-2">
-          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">開啟提醒</label>
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
         </div>
 
 
@@ -106,10 +109,6 @@ async function creditCardDataHandling(apiMsg?: string) {
     confirmButtonText: props.creditCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
       
@@ -119,7 +118,6 @@ async function creditCardDataHandling(apiMsg?: string) {
         isAble: props.creditCardIdGot ? true : false,
         onSendbackSchemaId: (schemaId: string) => {
           dataParams.creditcardSchema = schemaId;
-          // console.log("schemaId:", schemaId);
         },
       });
       creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
@@ -134,11 +132,21 @@ async function creditCardDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        // 
+        alertValue.max = creditPerMonth.value;
+        if (Number(alertValue.value) > Number(creditPerMonth.value)) {
+          alertValue.value = creditPerMonth.value;
+        }
       }
 
-      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
-      openAlertCheckbox.checked = dataParams.openAlert;
+
+      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
+        switchValueGot: dataParams.openAlert,
+        onSendBackSwitchValue: (switchValue: boolean) => {
+          dataParams.openAlert = switchValue;
+        },
+      });
+      switchComponent.mount("#switchComponent");
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);

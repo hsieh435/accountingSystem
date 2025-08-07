@@ -37,15 +37,15 @@ const dataParams = reactive<ICashFlowList>({
 
 
 
-// onMounted(() => {
-//   // console.log("onMounted props:", props);
-//   dataParams.currency = props.currencyIdGot;
-// });
+onMounted(() => {
+  // console.log("onMounted props:", props);
+  dataParams.currency = props.currencyIdGot;
+});
 
-// watch(props, async () => {
-//   console.log("watch props:", props);
-//   dataParams.currency = props.currencyIdGot;
-// });
+watch(props, async () => {
+  // console.log("watch props:", props);
+  dataParams.currency = props.currencyIdGot;
+});
 
 
 
@@ -53,7 +53,7 @@ async function searchingCashflowData() {
   // console.log("props:", props);
   try {
     const res = await fetchCashFlowById(props.cashflowIdIdGot) as IResponse;
-    console.log("res:", res);
+    // console.log("fetchCashFlowById:", res.data.data);
     if (res.data.returnCode === 0) {
       dataParams.cashflowId = res.data.data.cashflowId;
       dataParams.userId = res.data.data.userId;
@@ -94,7 +94,9 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <span class="col-start-1 col-end-3 text-right">
+            ${props.cashflowIdIdGot ? `` : `<span class="text-red-600 mx-1">∗</span>`}初始金額：
+          </span>
           <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashflowIdIdGot ? "disabled" : ""} />
         </div>
 
@@ -102,7 +104,7 @@ async function cashflowDataHandling(apiMsg?: string) {
         ${props.cashflowIdIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" ${props.cashflowIdIdGot ? "disabled" : ""} />
         </div>` : 
         ""}
 
@@ -120,7 +122,7 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">開啟提醒：</span><div class="mx-2" id="switchComponent"></div>
+          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
         </div>
 
 
@@ -142,10 +144,6 @@ async function cashflowDataHandling(apiMsg?: string) {
     confirmButtonText: props.cashflowIdIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 
@@ -166,7 +164,13 @@ async function cashflowDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        // 
+        // console.log("minimumValueAllowed:", minimumValueAllowed.value);
+        // console.log("alertValue:", alertValue.value);
+        alertValue.min = minimumValueAllowed.value;
+
+        if (Number(alertValue.value) < Number(minimumValueAllowed.value)) {
+          alertValue.value = minimumValueAllowed.value;
+        }
       }
 
       let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
@@ -226,7 +230,7 @@ async function cashflowDataHandling(apiMsg?: string) {
       // console.log("result:", result.value);
       try {
         const res = await (props.cashflowIdIdGot ? fetchUpdateCashFlow : fetchCreateCashFlow)(result.value) as IResponse;
-        console.log("res:", res);
+        // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");

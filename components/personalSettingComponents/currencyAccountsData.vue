@@ -99,7 +99,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         <div class="flex justify-center items-center w-full my-2">
           <div class="mx-2">
             <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-            <label for="openAlert">開啟提醒</label>
+            <label for="openAlert">提醒</label>
           </div>
           <div class="mx-2">
             <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
@@ -120,10 +120,10 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     confirmButtonText: props.currencyAccountIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
+    // color: "#000",
+    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 

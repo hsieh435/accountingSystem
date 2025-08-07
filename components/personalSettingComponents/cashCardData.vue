@@ -76,7 +76,7 @@ async function cashCardDataHandling(apiMsg?: string) {
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" />
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
         </div>` : 
         ""}
 
@@ -100,7 +100,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-center items-center w-full my-2">
           <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">開啟提醒</label>
+          <label class="mx-1" for="openAlert">提醒</label>
         </div>
 
 
@@ -116,13 +116,13 @@ async function cashCardDataHandling(apiMsg?: string) {
     confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
+    // color: "#000",
+    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      const startingAmount = document.getElementById("startingAmount") as HTMLInputElement;
+      // const startingAmount = document.getElementById("startingAmount") as HTMLInputElement;
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const maximumValueAllowed = document.getElementById("maximumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
@@ -137,9 +137,9 @@ async function cashCardDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        // console.log("minimumValueAllowed:", minimumValueAllowed.value);
-        // console.log("maximumValueAllowed:", maximumValueAllowed.value);
-        // console.log("alertValue:", alertValue.value);
+        console.log("minimumValueAllowed:", minimumValueAllowed.value);
+        console.log("maximumValueAllowed:", maximumValueAllowed.value);
+        console.log("alertValue:", alertValue.value);
 
         maximumValueAllowed.min = minimumValueAllowed.value;
         minimumValueAllowed.max = maximumValueAllowed.value;

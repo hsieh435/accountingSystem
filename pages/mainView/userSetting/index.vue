@@ -88,8 +88,8 @@ async function submitUserData(apiMsg?: string) {
     cancelButtonText: "取消",
     // confirmButtonColor: "#007fff",
     // cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
+    // color: "#000",
+    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 

@@ -90,10 +90,10 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.tradeIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
+    // confirmButtonColor: "#007fff",
+    // cancelButtonColor: "#ff4337",
+    // color: "#000",
+    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 

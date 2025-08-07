@@ -9,7 +9,7 @@ export const tailwindStyles = {
   thClasses: `table-cell w-auto border-x border-gray-200 bg-black text-white px-1 py-1 first:border-0 first:rounded-tl-xl last:border-l last:rounded-tr-xl last:${tableLastColumn}`,
   tbodyClasses: "table-row-group",
   tbodytrClasses: "text-sm text-center table-row rounded hover:bg-gray-200 hover:border-gray-300 group",
-  tdClasses: `table-cell text-black border border-gray-200 bg-white px-1 py-1 group-hover:border-gray-300 first:w-[60px] last:${tableLastColumn}`,
+  tdClasses: `table-cell text-black border border-gray-200 bg-white px-1 py-[3px] group-hover:border-gray-300 first:w-[60px] last:${tableLastColumn}`,
   noDataClasses: "text-black mx-3",
 
 

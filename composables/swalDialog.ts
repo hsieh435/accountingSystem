@@ -1,4 +1,3 @@
-import type { AxiosResponse, AxiosError } from "axios";
 import { IResponse } from "@/models/index";
 import Swal from "sweetalert2";
 
@@ -65,7 +64,7 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
     cancelButtonText: cancelButtonText,
     // confirmButtonColor: "#007fff",
     // cancelButtonColor: "#ff4337",
-    color: "#000",
+    // color: "#000",
     width: message.length > 14 ? "auto" : "",
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
