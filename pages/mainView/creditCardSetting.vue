@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
+  <div class="w-full px-3">
+    <div class="flex flex-wrap justify-start items-center">
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
       <creditCardData :userIdGot="''" />
     </div>
 
@@ -27,7 +28,9 @@
               <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
                 <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.creditcardBankCode }} / {{ card.creditcardBankName }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
+                </div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
@@ -47,12 +50,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
-import { ICreditCardList } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-
-
+import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -61,21 +63,25 @@ definePageMeta({
   subTitle: "信用卡資料設定",
 });
 
-
-
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
 const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardData.vue"));
-
-
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 const searchWord = ref<string>("");
 
-const creditCardList = ref<any[]>([]);
+const searchingParams = reactive<IAccountSearchingParams>({
+  currencyId: "",
+});
+const creditCardList = ref<ICreditCardList[]>([]);
 const creditCardListFiltered = ref<ICreditCardList[]>([]);
 const tableData = ref<ICreditCardList[]>([]);
 
-
+onMounted(() => {
+  creditCardSearching();
+});
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; keyWord: string }) {
   currentPage.value = sliceData.currentPage;
@@ -84,22 +90,30 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
   await creditCardListFilterEvent();
 }
 
-
-
-async function creditCardListFilterEvent() {
-  creditCardListFiltered.value = searchWord.value.length > 0
-  ? creditCardList.value.filter((row: ICreditCardList) => {
-    return row.creditcardName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.creditcardBankName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.creditcardBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.creditcardSchema.toLowerCase().includes(searchWord.value.toLowerCase())
-  })
-  : creditCardList.value;
-  
-  tableData.value = sliceArray(creditCardListFiltered.value, currentPage.value, itemsPerPage.value);
+async function settingSearchingParams(params: IAccountSearchingParams) {
+  searchingParams.currencyId = params.currencyId;
+  await creditCardSearching();
 }
 
+async function creditCardSearching() {
+  //
+}
 
+async function creditCardListFilterEvent() {
+  creditCardListFiltered.value = creditCardList.value;
+  if (searchWord.value.length > 0) {
+    creditCardListFiltered.value = creditCardListFiltered.value.filter((row: ICreditCardList) => {
+      return (
+        row.creditcardName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.creditcardBankName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.creditcardBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.creditcardSchema.toLowerCase().includes(searchWord.value.toLowerCase())
+      );
+    });
+  }
+
+  tableData.value = sliceArray(creditCardListFiltered.value, currentPage.value, itemsPerPage.value);
+}
 
 async function removeCreditcardData() {
   //

@@ -101,7 +101,7 @@ async function creditCardDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` : 
+        </div>` :
         ""}
 
       </div>
@@ -111,7 +111,7 @@ async function creditCardDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      
+
       let creditCardSchemaSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue")), {
         selectId: "cashCard",
         sellectAll: false,
@@ -121,7 +121,7 @@ async function creditCardDataHandling(apiMsg?: string) {
         },
       });
       creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
-      
+
       const creditPerMonth = document.getElementById("creditPerMonth") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       creditPerMonth.addEventListener("change", () => {

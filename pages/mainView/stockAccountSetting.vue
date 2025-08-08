@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
+  <div class="w-full px-3">
+    <div class="flex flex-wrap justify-start items-center">
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
       <stockAccountData />
     </div>
 
@@ -45,10 +46,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
-import { IStockAccountList } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
 
 
@@ -61,6 +63,7 @@ definePageMeta({
 
 
 
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
 const stockAccountData = defineAsyncComponent(() => import("@/components/personalSettingComponents/stockAccountData.vue"));
 
 
@@ -69,9 +72,18 @@ const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 const searchWord = ref<string>("");
 
+const searchingParams = reactive<IAccountSearchingParams>({
+  currencyId: "",
+});
 const stockAccountList = ref<IStockAccountList[]>([]);
 const stockAccountListFiltered = ref<IStockAccountList[]>([]);
 const tableData = ref<IStockAccountList[]>([]);
+
+
+
+onMounted(() => {
+  stockAccountSearching();
+});
 
 
 
@@ -84,15 +96,29 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 
 
+async function settingSearchingParams(params: IAccountSearchingParams) {
+  searchingParams.currencyId = params.currencyId;
+  await stockAccountListFilterEvent();
+}
+
+
+
+async function stockAccountSearching() {
+  // await stockAccountListFilterEvent();
+}
+
 async function stockAccountListFilterEvent() {
-  stockAccountListFiltered.value = searchWord.value.length > 0
-  ? stockAccountList.value.filter((row: IStockAccountList) => {
-    return row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
-  })
-  : stockAccountList.value;
-  
+  stockAccountListFiltered.value = stockAccountList.value;
+  if (searchWord.value.length > 0) {
+    stockAccountListFiltered.value = stockAccountListFiltered.value.filter((row: IStockAccountList) => {
+      return (
+        row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
+      );
+    });
+  }
+
   tableData.value = sliceArray(stockAccountListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 

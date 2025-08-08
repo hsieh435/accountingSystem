@@ -50,6 +50,11 @@ export interface ICurrency {
   sort: number;
 }
 
+// 搜尋帳戶參數 interface
+export interface IAccountSearchingParams {
+  currencyId: string;
+}
+
 // 現金流列表 interface
 export interface ICashFlowList {
   no?: number;

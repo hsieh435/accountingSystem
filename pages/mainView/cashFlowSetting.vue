@@ -1,9 +1,11 @@
 <template>
   <div class="w-full px-3">
-    <div class="flex flex-wrap justify-start items-center my-2">
-    <span>查詢貨幣：</span>
-    <currencySelect @sendbackCurrencyId="settingCurrency" />
-    <cashFlowData :currencyIdGot="currencyId" :isDisable="!currencyId || currencyArray.includes(currencyId)" @dataReseaching="cashFlowSearching()" />
+    <div class="flex flex-wrap justify-start items-center">
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+      <cashFlowData
+        :currencyIdGot="currencyId"
+        :isDisable="!currencyId || currencyArray.includes(currencyId)"
+        @dataReseaching="cashFlowSearching()" />
     </div>
 
     <template v-if="cashFlowList.length > 0">
@@ -38,7 +40,10 @@
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
-                <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData(cashFlow.cashflowId)" />
+                <ui-buttonGroup
+                  showRemove
+                  :removeText="'刪除現金流'"
+                  @dataRemove="removeCashFlowData(cashFlow.cashflowId)" />
               </div>
             </div>
           </div>
@@ -51,14 +56,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, onMounted } from "vue";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCashFlowList, fetchDeleteCashFlow } from "@/server/cashFlowApi";
-import { IResponse, ICashFlowList } from "@/models/index";
+import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
-
-
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -67,12 +70,10 @@ definePageMeta({
   subTitle: "現金資料設定",
 });
 
-
-
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
 const cashFlowData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowData.vue"));
-
-
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -82,35 +83,30 @@ const currencyArray = ref<string[]>([]);
 const cashFlowList = ref<ICashFlowList[]>([]);
 const cashFlowListFiltered = ref<ICashFlowList[]>([]);
 const tableData = ref<ICashFlowList[]>([]);
-
-
+const searchingParams = reactive<IAccountSearchingParams>({
+  currencyId: "",
+});
 
 onMounted(() => {
   cashFlowSearching();
 });
 
-
-
-async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
   await cashFlowListFilterEvent();
 }
 
-
-
-async function settingCurrency(currencyIdSendback: string) {
-  currencyId.value = currencyIdSendback;
-  await cashFlowSearching()
+async function settingSearchingParams(params: IAccountSearchingParams) {
+  searchingParams.currencyId = params.currencyId;
+  await cashFlowSearching();
 }
-
-
 
 async function cashFlowSearching() {
   currencyArray.value = [];
 
   try {
-    const res = await fetchCashFlowList({ currencyId: currencyId.value }) as IResponse;
+    const res = (await fetchCashFlowList(searchingParams)) as IResponse;
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashFlowList.value = res.data.data;
@@ -126,15 +122,10 @@ async function cashFlowSearching() {
   }
 }
 
-
-
 async function cashFlowListFilterEvent() {
   cashFlowListFiltered.value = cashFlowList.value;
   tableData.value = sliceArray(cashFlowListFiltered.value, currentPage.value, itemsPerPage.value);
 }
-
-
-
 
 async function removeCashFlowData(cashflowId: string) {
   const confirmResult = await showConfirmDialog({
@@ -148,8 +139,5 @@ async function removeCashFlowData(cashflowId: string) {
     await cashFlowSearching();
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

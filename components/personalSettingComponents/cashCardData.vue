@@ -24,7 +24,7 @@ const dataParams = reactive<ICashCardList>({
   cashCardId: props.cashCardIdGot || "",
   cashCardUser: "",
   cashCardName: "",
-  currency: "TWD",
+  currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -50,25 +50,25 @@ async function cashCardDataHandling(apiMsg?: string) {
     title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
           <input class="${tailwindStyles.inputClasses}" id="cashCardId" value="${dataParams.cashCardId}" disabled />
-        </div>` : 
+        </div>` :
         ""}
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
+          <span class="col-start-1 col-end-3 text-right">儲值票卡名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="cashCardName" value="${dataParams.cashCardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <span class="col-start-1 col-end-3 text-right">初始金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
         </div>
 
@@ -76,24 +76,24 @@ async function cashCardDataHandling(apiMsg?: string) {
         ${props.cashCardIdGot ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
-        </div>` : 
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
+        </div>` :
         ""}
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
+          <span class="col-start-1 col-end-3 text-right">最小儲值金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
+          <span class="col-start-1 col-end-3 text-right">最大儲值金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+          <span class="col-start-1 col-end-3 text-right">提醒金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
@@ -105,10 +105,10 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         ${props.cashCardIdGot ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" type="text" disabled />
-        </div>` : 
+          <div class="flex justify-start items-center grid grid-cols-6 my-2">
+            <span class="col-start-1 col-end-3 text-right">建立時間：</span>
+            <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
+          </div>` :
         ""}
 
       </div>

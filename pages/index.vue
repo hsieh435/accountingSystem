@@ -1,16 +1,16 @@
-<template>    
+<template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white rounded-xl shadow-md w-full max-w-sm p-8">
-      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">登入</h2>
-        
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">記帳系統登入</h2>
+
       <div class="my-4">
         <label class="block text-gray-600 mb-1">帳號：</label>
-        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="accountId" type="search" v-on:keyup.enter="handleLogin" />
+        <input :class="inputClasses" v-model="accountId" type="search" v-on:keyup.enter="handleLogin" />
       </div>
 
       <div class="mb-6">
         <label class="block text-gray-600 mb-1">密碼：</label>
-        <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2" v-model="password" type="password" v-on:keyup.enter="handleLogin" />
+        <input :class="inputClasses" v-model="password" type="password" v-on:keyup.enter="handleLogin" />
       </div>
 
       <div class="flex justify-center items-center">
@@ -36,11 +36,11 @@ import { encryptString } from "@/composables/crypto";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  layout: false, 
-})
+  layout: false,
+});
 
 
-
+const inputClasses = "w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2"
 const accountId = ref<string>("");
 const password = ref<string>("");
 
@@ -48,10 +48,10 @@ const password = ref<string>("");
 
 async function handleLogin() {
   try {
-    const res = await fetchUserLogin({
+    const res = (await fetchUserLogin({
       userId: accountId.value,
       password: encryptString(password.value),
-    }) as IResponse;
+    })) as IResponse;
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
@@ -63,6 +63,7 @@ async function handleLogin() {
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
-};
+}
+
 </script>
 <style lang="scss" scoped></style>

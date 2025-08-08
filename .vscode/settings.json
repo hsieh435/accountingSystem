@@ -1,0 +1,56 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#373c38",
+    "titleBar.activeBackground": "#373c38",
+    "titleBar.activeForeground": "#ffffff",
+  },
+  // 存檔即自動格式化
+  "editor.formatOnSave": true,
+  // 指定預設格式化器為 Prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+
+
+  // Prettier 規則
+  "prettier.singleQuote": false, // 使用雙引號
+  "prettier.semi": true, // 每行結尾加分號
+  "prettier.endOfLine": "lf", // 強制換行符號 LF
+  // 檔案處理
+  "files.trimTrailingWhitespace": true, // 自動移除行尾空白
+  "files.insertFinalNewline": true, // 保險再加一次檔尾換行
+  "files.trimFinalNewlines": true,
+
+  // 編輯器習慣
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "editor.renderWhitespace": "trailing",
+
+  // 各語言分別啟用 Prettier
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

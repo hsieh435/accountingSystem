@@ -105,7 +105,7 @@ async function cashflowDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" ${props.cashflowIdIdGot ? "disabled" : ""} />
-        </div>` : 
+        </div>` :
         ""}
 
 
@@ -136,7 +136,7 @@ async function cashflowDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立日期：</span>
           <input class="${tailwindStyles.inputClasses}" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
-        </div>` : 
+        </div>` :
         ""}
 
       </div>

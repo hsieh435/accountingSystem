@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
+  <div class="w-full px-3">
+    <div class="flex flex-wrap justify-start items-center">
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
       <currencyAccountsData />
     </div>
 
@@ -27,7 +28,9 @@
               <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
                 <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
+                <div :class="tailwindStyles.tdClasses"
+                  >{{ account.accountBankCode }} / {{ account.accountBankName }}</div
+                >
                 <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.isSalaryAccount }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
@@ -47,12 +50,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
-import { ICurrencyAccountList } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-
-
+import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -61,21 +63,27 @@ definePageMeta({
   subTitle: "存款帳戶資料設定",
 });
 
-
-
-const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsData.vue"));
-
-
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
+const currencyAccountsData = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/currencyAccountsData.vue"),
+);
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 const searchWord = ref<string>("");
 
+const searchingParams = reactive<IAccountSearchingParams>({
+  currencyId: "",
+});
 const currencyAccountList = ref<ICurrencyAccountList[]>([]);
 const currencyAccountListFiltered = ref<ICurrencyAccountList[]>([]);
 const tableData = ref<ICurrencyAccountList[]>([]);
 
-
+onMounted(() => {
+  currencyAccountSearching();
+});
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; keyWord: string }) {
   currentPage.value = sliceData.currentPage;
@@ -84,27 +92,32 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
   await currencyAccountListFilterEvent();
 }
 
-
-
-async function currencyAccountListFilterEvent() {
-  currencyAccountListFiltered.value = searchWord.value.length > 0
-  ? currencyAccountList.value.filter((row: ICurrencyAccountList) => {
-    return row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
-    row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
-  })
-  : currencyAccountList.value;
-  
-  tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
+async function settingSearchingParams(params: IAccountSearchingParams) {
+  searchingParams.currencyId = params.currencyId;
+  await currencyAccountSearching();
 }
 
+async function currencyAccountSearching() {
+  //
+}
 
+async function currencyAccountListFilterEvent() {
+  currencyAccountListFiltered.value = currencyAccountList.value;
+  if (searchWord.value.length > 0) {
+    currencyAccountListFiltered.value = currencyAccountListFiltered.value.filter((row: ICurrencyAccountList) => {
+      return (
+        row.accountName.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.accountBankCode.toLowerCase().includes(searchWord.value.toLowerCase()) ||
+        row.accountBankName.toLowerCase().includes(searchWord.value.toLowerCase())
+      );
+    });
+  }
+
+  tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
+}
 
 async function removeCurrencyAccountData() {
   //
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

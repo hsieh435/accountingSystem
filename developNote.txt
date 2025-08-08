@@ -7,6 +7,9 @@
 
 4.SQL語法
 
+5.安裝 Prettier - Code formatter 跟 npm i prettier
+文件：https://prettier.io/docs
+
 
 
 Nuxt.js 3
