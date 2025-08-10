@@ -156,10 +156,6 @@ async function creditCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.creditCardIdGot) {
-        dataParams.creditcardId = getCurrentTimestamp() + "";
-      }
-
       dataParams.creditcardName = (document.getElementById("creditcardName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);

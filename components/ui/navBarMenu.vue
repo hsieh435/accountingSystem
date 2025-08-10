@@ -153,23 +153,34 @@ const items = ref<NavigationMenuItem[]>([
     ]
   },
   {
+    label: "資訊查詢",
+    icon: "i-lucide-file-text",
+    children: [
+      {
+        label: "外幣匯率查詢",
+        icon: "i-lucide-file-text",
+        to: "/mainView/currencyExchangeRateInfo",
+      },
+      {
+        label: "股市查詢",
+        icon: "i-lucide-file-text",
+        to: "/mainView/testArea",
+      },
+    ]
+  },
+  {
     label: "參數設定",
     icon: "i-lucide-file-text",
     children: [
       {
-        label: "收支類型設定",
-        icon: "i-lucide-file-text",
-        to: "/mainView/tradeCategorySetting",
-      },
-      {
-        label: "帳戶類型設定",
-        icon: "i-lucide-file-text",
-        to: "/mainView/accountTypeSetting",
-      },
-      {
         label: "貨幣設定",
         icon: "i-lucide-file-text",
         to: "/mainView/currencySetting",
+      },
+      {
+        label: "收支類型設定",
+        icon: "i-lucide-file-text",
+        to: "/mainView/tradeCategorySetting",
       },
     ]
   },

@@ -26,7 +26,7 @@ export async function fetchCashFlowById(cashFlowId: string) {
   return result;
 }
 
-export async function fetchCreateCashFlow(data: ICashFlowList) {
+export async function fetchCashFlowCreate(data: ICashFlowList) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlow/create", "POST", {
     body: JSON.stringify(data),
   });
@@ -40,7 +40,7 @@ export async function fetchCreateCashFlow(data: ICashFlowList) {
   return result;
 }
 
-export async function fetchUpdateCashFlow(data: ICashFlowList) {
+export async function fetchCashFlowUpdate(data: ICashFlowList) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlow/update", "PUT", {
     body: JSON.stringify(data),
   });
@@ -54,7 +54,7 @@ export async function fetchUpdateCashFlow(data: ICashFlowList) {
   return result;
 }
 
-export async function fetchDeleteCashFlow(cashflowId: string) {
+export async function fetchCashFlowDelete(cashflowId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/cashFlow/delete/${cashflowId}`, "GET");
 
   if (!response.ok) {

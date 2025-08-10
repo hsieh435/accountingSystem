@@ -3,8 +3,8 @@
     <div class="flex flex-wrap justify-start items-center">
       <accountSearching @sendbackSearchingParams="settingSearchingParams" />
       <cashFlowData
-        :currencyIdGot="currencyId"
-        :isDisable="!currencyId || currencyArray.includes(currencyId)"
+        :currencyIdGot="searchingParams.currencyId"
+        :isDisable="!searchingParams.currencyId || currencyArray.includes(searchingParams.currencyId)"
         @dataReseaching="cashFlowSearching()" />
     </div>
 
@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashFlowList, fetchDeleteCashFlow } from "@/server/cashFlowApi";
+import { fetchCashFlowList, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -78,7 +78,6 @@ const cashFlowData = defineAsyncComponent(() => import("@/components/personalSet
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 
-const currencyId = ref<string>("");
 const currencyArray = ref<string[]>([]);
 const cashFlowList = ref<ICashFlowList[]>([]);
 const cashFlowListFiltered = ref<ICashFlowList[]>([]);
@@ -129,9 +128,9 @@ async function cashFlowListFilterEvent() {
 
 async function removeCashFlowData(cashflowId: string) {
   const confirmResult = await showConfirmDialog({
-    message: "您確定要刪除這筆現金流資料嗎？",
+    message: "即將刪除現金流資料",
     confirmButtonMsg: "確認刪除",
-    executionApi: fetchDeleteCashFlow,
+    executionApi: fetchCashFlowDelete,
     apiParams: cashflowId,
   });
 

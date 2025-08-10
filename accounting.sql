@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-08-08 17:41:48
+-- Started on 2025-08-10 18:11:09
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 7 (class 2615 OID 26825)
+-- TOC entry 7 (class 2615 OID 20115)
 -- Name: pgagent; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -30,7 +30,7 @@ CREATE SCHEMA pgagent;
 ALTER SCHEMA pgagent OWNER TO postgres;
 
 --
--- TOC entry 4988 (class 0 OID 0)
+-- TOC entry 4989 (class 0 OID 0)
 -- Dependencies: 7
 -- Name: SCHEMA pgagent; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -39,7 +39,7 @@ COMMENT ON SCHEMA pgagent IS 'pgAgent system tables';
 
 
 --
--- TOC entry 2 (class 3079 OID 26826)
+-- TOC entry 2 (class 3079 OID 20116)
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -47,7 +47,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
 --
--- TOC entry 4989 (class 0 OID 0)
+-- TOC entry 4990 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
 --
@@ -60,7 +60,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 219 (class 1259 OID 26863)
+-- TOC entry 219 (class 1259 OID 20153)
 -- Name: account_types; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -74,7 +74,7 @@ CREATE TABLE public.account_types (
 ALTER TABLE public.account_types OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 26868)
+-- TOC entry 220 (class 1259 OID 20158)
 -- Name: cashcard_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -97,18 +97,18 @@ CREATE TABLE public.cashcard_list (
 ALTER TABLE public.cashcard_list OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 26876)
+-- TOC entry 221 (class 1259 OID 20166)
 -- Name: cashcard_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.cashcard_trade (
     trade_id character varying NOT NULL,
     cashcard_id character varying NOT NULL,
-    account_type character varying,
-    trade_datetime timestamp without time zone,
+    user_id character varying NOT NULL,
+    trade_datetime timestamp without time zone NOT NULL,
     incoming_outgoing character varying NOT NULL,
-    trade_category character varying,
-    trade_amount numeric(15,3) NOT NULL,
+    trade_category character varying NOT NULL,
+    trade_amount numeric(15,3) DEFAULT 0 NOT NULL,
     currency character varying NOT NULL,
     trade_description text,
     trade_note text
@@ -118,7 +118,7 @@ CREATE TABLE public.cashcard_trade (
 ALTER TABLE public.cashcard_trade OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 26881)
+-- TOC entry 222 (class 1259 OID 20171)
 -- Name: cashflow_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -139,7 +139,7 @@ CREATE TABLE public.cashflow_list (
 ALTER TABLE public.cashflow_list OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 26891)
+-- TOC entry 223 (class 1259 OID 20181)
 -- Name: cashflow_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -160,7 +160,7 @@ CREATE TABLE public.cashflow_trade (
 ALTER TABLE public.cashflow_trade OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 26896)
+-- TOC entry 224 (class 1259 OID 20187)
 -- Name: creditcard_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -184,7 +184,7 @@ CREATE TABLE public.creditcard_list (
 ALTER TABLE public.creditcard_list OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 26903)
+-- TOC entry 225 (class 1259 OID 20194)
 -- Name: creditcard_schema_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -198,20 +198,19 @@ CREATE TABLE public.creditcard_schema_list (
 ALTER TABLE public.creditcard_schema_list OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 26908)
+-- TOC entry 226 (class 1259 OID 20199)
 -- Name: creditcard_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.creditcard_trade (
     trade_id character varying NOT NULL,
     credit_card_id character varying NOT NULL,
-    trade_datetime timestamp without time zone,
-    creditcard_user character varying,
-    account_type character varying,
-    trade_category character varying,
-    trade_amount numeric(15,3) NOT NULL,
+    trade_datetime timestamp without time zone NOT NULL,
+    user_id character varying NOT NULL,
+    trade_category character varying NOT NULL,
+    trade_amount numeric(15,3) DEFAULT 0 NOT NULL,
     currency character varying NOT NULL,
-    bill_month timestamp without time zone,
+    bill_month timestamp without time zone NOT NULL,
     trade_description text,
     trade_note text
 );
@@ -220,11 +219,11 @@ CREATE TABLE public.creditcard_trade (
 ALTER TABLE public.creditcard_trade OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 26913)
--- Name: currency_accounts_list; Type: TABLE; Schema: public; Owner: postgres
+-- TOC entry 227 (class 1259 OID 20204)
+-- Name: currency_account_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.currency_accounts_list (
+CREATE TABLE public.currency_account_list (
     account_id character varying NOT NULL,
     user_id character varying NOT NULL,
     account_name character varying NOT NULL,
@@ -243,39 +242,38 @@ CREATE TABLE public.currency_accounts_list (
 );
 
 
-ALTER TABLE public.currency_accounts_list OWNER TO postgres;
+ALTER TABLE public.currency_account_list OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 26922)
--- Name: currency_accounts_trade; Type: TABLE; Schema: public; Owner: postgres
+-- TOC entry 228 (class 1259 OID 20213)
+-- Name: currency_account_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.currency_accounts_trade (
+CREATE TABLE public.currency_account_trade (
     trade_id character varying NOT NULL,
     account_id character varying NOT NULL,
-    trade_datetime timestamp without time zone,
-    account_user character varying,
-    account_type character varying,
-    incoming_outgoing character varying,
-    trade_category character varying,
-    trade_amount numeric(15,3) DEFAULT 0,
+    trade_datetime timestamp without time zone NOT NULL,
+    account_user character varying NOT NULL,
+    incoming_outgoing character varying NOT NULL,
+    trade_category character varying NOT NULL,
+    trade_amount numeric(15,3) DEFAULT 0 NOT NULL,
     currency character varying NOT NULL,
     trade_description text,
     trade_note text
 );
 
 
-ALTER TABLE public.currency_accounts_trade OWNER TO postgres;
+ALTER TABLE public.currency_account_trade OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 26928)
+-- TOC entry 229 (class 1259 OID 20219)
 -- Name: currency_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.currency_list (
     currency_code character varying NOT NULL,
     currency_name character varying NOT NULL,
-    allow_delete boolean DEFAULT true NOT NULL,
+    currency_symbol character varying,
     sort integer DEFAULT 90 NOT NULL
 );
 
@@ -283,7 +281,7 @@ CREATE TABLE public.currency_list (
 ALTER TABLE public.currency_list OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 26935)
+-- TOC entry 230 (class 1259 OID 20226)
 -- Name: function; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -299,7 +297,7 @@ CREATE TABLE public.function (
 ALTER TABLE public.function OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 26940)
+-- TOC entry 231 (class 1259 OID 20231)
 -- Name: function_group; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -313,14 +311,39 @@ CREATE TABLE public.function_group (
 ALTER TABLE public.function_group OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 26945)
+-- TOC entry 233 (class 1259 OID 20241)
+-- Name: stock_account_list; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stock_account_list (
+    account_id character varying NOT NULL,
+    user_id character varying NOT NULL,
+    account_name character varying,
+    account_type character varying,
+    account_bank_code character varying,
+    account_bank_name character varying,
+    currency character varying NOT NULL,
+    starting_amount numeric(15,3) NOT NULL,
+    present_amount numeric(15,3) NOT NULL,
+    minimum_value_allowed numeric(15,3) DEFAULT 0 NOT NULL,
+    alert_value numeric(15,3) NOT NULL,
+    open_alert boolean,
+    created_date timestamp without time zone,
+    note text
+);
+
+
+ALTER TABLE public.stock_account_list OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 20236)
 -- Name: stock_account_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.stock_account_trade (
     trade_id character varying NOT NULL,
     account_id character varying NOT NULL,
-    account_user character varying,
+    account_user character varying NOT NULL,
     trade_datetime timestamp without time zone NOT NULL,
     incoming_outgoing character varying NOT NULL,
     buy_sell character varying NOT NULL,
@@ -341,32 +364,7 @@ CREATE TABLE public.stock_account_trade (
 ALTER TABLE public.stock_account_trade OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 26950)
--- Name: stock_accounts_list; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.stock_accounts_list (
-    account_id character varying NOT NULL,
-    user_id character varying NOT NULL,
-    account_name character varying,
-    account_type character varying,
-    account_bank_code character varying,
-    account_bank_name character varying,
-    currency character varying NOT NULL,
-    starting_amount numeric(15,3) NOT NULL,
-    present_amount numeric(15,3) NOT NULL,
-    minimum_value_allowed numeric(15,3) DEFAULT 0 NOT NULL,
-    alert_value numeric(15,3) NOT NULL,
-    open_alert boolean,
-    created_date timestamp without time zone,
-    note text
-);
-
-
-ALTER TABLE public.stock_accounts_list OWNER TO postgres;
-
---
--- TOC entry 234 (class 1259 OID 26956)
+-- TOC entry 234 (class 1259 OID 20247)
 -- Name: stock_storage_detail; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -388,7 +386,7 @@ CREATE TABLE public.stock_storage_detail (
 ALTER TABLE public.stock_storage_detail OWNER TO postgres;
 
 --
--- TOC entry 235 (class 1259 OID 26961)
+-- TOC entry 235 (class 1259 OID 20252)
 -- Name: stock_storage_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -403,7 +401,7 @@ CREATE TABLE public.stock_storage_list (
 ALTER TABLE public.stock_storage_list OWNER TO postgres;
 
 --
--- TOC entry 236 (class 1259 OID 26966)
+-- TOC entry 236 (class 1259 OID 20257)
 -- Name: stock_type; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -417,7 +415,7 @@ CREATE TABLE public.stock_type (
 ALTER TABLE public.stock_type OWNER TO postgres;
 
 --
--- TOC entry 237 (class 1259 OID 26971)
+-- TOC entry 237 (class 1259 OID 20262)
 -- Name: trade_category; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -436,7 +434,7 @@ CREATE TABLE public.trade_category (
 ALTER TABLE public.trade_category OWNER TO postgres;
 
 --
--- TOC entry 238 (class 1259 OID 26981)
+-- TOC entry 238 (class 1259 OID 20272)
 -- Name: user_data; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -451,7 +449,7 @@ CREATE TABLE public.user_data (
 ALTER TABLE public.user_data OWNER TO postgres;
 
 --
--- TOC entry 4963 (class 0 OID 26863)
+-- TOC entry 4964 (class 0 OID 20153)
 -- Dependencies: 219
 -- Data for Name: account_types; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -466,7 +464,7 @@ stockAccount	證券帳戶	5
 
 
 --
--- TOC entry 4964 (class 0 OID 26868)
+-- TOC entry 4965 (class 0 OID 20158)
 -- Dependencies: 220
 -- Data for Name: cashcard_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -476,17 +474,17 @@ COPY public.cashcard_list (cashcard_id, cashcard_user, cashcard_name, currency, 
 
 
 --
--- TOC entry 4965 (class 0 OID 26876)
+-- TOC entry 4966 (class 0 OID 20166)
 -- Dependencies: 221
 -- Data for Name: cashcard_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cashcard_trade (trade_id, cashcard_id, account_type, trade_datetime, incoming_outgoing, trade_category, trade_amount, currency, trade_description, trade_note) FROM stdin;
+COPY public.cashcard_trade (trade_id, cashcard_id, user_id, trade_datetime, incoming_outgoing, trade_category, trade_amount, currency, trade_description, trade_note) FROM stdin;
 \.
 
 
 --
--- TOC entry 4966 (class 0 OID 26881)
+-- TOC entry 4967 (class 0 OID 20171)
 -- Dependencies: 222
 -- Data for Name: cashflow_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -497,18 +495,18 @@ COPY public.cashflow_list (cashflow_id, user_id, currency, starting_amount, pres
 
 
 --
--- TOC entry 4967 (class 0 OID 26891)
+-- TOC entry 4968 (class 0 OID 20181)
 -- Dependencies: 223
 -- Data for Name: cashflow_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.cashflow_trade (trade_id, cashflow_id, user_id, trade_datetime, incoming_outgoing, trade_category, trade_amount, currency, trade_description, trade_note) FROM stdin;
-0000000001111	1753244234071	mike	2025-07-23 00:00:00	in	aaa	100.000	NTD		
+0000000001111	1753244234071	mike	2025-07-23 00:00:00	in	else	100.000	NTD		
 \.
 
 
 --
--- TOC entry 4968 (class 0 OID 26896)
+-- TOC entry 4969 (class 0 OID 20187)
 -- Dependencies: 224
 -- Data for Name: creditcard_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -518,7 +516,7 @@ COPY public.creditcard_list (creditcard_id, creditcard_user, creditcard_name, cr
 
 
 --
--- TOC entry 4969 (class 0 OID 26903)
+-- TOC entry 4970 (class 0 OID 20194)
 -- Dependencies: 225
 -- Data for Name: creditcard_schema_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -534,60 +532,60 @@ else	其他	99
 
 
 --
--- TOC entry 4970 (class 0 OID 26908)
+-- TOC entry 4971 (class 0 OID 20199)
 -- Dependencies: 226
 -- Data for Name: creditcard_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.creditcard_trade (trade_id, credit_card_id, trade_datetime, creditcard_user, account_type, trade_category, trade_amount, currency, bill_month, trade_description, trade_note) FROM stdin;
+COPY public.creditcard_trade (trade_id, credit_card_id, trade_datetime, user_id, trade_category, trade_amount, currency, bill_month, trade_description, trade_note) FROM stdin;
 \.
 
 
 --
--- TOC entry 4971 (class 0 OID 26913)
+-- TOC entry 4972 (class 0 OID 20204)
 -- Dependencies: 227
--- Data for Name: currency_accounts_list; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: currency_account_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.currency_accounts_list (account_id, user_id, account_name, account_type, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, is_salary_account, created_date, note) FROM stdin;
+COPY public.currency_account_list (account_id, user_id, account_name, account_type, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, is_salary_account, created_date, note) FROM stdin;
 \.
 
 
 --
--- TOC entry 4972 (class 0 OID 26922)
+-- TOC entry 4973 (class 0 OID 20213)
 -- Dependencies: 228
--- Data for Name: currency_accounts_trade; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: currency_account_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.currency_accounts_trade (trade_id, account_id, trade_datetime, account_user, account_type, incoming_outgoing, trade_category, trade_amount, currency, trade_description, trade_note) FROM stdin;
+COPY public.currency_account_trade (trade_id, account_id, trade_datetime, account_user, incoming_outgoing, trade_category, trade_amount, currency, trade_description, trade_note) FROM stdin;
 \.
 
 
 --
--- TOC entry 4973 (class 0 OID 26928)
+-- TOC entry 4974 (class 0 OID 20219)
 -- Dependencies: 229
 -- Data for Name: currency_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.currency_list (currency_code, currency_name, allow_delete, sort) FROM stdin;
-NTD	新臺幣	f	1
-USD	美元	f	2
-JPY	日幣	f	3
-GBP	英鎊	f	4
-CAD	加幣	f	6
-THB	泰銖	t	10
-EUR	歐元	f	5
-CHF	瑞士法郎	f	9
-NZD	紐西蘭元	f	8
-AUD	澳洲元	f	7
-CLP	智利披索	t	55
-ZAR	南非鍰	t	60
-VND	越南盾	t	40
+COPY public.currency_list (currency_code, currency_name, currency_symbol, sort) FROM stdin;
+EUR	歐元	€	5
+GBP	英鎊	£	4
+JPY	日幣	¥	3
+NTD	新臺幣	$	1
+NZD	紐西蘭元	$	8
+CAD	加拿大元	$	6
+CHF	瑞士法郎	Fr	9
+CLP	智利披索	$	55
+AUD	澳大利亞元	$	7
+USD	美元	$	2
+THB	泰銖	฿	10
+VND	越南盾	₫	40
+ZAR	南非蘭特	R	60
 \.
 
 
 --
--- TOC entry 4974 (class 0 OID 26935)
+-- TOC entry 4975 (class 0 OID 20226)
 -- Dependencies: 230
 -- Data for Name: function; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -612,7 +610,7 @@ financeStatement	financeStatement	財務報表	/financeStatement	1
 
 
 --
--- TOC entry 4975 (class 0 OID 26940)
+-- TOC entry 4976 (class 0 OID 20231)
 -- Dependencies: 231
 -- Data for Name: function_group; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -626,7 +624,17 @@ parameterSetting	參數設定	4
 
 
 --
--- TOC entry 4976 (class 0 OID 26945)
+-- TOC entry 4978 (class 0 OID 20241)
+-- Dependencies: 233
+-- Data for Name: stock_account_list; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.stock_account_list (account_id, user_id, account_name, account_type, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, created_date, note) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4977 (class 0 OID 20236)
 -- Dependencies: 232
 -- Data for Name: stock_account_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -636,17 +644,7 @@ COPY public.stock_account_trade (trade_id, account_id, account_user, trade_datet
 
 
 --
--- TOC entry 4977 (class 0 OID 26950)
--- Dependencies: 233
--- Data for Name: stock_accounts_list; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.stock_accounts_list (account_id, user_id, account_name, account_type, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, created_date, note) FROM stdin;
-\.
-
-
---
--- TOC entry 4978 (class 0 OID 26956)
+-- TOC entry 4979 (class 0 OID 20247)
 -- Dependencies: 234
 -- Data for Name: stock_storage_detail; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -656,7 +654,7 @@ COPY public.stock_storage_detail (stock_no, sno, stock_name, purchase_date, quan
 
 
 --
--- TOC entry 4979 (class 0 OID 26961)
+-- TOC entry 4980 (class 0 OID 20252)
 -- Dependencies: 235
 -- Data for Name: stock_storage_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -666,7 +664,7 @@ COPY public.stock_storage_list (stock_no, stock_name, stock_type, sno) FROM stdi
 
 
 --
--- TOC entry 4980 (class 0 OID 26966)
+-- TOC entry 4981 (class 0 OID 20257)
 -- Dependencies: 236
 -- Data for Name: stock_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -680,7 +678,7 @@ tse_	上市	1
 
 
 --
--- TOC entry 4981 (class 0 OID 26971)
+-- TOC entry 4982 (class 0 OID 20262)
 -- Dependencies: 237
 -- Data for Name: trade_category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -723,7 +721,7 @@ payTaxes	繳稅	t	f	t	t	f	21
 
 
 --
--- TOC entry 4982 (class 0 OID 26981)
+-- TOC entry 4983 (class 0 OID 20272)
 -- Dependencies: 238
 -- Data for Name: user_data; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -734,7 +732,7 @@ mike	mike	pPuxl3/DtZEM5of4vuwbNw==	2025-06-01 00:00:00
 
 
 --
--- TOC entry 4779 (class 2606 OID 26987)
+-- TOC entry 4780 (class 2606 OID 20278)
 -- Name: account_types account_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -743,7 +741,7 @@ ALTER TABLE ONLY public.account_types
 
 
 --
--- TOC entry 4781 (class 2606 OID 26989)
+-- TOC entry 4782 (class 2606 OID 20280)
 -- Name: cashcard_list cashcard_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -752,7 +750,7 @@ ALTER TABLE ONLY public.cashcard_list
 
 
 --
--- TOC entry 4783 (class 2606 OID 26991)
+-- TOC entry 4784 (class 2606 OID 20282)
 -- Name: cashcard_trade cashcard_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -761,7 +759,7 @@ ALTER TABLE ONLY public.cashcard_trade
 
 
 --
--- TOC entry 4785 (class 2606 OID 26993)
+-- TOC entry 4786 (class 2606 OID 20284)
 -- Name: cashflow_list cashflow_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -770,7 +768,7 @@ ALTER TABLE ONLY public.cashflow_list
 
 
 --
--- TOC entry 4787 (class 2606 OID 27030)
+-- TOC entry 4788 (class 2606 OID 20286)
 -- Name: cashflow_trade cashflow_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -779,7 +777,7 @@ ALTER TABLE ONLY public.cashflow_trade
 
 
 --
--- TOC entry 4789 (class 2606 OID 26997)
+-- TOC entry 4790 (class 2606 OID 20288)
 -- Name: creditcard_list credit_card_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -788,7 +786,7 @@ ALTER TABLE ONLY public.creditcard_list
 
 
 --
--- TOC entry 4793 (class 2606 OID 26999)
+-- TOC entry 4794 (class 2606 OID 20290)
 -- Name: creditcard_trade credit_card_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -797,7 +795,7 @@ ALTER TABLE ONLY public.creditcard_trade
 
 
 --
--- TOC entry 4791 (class 2606 OID 27001)
+-- TOC entry 4792 (class 2606 OID 20292)
 -- Name: creditcard_schema_list creditcard_scheme_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -806,25 +804,25 @@ ALTER TABLE ONLY public.creditcard_schema_list
 
 
 --
--- TOC entry 4795 (class 2606 OID 27003)
--- Name: currency_accounts_list currency_accounts_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- TOC entry 4796 (class 2606 OID 20294)
+-- Name: currency_account_list currency_account_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.currency_accounts_list
-    ADD CONSTRAINT currency_accounts_list_pkey PRIMARY KEY (account_id, user_id);
-
-
---
--- TOC entry 4797 (class 2606 OID 27005)
--- Name: currency_accounts_trade currency_accounts_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.currency_accounts_trade
-    ADD CONSTRAINT currency_accounts_trade_pkey PRIMARY KEY (trade_id, account_id);
+ALTER TABLE ONLY public.currency_account_list
+    ADD CONSTRAINT currency_account_list_pkey PRIMARY KEY (account_id, user_id);
 
 
 --
--- TOC entry 4799 (class 2606 OID 27007)
+-- TOC entry 4798 (class 2606 OID 20296)
+-- Name: currency_account_trade currency_account_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.currency_account_trade
+    ADD CONSTRAINT currency_account_trade_pkey PRIMARY KEY (trade_id, account_id);
+
+
+--
+-- TOC entry 4800 (class 2606 OID 20298)
 -- Name: currency_list currency_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -833,7 +831,7 @@ ALTER TABLE ONLY public.currency_list
 
 
 --
--- TOC entry 4803 (class 2606 OID 27009)
+-- TOC entry 4804 (class 2606 OID 20300)
 -- Name: function_group function_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -842,7 +840,7 @@ ALTER TABLE ONLY public.function_group
 
 
 --
--- TOC entry 4801 (class 2606 OID 27011)
+-- TOC entry 4802 (class 2606 OID 20302)
 -- Name: function function_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -851,7 +849,16 @@ ALTER TABLE ONLY public.function
 
 
 --
--- TOC entry 4805 (class 2606 OID 27013)
+-- TOC entry 4808 (class 2606 OID 20324)
+-- Name: stock_account_list stock_account_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stock_account_list
+    ADD CONSTRAINT stock_account_list_pkey PRIMARY KEY (account_id, user_id);
+
+
+--
+-- TOC entry 4806 (class 2606 OID 20304)
 -- Name: stock_account_trade stock_account_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -860,16 +867,7 @@ ALTER TABLE ONLY public.stock_account_trade
 
 
 --
--- TOC entry 4807 (class 2606 OID 27015)
--- Name: stock_accounts_list stock_accounts_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.stock_accounts_list
-    ADD CONSTRAINT stock_accounts_list_pkey PRIMARY KEY (user_id, account_id);
-
-
---
--- TOC entry 4809 (class 2606 OID 27017)
+-- TOC entry 4810 (class 2606 OID 20308)
 -- Name: stock_storage_detail stock_storage_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -878,7 +876,7 @@ ALTER TABLE ONLY public.stock_storage_detail
 
 
 --
--- TOC entry 4811 (class 2606 OID 27019)
+-- TOC entry 4812 (class 2606 OID 20310)
 -- Name: stock_storage_list stock_storage_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -887,7 +885,7 @@ ALTER TABLE ONLY public.stock_storage_list
 
 
 --
--- TOC entry 4813 (class 2606 OID 27021)
+-- TOC entry 4814 (class 2606 OID 20312)
 -- Name: stock_type stock_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -896,7 +894,7 @@ ALTER TABLE ONLY public.stock_type
 
 
 --
--- TOC entry 4815 (class 2606 OID 27023)
+-- TOC entry 4816 (class 2606 OID 20314)
 -- Name: trade_category trade_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -905,7 +903,7 @@ ALTER TABLE ONLY public.trade_category
 
 
 --
--- TOC entry 4817 (class 2606 OID 27025)
+-- TOC entry 4818 (class 2606 OID 20316)
 -- Name: user_data user_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -913,7 +911,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-08-08 17:41:48
+-- Completed on 2025-08-10 18:11:09
 
 --
 -- PostgreSQL database dump complete

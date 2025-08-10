@@ -1,7 +1,7 @@
 {
   "workbench.colorCustomizations": {
-    "activityBar.background": "#373c38",
-    "titleBar.activeBackground": "#373c38",
+    "activityBar.background": "#574738",
+    "titleBar.activeBackground": "#574738",
     "titleBar.activeForeground": "#ffffff",
   },
   // 存檔即自動格式化

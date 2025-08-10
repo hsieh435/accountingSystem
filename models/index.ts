@@ -46,7 +46,7 @@ export interface ICurrency {
   no?: number;
   currencyCode: string;
   currencyName: string;
-  allowDelete?: boolean;
+  currencySymbol: string;
   sort: number;
 }
 
@@ -90,9 +90,9 @@ export interface ICashFlowRecordList {
 // 儲值票卡列表 interface
 export interface ICashCardList {
   no?: number;
-  cashCardId: string;
-  cashCardUser: string;
-  cashCardName: string;
+  cashcardId: string;
+  userId: string;
+  cashcardName: string;
   currency: string;
   currencyName?: string;
   startingAmount: number;
@@ -102,14 +102,15 @@ export interface ICashCardList {
   alertValue: number;
   openAlert: boolean;
   createdDate: string;
+  note: string;
 }
 
 // 儲值票卡收支紀錄 interface
 export interface ICashCardRecordList {
   no?: number;
   tradeId: string;
-  cashCardId: string;
-  cashCardName?: string;
+  cashcardId: string;
+  cashcardName?: string;
   accountType: string;
   tradeDatetime: string;
   incomingOutgoing: string;

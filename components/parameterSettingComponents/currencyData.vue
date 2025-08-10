@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.currencyCodeGot">
     <ui-buttonGroup showView :viewText="'檢視貨幣資料'" @dataView="searchingCategoryCode()" />
   </template>
@@ -24,7 +24,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICurrency>({
   currencyCode: props.currencyCodeGot || "",
   currencyName: "",
-  allowDelete: true,
+  currencySymbol: "",
   sort: 0,
 });
 
@@ -39,6 +39,7 @@ async function searchingCategoryCode() {
     if (res.data.returnCode === 0) {
       dataParams.currencyCode = res.data.data.currencyCode;
       dataParams.currencyName = res.data.data.currencyName;
+      dataParams.currencySymbol = res.data.data.currencySymbol;
       dataParams.sort = res.data.data.sort;
       await categoryCodeDataHandling();
     } else {
@@ -46,7 +47,7 @@ async function searchingCategoryCode() {
     }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
-  }  
+  }
 }
 
 
@@ -70,6 +71,11 @@ async function categoryCodeDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="currencyName" value="${dataParams.currencyName}" />
+        </div>
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">貨幣符號：</span>
+          <input class="${tailwindStyles.inputClasses}" id="currencySymbol" value="${dataParams.currencySymbol}" />
         </div>
 
 
@@ -100,6 +106,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
       dataParams.currencyCode = (document.getElementById("currencyCode") as HTMLInputElement).value;
       dataParams.currencyName = (document.getElementById("currencyName") as HTMLInputElement).value;
+      dataParams.currencySymbol = (document.getElementById("currencySymbol") as HTMLInputElement).value;
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
 
 

@@ -28,7 +28,6 @@ const currencyList = ref<ICurrency[]>([]);
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
-  
   await searchingCurrencyList();
   if (props.currencyIdGot) {
     isSelectDisabled.value = props.isDisable;

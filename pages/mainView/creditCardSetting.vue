@@ -19,6 +19,7 @@
                 <div :class="tailwindStyles.thClasses">信用卡名稱</div>
                 <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
                 <div :class="tailwindStyles.thClasses">發卡機構</div>
+                <div :class="tailwindStyles.thClasses">結算貨幣</div>
                 <div :class="tailwindStyles.thClasses">每月額度</div>
                 <div :class="tailwindStyles.thClasses">建立時間</div>
                 <div :class="tailwindStyles.thClasses">操作</div>
@@ -32,6 +33,7 @@
                   {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
                 </div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
                 <div :class="tailwindStyles.tdClasses">
@@ -63,9 +65,7 @@ definePageMeta({
   subTitle: "信用卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
 const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardData.vue"));
 
 const currentPage = ref<number>(1);

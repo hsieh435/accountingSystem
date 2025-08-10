@@ -7,24 +7,25 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
-import { ICashCardList } from "@/models/index";
-import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
+import { reactive, createApp, defineAsyncComponent } from "vue";
+import { fetchCashCardById, fetchCashCardCreate, fetchCashCardUpdate } from "@/server/cashCardApi";
+import { ICashCardList, IResponse } from "@/models/index";
+import { getCurrentYMD, yearMonthDayTimeFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ cashCardIdGot?: string; userIdGot?: string; }>(), { cashCardIdGot: "", userIdGot: "" });
+const props = withDefaults(defineProps<{ cashCardIdGot?: string; userIdGot?: string }>(), {
+  cashCardIdGot: "",
+  userIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
 
-
-
 const dataParams = reactive<ICashCardList>({
-  cashCardId: props.cashCardIdGot || "",
-  cashCardUser: "",
-  cashCardName: "",
-  currency: "",
+  cashcardId: props.cashCardIdGot || "",
+  userId: "",
+  cashcardName: "",
+  currency: "NTD",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -32,19 +33,40 @@ const dataParams = reactive<ICashCardList>({
   alertValue: 0,
   openAlert: false,
   createdDate: getCurrentYMD(),
+  note: "",
 });
 
-
-
 async function searchingCashCardData() {
-
+  console.log("props:", props);
   // cashCardDataHandling();
+
+  try {
+    const res = (await fetchCashCardById(props.cashCardIdGot)) as IResponse;
+    console.log("fetchCashCardById:", res.data.data);
+    if (res.data.returnCode === 0) {
+      dataParams.cashcardId = res.data.data.cashcardId;
+      dataParams.userId = res.data.data.userId;
+      dataParams.cashcardName = res.data.data.cashcardName;
+      dataParams.currency = res.data.data.currency;
+      dataParams.startingAmount = res.data.data.startingAmount;
+      dataParams.presentAmount = res.data.data.presentAmount;
+      dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
+      dataParams.alertValue = res.data.data.alertValue;
+      dataParams.openAlert = res.data.data.openAlert;
+      dataParams.createdDate = res.data.data.createdDate;
+      dataParams.note = res.data.data.note;
+
+      await cashCardDataHandling();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
-
-
 async function cashCardDataHandling(apiMsg?: string) {
-  console.log(dataParams);
+  // console.log(dataParams);
 
   Swal.fire({
     title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
@@ -53,32 +75,38 @@ async function cashCardDataHandling(apiMsg?: string) {
         <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
-        ${props.cashCardIdGot ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">儲值票卡ID：</span>
-          <input class="${tailwindStyles.inputClasses}" id="cashCardId" value="${dataParams.cashCardId}" disabled />
-        </div>` :
-        ""}
-
-
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">儲值票卡名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="cashCardName" value="${dataParams.cashCardName}" />
+          <input class="${tailwindStyles.inputClasses}" id="cashcardName" value="${dataParams.cashcardName}" />
         </div>
 
 
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">票卡結算貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        ${
+          props.cashCardIdGot
+            ? ""
+            : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
-        </div>
+        </div>`
+        }
 
 
-        ${props.cashCardIdGot ? `
+        ${
+          props.cashCardIdGot
+            ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
-        </div>` :
-        ""}
+        </div>`
+            : ""
+        }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -98,30 +126,44 @@ async function cashCardDataHandling(apiMsg?: string) {
         </div>
 
 
-        <div class="flex justify-center items-center w-full my-2">
-          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label class="mx-1" for="openAlert">提醒</label>
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
         </div>
 
 
-        ${props.cashCardIdGot ? `
+        <div class="flex justify-start items-start grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+        </div>
+
+
+        ${
+          props.cashCardIdGot
+            ? `
           <div class="flex justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-            <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-          </div>` :
-        ""}
+            <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          </div>`
+            : ""
+        }
 
       </div>
     `,
     confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
+      let currencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+        {
+          currencyIdGot: dataParams.currency || "",
+          sellectAll: false,
+          isDisable: props.cashCardIdGot ? true : false,
+        },
+      );
+      currencySelect.mount("#currencySelectComponent");
+
       // const startingAmount = document.getElementById("startingAmount") as HTMLInputElement;
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const maximumValueAllowed = document.getElementById("maximumValueAllowed") as HTMLInputElement;
@@ -137,9 +179,9 @@ async function cashCardDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        console.log("minimumValueAllowed:", minimumValueAllowed.value);
-        console.log("maximumValueAllowed:", maximumValueAllowed.value);
-        console.log("alertValue:", alertValue.value);
+        // console.log("minimumValueAllowed:", minimumValueAllowed.value);
+        // console.log("maximumValueAllowed:", maximumValueAllowed.value);
+        // console.log("alertValue:", alertValue.value);
 
         maximumValueAllowed.min = minimumValueAllowed.value;
         minimumValueAllowed.max = maximumValueAllowed.value;
@@ -147,11 +189,31 @@ async function cashCardDataHandling(apiMsg?: string) {
         // startingAmount.min = minimumValueAllowed.value;
         alertValue.max = maximumValueAllowed.value;
         alertValue.min = minimumValueAllowed.value;
+
+        if (Number(alertValue.value) < Number(minimumValueAllowed.value)) {
+          alertValue.value = minimumValueAllowed.value;
+        }
+        if (Number(alertValue.value) > Number(maximumValueAllowed.value)) {
+          alertValue.value = maximumValueAllowed.value;
+        }
+        if (Number(minimumValueAllowed.value) > Number(maximumValueAllowed.value)) {
+          minimumValueAllowed.value = maximumValueAllowed.value;
+        }
+        if (Number(maximumValueAllowed.value) < Number(minimumValueAllowed.value)) {
+          maximumValueAllowed.value = minimumValueAllowed.value;
+        }
       }
 
-      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
-      openAlertCheckbox.checked = dataParams.openAlert;
-
+      let switchComponent = createApp(
+        defineAsyncComponent(() => import("@/components/ui/switch.vue")),
+        {
+          switchValueGot: dataParams.openAlert,
+          onSendBackSwitchValue: (switchValue: boolean) => {
+            dataParams.openAlert = switchValue;
+          },
+        },
+      );
+      switchComponent.mount("#switchComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -161,24 +223,27 @@ async function cashCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.cashCardIdGot) {
-        dataParams.cashCardId = getCurrentTimestamp() + "";
+      dataParams.cashcardName = (document.getElementById("cashcardName") as HTMLInputElement).value;
+      if (!dataParams.cashcardId) {
+        dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
-
-      dataParams.cashCardName = (document.getElementById("cashCardName") as HTMLInputElement).value;
-      dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.presentAmount =
-        props.cashCardIdGot ?
-        Number((document.getElementById("presentAmount") as HTMLInputElement).value) :
-        Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
-      dataParams.maximumValueAllowed = Number((document.getElementById("maximumValueAllowed") as HTMLInputElement).value);
+      dataParams.presentAmount = props.cashCardIdGot
+        ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
+        : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number(
+        (document.getElementById("minimumValueAllowed") as HTMLInputElement).value,
+      );
+      dataParams.maximumValueAllowed = Number(
+        (document.getElementById("maximumValueAllowed") as HTMLInputElement).value,
+      );
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
-      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
+      dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
-
-      if (!dataParams.cashCardName) {
+      if (!dataParams.cashcardName) {
         errors.push("請填寫儲值票卡名稱");
+      }
+      if (!dataParams.currency) {
+        errors.push("請填寫票卡結算貨幣");
       }
       if (isNaN(dataParams.startingAmount)) {
         errors.push("請填寫儲值票卡初始金額");
@@ -195,7 +260,10 @@ async function cashCardDataHandling(apiMsg?: string) {
       if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
         errors.push("請填寫提醒金額");
       }
-      if (dataParams.alertValue < dataParams.minimumValueAllowed || dataParams.alertValue > dataParams.maximumValueAllowed) {
+      if (
+        dataParams.alertValue < dataParams.minimumValueAllowed ||
+        dataParams.alertValue > dataParams.maximumValueAllowed
+      ) {
         errors.push("提醒金額需介於最小儲值金額與最大儲值金額之間");
       }
       if (errors.length > 0) {
@@ -208,11 +276,22 @@ async function cashCardDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
+      try {
+        const res = (await (props.cashCardIdGot ? fetchCashCardUpdate : fetchCashCardCreate)(
+          result.value,
+        )) as IResponse;
+        // console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

@@ -19,7 +19,7 @@
                 <div :class="tailwindStyles.thClasses">NO.</div>
                 <div :class="tailwindStyles.thClasses">貨幣代碼</div>
                 <div :class="tailwindStyles.thClasses">貨幣名稱</div>
-                <div :class="tailwindStyles.thClasses">可否刪除</div>
+                <div :class="tailwindStyles.thClasses">貨幣符號</div>
                 <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
@@ -28,12 +28,10 @@
                 <div :class="tailwindStyles.tdClasses">{{ currency.no }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="currency.allowDelete" />
-                </div>
+                <div :class="tailwindStyles.tdClasses">{{ currency.currencySymbol }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
-                  <ui-buttonGroup :showRemove="currency.allowDelete" :createText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
+                  <ui-buttonGroup showRemove :removeText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
                 </div>
               </div>
             </div>
@@ -95,7 +93,7 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function searchingCurrencyList() {
   try {
     const res = await fetchCurrencyList() as IResponse;
-    console.log("res:", res);
+    console.log("fetchCurrencyList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyList.value = res.data.data;
       await currencyListFilterEvent();
@@ -110,7 +108,7 @@ async function searchingCurrencyList() {
 
 
 async function currencyListFilterEvent() {
-  currencyListFiltered.value = currencyList.value;  
+  currencyListFiltered.value = currencyList.value;
   tableData.value = sliceArray(currencyListFiltered.value, currentPage.value, itemsPerPage.value);
   // console.log("currencyListFiltered:", currencyListFiltered.value);
   // console.log("tableData:", tableData.value);

@@ -2,7 +2,7 @@
   <div class="w-full px-3">
     <div class="flex flex-wrap justify-start items-center">
       <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <cashCardData />
+      <cashCardData @dataReseaching="cashCardSearching" />
     </div>
 
     <template v-if="cashCardList.length > 0">
@@ -23,19 +23,19 @@
               <div :class="tailwindStyles.thClasses">建立時間</div>
               <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashCardId">
-                <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.cashCardName }}</div>
-                <div :class="tailwindStyles.tdClasses"></div>
-                <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <cashCardData :cashCardId="card.cashCardId" />
-                  <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard()" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashcardId">
+              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <cashCardData :cashCardIdGot="card.cashcardId" @dataReseaching="cashCardSearching" />
+                <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard(card.cashcardId)" />
               </div>
             </div>
           </div>
@@ -49,8 +49,9 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCashCardList, fetchCashCardDelete } from "@/server/cashCardApi";
 import { IResponse, ICashCardList, IAccountSearchingParams } from "@/models/index";
-import { sliceArray } from "@/composables/tools";
+import { yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 
@@ -61,9 +62,7 @@ definePageMeta({
   subTitle: "儲值票卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
 const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardData.vue"));
 
 const currentPage = ref<number>(1);
@@ -94,26 +93,43 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function cashCardSearching() {
-  //
+
+  try {
+    const res = (await fetchCashCardList(searchingParams)) as IResponse;
+    // console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      cashCardList.value = res.data.data;
+      await cashCardListFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function cashCardListFilterEvent() {
-  // cashCardList.value = data.value;
-  // cashCardListFiltered.value = cashCardList.value;
-  // tableData.value = cashCardListFiltered.value;
-
   cashCardListFiltered.value = cashCardList.value;
   if (searchWord.value.length > 0) {
     cashCardListFiltered.value = cashCardListFiltered.value.filter((row: ICashCardList) => {
-      return row.cashCardName.toLowerCase().includes(searchWord.value.toLowerCase());
+      return row.cashcardName.toLowerCase().includes(searchWord.value.toLowerCase());
     });
   }
 
   tableData.value = sliceArray(cashCardListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-async function removeCashCard() {
-  //
+async function removeCashCard(cashcardId: string) {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除儲值票卡資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCashCardDelete,
+    apiParams: cashcardId,
+  });
+
+  if (confirmResult) {
+    await cashCardSearching();
+  }
 }
 </script>
 <style lang="scss" scoped></style>
