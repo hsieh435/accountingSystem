@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center">
-      <accountRecordSearching :accountTypeId="'isCashflowAble'" :accountTypeName="'持有現金'" /> 
+      <accountRecordSearching :accountTypeId="'isCashflowAble'" :accountTypeName="'持有現金'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">
@@ -9,7 +9,7 @@
     </div>
     <div class="mx-5">
       <template v-if="cashFlowRecord.length > 0">
-        <ui-pagination 
+        <ui-pagination
           :totalDataQuanity="cashFlowRecordFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
@@ -30,7 +30,7 @@
                 <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
                   <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                  <div :class="tailwindStyles.tdClasses">{{ record.incomingOutgoing }}</div>
+                  <div :class="tailwindStyles.tdClasses">{{ record.transactionType }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
                   <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
                   <div :class="tailwindStyles.tdClasses">0</div>
@@ -90,7 +90,7 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 
 async function cashFlowRecordFilterEvent() {
-  cashFlowRecordFiltered.value = cashFlowRecord.value;  
+  cashFlowRecordFiltered.value = cashFlowRecord.value;
   tableData.value = sliceArray(cashFlowRecordFiltered.value, currentPage.value, itemsPerPage.value);
 }
 

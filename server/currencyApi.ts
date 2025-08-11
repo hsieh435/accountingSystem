@@ -4,8 +4,7 @@ import { ICurrency } from "@/models/index";
 
 
 export async function fetchCurrencyList() {
-  const response =
-    await apiFetch("/accounting_system_backend/api/parameters/currencyList", "GET");
+  const response = await apiFetch("/accounting_system_backend/api/parameters/currencyList", "GET");
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
@@ -17,9 +16,8 @@ export async function fetchCurrencyList() {
 
 
 
-export async function fetchEachCurrency(currencyCode: string) {
-  const response =
-    await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "GET");
+export async function fetchCurrencyByCurrencyCode(currencyCode: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "GET");
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
@@ -31,9 +29,11 @@ export async function fetchEachCurrency(currencyCode: string) {
 
 
 
-export async function fetchCreateCurrency(data: ICurrency) {
+export async function fetchCurrencyCreate(data: ICurrency) {
   const response =
-    await apiFetch("/accounting_system_backend/api/parameters/currency/create", "POST", { body: JSON.stringify(data) });
+    await apiFetch("/accounting_system_backend/api/parameters/currency/create", "POST", {
+    body: JSON.stringify(data),
+  });
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
@@ -45,9 +45,10 @@ export async function fetchCreateCurrency(data: ICurrency) {
 
 
 
-export async function fetchUpdateCurrency(data: ICurrency) {
-  const response =
-    await apiFetch("/accounting_system_backend/api/parameters/currency/update", "PUT", { body: JSON.stringify(data) });
+export async function fetchCurrencyUpdate(data: ICurrency) {
+  const response = await apiFetch("/accounting_system_backend/api/parameters/currency/update", "PUT", {
+    body: JSON.stringify(data),
+  });
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);
@@ -59,9 +60,8 @@ export async function fetchUpdateCurrency(data: ICurrency) {
 
 
 
-export async function fetchDeleteCurrency(currencyCode: string) {
-  const response =
-    await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "DELETE");
+export async function fetchCurrencyDelete(currencyCode: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "DELETE");
 
   if (!response.ok) {
     throw new Error("HTTP error! status:" + response.status);

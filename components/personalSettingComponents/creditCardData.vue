@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.creditCardIdGot">
     <ui-buttonGroup showView :viewText="'檢視信用卡'" @dataView="searchingCreditCardData()" />
+    <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
   </template>
   <template v-if="!props.creditCardIdGot">
     <ui-buttonGroup showCreate :createText="'新增信用卡'" @dataCreate="creditCardDataHandling()" />
@@ -8,40 +9,55 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
-import { ICreditCardList } from "@/models/index";
-import { getCurrentYMD, getCurrentTimestamp } from "@/composables/tools";
+import { fetchCreditCardById, fetchCreditCardCreate, fetchCreditCardUpdate, fetchCreditCardDelete } from "@/server/creditCardApi";
+import { ICreditCardList, IResponse } from "@/models/index";
+import { yearMonthDayTimeFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ creditCardIdGot?: string; userIdGot?: string; }>(), { creditCardIdGot: "", userIdGot: "" });
+const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<ICreditCardList>({
   creditcardId: props.creditCardIdGot || "",
-  creditcardUser: "",
+  userId: "",
   creditcardName: "",
   creditcardBankCode: "",
   creditcardBankName: "",
   creditcardSchema: "",
-  currency: "TWD",
+  currency: "NTD",
   creditPerMonth: 0,
   expirationDate: "",
   alertValue: 0,
   openAlert: false,
-  createdDate: getCurrentYMD(),
+  enable: true,
+  createdDate: "",
+  note: "",
 });
 
-
 async function searchingCreditCardData() {
-  // 在這裡可以加入 API 呼叫來獲取信用卡資料
-  creditCardDataHandling();
+  const res = (await fetchCreditCardById(props.creditCardIdGot)) as IResponse;
+  if (res.data.returnCode === 0) {
+    dataParams.creditcardId = res.data.data.creditcardId;
+    dataParams.userId = res.data.data.userId;
+    dataParams.creditcardName = res.data.data.creditcardName;
+    dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
+    dataParams.creditcardBankName = res.data.data.creditcardBankName;
+    dataParams.creditcardSchema = res.data.data.creditcardSchema;
+    dataParams.currency = res.data.data.currency;
+    dataParams.creditPerMonth = res.data.data.creditPerMonth;
+    dataParams.expirationDate = res.data.data.expirationDate;
+    dataParams.alertValue = res.data.data.alertValue;
+    dataParams.openAlert = res.data.data.openAlert;
+    dataParams.createdDate = res.data.data.createdDate;
+    dataParams.note = res.data.data.note;
+
+    await creditCardDataHandling();
+  } else {
+    showAxiosToast({ message: res.data.message });
+  }
 }
-
-
 
 async function creditCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -61,18 +77,24 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行代碼：</span>
-          <input class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行：</span>
-          <input class="${tailwindStyles.inputClasses}" id="creditcardBankName" value="${dataParams.creditcardBankName}" ${props.creditCardIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡機構：</span>
           <div id="creditcardSchemaSelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">信用卡結算貨幣：</span>
+          <div id="currencySelectComponent"></div>
         </div>
 
 
@@ -93,16 +115,32 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
+          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <div class="mx-2" id="switchComponent"></div>
         </div>
 
 
-        ${props.creditCardIdGot ? `
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">到期年月：</span>
+          <div class="mx-2" id="yearMonthComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-start grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+        </div>
+
+
+        ${
+          props.creditCardIdGot
+            ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` :
-        ""}
+          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+        </div>`
+            : ""
+        }
 
       </div>
     `,
@@ -111,21 +149,36 @@ async function creditCardDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
-      let creditCardSchemaSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue")), {
-        selectId: "cashCard",
-        sellectAll: false,
-        isAble: props.creditCardIdGot ? true : false,
-        onSendbackSchemaId: (schemaId: string) => {
-          dataParams.creditcardSchema = schemaId;
+      let creditCardSchemaSelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue")),
+        {
+          selectId: dataParams.creditcardSchema,
+          sellectAll: false,
+          isAble: props.creditCardIdGot ? true : false,
+          onSendbackSchemaId: (schemaId: string) => {
+            dataParams.creditcardSchema = schemaId;
+          },
         },
-      });
+      );
       creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
+
+      let currencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+        {
+          currencyIdGot: dataParams.currency || "",
+          sellectAll: false,
+          isDisable: props.creditCardIdGot ? true : false,
+          onSendbackCurrencyId: (currencyId: string) => {
+            dataParams.currency = currencyId;
+          },
+        },
+      );
+      currencySelect.mount("#currencySelectComponent");
 
       const creditPerMonth = document.getElementById("creditPerMonth") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       creditPerMonth.addEventListener("change", () => {
-        validateAlertValue()
+        validateAlertValue();
       });
       alertValue.addEventListener("change", () => {
         validateAlertValue();
@@ -138,14 +191,29 @@ async function creditCardDataHandling(apiMsg?: string) {
         }
       }
 
-
-      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
-        switchValueGot: dataParams.openAlert,
-        onSendBackSwitchValue: (switchValue: boolean) => {
-          dataParams.openAlert = switchValue;
+      let switchComponent = createApp(
+        defineAsyncComponent(() => import("@/components/ui/switch.vue")),
+        {
+          switchValueGot: dataParams.openAlert,
+          onSendBackSwitchValue: (switchValue: boolean) => {
+            dataParams.openAlert = switchValue;
+          },
         },
-      });
+      );
       switchComponent.mount("#switchComponent");
+
+
+
+      let yearMonthComponent = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue")),
+        {
+          yearMonthGot: dataParams.expirationDate,
+          onSendBackYearMonth: (yearMonth: string) => {
+            dataParams.expirationDate = yearMonth;
+          },
+        },
+      );
+      yearMonthComponent.mount("#yearMonthComponent");
 
 
       if (apiMsg) {
@@ -157,10 +225,11 @@ async function creditCardDataHandling(apiMsg?: string) {
       const errors: string[] = [];
 
       dataParams.creditcardName = (document.getElementById("creditcardName") as HTMLInputElement).value;
+      dataParams.creditcardBankCode = (document.getElementById("creditcardBankCode") as HTMLInputElement).value;
+      dataParams.creditcardBankName = (document.getElementById("creditcardBankName") as HTMLInputElement).value;
       dataParams.creditPerMonth = Number((document.getElementById("creditPerMonth") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
-      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
-
+      dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
       if (!dataParams.creditcardName) {
         errors.push("請填寫信用卡名稱");
@@ -193,12 +262,36 @@ async function creditCardDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-
+      // console.log("result:", result.value);
+      try {
+        const res = (await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(
+          result.value,
+        )) as IResponse;
+        // console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
-};
+}
 
+async function removeCreditcardData() {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除信用卡資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCreditCardDelete,
+    apiParams: props.creditCardIdGot,
+  });
 
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
+}
 </script>
 <style lang="scss" scoped></style>

@@ -14,15 +14,5 @@ definePageMeta({
 
 
 
-// const posts = await $fetch("https://randomuser.me/api/?results=5", {
-//   method: "GET",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-// });
-// console.log("posts:", posts);
-
-
-
 </script>
 <style lang="scss" scoped></style>

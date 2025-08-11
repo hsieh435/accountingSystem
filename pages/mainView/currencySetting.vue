@@ -31,7 +31,10 @@
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencySymbol }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
-                  <ui-buttonGroup showRemove :removeText="'刪除貨幣資料'" @dataRemove="removeCurrency(currency.currencyCode)" />
+                  <ui-buttonGroup
+                    showRemove
+                    :removeText="'刪除貨幣資料'"
+                    @dataRemove="removeCurrency(currency.currencyCode)" />
                 </div>
               </div>
             </div>
@@ -46,13 +49,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchCurrencyList, fetchDeleteCurrency } from "@/server/currencyApi";
+import { fetchCurrencyList, fetchCurrencyDelete } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
-
-
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -61,11 +62,7 @@ definePageMeta({
   subTitle: "支出類型設定",
 });
 
-
-
 const currencyData = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencyData.vue"));
-
-
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -74,25 +71,19 @@ const currencyList = ref<ICurrency[]>([]);
 const currencyListFiltered = ref<ICurrency[]>([]);
 const tableData = ref<ICurrency[]>([]);
 
-
-
 onMounted(async () => {
   await searchingCurrencyList();
 });
 
-
-
-async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; }) {
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
   await currencyListFilterEvent();
 }
 
-
-
 async function searchingCurrencyList() {
   try {
-    const res = await fetchCurrencyList() as IResponse;
+    const res = (await fetchCurrencyList()) as IResponse;
     console.log("fetchCurrencyList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyList.value = res.data.data;
@@ -105,8 +96,6 @@ async function searchingCurrencyList() {
   }
 }
 
-
-
 async function currencyListFilterEvent() {
   currencyListFiltered.value = currencyList.value;
   tableData.value = sliceArray(currencyListFiltered.value, currentPage.value, itemsPerPage.value);
@@ -114,14 +103,12 @@ async function currencyListFilterEvent() {
   // console.log("tableData:", tableData.value);
 }
 
-
-
 async function removeCurrency(currencyCode: string) {
   // console.log("currencyCode:", currencyCode);
   const confirmResult = await showConfirmDialog({
     message: "確定刪除該貨幣資料嗎？",
     confirmButtonMsg: "刪除",
-    executionApi: fetchDeleteCurrency,
+    executionApi: fetchCurrencyDelete,
     apiParams: currencyCode,
   });
 
@@ -129,8 +116,5 @@ async function removeCurrency(currencyCode: string) {
     await searchingCurrencyList();
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

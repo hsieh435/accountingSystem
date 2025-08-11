@@ -1,10 +1,18 @@
 <template>
-  <div class="w-64 flex justify-center items-center">
-  </div>
+  <UInput v-model="yearMonth" type="month" :month-controls="true" icon="i-lucide-calendar" />
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-const date = ref<string>("");
+import { ref, watch } from "vue";
+
+
+
+const yearMonth = ref<string>("");
+
+
+
+watch(yearMonth, () => {
+  console.log("yearMonth:", yearMonth.value);
+});
 
 
 

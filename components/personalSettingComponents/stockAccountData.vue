@@ -39,7 +39,7 @@ const dataParams = reactive<IStockAccountList>({
 
 
 async function searchingStockAccountData() {
-  stockAccountDataHandling();  
+  stockAccountDataHandling();
 }
 
 
@@ -105,7 +105,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` : 
+        </div>` :
         ""}
 
       </div>
@@ -113,10 +113,6 @@ async function stockAccountDataHandling(apiMsg?: string) {
     confirmButtonText: props.stockAccountIGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 
@@ -130,7 +126,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        // 
+        //
       }
 
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;

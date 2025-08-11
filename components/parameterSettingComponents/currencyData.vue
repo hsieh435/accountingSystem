@@ -8,18 +8,14 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchEachCurrency, fetchCreateCurrency, fetchUpdateCurrency } from "@/server/currencyApi";
+import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "", });
+const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<ICurrency>({
   currencyCode: props.currencyCodeGot || "",
@@ -28,13 +24,11 @@ const dataParams = reactive<ICurrency>({
   sort: 0,
 });
 
-
-
 async function searchingCategoryCode() {
   // console.log("props:", props.currencyCodeGot);
 
   try {
-    const res = await fetchEachCurrency(props.currencyCodeGot) as IResponse;
+    const res = (await fetchCurrencyByCurrencyCode(props.currencyCodeGot)) as IResponse;
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       dataParams.currencyCode = res.data.data.currencyCode;
@@ -50,8 +44,6 @@ async function searchingCategoryCode() {
   }
 }
 
-
-
 async function categoryCodeDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
@@ -64,7 +56,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣代碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="currencyCode" value="${dataParams.currencyCode}" ${props.currencyCodeGot ? "disabled" : "" } />
+          <input class="${tailwindStyles.inputClasses}" id="currencyCode" value="${dataParams.currencyCode}" ${props.currencyCodeGot ? "disabled" : ""} />
         </div>
 
 
@@ -95,7 +87,6 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;
@@ -108,7 +99,6 @@ async function categoryCodeDataHandling(apiMsg?: string) {
       dataParams.currencyName = (document.getElementById("currencyName") as HTMLInputElement).value;
       dataParams.currencySymbol = (document.getElementById("currencySymbol") as HTMLInputElement).value;
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
-
 
       if (!dataParams.currencyCode) {
         errors.push("請填寫貨幣代碼");
@@ -131,7 +121,9 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res = await (props.currencyCodeGot ? fetchUpdateCurrency : fetchCreateCurrency)(result.value) as IResponse;
+        const res = (await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(
+          result.value,
+        )) as IResponse;
         console.log("res:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -144,8 +136,6 @@ async function categoryCodeDataHandling(apiMsg?: string) {
       }
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.currencyAccountIdGot">
     <ui-buttonGroup showView :viewText="'檢視存款帳戶'" @dataView="searchingCurrencyAccountData()" />
+    <ui-buttonGroup showRemove :removeText="'刪除存款帳戶'" @dataRemove="removeCurrencyAccountData()" />
   </template>
   <template v-if="!props.currencyAccountIdGot">
     <ui-buttonGroup showCreate :createText="'新增存款帳戶'" @dataCreate="currencyAccountDataHandling()" />
@@ -8,17 +9,16 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { ICurrencyAccountList } from "@/models/index";
+import { ICurrencyAccountList, IResponse } from "@/models/index";
+import { fetchCreditCardById, fetchCreditCardCreate, fetchCreditCardUpdate, fetchCreditCardDelete } from "@/server/currencyAccountApi";
+import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { getCurrentYMD } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ currencyAccountIdGot?: string; }>(), { currencyAccountIdGot: "" });
+const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<ICurrencyAccountList>({
   accountId: props.currencyAccountIdGot || "",
@@ -34,16 +34,14 @@ const dataParams = reactive<ICurrencyAccountList>({
   alertValue: 0,
   openAlert: false,
   isSalaryAccount: false,
-  createdDate: getCurrentYMD(),
+  enable: true,
+  createdDate: "",
+  note: "",
 });
 
-
-
 async function searchingCurrencyAccountData() {
-  currencyAccountDataHandling();
+  // currencyAccountDataHandling();
 }
-
-
 
 async function currencyAccountDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -108,25 +106,23 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        ${props.currencyAccountIdGot ? `
+        ${
+          props.currencyAccountIdGot
+            ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
           <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` :
-        ""}
+        </div>`
+            : ""
+        }
 
       </div>
     `,
     confirmButtonText: props.currencyAccountIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       minimumValueAllowed.addEventListener("change", () => {
@@ -137,12 +133,12 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        // 
+        //
       }
 
       const isSalaryAccountCheckbox = document.getElementById("isSalaryAccount") as HTMLInputElement;
       isSalaryAccountCheckbox.checked = dataParams.isSalaryAccount;
-      
+
       const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
       openAlertCheckbox.checked = dataParams.openAlert;
 
@@ -157,11 +153,12 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number(
+        (document.getElementById("minimumValueAllowed") as HTMLInputElement).value,
+      );
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
       dataParams.isSalaryAccount = Boolean((document.getElementById("isSalaryAccount") as HTMLInputElement).checked);
-
 
       if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");
@@ -198,11 +195,21 @@ async function currencyAccountDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
     }
   });
-};
+}
 
+async function removeCurrencyAccountData() {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除信用卡資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCreditCardDelete,
+    apiParams: props.currencyAccountIdGot,
+  });
 
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
+}
 </script>
 <style lang="scss" scoped></style>

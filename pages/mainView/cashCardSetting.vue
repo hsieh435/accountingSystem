@@ -15,6 +15,7 @@
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
               <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">啟用</div>
               <div :class="tailwindStyles.thClasses">票卡名稱</div>
               <div :class="tailwindStyles.thClasses">使用貨幣</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
@@ -27,6 +28,7 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashcardId">
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
+              <div :class="tailwindStyles.tdClasses"></div>
               <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
@@ -35,7 +37,6 @@
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <cashCardData :cashCardIdGot="card.cashcardId" @dataReseaching="cashCardSearching" />
-                <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCard(card.cashcardId)" />
               </div>
             </div>
           </div>
@@ -49,11 +50,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashCardList, fetchCashCardDelete } from "@/server/cashCardApi";
+import { fetchCashCardList } from "@/server/cashCardApi";
 import { IResponse, ICashCardList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -119,17 +120,7 @@ async function cashCardListFilterEvent() {
   tableData.value = sliceArray(cashCardListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-async function removeCashCard(cashcardId: string) {
-  const confirmResult = await showConfirmDialog({
-    message: "即將刪除儲值票卡資料",
-    confirmButtonMsg: "確認刪除",
-    executionApi: fetchCashCardDelete,
-    apiParams: cashcardId,
-  });
 
-  if (confirmResult) {
-    await cashCardSearching();
-  }
-}
+
 </script>
 <style lang="scss" scoped></style>

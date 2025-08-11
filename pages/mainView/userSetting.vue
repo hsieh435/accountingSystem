@@ -86,14 +86,9 @@ async function submitUserData(apiMsg?: string) {
     confirmButtonText: "修改",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 
-  
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;

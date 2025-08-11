@@ -2,55 +2,59 @@
   <div class="w-full px-3">
     <div class="flex flex-wrap justify-start items-center">
       <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <currencyAccountsData />
+      <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
     </div>
 
-    <div class="mx-5">
-      <template v-if="currencyAccountList.length > 0">
-        <ui-pagination
-          :totalDataQuanity="currencyAccountList.length"
-          :searchingPlaceholder="'搜尋帳戶名稱'"
-          @tableSliceChange="settingTableSlice" />
-        <template v-if="currencyAccountListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">帳戶名稱</div>
-                <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
-                <div :class="tailwindStyles.thClasses">目前金額</div>
-                <div :class="tailwindStyles.thClasses">薪資帳戶</div>
-                <div :class="tailwindStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
-              </div>
+    <template v-if="currencyAccountList.length > 0">
+      <ui-pagination
+        :totalDataQuanity="currencyAccountList.length"
+        :searchingPlaceholder="'搜尋帳戶名稱'"
+        @tableSliceChange="settingTableSlice" />
+      <template v-if="currencyAccountListFiltered.length > 0">
+        <div :class="tailwindStyles.tableClasses">
+          <div :class="tailwindStyles.theadClasses">
+            <div :class="tailwindStyles.theadtrClasses">
+              <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">帳戶名稱</div>
+              <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
+              <div :class="tailwindStyles.thClasses">目前金額</div>
+              <div :class="tailwindStyles.thClasses">薪資帳戶</div>
+              <div :class="tailwindStyles.thClasses">建立時間</div>
+              <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
-                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-                <div :class="tailwindStyles.tdClasses"
-                  >{{ account.accountBankCode }} / {{ account.accountBankName }}</div
-                >
-                <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.isSalaryAccount }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <currencyAccountsData :currencyAccountIdGot="account.accountId" />
-                  <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeCurrencyAccountData()" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+              <div :class="tailwindStyles.tdClasses"></div>
+              <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                {{ account.accountBankCode }} / {{ account.accountBankName }}
+              </div>
+              <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>
+              </div>
+              <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <currencyAccountsData
+                  :currencyAccountIdGot="account.accountId"
+                  @dataReseaching="currencyAccountSearching()" />
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
-      <template v-else-if="currencyAccountList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
-      </template>
-    </div>
+    </template>
+    <template v-else-if="currencyAccountList.length === 0">
+      <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+    </template>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCreditCardList } from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -114,10 +118,6 @@ async function currencyAccountListFilterEvent() {
   }
 
   tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
-}
-
-async function removeCurrencyAccountData() {
-  //
 }
 </script>
 <style lang="scss" scoped></style>

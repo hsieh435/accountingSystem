@@ -95,7 +95,7 @@ async function searchingTradeCategoryList() {
 
 
 async function tradeCategoryListFilterEvent() {
-  tradeCategoryListFiltered.value = tradeCategoryList.value;  
+  tradeCategoryListFiltered.value = tradeCategoryList.value;
   tableData.value = sliceArray(tradeCategoryListFiltered.value);
 }
 
@@ -103,10 +103,10 @@ async function tradeCategoryListFilterEvent() {
 
 async function removeTradeCategory(categoryCode: string) {
   // console.log("categoryCode:", categoryCode);
-  
+
   const confirmResult = await showConfirmDialog({
-    message: "確定刪除該交易類別嗎？",
-    confirmButtonMsg: "刪除",
+    message: "即將刪除該收支類別",
+    confirmButtonMsg: "確定刪除",
     executionApi: fetchDeleteTradeCategory,
     apiParams: categoryCode,
   });

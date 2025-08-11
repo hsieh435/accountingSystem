@@ -40,10 +40,6 @@
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
-                <ui-buttonGroup
-                  showRemove
-                  :removeText="'刪除現金流'"
-                  @dataRemove="removeCashFlowData(cashFlow.cashflowId)" />
               </div>
             </div>
           </div>
@@ -57,11 +53,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashFlowList, fetchCashFlowDelete } from "@/server/cashFlowApi";
+import { fetchCashFlowList } from "@/server/cashFlowApi";
 import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -70,9 +66,7 @@ definePageMeta({
   subTitle: "現金資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
 const cashFlowData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowData.vue"));
 
 const currentPage = ref<number>(1);
@@ -126,17 +120,7 @@ async function cashFlowListFilterEvent() {
   tableData.value = sliceArray(cashFlowListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-async function removeCashFlowData(cashflowId: string) {
-  const confirmResult = await showConfirmDialog({
-    message: "即將刪除現金流資料",
-    confirmButtonMsg: "確認刪除",
-    executionApi: fetchCashFlowDelete,
-    apiParams: cashflowId,
-  });
 
-  if (confirmResult) {
-    await cashFlowSearching();
-  }
-}
+
 </script>
 <style lang="scss" scoped></style>

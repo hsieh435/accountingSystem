@@ -5,44 +5,44 @@
       <stockAccountData />
     </div>
 
-    <div class="mx-5">
-      <template v-if="stockAccountList.length > 0">
-        <ui-pagination
-          :totalDataQuanity="stockAccountList.length"
-          :searchingPlaceholder="'搜尋帳戶名稱'"
-          @tableSliceChange="settingTableSlice" />
-        <template v-if="stockAccountListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">帳戶名稱</div>
-                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
-                <div :class="tailwindStyles.thClasses">目前金額</div>
-                <div :class="tailwindStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
-              </div>
+    <template v-if="stockAccountList.length > 0">
+      <ui-pagination
+        :totalDataQuanity="stockAccountList.length"
+        :searchingPlaceholder="'搜尋帳戶名稱'"
+        @tableSliceChange="settingTableSlice" />
+      <template v-if="stockAccountListFiltered.length > 0">
+        <div :class="tailwindStyles.tableClasses">
+          <div :class="tailwindStyles.theadClasses">
+            <div :class="tailwindStyles.theadtrClasses">
+              <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">帳戶名稱</div>
+              <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+              <div :class="tailwindStyles.thClasses">目前金額</div>
+              <div :class="tailwindStyles.thClasses">建立時間</div>
+              <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
-                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <stockAccountData :stockAccountIGot="account.accountId" />
-                  <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+              <div :class="tailwindStyles.tdClasses"></div>
+              <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <stockAccountData :stockAccountIGot="account.accountId" />
+                <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
-      <template v-else-if="stockAccountList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
-      </template>
-    </div>
+    </template>
+    <template v-else-if="stockAccountList.length === 0">
+      <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+    </template>
   </div>
 </template>
 <script setup lang="ts">

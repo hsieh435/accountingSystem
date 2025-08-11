@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-start items-center">
     <div class="flex flex-wrap justify-start items-center me-3 my-2">
-      <span>貨幣：</span><currencySelect @sendbackCurrencyId="settingCurrency" />
+      <span>貨幣：</span><currencySelect sellectAll @sendbackCurrencyId="settingCurrency" />
     </div>
   </div>
 </template>

@@ -1,25 +1,18 @@
 <template>
   <template v-if="props.cashflowIdIdGot">
-    <ui-buttonGroup
-      showView
-      :viewText="'檢視現金流'"
-      @dataView="searchingCashflowData()"
-      :viewDisable="props.isDisable" />
+    <ui-buttonGroup showView :viewText="'檢視現金流'" @dataView="searchingCashflowData()" :viewDisable="props.isDisable" />
+    <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData()" :removeDisable="props.isDisable" />
   </template>
   <template v-if="!props.cashflowIdIdGot">
-    <ui-buttonGroup
-      showCreate
-      :createText="'新增現金流'"
-      @dataCreate="cashflowDataHandling()"
-      :createDisable="props.isDisable" />
+    <ui-buttonGroup showCreate :createText="'新增現金流'" @dataCreate="cashflowDataHandling()" :createDisable="props.isDisable" />
   </template>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, onMounted, watch, createApp } from "vue";
-import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate } from "@/server/cashFlowApi";
+import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, IResponse } from "@/models/index";
-import { getCurrentYMD, yearMonthDayTimeFormat } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { yearMonthDayTimeFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
@@ -39,7 +32,7 @@ const dataParams = reactive<ICashFlowList>({
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  createdDate: getCurrentYMD(),
+  createdDate: "",
   note: "",
 });
 
@@ -160,6 +153,9 @@ async function cashflowDataHandling(apiMsg?: string) {
           currencyIdGot: dataParams.currency,
           sellectAll: false,
           isDisable: true,
+          onSendbackCurrencyId: (currencyId: string) => {
+            dataParams.currency = currencyId;
+          },
         },
       );
       currencySelect.mount("#currencySelectComponent");
@@ -253,6 +249,21 @@ async function cashflowDataHandling(apiMsg?: string) {
       }
     }
   });
+}
+
+
+
+async function removeCashFlowData() {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除現金流資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCashFlowDelete,
+    apiParams: props.cashflowIdIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>

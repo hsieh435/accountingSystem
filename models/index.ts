@@ -78,7 +78,7 @@ export interface ICashFlowRecordList {
   userId: string;
   tradeDatetime: string;
   accountType: string;
-  incomingOutgoing: string;
+  transactionType: string;
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
@@ -113,7 +113,7 @@ export interface ICashCardRecordList {
   cashcardName?: string;
   accountType: string;
   tradeDatetime: string;
-  incomingOutgoing: string;
+  transactionType: string;
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
@@ -126,7 +126,7 @@ export interface ICashCardRecordList {
 export interface ICreditCardList {
   no?: number;
   creditcardId: string;
-  creditcardUser: string;
+  userId: string;
   creditcardName: string;
   creditcardBankCode: string;
   creditcardBankName: string;
@@ -137,7 +137,9 @@ export interface ICreditCardList {
   expirationDate: string;
   alertValue: number;
   openAlert: boolean;
+  enable: boolean;
   createdDate: string;
+  note: string;
 }
 
 // 信用卡收支紀錄 interface
@@ -174,7 +176,9 @@ export interface ICurrencyAccountList {
   alertValue: number;
   openAlert: boolean;
   isSalaryAccount: boolean;
+  enable: boolean;
   createdDate: string;
+  note: string;
 }
 
 // 存款帳戶收支紀錄 interface
@@ -185,7 +189,7 @@ export interface IcurrencyAccountRecordList {
   tradeDatetime: string;
   accountUser: string;
   accountType: string;
-  incomingOutgoing: string;
+  transactionType: string;
   tradeCategory: string;
   tradeAmount: number;
   currency: string;
@@ -220,7 +224,7 @@ export interface IStockAccountRecordList {
   accountId: string;
   tradeDatetime: string;
   accountUser: string;
-  incomingOutgoing: string;
+  transactionType: string;
   tradeCategory: string;
   stockNo: string;
   stockName: string;

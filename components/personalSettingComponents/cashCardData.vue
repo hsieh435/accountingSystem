@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.cashCardIdGot">
     <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="searchingCashCardData()" />
+    <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCardData()" />
   </template>
   <template v-if="!props.cashCardIdGot">
     <ui-buttonGroup showCreate :createText="'新增儲值票卡'" @dataCreate="cashCardDataHandling()" />
@@ -8,17 +9,14 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
-import { fetchCashCardById, fetchCashCardCreate, fetchCashCardUpdate } from "@/server/cashCardApi";
+import { fetchCashCardById, fetchCashCardCreate, fetchCashCardUpdate, fetchCashCardDelete } from "@/server/cashCardApi";
 import { ICashCardList, IResponse } from "@/models/index";
-import { getCurrentYMD, yearMonthDayTimeFormat } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { yearMonthDayTimeFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ cashCardIdGot?: string; userIdGot?: string }>(), {
-  cashCardIdGot: "",
-  userIdGot: "",
-});
+const props = withDefaults(defineProps<{ cashCardIdGot?: string }>(), { cashCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 const dataParams = reactive<ICashCardList>({
@@ -32,7 +30,7 @@ const dataParams = reactive<ICashCardList>({
   maximumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
-  createdDate: getCurrentYMD(),
+  createdDate: "",
   note: "",
 });
 
@@ -160,6 +158,9 @@ async function cashCardDataHandling(apiMsg?: string) {
           currencyIdGot: dataParams.currency || "",
           sellectAll: false,
           isDisable: props.cashCardIdGot ? true : false,
+          onSendbackCurrencyId: (currencyId: string) => {
+            dataParams.currency = currencyId;
+          },
         },
       );
       currencySelect.mount("#currencySelectComponent");
@@ -275,7 +276,7 @@ async function cashCardDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
+      // console.log("result:", result.value);
       try {
         const res = (await (props.cashCardIdGot ? fetchCashCardUpdate : fetchCashCardCreate)(
           result.value,
@@ -292,6 +293,19 @@ async function cashCardDataHandling(apiMsg?: string) {
       }
     }
   });
+}
+
+async function removeCashCardData() {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除儲值票卡資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCashCardDelete,
+    apiParams: props.cashCardIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>

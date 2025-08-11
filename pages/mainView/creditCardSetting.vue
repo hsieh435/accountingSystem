@@ -2,61 +2,61 @@
   <div class="w-full px-3">
     <div class="flex flex-wrap justify-start items-center">
       <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <creditCardData :userIdGot="''" />
+      <creditCardData @dataReseaching="creditCardSearching" />
     </div>
 
-    <div class="mx-5">
-      <template v-if="creditCardList.length > 0">
-        <ui-pagination
-          :totalDataQuanity="creditCardList.length"
-          :searchingPlaceholder="'搜尋信用卡名稱'"
-          @tableSliceChange="settingTableSlice" />
-        <template v-if="creditCardListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">信用卡名稱</div>
-                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
-                <div :class="tailwindStyles.thClasses">發卡機構</div>
-                <div :class="tailwindStyles.thClasses">結算貨幣</div>
-                <div :class="tailwindStyles.thClasses">每月額度</div>
-                <div :class="tailwindStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
-              </div>
+    <template v-if="creditCardList.length > 0">
+      <ui-pagination
+        :totalDataQuanity="creditCardList.length"
+        :searchingPlaceholder="'搜尋信用卡名稱'"
+        @tableSliceChange="settingTableSlice" />
+      <template v-if="creditCardListFiltered.length > 0">
+        <div :class="tailwindStyles.tableClasses">
+          <div :class="tailwindStyles.theadClasses">
+            <div :class="tailwindStyles.theadtrClasses">
+              <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">信用卡名稱</div>
+              <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+              <div :class="tailwindStyles.thClasses">發卡機構</div>
+              <div :class="tailwindStyles.thClasses">結算貨幣</div>
+              <div :class="tailwindStyles.thClasses">每月額度</div>
+              <div :class="tailwindStyles.thClasses">到期日</div>
+              <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
-                <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
-                </div>
-                <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.createdDate }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <creditCardData :creditCardIdGot="card.creditcardId" :userIdGot="''" />
-                  <ui-buttonGroup showRemove :createText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
+              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
+              <div :class="tailwindStyles.tdClasses"></div>
+              <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
+              </div>
+              <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.expirationDate }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
-      <template v-else-if="creditCardList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無信用卡資料</span>
-      </template>
-    </div>
+    </template>
+    <template v-else-if="creditCardList.length === 0">
+      <span :class="tailwindStyles.noDataClasses">無信用卡資料</span>
+    </template>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCreditCardList } from "@/server/creditCardApi";
 import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -96,7 +96,18 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function creditCardSearching() {
-  //
+  try {
+    const res = (await fetchCreditCardList(searchingParams)) as IResponse;
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      creditCardList.value = res.data.data;
+      await creditCardListFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function creditCardListFilterEvent() {
@@ -111,12 +122,7 @@ async function creditCardListFilterEvent() {
       );
     });
   }
-
   tableData.value = sliceArray(creditCardListFiltered.value, currentPage.value, itemsPerPage.value);
-}
-
-async function removeCreditcardData() {
-  //
 }
 </script>
 <style lang="scss" scoped></style>

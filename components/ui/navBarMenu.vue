@@ -164,7 +164,7 @@ const items = ref<NavigationMenuItem[]>([
       {
         label: "股市查詢",
         icon: "i-lucide-file-text",
-        to: "/mainView/testArea",
+        to: "/mainView/stockInfo",
       },
     ]
   },
