@@ -7,8 +7,7 @@
 
 4.SQL語法
 
-5.安裝 Prettier - Code formatter 跟 npm i prettier
-文件：https://prettier.io/docs
+5.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
 
 
 
