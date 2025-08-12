@@ -12,11 +12,11 @@ export const tailwindStyles = {
   tdClasses: `table-cell text-black border border-gray-200 bg-white px-1 py-[3px] group-hover:border-gray-300 first:w-[60px] last:${tableLastColumn}`,
   noDataClasses: "text-black mx-3",
 
+  selectClasses:
+    "block border border-gray-300 rounded-md shadow-sm text-black bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
 
-  selectClasses: "block border border-gray-300 rounded-md shadow-sm text-black bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-
-
-  inputClasses: "col-span-4 border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500",
+  inputClasses:
+    "col-span-4 border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500",
 };
 
 

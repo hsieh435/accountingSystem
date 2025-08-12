@@ -41,10 +41,14 @@ onMounted(() => {
   getbreadcrumbItemList();
 });
 
-watch(() => route.matched, () => {
-  // console.log("Route changed:", route.matched);
-  getbreadcrumbItemList();
-}, { immediate: true, deep: true });
+watch(
+  () => route.matched,
+  () => {
+    // console.log("Route changed:", route.matched);
+    getbreadcrumbItemList();
+  },
+  { immediate: true, deep: true },
+);
 
 
 
@@ -97,8 +101,8 @@ const items = ref<NavigationMenuItem[]>([
         label: "證券帳戶資料設定",
         icon: "i-lucide-file-text",
         to: "/mainView/stockAccountSetting",
-      }
-    ]
+      },
+    ],
   },
   {
     label: "財務收支",
@@ -128,8 +132,8 @@ const items = ref<NavigationMenuItem[]>([
         label: "證券帳戶收支",
         icon: "i-lucide-file-text",
         to: "/mainView/stockAccountRecord",
-      }
-    ]
+      },
+    ],
   },
   {
     label: "財務報表",
@@ -150,7 +154,7 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "/mainView/creditCardConsumptionStatement",
       },
-    ]
+    ],
   },
   {
     label: "資訊查詢",
@@ -166,7 +170,7 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "/mainView/stockInfo",
       },
-    ]
+    ],
   },
   {
     label: "參數設定",
@@ -182,7 +186,7 @@ const items = ref<NavigationMenuItem[]>([
         icon: "i-lucide-file-text",
         to: "/mainView/tradeCategorySetting",
       },
-    ]
+    ],
   },
   {
     label: "其他",
@@ -192,12 +196,9 @@ const items = ref<NavigationMenuItem[]>([
         label: "測試區",
         icon: "i-lucide-file-text",
         to: "/mainView/testArea",
-      }
-    ]
-  }
-])
-
-
-
+      },
+    ],
+  },
+]);
 </script>
 <style lang="scss" scoped></style>
