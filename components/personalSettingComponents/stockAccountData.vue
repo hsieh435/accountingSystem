@@ -8,6 +8,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
+import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
 import { IStockAccountList } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -33,7 +34,9 @@ const dataParams = reactive<IStockAccountList>({
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
+  enable: true,
   createdDate: getCurrentYMD(),
+  note: "",
 });
 
 
@@ -67,13 +70,13 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" maxlength="3" value="${dataParams.accountBankCode}" ${props.stockAccountIGot ? "disabled" : ""} />
+          <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" maxlength="3" value="${dataParams.accountBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" ${props.stockAccountIGot ? "disabled" : ""} />
+          <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
+          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" />
         </div>
 
 

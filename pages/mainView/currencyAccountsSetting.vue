@@ -54,11 +54,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCreditCardList } from "@/server/currencyAccountApi";
+import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -67,12 +67,8 @@ definePageMeta({
   subTitle: "存款帳戶資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
-const currencyAccountsData = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/currencyAccountsData.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
+const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -102,7 +98,19 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function currencyAccountSearching() {
-  //
+
+  try {
+    const res = (await fetchCurrencyAccountList(searchingParams)) as IResponse;
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      currencyAccountList.value = res.data.data;
+      await currencyAccountListFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function currencyAccountListFilterEvent() {

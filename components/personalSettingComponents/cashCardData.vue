@@ -30,6 +30,7 @@ const dataParams = reactive<ICashCardList>({
   maximumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
+  enable: true,
   createdDate: "",
   note: "",
 });

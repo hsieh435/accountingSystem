@@ -1,8 +1,8 @@
 import { apiFetch } from "@/server";
-import { ICreditCardList, IAccountSearchingParams } from "@/models";
+import { ICurrencyAccountList, IAccountSearchingParams } from "@/models";
 
-export async function fetchCreditCardList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/creditCard/List", "POST", {
+export async function fetchCurrencyAccountList(data: IAccountSearchingParams) {
+  const response = await apiFetch("/accounting_system_backend/api/currencyAccount/List", "POST", {
     body: JSON.stringify(data),
   });
 
@@ -10,24 +10,24 @@ export async function fetchCreditCardList(data: IAccountSearchingParams) {
   //   throw new Error("HTTP error! status:" + response.status);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
+  const result = (await response.json()) as { data: ICurrencyAccountList[] };
   return result;
 }
 
-export async function fetchCreditCardById(creditCardId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/creditCardData/${creditCardId}`, "GET");
+export async function fetchCurrencyAccountById(currencyAccountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/currencyAccountData/${currencyAccountId}`, "GET");
 
   // if (!response.ok) {
   //   const errorText = await response.text();
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
+  const result = (await response.json()) as { data: ICurrencyAccountList[] };
   return result;
 }
 
-export async function fetchCreditCardCreate(data: ICreditCardList) {
-  const response = await apiFetch("/accounting_system_backend/api/creditCard/create", "POST", {
+export async function fetchCurrencyAccountCreate(data: ICurrencyAccountList) {
+  const response = await apiFetch("/accounting_system_backend/api/currencyAccount/create", "POST", {
     body: JSON.stringify(data),
   });
 
@@ -36,12 +36,12 @@ export async function fetchCreditCardCreate(data: ICreditCardList) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
+  const result = (await response.json()) as { data: ICurrencyAccountList[] };
   return result;
 }
 
-export async function fetchCreditCardUpdate(data: ICreditCardList) {
-  const response = await apiFetch("/accounting_system_backend/api/creditCard/update", "PUT", {
+export async function fetchCurrencyAccountUpdate(data: ICurrencyAccountList) {
+  const response = await apiFetch("/accounting_system_backend/api/currencyAccount/update", "PUT", {
     body: JSON.stringify(data),
   });
 
@@ -50,12 +50,12 @@ export async function fetchCreditCardUpdate(data: ICreditCardList) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
+  const result = (await response.json()) as { data: ICurrencyAccountList[] };
   return result;
 }
 
-export async function fetchCreditCardDelete(creditCardId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/creditCard/delete/${creditCardId}`, "GET");
+export async function fetchCurrencyAccountDelete(currencyAccountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/currencyAccount/delete/${currencyAccountId}`, "GET");
 
   // if (!response.ok) {
   //   const errorText = await response.text();

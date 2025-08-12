@@ -47,10 +47,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchStockAccountList } from "@/server/stockAccountApi";
 import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -104,7 +105,19 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 
 
 async function stockAccountSearching() {
-  // await stockAccountListFilterEvent();
+
+  try {
+    const res = (await fetchStockAccountList(searchingParams)) as IResponse;
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      stockAccountList.value = res.data.data;
+      await stockAccountListFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function stockAccountListFilterEvent() {

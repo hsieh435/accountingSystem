@@ -11,14 +11,20 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "types": ["@nuxt/types"],
+    "types": [
+      "@nuxt/types"
+    ],
   },
   "exclude": [
     "node_modules",
     ".output",
     ".nuxt"
-  ]
+  ],
 }

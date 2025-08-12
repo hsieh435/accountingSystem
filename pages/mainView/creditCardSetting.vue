@@ -21,7 +21,7 @@
               <div :class="tailwindStyles.thClasses">發卡機構</div>
               <div :class="tailwindStyles.thClasses">結算貨幣</div>
               <div :class="tailwindStyles.thClasses">每月額度</div>
-              <div :class="tailwindStyles.thClasses">到期日</div>
+              <div :class="tailwindStyles.thClasses">到期</div>
               <div :class="tailwindStyles.thClasses">操作</div>
             </div>
           </div>
@@ -35,8 +35,8 @@
               </div>
               <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.creditPerMonth }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.expirationDate }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ (card.expirationDate).slice(0, 7) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
               </div>
@@ -54,7 +54,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardList } from "@/server/creditCardApi";
 import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
-import { sliceArray } from "@/composables/tools";
+import { currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 

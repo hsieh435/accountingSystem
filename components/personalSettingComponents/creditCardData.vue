@@ -76,12 +76,12 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行代碼：</span>
+          <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
           <input class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡銀行：</span>
+          <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
           <input class="${tailwindStyles.inputClasses}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
         </div>
 
@@ -93,7 +93,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">信用卡結算貨幣：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡結算貨幣：</span>
           <div id="currencySelectComponent"></div>
         </div>
 
@@ -121,7 +121,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">到期年月：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
           <div class="mx-2" id="yearMonthComponent"></div>
         </div>
 
@@ -208,8 +208,8 @@ async function creditCardDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue")),
         {
           yearMonthGot: dataParams.expirationDate,
-          onSendBackYearMonth: (yearMonth: string) => {
-            dataParams.expirationDate = yearMonth;
+          onSendbackYearMonth: (yearMonth: string) => {
+            dataParams.expirationDate = yearMonth + "-01";
           },
         },
       );

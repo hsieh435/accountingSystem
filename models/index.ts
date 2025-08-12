@@ -101,6 +101,7 @@ export interface ICashCardList {
   maximumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
+  enable: boolean;
   createdDate: string;
   note: string;
 }
@@ -214,7 +215,9 @@ export interface IStockAccountList {
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
+  enable: boolean;
   createdDate: string;
+  note: string;
 }
 
 // 證券帳戶收支紀錄 interface

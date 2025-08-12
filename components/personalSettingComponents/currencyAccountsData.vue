@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { ICurrencyAccountList, IResponse } from "@/models/index";
-import { fetchCreditCardById, fetchCreditCardCreate, fetchCreditCardUpdate, fetchCreditCardDelete } from "@/server/currencyAccountApi";
+import { fetchCurrencyAccountById, fetchCurrencyAccountCreate, fetchCurrencyAccountUpdate, fetchCurrencyAccountDelete } from "@/server/currencyAccountApi";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { getCurrentYMD } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
@@ -201,9 +201,9 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
 async function removeCurrencyAccountData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除信用卡資料",
+    message: "即將刪除貨幣帳戶資料",
     confirmButtonMsg: "確認刪除",
-    executionApi: fetchCreditCardDelete,
+    executionApi: fetchCurrencyAccountDelete,
     apiParams: props.currencyAccountIdGot,
   });
 
