@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.currencyCodeGot">
     <ui-buttonGroup showView :viewText="'檢視貨幣資料'" @dataView="searchingCategoryCode()" />
+    <ui-buttonGroup showRemove :removeText="'刪除貨幣資料'" @dataRemove="removeCurrency()" />
   </template>
   <template v-if="!props.currencyCodeGot">
     <ui-buttonGroup showCreate :createText="'新增貨幣資料'" @dataCreate="categoryCodeDataHandling()" />
@@ -8,9 +9,9 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate } from "@/server/currencyApi";
+import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
@@ -28,7 +29,7 @@ async function searchingCategoryCode() {
   // console.log("props:", props.currencyCodeGot);
 
   try {
-    const res = (await fetchCurrencyByCurrencyCode(props.currencyCodeGot)) as IResponse;
+    const res: IResponse = await fetchCurrencyByCurrencyCode(props.currencyCodeGot);
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       dataParams.currencyCode = res.data.data.currencyCode;
@@ -81,10 +82,6 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     confirmButtonText: props.currencyCodeGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    confirmButtonColor: "#007fff",
-    cancelButtonColor: "#ff4337",
-    color: "#000",
-    background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
       if (apiMsg) {
@@ -121,9 +118,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res = (await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(
-          result.value,
-        )) as IResponse;
+        const res: IResponse = await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(result.value);
         console.log("res:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -136,6 +131,21 @@ async function categoryCodeDataHandling(apiMsg?: string) {
       }
     }
   });
+}
+
+
+
+async function removeCurrency() {
+  const confirmResult = await showConfirmDialog({
+    message: "確定刪除該貨幣資料嗎？",
+    confirmButtonMsg: "刪除",
+    executionApi: fetchCurrencyDelete,
+    apiParams: props.currencyCodeGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>

@@ -10,8 +10,7 @@ export async function fetchCreditCardList(data: IAccountSearchingParams) {
   //   throw new Error("HTTP error! status:" + response.status);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
-  return result;
+  return await response.json();
 }
 
 export async function fetchCreditCardById(creditCardId: string) {
@@ -22,8 +21,7 @@ export async function fetchCreditCardById(creditCardId: string) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
-  return result;
+  return await response.json();
 }
 
 export async function fetchCreditCardCreate(data: ICreditCardList) {
@@ -36,8 +34,7 @@ export async function fetchCreditCardCreate(data: ICreditCardList) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
-  return result;
+  return await response.json();
 }
 
 export async function fetchCreditCardUpdate(data: ICreditCardList) {
@@ -50,8 +47,7 @@ export async function fetchCreditCardUpdate(data: ICreditCardList) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = (await response.json()) as { data: ICreditCardList[] };
-  return result;
+  return await response.json();
 }
 
 export async function fetchCreditCardDelete(creditCardId: string) {
@@ -62,6 +58,17 @@ export async function fetchCreditCardDelete(creditCardId: string) {
   //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
   // }
 
-  const result = await response.json();
-  return result;
+  return await response.json();
+}
+
+
+
+export async function fetchEnableCreditCard(creditcardId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/creditCard/enable/${creditcardId}`, "GET");
+  return await response.json();
+}
+
+export async function fetchDisableCreditCard(creditcardId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/creditCard/disable/${creditcardId}`, "GET");
+  return await response.json();
 }

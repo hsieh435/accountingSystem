@@ -37,7 +37,7 @@ const dataParams = reactive<ICreditCardList>({
 });
 
 async function searchingCreditCardData() {
-  const res = (await fetchCreditCardById(props.creditCardIdGot)) as IResponse;
+  const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
   if (res.data.returnCode === 0) {
     dataParams.creditcardId = res.data.data.creditcardId;
     dataParams.userId = res.data.data.userId;
@@ -93,7 +93,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡結算貨幣：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
           <div id="currencySelectComponent"></div>
         </div>
 
@@ -264,9 +264,8 @@ async function creditCardDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res = (await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(
-          result.value,
-        )) as IResponse;
+        const res: IResponse =
+          await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

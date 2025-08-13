@@ -28,7 +28,9 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashcardId">
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tdClasses"></div>
+              <div :class="tailwindStyles.tdClasses">
+                <ui-switch :switchValueGot="card.enable" @sendBackSwitchValue="(value: boolean) => { card.enable = value; adjustAbleStatus(card); }" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
@@ -50,11 +52,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashCardList } from "@/server/cashCardApi";
+import { fetchCashCardList, fetchEnableCashCard, fetchDisableCashCard } from "@/server/cashCardApi";
 import { IResponse, ICashCardList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -96,7 +98,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function cashCardSearching() {
 
   try {
-    const res = (await fetchCashCardList(searchingParams)) as IResponse;
+    const res: IResponse = await fetchCashCardList(searchingParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashCardList.value = res.data.data;
@@ -122,5 +124,19 @@ async function cashCardListFilterEvent() {
 
 
 
+async function adjustAbleStatus(card: ICashCardList) {
+
+  try {
+    const res: IResponse =
+      await (card.enable === true ? fetchEnableCashCard : fetchDisableCashCard)(card.cashcardId);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
+}
 </script>
 <style lang="scss" scoped></style>

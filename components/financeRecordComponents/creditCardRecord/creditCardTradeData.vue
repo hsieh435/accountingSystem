@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.tradeIdGot">
     <ui-buttonGroup showView :viewText="'檢視信用卡花費'" @dataView="searchingCreditCardRecord()" />
   </template>
@@ -37,7 +37,7 @@ const dataParams = reactive<ICreditCardRecordList>({
 
 
 async function searchingCreditCardRecord() {
-  // creditCardRecordDataHandling();  
+  // creditCardRecordDataHandling();
 }
 
 
@@ -90,10 +90,6 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.tradeIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 
@@ -109,7 +105,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       });
       creditCardAccountSelect.mount("#accountSelectComponent");
 
-  
+
       let cashCardTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {

@@ -65,7 +65,7 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
 
-      const res = await executionApi(apiParams) as IResponse;
+      const res: IResponse = await executionApi(apiParams);
       // console.log("res:", res);
 
       if (res.data.returnCode === 0) {

@@ -14,8 +14,8 @@
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">帳戶名稱</div>
               <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
@@ -26,8 +26,10 @@
           </div>
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+              <div :class="tailwindStyles.tdClasses">
+                <ui-switch :switchValueGot="account.enable" @sendBackSwitchValue="(value: boolean) => { account.enable = value; adjustAbleStatus(account); }" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-              <div :class="tailwindStyles.tdClasses"></div>
               <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
               <div :class="tailwindStyles.tdClasses">
                 {{ account.accountBankCode }} / {{ account.accountBankName }}
@@ -36,11 +38,9 @@
               <div :class="tailwindStyles.tdClasses">
                 <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>
               </div>
-              <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <currencyAccountsData
-                  :currencyAccountIdGot="account.accountId"
-                  @dataReseaching="currencyAccountSearching()" />
+                <currencyAccountsData :currencyAccountIdGot="account.accountId" @dataReseaching="currencyAccountSearching()" />
               </div>
             </div>
           </div>
@@ -54,11 +54,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
+import { fetchCurrencyAccountList, fetchEnableCurrencyAccount, fetchDisableCurrencyAccount } from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
-import { sliceArray } from "@/composables/tools";
+import { sliceArray, yearMonthDayTimeFormat } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -100,7 +100,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function currencyAccountSearching() {
 
   try {
-    const res = (await fetchCurrencyAccountList(searchingParams)) as IResponse;
+    const res: IResponse = await fetchCurrencyAccountList(searchingParams);
     console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyAccountList.value = res.data.data;
@@ -124,8 +124,25 @@ async function currencyAccountListFilterEvent() {
       );
     });
   }
-
   tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
 }
+
+
+
+async function adjustAbleStatus(card: ICurrencyAccountList) {
+
+  try {
+    const res: IResponse =
+      await (card.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(card.accountId);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
+}
+
 </script>
 <style lang="scss" scoped></style>

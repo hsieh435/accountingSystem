@@ -36,12 +36,10 @@ const dataParams = reactive<ICashCardList>({
 });
 
 async function searchingCashCardData() {
-  console.log("props:", props);
-  // cashCardDataHandling();
-
+  // console.log("props:", props);
   try {
-    const res = (await fetchCashCardById(props.cashCardIdGot)) as IResponse;
-    console.log("fetchCashCardById:", res.data.data);
+    const res: IResponse = await fetchCashCardById(props.cashCardIdGot);
+    // console.log("fetchCashCardById:", res.data.data);
     if (res.data.returnCode === 0) {
       dataParams.cashcardId = res.data.data.cashcardId;
       dataParams.userId = res.data.data.userId;
@@ -81,30 +79,22 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">票卡結算貨幣：</span>
+          <span class="col-start-1 col-end-3 text-right">結算貨幣：</span>
           <div id="currencySelectComponent"></div>
         </div>
 
 
         ${
           props.cashCardIdGot
-            ? ""
+            ? `<div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
+        </div>`
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">初始金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
         </div>`
-        }
-
-
-        ${
-          props.cashCardIdGot
-            ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
-        </div>`
-            : ""
         }
 
 
@@ -279,9 +269,7 @@ async function cashCardDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res = (await (props.cashCardIdGot ? fetchCashCardUpdate : fetchCashCardCreate)(
-          result.value,
-        )) as IResponse;
+        const res: IResponse = await (props.cashCardIdGot ? fetchCashCardUpdate : fetchCashCardCreate)(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

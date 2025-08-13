@@ -131,7 +131,7 @@ async function submitUserData(apiMsg?: string) {
       // console.log("result:", result.value);
 
       try {
-        const res = await fetchUserDataChange(result.value) as IResponse;
+        const res: IResponse = await fetchUserDataChange(result.value);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           setLocalStorageItem("userToken", res.data.data.jwt);

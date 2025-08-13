@@ -99,7 +99,7 @@ async function cashFlowSearching() {
   currencyArray.value = [];
 
   try {
-    const res = (await fetchCashFlowList(searchingParams)) as IResponse;
+    const res: IResponse = await fetchCashFlowList(searchingParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashFlowList.value = res.data.data;

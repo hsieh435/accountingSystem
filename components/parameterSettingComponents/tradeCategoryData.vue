@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.categoryCodeGot">
     <ui-buttonGroup showView :viewText="'檢視交易代碼'" @dataView="searchingCategoryCode()" />
   </template>
@@ -55,7 +55,7 @@ async function searchingCategoryCode() {
     }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
-  }  
+  }
 }
 
 
@@ -118,16 +118,12 @@ async function categoryCodeDataHandling(apiMsg?: string) {
     confirmButtonText: props.categoryCodeGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      
+
       const isCashflowAbleCheckbox = document.getElementById("isCashflowAble") as HTMLInputElement;
       isCashflowAbleCheckbox.checked = dataParams.isCashflowAble;
-      
+
       const isCashcardAbleAbleCheckbox = document.getElementById("isCashcardAble") as HTMLInputElement;
       isCashcardAbleAbleCheckbox.checked = dataParams.isCashcardAble;
 
@@ -140,7 +136,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
       const isStaccountAbleCheckbox = document.getElementById("isStaccountAble") as HTMLInputElement;
       isStaccountAbleCheckbox.checked = dataParams.isStaccountAble;
 
-  
+
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
         return false;

@@ -10,7 +10,7 @@
 import { reactive } from "vue";
 import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
 import { IStockAccountList } from "@/models/index";
-import { getCurrentYMD } from "@/composables/tools";
+import { currencyFormat } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
@@ -35,7 +35,7 @@ const dataParams = reactive<IStockAccountList>({
   alertValue: 0,
   openAlert: false,
   enable: true,
-  createdDate: getCurrentYMD(),
+  createdDate: "",
   note: "",
 });
 
@@ -80,10 +80,21 @@ async function stockAccountDataHandling(apiMsg?: string) {
         </div>
 
 
+
+        ${
+          props.stockAccountIGot
+            ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
+        </div>`
+            : `<div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.stockAccountIGot ? "disabled" : ""} />
-        </div>
+          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+        </div>`
+        }
+
+
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -156,12 +167,6 @@ async function stockAccountDataHandling(apiMsg?: string) {
       }
       if (!dataParams.accountName) {
         errors.push("請填寫存款帳戶名稱");
-      }
-      if (!dataParams.accountBankCode) {
-        errors.push("請填寫銀行代碼");
-      }
-      if (!dataParams.accountBankName) {
-        errors.push("請填寫銀行名稱");
       }
       if (isNaN(dataParams.startingAmount)) {
         errors.push("請填寫帳戶初始金額");

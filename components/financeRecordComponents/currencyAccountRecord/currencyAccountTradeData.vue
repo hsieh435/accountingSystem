@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.tradeIdGot">
     <ui-buttonGroup showView :viewText="'檢視銀行帳戶收支'" @dataView="searchingCurrencyAccountRecord()" />
   </template>
@@ -26,7 +26,7 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
   tradeDatetime: "",
   accountUser: "",
   accountType: "",
-  incomingOutgoing: "",
+  transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
   currency: "TWD",
@@ -37,7 +37,7 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
 
 
 async function searchingCurrencyAccountRecord() {
-  // currencyAccountRecordDataHandling();  
+  // currencyAccountRecordDataHandling();
 }
 
 
@@ -114,7 +114,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       });
       currencyAccountSelect.mount("#accountSelectComponent");
 
-    
+
       let currencyAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
@@ -125,9 +125,9 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
 
 
       let currencyAccountIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
-        tradeCategoryGot: dataParams.incomingOutgoing,
+        tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
-          dataParams.incomingOutgoing = type;
+          dataParams.transactionType = type;
         },
       });
       currencyAccountIncomeOutgo.mount("#incomeOutgoSelectComponent");
@@ -140,7 +140,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         },
       });
       currencyAccountCategory.mount("#tradeCategorySelectComponent");
-      
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -164,7 +164,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }
-      if (!dataParams.incomingOutgoing) {
+      if (!dataParams.transactionType) {
         errors.push("請選擇收支");
       }
       if (!dataParams.tradeCategory) {

@@ -14,4 +14,3 @@ export async function fetchJwtVerification(data: { token: string }) {
   const result = await response.json();
   return result;
 }
-

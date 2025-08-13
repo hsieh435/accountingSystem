@@ -79,7 +79,7 @@ onMounted(async () => {
 
 async function searchingTradeCategoryList() {
   try {
-    const res = await fetchTradeCategoryList() as IResponse;
+    const res: IResponse = await fetchTradeCategoryList();
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data;

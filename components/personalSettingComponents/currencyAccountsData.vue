@@ -8,11 +8,10 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, createApp, defineAsyncComponent } from "vue";
 import { ICurrencyAccountList, IResponse } from "@/models/index";
 import { fetchCurrencyAccountById, fetchCurrencyAccountCreate, fetchCurrencyAccountUpdate, fetchCurrencyAccountDelete } from "@/server/currencyAccountApi";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { getCurrentYMD } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
@@ -40,7 +39,25 @@ const dataParams = reactive<ICurrencyAccountList>({
 });
 
 async function searchingCurrencyAccountData() {
-  // currencyAccountDataHandling();
+  console.log("props:", props.currencyAccountIdGot);
+
+  const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
+  if (res.data.returnCode === 0) {
+    dataParams.accountId = res.data.data.accountId;
+    dataParams.userId = res.data.data.userId;
+    dataParams.accountName = res.data.data.accountName;
+    dataParams.accountBankCode = res.data.data.accountBankCode;
+    dataParams.accountBankName = res.data.data.accountBankName;
+    dataParams.currency = res.data.data.currency;
+    dataParams.alertValue = res.data.data.alertValue;
+    dataParams.openAlert = res.data.data.openAlert;
+    dataParams.createdDate = res.data.data.createdDate;
+    dataParams.note = res.data.data.note;
+
+    await currencyAccountDataHandling();
+  } else {
+    showAxiosToast({ message: res.data.message });
+  }
 }
 
 async function currencyAccountDataHandling(apiMsg?: string) {
@@ -66,20 +83,34 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行代碼：</span>
-          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
+          <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" value="${dataParams.accountBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>銀行名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" ${props.currencyAccountIdGot ? "disabled" : ""} />
+          <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
+          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        ${
+          props.currencyAccountIdGot
+            ? `
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
+        </div>`
+            : `<div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.currencyAccountIdGot ? "disabled" : ""} />
-        </div>
+          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+        </div>`
+        }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -94,15 +125,19 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        <div class="flex justify-center items-center w-full my-2">
-          <div class="mx-2">
-            <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-            <label for="openAlert">提醒</label>
-          </div>
-          <div class="mx-2">
+        <div class="flex justify-start items-center grid grid-cols-6 w-full my-2">
+          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <div class="mx-1" id="switchComponent"></div>
+          <div class="flex justify-start items-center col-start-4 col-end-7">
             <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
-            <label for="isSalaryAccount">薪資帳戶</label>
+            <span><label for="isSalaryAccount">薪資帳戶</label></span>
           </div>
+        </div>
+
+
+        <div class="flex justify-start items-start grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
         </div>
 
 
@@ -111,7 +146,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
+          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }
@@ -123,6 +158,21 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
+
+      let currencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+        {
+          currencyIdGot: dataParams.currency || "",
+          sellectAll: false,
+          isDisable: props.currencyAccountIdGot ? true : false,
+          onSendbackCurrencyId: (currencyId: string) => {
+            dataParams.currency = currencyId;
+          },
+        },
+      );
+      currencySelect.mount("#currencySelectComponent");
+
+
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       minimumValueAllowed.addEventListener("change", () => {
@@ -133,14 +183,26 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        //
+        alertValue.max = minimumValueAllowed.value;
+        if (Number(alertValue.value) > Number(minimumValueAllowed.value)) {
+          alertValue.value = minimumValueAllowed.value;
+        }
       }
+
+
+
+      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
+        switchValueGot: dataParams.openAlert,
+        onSendBackSwitchValue: (switchValue: boolean) => {
+          dataParams.openAlert = switchValue;
+        },
+      });
+      switchComponent.mount("#switchComponent");
+
 
       const isSalaryAccountCheckbox = document.getElementById("isSalaryAccount") as HTMLInputElement;
       isSalaryAccountCheckbox.checked = dataParams.isSalaryAccount;
 
-      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
-      openAlertCheckbox.checked = dataParams.openAlert;
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -152,12 +214,17 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
       dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
+      if (!props.currencyAccountIdGot) {
+        dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      }
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      dataParams.presentAmount = props.currencyAccountIdGot
+        ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
+        : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllowed = Number(
         (document.getElementById("minimumValueAllowed") as HTMLInputElement).value,
       );
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
-      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
       dataParams.isSalaryAccount = Boolean((document.getElementById("isSalaryAccount") as HTMLInputElement).checked);
 
       if (!dataParams.accountId) {
@@ -166,11 +233,8 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       if (!dataParams.accountName) {
         errors.push("請填寫存款帳戶名稱");
       }
-      if (!dataParams.accountBankCode) {
-        errors.push("請填寫銀行代碼");
-      }
-      if (!dataParams.accountBankName) {
-        errors.push("請填寫銀行名稱");
+      if (!dataParams.currency) {
+        errors.push("請選擇結算貨幣");
       }
       if (isNaN(dataParams.startingAmount)) {
         errors.push("請填寫帳戶初始金額");
@@ -195,13 +259,28 @@ async function currencyAccountDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
+      try {
+        const res: IResponse =
+          await (props.currencyAccountIdGot ? fetchCurrencyAccountUpdate : fetchCurrencyAccountCreate)(result.value);
+        // console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 }
 
+
+
 async function removeCurrencyAccountData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除貨幣帳戶資料",
+    message: "即將刪除存款帳戶資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCurrencyAccountDelete,
     apiParams: props.currencyAccountIdGot,

@@ -1,69 +1,59 @@
 import { apiFetch } from "@/server";
-import { IResponse, ITradeCategory } from "@/models/index";
+import { ITradeCategory } from "@/models/index";
 
 
 
 export async function fetchTradeCategoryList() {
   const response = await apiFetch("/accounting_system_backend/api/tradeCategory/list", "GET", {});
-
-  if (!response.ok) {
-    throw new Error("HTTP error! status:" + response.status);
-  }
-
-  const result = await response.json() as { data: ITradeCategory[] };
-  return result;
+  // if (!response.ok) {
+  //   throw new Error("HTTP error! status:" + response.status);
+  // }
+  // const result = await response.json();
+  return await response.json();
 }
 
 
 
 export async function fetchTradeCategory(code: string) {
   const response = await apiFetch(`/accounting_system_backend/api/tradeCategory/${code}`, "GET", {});
-
-  if (!response.ok) {
-    throw new Error("HTTP error! status:" + response.status);
-  }
-
-  const result = await response.json() as { data: ITradeCategory };
-  return result;
+  // if (!response.ok) {
+  //   throw new Error("HTTP error! status:" + response.status);
+  // }
+  // const result = await response.json() as { data: ITradeCategory };
+  return await response.json();
 }
 
 
 
 export async function fetchCreateTradeCategory(data: ITradeCategory) {
   const response = await apiFetch("/accounting_system_backend/api/tradeCategory/create", "POST", { body: JSON.stringify(data) });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = await response.json() as IResponse;
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = await response.json() as IResponse;
+  return await response.json();
 }
 
 
 
 export async function fetchUpdateTradeCategory(data: ITradeCategory) {
   const response = await apiFetch("/accounting_system_backend/api/tradeCategory/update", "PUT", { body: JSON.stringify(data) });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = await response.json() as IResponse;
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = await response.json() as IResponse;
+  return await response.json();
 }
 
 
 
 export async function fetchDeleteTradeCategory(code: string) {
   const response = await apiFetch(`/accounting_system_backend/api/tradeCategory/${code}`, "DELETE", {});
-
-  if (!response.ok) {
-    throw new Error("HTTP error! status:" + response.status);
-  }
-
-  const result = await response.json() as IResponse;
-  return result;
+  // if (!response.ok) {
+  //   throw new Error("HTTP error! status:" + response.status);
+  // }
+  // const result = await response.json() as IResponse;
+  return await response.json();
 }

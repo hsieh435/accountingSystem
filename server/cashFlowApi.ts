@@ -6,24 +6,22 @@ export async function fetchCashFlowList(data: IAccountSearchingParams) {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw new Error("HTTP error! status:" + response.status);
-  }
-
-  const result = (await response.json()) as { data: ICashFlowList[] };
-  return result;
+  // if (!response.ok) {
+  //   throw new Error("HTTP error! status:" + response.status);
+  // }
+  // const result = (await response.json()) as { data: ICashFlowList[] };
+  return await response.json();
 }
 
 export async function fetchCashFlowById(cashFlowId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/cashFlowData/${cashFlowId}`, "GET");
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = (await response.json()) as { data: ICashFlowList[] };
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = (await response.json()) as { data: ICashFlowList[] };
+  return await response.json();
 }
 
 export async function fetchCashFlowCreate(data: ICashFlowList) {
@@ -31,13 +29,12 @@ export async function fetchCashFlowCreate(data: ICashFlowList) {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = (await response.json()) as { data: ICashFlowList[] };
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = (await response.json()) as { data: ICashFlowList[] };
+  return await response.json();
 }
 
 export async function fetchCashFlowUpdate(data: ICashFlowList) {
@@ -45,23 +42,21 @@ export async function fetchCashFlowUpdate(data: ICashFlowList) {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = (await response.json()) as { data: ICashFlowList[] };
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = (await response.json()) as { data: ICashFlowList[] };
+  return await response.json();
 }
 
 export async function fetchCashFlowDelete(cashflowId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/cashFlow/delete/${cashflowId}`, "GET");
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  }
-
-  const result = await response.json();
-  return result;
+  // if (!response.ok) {
+  //   const errorText = await response.text();
+  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
+  // }
+  // const result = await response.json();
+  return await response.json();
 }

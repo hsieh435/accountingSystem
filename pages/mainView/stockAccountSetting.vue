@@ -105,6 +105,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 
 
 async function stockAccountSearching() {
+  console.log("searchingParams:", searchingParams);
 
   try {
     const res = (await fetchStockAccountList(searchingParams)) as IResponse;

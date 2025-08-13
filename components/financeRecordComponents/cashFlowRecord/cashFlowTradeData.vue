@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.tradeIdGot">
     <ui-buttonGroup showView :viewText="'檢視現金收支'" @dataView="searchingCashFlowRecord()" />
   </template>
@@ -25,7 +25,7 @@ const dataParams = reactive<ICashFlowRecordList>({
   userId: "",
   tradeDatetime: "",
   accountType: "",
-  incomingOutgoing: "",
+  transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
   currency: "TWD",
@@ -36,7 +36,7 @@ const dataParams = reactive<ICashFlowRecordList>({
 
 
 async function searchingCashFlowRecord() {
-  // cashFlowRecordDataHandling();  
+  // cashFlowRecordDataHandling();
 }
 
 
@@ -108,9 +108,9 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
 
       let cashCardIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
-        tradeCategoryGot: dataParams.incomingOutgoing,
+        tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
-          dataParams.incomingOutgoing = type;
+          dataParams.transactionType = type;
         },
       });
       cashCardIncomeOutgo.mount("#incomeOutgoSelectComponent");
@@ -123,7 +123,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
         },
       });
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
-      
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -144,7 +144,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }
-      if (!dataParams.incomingOutgoing) {
+      if (!dataParams.transactionType) {
         errors.push("請選擇收支");
       }
       if (!dataParams.tradeCategory) {

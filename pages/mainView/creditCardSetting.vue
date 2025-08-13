@@ -14,8 +14,8 @@
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">信用卡名稱</div>
               <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
               <div :class="tailwindStyles.thClasses">發卡機構</div>
@@ -27,8 +27,10 @@
           </div>
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
+              <div :class="tailwindStyles.tdClasses">
+                <ui-switch :switchValueGot="card.enable" @sendBackSwitchValue="(value: boolean) => { card.enable = value; adjustAbleStatus(card); }" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tdClasses"></div>
               <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
               <div :class="tailwindStyles.tdClasses">
                 {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
@@ -36,7 +38,7 @@
               <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ (card.expirationDate).slice(0, 7) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.expirationDate.slice(0, 7) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
               </div>
@@ -52,11 +54,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCreditCardList } from "@/server/creditCardApi";
+import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi";
 import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -96,8 +98,9 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function creditCardSearching() {
+
   try {
-    const res = (await fetchCreditCardList(searchingParams)) as IResponse;
+    const res: IResponse = await fetchCreditCardList(searchingParams);
     console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       creditCardList.value = res.data.data;
@@ -123,6 +126,21 @@ async function creditCardListFilterEvent() {
     });
   }
   tableData.value = sliceArray(creditCardListFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+async function adjustAbleStatus(card: ICreditCardList) {
+
+  try {
+    const res: IResponse =
+      await (card.enable === true ? fetchEnableCreditCard : fetchDisableCreditCard)(card.creditcardId);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

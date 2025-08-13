@@ -1,4 +1,3 @@
-
 // API response interface
 export interface IResponse {
   data?: any;
@@ -26,6 +25,24 @@ export interface ISortArray {
   sortId: string;
   sortText: string;
   value?: number;
+}
+
+// 功能群組列表 interface
+export interface IFunctionGroupList {
+  functionGroupId: string;
+  functionGroupName: string;
+  functionGroupIcon: string;
+  sort: number;
+  functionList: IFunctionList[];
+}
+
+export interface IFunctionList {
+  functionGroupId: string;
+  functionId: string;
+  functionName: string;
+  url: string;
+  functionIcon: string;
+  sort: number;
 }
 
 // 收支類型 interface

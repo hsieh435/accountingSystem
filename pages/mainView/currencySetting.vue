@@ -31,10 +31,6 @@
                 <div :class="tailwindStyles.tdClasses">{{ currency.currencySymbol }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
-                  <ui-buttonGroup
-                    showRemove
-                    :removeText="'刪除貨幣資料'"
-                    @dataRemove="removeCurrency(currency.currencyCode)" />
                 </div>
               </div>
             </div>
@@ -49,11 +45,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchCurrencyList, fetchCurrencyDelete } from "@/server/currencyApi";
+import { fetchCurrencyList } from "@/server/currencyApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -99,22 +95,7 @@ async function searchingCurrencyList() {
 async function currencyListFilterEvent() {
   currencyListFiltered.value = currencyList.value;
   tableData.value = sliceArray(currencyListFiltered.value, currentPage.value, itemsPerPage.value);
-  // console.log("currencyListFiltered:", currencyListFiltered.value);
-  // console.log("tableData:", tableData.value);
 }
 
-async function removeCurrency(currencyCode: string) {
-  // console.log("currencyCode:", currencyCode);
-  const confirmResult = await showConfirmDialog({
-    message: "確定刪除該貨幣資料嗎？",
-    confirmButtonMsg: "刪除",
-    executionApi: fetchCurrencyDelete,
-    apiParams: currencyCode,
-  });
-
-  if (confirmResult) {
-    await searchingCurrencyList();
-  }
-}
 </script>
 <style lang="scss" scoped></style>

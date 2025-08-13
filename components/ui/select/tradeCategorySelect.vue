@@ -23,7 +23,7 @@ const tradeCategoryList = ref<ISelectData[]>([]);
 
 
 onMounted(async () => {
-  console.log("props:", props);  
+  // console.log("onMounted props:", props);
   tradeCategoryId.value = props.tradeCategoryGot || "";
   await searchingTradeType();
 });
@@ -38,7 +38,7 @@ async function searchingTradeType() {
 
   try {
     const res = await fetchTradeCategoryList() as IResponse;
-    console.log("res:", res);
+    // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data.filter((item: ITradeCategory) => {
         return props.accountType ? (item[props.accountType as keyof ITradeCategory] === true) : true;

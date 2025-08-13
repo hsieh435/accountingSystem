@@ -48,10 +48,10 @@ const password = ref<string>("");
 
 async function handleLogin() {
   try {
-    const res = (await fetchUserLogin({
+    const res: IResponse = await fetchUserLogin({
       userId: accountId.value,
       password: encryptString(password.value),
-    })) as IResponse;
+    });
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });

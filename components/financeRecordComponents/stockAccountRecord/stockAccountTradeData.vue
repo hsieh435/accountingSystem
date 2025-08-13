@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.tradeIdGot">
     <ui-buttonGroup showView :viewText="'檢視證券帳戶收支'" @dataView="searchingStockAccountRecord()" />
   </template>
@@ -22,10 +22,10 @@ const emits = defineEmits(["dataReseaching"]);
 
 const dataParams = reactive<IStockAccountRecordList>({
   tradeId: props.tradeIdGot || "",
-  accountId: props.bankIdGot,  
+  accountId: props.bankIdGot,
   tradeDatetime: "",
   accountUser: "",
-  incomingOutgoing: "",
+  transactionType: "",
   tradeCategory: "",
   stockNo: "",
   stockName: "",
@@ -42,7 +42,7 @@ const dataParams = reactive<IStockAccountRecordList>({
 
 
 async function searchingStockAccountRecord() {
-  // stockAccountRecordDataHandling();  
+  // stockAccountRecordDataHandling();
 }
 
 
@@ -153,7 +153,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       });
       stockAccountSelect.mount("#accountSelectComponent");
 
-    
+
       let currencyAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
@@ -164,9 +164,9 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
 
       let currencyAccountIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
-        tradeCategoryGot: dataParams.incomingOutgoing,
+        tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
-          dataParams.incomingOutgoing = type;
+          dataParams.transactionType = type;
         },
       });
       currencyAccountIncomeOutgo.mount("#incomeOutgoSelectComponent");
@@ -180,7 +180,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       });
       currencyAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
 
-      
+
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
       const quantity = document.getElementById("quantity") as HTMLInputElement;
       const handlingFee = document.getElementById("handlingFee") as HTMLInputElement;
@@ -191,7 +191,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         totalPriceInput.value = total.toString();
         dataParams.totalPrice = total;
       };
-      
+
       pricePerShare.addEventListener("input", calculateDateDiff);
       quantity.addEventListener("input", calculateDateDiff);
       handlingFee.addEventListener("input", calculateDateDiff);
@@ -225,7 +225,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }
-      if (!dataParams.incomingOutgoing) {
+      if (!dataParams.transactionType) {
         errors.push("請選擇收支");
       }
       if (!dataParams.tradeCategory) {

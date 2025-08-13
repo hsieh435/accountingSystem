@@ -1,4 +1,4 @@
-<template>  
+<template>
   <template v-if="props.tradeIdGot">
     <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" @dataView="searchingCashCardRecord()" />
   </template>
@@ -22,11 +22,11 @@ const emits = defineEmits(["dataReseaching"]);
 
 const dataParams = reactive<ICashCardRecordList>({
   tradeId: props.tradeIdGot || "",
-  cashCardId: props.cashCardIdGot || "",
-  cashCardName: "",
+  cashcardId: props.cashCardIdGot || "",
+  cashcardName: "",
   accountType: "",
   tradeDatetime: "",
-  incomingOutgoing: "",
+  transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
   currency: "TWD",
@@ -108,7 +108,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
         selectId: "cashCard",
         selectTitle: "儲值票卡",
         onSendbackAccountId: (accountId: string) => {
-          dataParams.cashCardId = accountId;
+          dataParams.cashcardId = accountId;
           // console.log("選擇的票卡ID:", accountId);
         },
       });
@@ -125,9 +125,9 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
 
 
       let cashCardIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
-        tradeCategoryGot: dataParams.incomingOutgoing,
+        tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
-          dataParams.incomingOutgoing = type;
+          dataParams.transactionType = type;
         },
       });
       cashCardIncomeOutgo.mount("#incomeOutgoSelectComponent");
@@ -140,7 +140,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
         },
       });
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
-      
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -158,13 +158,13 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
 
 
-      if (!dataParams.cashCardId) {
+      if (!dataParams.cashcardId) {
         errors.push("請選擇儲值票卡");
       }
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }
-      if (!dataParams.incomingOutgoing) {
+      if (!dataParams.transactionType) {
         errors.push("請選擇收支");
       }
       if (!dataParams.tradeCategory) {

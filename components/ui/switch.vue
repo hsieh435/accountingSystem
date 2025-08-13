@@ -1,5 +1,5 @@
 <template>
-  <USwitch v-model="switchValue" :label="props.switchLabel" :disabled="props.isDisable" />
+  <USwitch class="mx-0 my-0" v-model="switchValue" :label="props.switchLabel" :disabled="props.isDisable" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";

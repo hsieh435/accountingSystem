@@ -2,16 +2,10 @@ import { apiFetch } from "@/server";
 import { IStockAccountList, IAccountSearchingParams } from "@/models";
 
 export async function fetchStockAccountList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/stockAccountData/List", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/stockAccount/List", "POST", {
     body: JSON.stringify(data),
   });
-
-  // if (!response.ok) {
-  //   throw new Error("HTTP error! status:" + response.status);
-  // }
-
-  const result = (await response.json()) as { data: IStockAccountList[] };
-  return result;
+  return await response.json();
 }
 
 export async function fetchStockAccountById(stockAccountId: string) {

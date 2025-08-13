@@ -75,7 +75,7 @@ async function settingEndDate(dateSendback: string) {
 
 async function searchingRecord() {
   console.log("searchParams:", searchParams);
-  emits("sendbackRecord");  
+  emits("sendbackRecord");
 }
 
 
