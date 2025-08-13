@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.stockAccountIGot">
     <ui-buttonGroup showView :viewText="'檢視證券帳戶'" @dataView="searchingStockAccountData()" />
+    <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
   </template>
   <template v-if="!props.stockAccountIGot">
     <ui-buttonGroup showCreate :createText="'新增證券帳戶'" @dataCreate="stockAccountDataHandling()" />
@@ -11,6 +12,7 @@ import { reactive } from "vue";
 import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
 import { IStockAccountList } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
@@ -196,6 +198,20 @@ async function stockAccountDataHandling(apiMsg?: string) {
   });
 };
 
+
+
+async function removeStockAccountData() {
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除存款帳戶資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchStockAccountDelete,
+    apiParams: props.stockAccountIGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
+}
 
 </script>
 <style lang="scss" scoped></style>

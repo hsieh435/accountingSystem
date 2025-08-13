@@ -2,7 +2,7 @@
   <div class="w-full px-3">
     <div class="flex flex-wrap justify-start items-center">
       <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <stockAccountData />
+      <stockAccountData  @dataReseaching="stockAccountSearching" />
     </div>
 
     <template v-if="stockAccountList.length > 0">
@@ -26,14 +26,15 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
               <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-              <div :class="tailwindStyles.tdClasses"></div>
+              <div :class="tailwindStyles.tdClasses">
+                <ui-switch :switchValueGot="account.enable" @sendBackSwitchValue="(value: boolean) => { account.enable = value; adjustAbleStatus(account); }" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ account.createdDate }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <stockAccountData :stockAccountIGot="account.accountId" />
-                <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
+                <stockAccountData :stockAccountIGot="account.accountId" @dataReseaching="stockAccountSearching" />
               </div>
             </div>
           </div>
@@ -47,11 +48,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchStockAccountList } from "@/server/stockAccountApi";
+import { fetchStockAccountList, fetchEnableStockAccount, fetchDisableStockAccount } from "@/server/stockAccountApi";
 import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index";
-import { sliceArray } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -99,7 +100,7 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function settingSearchingParams(params: IAccountSearchingParams) {
   searchingParams.currencyId = params.currencyId;
-  await stockAccountListFilterEvent();
+  await stockAccountSearching();
 }
 
 
@@ -138,9 +139,22 @@ async function stockAccountListFilterEvent() {
 
 
 
-async function removeStockAccountData() {
-  //
+
+async function adjustAbleStatus(account: IStockAccountList) {
+
+  try {
+    const res: IResponse =
+      await (account.enable === true ? fetchEnableStockAccount : fetchDisableStockAccount)(account.accountId);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
+
 
 
 

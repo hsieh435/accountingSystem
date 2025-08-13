@@ -34,7 +34,7 @@
               <div :class="tailwindStyles.tdClasses">
                 {{ account.accountBankCode }} / {{ account.accountBankName }}
               </div>
-              <div :class="tailwindStyles.tdClasses">{{ account.presentAmount }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>
               </div>
@@ -56,7 +56,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCurrencyAccountList, fetchEnableCurrencyAccount, fetchDisableCurrencyAccount } from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
-import { sliceArray, yearMonthDayTimeFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
@@ -129,11 +129,11 @@ async function currencyAccountListFilterEvent() {
 
 
 
-async function adjustAbleStatus(card: ICurrencyAccountList) {
+async function adjustAbleStatus(account: ICurrencyAccountList) {
 
   try {
     const res: IResponse =
-      await (card.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(card.accountId);
+      await (account.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(account.accountId);
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
     } else {

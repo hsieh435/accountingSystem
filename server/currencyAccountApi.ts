@@ -27,12 +27,6 @@ export async function fetchCurrencyAccountUpdate(data: ICurrencyAccountList) {
   return await response.json();
 }
 
-export async function fetchCurrencyAccountDelete(currencyAccountId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/currencyAccount/delete/${currencyAccountId}`, "GET");
-  return await response.json();
-}
-
-
 export async function fetchEnableCurrencyAccount(currencyAccountId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/currencyAccount/enable/${currencyAccountId}`, "GET");
   return await response.json();
@@ -40,5 +34,10 @@ export async function fetchEnableCurrencyAccount(currencyAccountId: string) {
 
 export async function fetchDisableCurrencyAccount(currencyAccountId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/currencyAccount/disable/${currencyAccountId}`, "GET");
+  return await response.json();
+}
+
+export async function fetchCurrencyAccountDelete(currencyAccountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/currencyAccount/delete/${currencyAccountId}`, "GET");
   return await response.json();
 }
