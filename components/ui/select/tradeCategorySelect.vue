@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { ISelectData, ITradeCategory, IResponse } from "@/models/index";
-import { fetchTradeCategoryList } from "@/server/tradeCategoryApi";
+import { fetchTradeCategoryList } from "@/server/parameterApi";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
@@ -37,7 +37,7 @@ watch(tradeCategoryId, () => {
 async function searchingTradeType() {
 
   try {
-    const res = await fetchTradeCategoryList() as IResponse;
+    const res: IResponse = await fetchTradeCategoryList();
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data.filter((item: ITradeCategory) => {

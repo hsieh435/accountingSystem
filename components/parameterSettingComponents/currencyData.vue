@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/currencyApi";
+import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/parameterApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -137,7 +137,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 
 async function removeCurrency() {
   const confirmResult = await showConfirmDialog({
-    message: "確定刪除該貨幣資料嗎？",
+    message: "即將刪除該貨幣資料",
     confirmButtonMsg: "刪除",
     executionApi: fetchCurrencyDelete,
     apiParams: props.currencyCodeGot,

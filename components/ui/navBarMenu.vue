@@ -45,25 +45,19 @@ onMounted(() => {
   getbreadcrumbItemList();
 });
 
-watch(
-  () => route.matched,
-  () => {
+watch(route.matched, async () => {
     // console.log("Route changed:", route.matched);
     // searchingFunctionList();
     getbreadcrumbItemList();
-  },
-  { immediate: true, deep: true },
-);
-
+});
 
 
 async function searchingFunctionList() {
 
   try {
-    const res = (await fetchFunctionList()) as IResponse;
+    const res: IResponse = await fetchFunctionList();
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
-
       navbarMenuList.value = res.data.data.map((group: IFunctionGroupList) => {
         const functions = group.functionList.filter((func: IFunctionList) => func.functionGroupId === group.functionGroupId)
           .map((func: IFunctionList) => ({
@@ -86,7 +80,6 @@ async function searchingFunctionList() {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
 
 
 

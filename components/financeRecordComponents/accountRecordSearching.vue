@@ -2,7 +2,7 @@
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
     <div class="flex items-center me-3 my-1">
       <span>{{ props.accountTypeName ? props.accountTypeName + "：" : "" }}</span>
-      <accountSelect :selectTargetId="props.accountTypeId" :selectTitle="props.accountTypeName" @sendbackRecord="settingAccountId" />
+      <accountSelect :selectTargetId="props.accountTypeId" :selectTitle="props.accountTypeName" @sendbackAccountId="settingAccountId" />
     </div>
 
     <div class="flex items-center me-3 my-1">
@@ -10,14 +10,14 @@
     </div>
 
     <div class="flex items-center me-3 my-1">
-      <span>收支類型：</span><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeTypeId="settingTradeTypeId" />
+      <span>收支類型：</span><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeCategory="settingTradeCategory" />
     </div>
 
     <div class="flex items-center me-3 my-1">
       <span>時間區間：</span>
-      <dateSelect :dateSelect="searchParams.startingDate" :maximumGot="searchParams.endDate" @sendbackRecord="settingSettingDate" />
-      <span>～</span>
-      <dateSelect :dateSelect="searchParams.endDate" :minimumGot="searchParams.startingDate" @sendbackRecord="settingEndDate" />
+      <dateSelect :dateSelect="getCurrentYear() + '-01-01'" :maximumGot="searchParams.endDate" @sendbackDate="settingSettingDate" />
+      <span class="mx-1">～</span>
+      <dateSelect :dateSelect="getCurrentYear() + '-12-31'" :minimumGot="searchParams.startingDate" @sendbackDate="settingEndDate" />
     </div>
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
@@ -25,6 +25,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
+import { IFinanceRecordSearchingParams } from "@/models/index";
 import { getCurrentYear } from "@/composables/tools";
 
 
@@ -41,10 +42,10 @@ const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dat
 
 
 
-const searchParams = reactive<{ accountId: string; currency: string; tradeTypeId: string; startingDate: string; endDate: string; }>({
+const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: props.accountTypeId || "",
-  currency: "",
-  tradeTypeId: "",
+  currencyId: "",
+  tradeCategory: "",
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",
 });
@@ -56,19 +57,19 @@ async function settingAccountId(accountIdSendback: string) {
 }
 
 async function settingCurrency(currencyIdSendback: string) {
-  searchParams.currency = currencyIdSendback;
+  searchParams.currencyId = currencyIdSendback;
 }
 
-async function settingTradeTypeId(tradeTypeSendback: string) {
-  searchParams.tradeTypeId = tradeTypeSendback;
+async function settingTradeCategory(tradeCategorySendback: string) {
+  searchParams.tradeCategory = tradeCategorySendback;
 }
 
 async function settingSettingDate(dateSendback: string) {
-  searchParams.startingDate = dateSendback;
+  searchParams.startingDate = dateSendback + " 00:00:00";
 }
 
 async function settingEndDate(dateSendback: string) {
-  searchParams.endDate = dateSendback;
+  searchParams.endDate = dateSendback + " 23:59:59";
 }
 
 

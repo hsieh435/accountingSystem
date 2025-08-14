@@ -116,7 +116,10 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
+          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <div class="flex justify-start items-center">
+            <div id="switchComponent"></div>
+          </div>
         </div>
 
 

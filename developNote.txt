@@ -9,6 +9,8 @@
 
 5.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
 
+6.收支紀錄餘額呈現方式、修改調整方式
+
 
 
 Nuxt.js 3
@@ -45,7 +47,7 @@ taskkill /pid xxxxx /f
 
 
 git ls-files | wc -l
-71
+103
 
 git ls-files | xargs cat | wc -l
-18719
+23794

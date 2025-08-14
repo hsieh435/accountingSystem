@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="flex justify-start items-center">
-      <accountRecordSearching :accountTypeId="'isCashflowAble'" :accountTypeName="'持有現金'" />
+      <accountRecordSearching :accountTypeId="'isCashflowAble'" :accountTypeName="'現金流'" />
     </div>
 
     <div class="flex justify-start items-center mx-3 my-2">

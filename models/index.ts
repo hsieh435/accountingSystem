@@ -72,6 +72,15 @@ export interface IAccountSearchingParams {
   currencyId: string;
 }
 
+// 搜尋收支紀錄參數 interface
+export interface IFinanceRecordSearchingParams {
+  accountId: string;
+  currencyId: string;
+  tradeCategory: string;
+  startingDate: string;
+  endDate: string;
+}
+
 // 現金流列表 interface
 export interface ICashFlowList {
   no?: number;
@@ -92,6 +101,7 @@ export interface ICashFlowList {
 export interface ICashFlowRecordList {
   no?: number;
   tradeId: string;
+  cashflowId: string;
   userId: string;
   tradeDatetime: string;
   accountType: string;

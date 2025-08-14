@@ -17,6 +17,7 @@ const dateString = ref<string>("");
 
 
 onMounted(async () => {
+  console.log("onMounted props:", props);
   dateString.value = props.dateSelect || getCurrentYMD();
 });
 

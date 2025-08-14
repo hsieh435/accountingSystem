@@ -32,9 +32,7 @@
               </div>
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
-              </div>
+              <div :class="tailwindStyles.tdClasses">{{ card.creditcardBankCode }} {{ card.creditcardBankName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>

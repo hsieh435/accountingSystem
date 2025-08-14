@@ -127,7 +127,9 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 w-full my-2">
           <span class="col-start-1 col-end-3 text-right">提醒：</span>
-          <div class="mx-1" id="switchComponent"></div>
+          <div class="flex justify-start items-center">
+            <div id="switchComponent"></div>
+          </div>
           <div class="flex justify-start items-center col-start-4 col-end-7">
             <input class="border border-gray-300 mx-1" id="isSalaryAccount" value="${dataParams.isSalaryAccount}" type="checkbox" />
             <span><label for="isSalaryAccount">薪資帳戶</label></span>
@@ -190,7 +192,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       }
 
 
-
       let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
         switchValueGot: dataParams.openAlert,
         onSendBackSwitchValue: (switchValue: boolean) => {
@@ -226,6 +227,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       );
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.isSalaryAccount = Boolean((document.getElementById("isSalaryAccount") as HTMLInputElement).checked);
+      dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
       if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");

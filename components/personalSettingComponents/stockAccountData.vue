@@ -1,17 +1,17 @@
 <template>
   <template v-if="props.stockAccountIGot">
     <ui-buttonGroup showView :viewText="'檢視證券帳戶'" @dataView="searchingStockAccountData()" />
-    <ui-buttonGroup showRemove :createText="'刪除帳戶'" @dataRemove="removeStockAccountData()" />
+    <ui-buttonGroup showRemove :createText="'刪除證券帳戶'" @dataRemove="removeStockAccountData()" />
   </template>
   <template v-if="!props.stockAccountIGot">
     <ui-buttonGroup showCreate :createText="'新增證券帳戶'" @dataCreate="stockAccountDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, createApp, defineAsyncComponent } from "vue";
 import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
-import { IStockAccountList } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
+import { IStockAccountList, IResponse } from "@/models/index";
+import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools"
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
@@ -30,7 +30,7 @@ const dataParams = reactive<IStockAccountList>({
   accountType: "",
   accountBankCode: "",
   accountBankName: "",
-  currency: "",
+  currency: "NTD",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -82,6 +82,11 @@ async function stockAccountDataHandling(apiMsg?: string) {
         </div>
 
 
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
 
         ${
           props.stockAccountIGot
@@ -97,8 +102,6 @@ async function stockAccountDataHandling(apiMsg?: string) {
         }
 
 
-
-
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
@@ -111,9 +114,17 @@ async function stockAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        <div class="flex justify-center items-center w-full my-2">
-          <input class="border border-gray-300 mx-1" id="openAlert" value="${dataParams.openAlert}" type="checkbox" />
-          <label for="openAlert">提醒</label>
+        <div class="flex justify-start items-center grid grid-cols-6 w-full my-2">
+          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <div class="flex justify-start items-center">
+            <div id="switchComponent"></div>
+          </div>
+        </div>
+
+
+        <div class="flex justify-start items-start grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
         </div>
 
 
@@ -132,6 +143,19 @@ async function stockAccountDataHandling(apiMsg?: string) {
     allowOutsideClick: false,
     didOpen: () => {
 
+      let currencySelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+        {
+          currencyIdGot: dataParams.currency || "",
+          sellectAll: false,
+          isDisable: props.stockAccountIGot ? true : false,
+          onSendbackCurrencyId: (currencyId: string) => {
+            dataParams.currency = currencyId;
+          },
+        },
+      );
+      currencySelect.mount("#currencySelectComponent");
+
+
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       minimumValueAllowed.addEventListener("change", () => {
@@ -145,8 +169,16 @@ async function stockAccountDataHandling(apiMsg?: string) {
         //
       }
 
-      const openAlertCheckbox = document.getElementById("openAlert") as HTMLInputElement;
-      openAlertCheckbox.checked = dataParams.openAlert;
+
+      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
+        switchValueGot: dataParams.openAlert,
+        onSendBackSwitchValue: (switchValue: boolean) => {
+          dataParams.openAlert = switchValue;
+        },
+      });
+      switchComponent.mount("#switchComponent");
+
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -161,7 +193,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
       dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
-      dataParams.openAlert = Boolean((document.getElementById("openAlert") as HTMLInputElement).checked);
+      dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
 
       if (!dataParams.accountId) {
@@ -193,10 +225,22 @@ async function stockAccountDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
+      try {
+        const res: IResponse =
+          await (props.stockAccountIGot ? fetchStockAccountUpdate : fetchStockAccountCreate)(result.value);
+        // console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
-};
+}
 
 
 

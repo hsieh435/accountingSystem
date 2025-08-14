@@ -45,7 +45,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchCurrencyList } from "@/server/currencyApi";
+import { fetchCurrencyList } from "@/server/parameterApi";
 import { ICurrency, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -80,7 +80,7 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function searchingCurrencyList() {
   try {
     const res = (await fetchCurrencyList()) as IResponse;
-    console.log("fetchCurrencyList:", res.data.data);
+    // console.log("fetchCurrencyList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyList.value = res.data.data;
       await currencyListFilterEvent();

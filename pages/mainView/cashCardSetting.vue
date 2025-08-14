@@ -14,8 +14,8 @@
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">票卡名稱</div>
               <div :class="tailwindStyles.thClasses">使用貨幣</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
@@ -27,15 +27,15 @@
           </div>
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashcardId">
-              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <ui-switch :switchValueGot="card.enable" @sendBackSwitchValue="(value: boolean) => { card.enable = value; adjustAbleStatus(card); }" />
               </div>
+              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.presentAmount }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.minimumValueAllowed }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.maximumValueAllowed }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.minimumValueAllowed) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.maximumValueAllowed) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <cashCardData :cashCardIdGot="card.cashcardId" @dataReseaching="cashCardSearching" />
@@ -54,7 +54,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCashCardList, fetchEnableCashCard, fetchDisableCashCard } from "@/server/cashCardApi";
 import { IResponse, ICashCardList, IAccountSearchingParams } from "@/models/index";
-import { yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
@@ -99,7 +99,7 @@ async function cashCardSearching() {
 
   try {
     const res: IResponse = await fetchCashCardList(searchingParams);
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashCardList.value = res.data.data;
       await cashCardListFilterEvent();

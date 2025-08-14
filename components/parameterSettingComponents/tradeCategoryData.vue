@@ -1,6 +1,7 @@
 <template>
   <template v-if="props.categoryCodeGot">
     <ui-buttonGroup showView :viewText="'檢視交易代碼'" @dataView="searchingCategoryCode()" />
+    <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory()" />
   </template>
   <template v-if="!props.categoryCodeGot">
     <ui-buttonGroup showCreate :createText="'新增交易代碼'" @dataCreate="categoryCodeDataHandling()" />
@@ -8,15 +9,15 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory } from "@/server/tradeCategoryApi";
+import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory, fetchDeleteTradeCategory } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ categoryCodeGot?: string; cashCardIdGot?: string }>(), { categoryCodeGot: "", cashCardIdGot: "" });
+const props = withDefaults(defineProps<{ categoryCodeGot?: string; }>(), { categoryCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -192,5 +193,20 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 };
 
 
+
+
+async function removeTradeCategory() {
+
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除該收支類別",
+    confirmButtonMsg: "確定刪除",
+    executionApi: fetchDeleteTradeCategory,
+    apiParams: props.categoryCodeGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
+}
 </script>
 <style lang="scss" scoped></style>

@@ -4,7 +4,7 @@ import { IResponse } from "@/models/index";
 
 
 export async function fetchUserList() {
-  const response = await apiFetch("/accounting_system_backend/api/userList", "GET");
+  const response = await apiFetch("/accounting_system_backend/public/api/userList", "GET");
   // if (!response.ok) {
   //   throw new Error("HTTP error! status:" + response.status);
   // }

@@ -116,13 +116,17 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">提醒：</span>
-          <div class="mx-2" id="switchComponent"></div>
+          <div class="flex justify-start items-center">
+            <div id="switchComponent"></div>
+          </div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
-          <div class="mx-2" id="yearMonthComponent"></div>
+          <div class="flex justify-start items-center">
+            <div class="mx-2" id="yearMonthComponent"></div>
+          </div>
         </div>
 
 

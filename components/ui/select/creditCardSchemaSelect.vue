@@ -50,7 +50,7 @@ async function searchingSchemaList() {
 
       if (props.sellectAll) {
         schemaArray.value.unshift({ label: "所有發卡機構", value: "" });
-      } else if (props.sellectAll === false) {
+      } else if (props.sellectAll === false && !props.selectId) {
         schemaId.value = schemaArray.value[0].value;
         emits("sendbackSchemaId", schemaId.value);
       }

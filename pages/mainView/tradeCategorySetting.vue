@@ -29,7 +29,6 @@
                 <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <tradeCategoryData :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
-                  <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory(account.categoryCode)" />
                 </div>
               </div>
             </div>
@@ -44,11 +43,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchTradeCategoryList, fetchDeleteTradeCategory } from "@/server/tradeCategoryApi";
+import { fetchTradeCategoryList } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -97,23 +96,6 @@ async function searchingTradeCategoryList() {
 async function tradeCategoryListFilterEvent() {
   tradeCategoryListFiltered.value = tradeCategoryList.value;
   tableData.value = sliceArray(tradeCategoryListFiltered.value);
-}
-
-
-
-async function removeTradeCategory(categoryCode: string) {
-  // console.log("categoryCode:", categoryCode);
-
-  const confirmResult = await showConfirmDialog({
-    message: "即將刪除該收支類別",
-    confirmButtonMsg: "確定刪除",
-    executionApi: fetchDeleteTradeCategory,
-    apiParams: categoryCode,
-  });
-
-  if (confirmResult) {
-    await searchingTradeCategoryList();
-  }
 }
 
 

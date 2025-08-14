@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchCurrencyList } from "@/server/currencyApi";
+import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrency, IResponse } from "@/models/index";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";

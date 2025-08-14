@@ -88,22 +88,18 @@ async function cashflowDataHandling(apiMsg?: string) {
         </div>
 
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">
-            ${props.cashflowIdIdGot ? `` : `<span class="text-red-600 mx-1">∗</span>`}初始金額：
-          </span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashflowIdIdGot ? "disabled" : ""} />
-        </div>
-
-
         ${
           props.cashflowIdIdGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" ${props.cashflowIdIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
         </div>`
-            : ""
+            : `
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+        </div>`
         }
 
 
@@ -198,7 +194,9 @@ async function cashflowDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      if (!props.cashflowIdIdGot) {
+        dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      }
       dataParams.presentAmount = props.cashflowIdIdGot
         ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
         : Number((document.getElementById("startingAmount") as HTMLInputElement).value);

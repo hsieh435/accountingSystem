@@ -21,7 +21,7 @@
 
 
     <template v-if="props.showView">
-      <button class="btn-gunjyo" @click="clickViewButton()" :disabled="props.viewDisable">
+      <button class="btn-shinbashi" @click="clickViewButton()" :disabled="props.viewDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'binoculars']" /><span class="mx-1">{{ props.viewText }}</span>
       </button>
     </template>
