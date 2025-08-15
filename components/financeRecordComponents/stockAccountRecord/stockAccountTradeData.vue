@@ -69,7 +69,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
-          <div class="col-span-4" id="incomeOutgoSelectComponent"></div>
+          <div class="col-span-4" id="transactionTypeSelectComponent"></div>
         </div>
 
 
@@ -154,31 +154,31 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       stockAccountSelect.mount("#accountSelectComponent");
 
 
-      let currencyAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
+      let stockAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
           dataParams.tradeDatetime = dateTime;
         },
       });
-      currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
+      stockAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      let currencyAccountIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
+      let stockAccountTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
         tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
           dataParams.transactionType = type;
         },
       });
-      currencyAccountIncomeOutgo.mount("#incomeOutgoSelectComponent");
+      stockAccountTransactionType.mount("#transactionTypeSelectComponent");
 
 
-      let currencyAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")), {
+      let stockAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")), {
         tradeCategoryGot: dataParams.tradeCategory,
         onSendbackTradeCategory: (tradeCategoryId: string) => {
           dataParams.tradeCategory = tradeCategoryId;
         },
       });
-      currencyAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
+      stockAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
 
 
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;

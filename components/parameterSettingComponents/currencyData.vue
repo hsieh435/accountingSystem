@@ -1,10 +1,10 @@
 <template>
   <template v-if="props.currencyCodeGot">
-    <ui-buttonGroup showView :viewText="'檢視貨幣資料'" @dataView="searchingCategoryCode()" />
+    <ui-buttonGroup showView :viewText="'檢視貨幣資料'" @dataView="searchingCurrencyData()" />
     <ui-buttonGroup showRemove :removeText="'刪除貨幣資料'" @dataRemove="removeCurrency()" />
   </template>
   <template v-if="!props.currencyCodeGot">
-    <ui-buttonGroup showCreate :createText="'新增貨幣資料'" @dataCreate="categoryCodeDataHandling()" />
+    <ui-buttonGroup showCreate :createText="'新增貨幣資料'" @dataCreate="currencyDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
@@ -25,7 +25,7 @@ const dataParams = reactive<ICurrency>({
   sort: 0,
 });
 
-async function searchingCategoryCode() {
+async function searchingCurrencyData() {
   // console.log("props:", props.currencyCodeGot);
 
   try {
@@ -36,7 +36,7 @@ async function searchingCategoryCode() {
       dataParams.currencyName = res.data.data.currencyName;
       dataParams.currencySymbol = res.data.data.currencySymbol;
       dataParams.sort = res.data.data.sort;
-      await categoryCodeDataHandling();
+      await currencyDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
     }
@@ -45,7 +45,7 @@ async function searchingCategoryCode() {
   }
 }
 
-async function categoryCodeDataHandling(apiMsg?: string) {
+async function currencyDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
@@ -124,7 +124,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
         } else {
-          categoryCodeDataHandling(res.data.message);
+          currencyDataHandling(res.data.message);
         }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });

@@ -26,6 +26,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICashFlowList>({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
+  accountType: "cashFlow",
   currency: props.currencyIdGot,
   startingAmount: 0,
   presentAmount: 0,

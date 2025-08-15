@@ -1,10 +1,10 @@
 <template>
+  <div class="flex-col justify-start items-center">
+    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+    <div class="my-1"></div>
+    <creditCardData @dataReseaching="creditCardSearching" />
+  </div>
   <div class="w-full px-3">
-    <div class="flex flex-wrap justify-start items-center">
-      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <creditCardData @dataReseaching="creditCardSearching" />
-    </div>
-
     <template v-if="creditCardList.length > 0">
       <ui-pagination
         :totalDataQuanity="creditCardList.length"

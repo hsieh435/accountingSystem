@@ -1,5 +1,5 @@
 <template>
-<div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+<div class="min-h-screen bg-green-100 py-6 flex flex-col justify-center sm:py-12">
 	<div class="relative py-3 sm:max-w-xl sm:mx-auto">
 		<div class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
 		</div>
@@ -18,7 +18,7 @@
 							<input :class="inputClasses" id="password" name="password" v-model="password" type="password" placeholder="" autocomplete="off" v-on:keyup.enter="handleLogin" />
 							<label :class="labelClasses" for="password">密碼：</label>
 						</div>
-						<div class="relative flex justify-center items-center">
+						<div class="flex justify-center items-center">
               <button class="btn-ruri" @click="handleLogin()" type="button">
                 <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
               </button>
@@ -45,6 +45,9 @@ import { encryptString } from "@/composables/crypto";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
+  middleware: "auth",
+  functionTitle: "",
+  subTitle: "",
   layout: false,
 });
 

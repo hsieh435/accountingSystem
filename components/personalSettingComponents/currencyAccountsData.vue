@@ -22,7 +22,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICurrencyAccountList>({
   accountId: props.currencyAccountIdGot || "",
   userId: "",
-  accountType: "",
+  accountType: "currencyAccount",
   accountName: "",
   accountBankCode: "",
   accountBankName: "",

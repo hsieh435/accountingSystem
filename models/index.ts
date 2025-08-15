@@ -1,8 +1,8 @@
 // API response interface
 export interface IResponse {
   data?: any;
-  returnCode: number;
   message: string;
+  returnCode: number;
 }
 
 // select option interface
@@ -86,6 +86,7 @@ export interface ICashFlowList {
   no?: number;
   cashflowId: string;
   userId: string;
+  accountType: string;
   currency: string;
   currencyName?: string;
   startingAmount: number;
@@ -119,6 +120,7 @@ export interface ICashCardList {
   no?: number;
   cashcardId: string;
   userId: string;
+  accountType: string;
   cashcardName: string;
   currency: string;
   currencyName?: string;
@@ -155,6 +157,7 @@ export interface ICreditCardList {
   no?: number;
   creditcardId: string;
   userId: string;
+  accountType: string;
   creditcardName: string;
   creditcardBankCode: string;
   creditcardBankName: string;
@@ -192,8 +195,8 @@ export interface ICurrencyAccountList {
   no?: number;
   accountId: string;
   userId: string;
-  accountName: string;
   accountType: string;
+  accountName: string;
   accountBankCode: string;
   accountBankName: string;
   currency: string;
@@ -231,8 +234,8 @@ export interface IStockAccountList {
   no?: number;
   accountId: string;
   userId: string;
-  accountName: string;
   accountType: string;
+  accountName: string;
   accountBankCode: string;
   accountBankName: string;
   currency: string;

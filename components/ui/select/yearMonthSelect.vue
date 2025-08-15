@@ -44,10 +44,6 @@ onMounted(() => {
 });
 
 watch([selectedYear, selectedMonth], () => {
-  // console.log(selectedYear.value + "-" + selectedMonth.value.toString().padStart(2, "0"));
-  // console.log(selectedYear.value);
-  // console.log(selectedMonth.value);
-  // console.log(selectedMonth.value.toString().padStart(2, "0"));
   emits("sendbackYearMonth", selectedYear.value + "-" + selectedMonth.value.toString().padStart(2, "0"));
 });
 

@@ -14,7 +14,7 @@ const emits = defineEmits(["sendbackIncomeExpense"]);
 
 const items = ref<RadioGroupItem[]>([
   { label: "收入", value: "income" },
-  { label: "支出", value: "outgo" },
+  { label: "支出", value: "expense" },
 ]);
 
 
@@ -36,4 +36,3 @@ watch(incomeExpenseValue, () => {
 
 </script>
 <style lang="scss" scoped></style>
-

@@ -22,6 +22,7 @@ const emits = defineEmits(["dataReseaching"]);
 
 const dataParams = reactive<ICashFlowRecordList>({
   tradeId: props.tradeIdGot || "",
+  cashflowId: "",
   userId: "",
   tradeDatetime: "",
   accountType: "",
@@ -58,7 +59,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
-          <div class="col-span-4" id="incomeOutgoSelectComponent"></div>
+          <div class="col-span-4" id="transactionTypeSelectComponent"></div>
         </div>
 
 
@@ -107,13 +108,13 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       cashCardTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      let cashCardIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
+      let cashFlowTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
         tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
           dataParams.transactionType = type;
         },
       });
-      cashCardIncomeOutgo.mount("#incomeOutgoSelectComponent");
+      cashFlowTransactionType.mount("#transactionTypeSelectComponent");
 
 
       let cashCardTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {

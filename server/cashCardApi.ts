@@ -2,7 +2,7 @@ import { apiFetch } from "@/server";
 import { ICashCardList, IAccountSearchingParams } from "@/models";
 
 export async function fetchCashCardList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/cashCard/List", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/cashCard/list", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
@@ -31,8 +31,6 @@ export async function fetchCashCardDelete(cashCardId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/cashCard/delete/${cashCardId}`, "GET");
   return await response.json();
 }
-
-
 
 export async function fetchEnableCashCard(cashCardId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/cashCard/enable/${cashCardId}`, "GET");

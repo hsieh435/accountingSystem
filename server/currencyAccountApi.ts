@@ -2,7 +2,7 @@ import { apiFetch } from "@/server";
 import { ICurrencyAccountList, IAccountSearchingParams } from "@/models";
 
 export async function fetchCurrencyAccountList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/currencyAccount/List", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/currencyAccount/list", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();

@@ -9,7 +9,12 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
-import { fetchCreditCardById, fetchCreditCardCreate, fetchCreditCardUpdate, fetchCreditCardDelete } from "@/server/creditCardApi";
+import {
+  fetchCreditCardById,
+  fetchCreditCardCreate,
+  fetchCreditCardUpdate,
+  fetchCreditCardDelete,
+} from "@/server/creditCardApi";
 import { ICreditCardList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
@@ -22,6 +27,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICreditCardList>({
   creditcardId: props.creditCardIdGot || "",
   userId: "",
+  accountType: "creditCard",
   creditcardName: "",
   creditcardBankCode: "",
   creditcardBankName: "",
@@ -37,25 +43,29 @@ const dataParams = reactive<ICreditCardList>({
 });
 
 async function searchingCreditCardData() {
-  const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
-  if (res.data.returnCode === 0) {
-    dataParams.creditcardId = res.data.data.creditcardId;
-    dataParams.userId = res.data.data.userId;
-    dataParams.creditcardName = res.data.data.creditcardName;
-    dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
-    dataParams.creditcardBankName = res.data.data.creditcardBankName;
-    dataParams.creditcardSchema = res.data.data.creditcardSchema;
-    dataParams.currency = res.data.data.currency;
-    dataParams.creditPerMonth = res.data.data.creditPerMonth;
-    dataParams.expirationDate = res.data.data.expirationDate;
-    dataParams.alertValue = res.data.data.alertValue;
-    dataParams.openAlert = res.data.data.openAlert;
-    dataParams.createdDate = res.data.data.createdDate;
-    dataParams.note = res.data.data.note;
+  try {
+    const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
+    if (res.data.returnCode === 0) {
+      dataParams.creditcardId = res.data.data.creditcardId;
+      dataParams.userId = res.data.data.userId;
+      dataParams.creditcardName = res.data.data.creditcardName;
+      dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
+      dataParams.creditcardBankName = res.data.data.creditcardBankName;
+      dataParams.creditcardSchema = res.data.data.creditcardSchema;
+      dataParams.currency = res.data.data.currency;
+      dataParams.creditPerMonth = res.data.data.creditPerMonth;
+      dataParams.expirationDate = res.data.data.expirationDate;
+      dataParams.alertValue = res.data.data.alertValue;
+      dataParams.openAlert = res.data.data.openAlert;
+      dataParams.createdDate = res.data.data.createdDate;
+      dataParams.note = res.data.data.note;
 
-    await creditCardDataHandling();
-  } else {
-    showAxiosToast({ message: res.data.message });
+      await creditCardDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
 
@@ -206,8 +216,6 @@ async function creditCardDataHandling(apiMsg?: string) {
       );
       switchComponent.mount("#switchComponent");
 
-
-
       let yearMonthComponent = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue")),
         {
@@ -218,7 +226,6 @@ async function creditCardDataHandling(apiMsg?: string) {
         },
       );
       yearMonthComponent.mount("#yearMonthComponent");
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -268,8 +275,9 @@ async function creditCardDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse =
-          await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(result.value);
+        const res: IResponse = await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(
+          result.value,
+        );
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

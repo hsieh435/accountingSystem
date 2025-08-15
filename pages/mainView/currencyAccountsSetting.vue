@@ -1,10 +1,10 @@
 <template>
+  <div class="flex-col justify-start items-center">
+    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+    <div class="my-1"></div>
+    <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
+  </div>
   <div class="w-full px-3">
-    <div class="flex flex-wrap justify-start items-center">
-      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
-    </div>
-
     <template v-if="currencyAccountList.length > 0">
       <ui-pagination
         :totalDataQuanity="currencyAccountList.length"
@@ -31,9 +31,7 @@
               </div>
               <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
               <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                {{ account.accountBankCode }} / {{ account.accountBankName }}
-              </div>
+              <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} {{ account.accountBankName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>

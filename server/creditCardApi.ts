@@ -2,7 +2,7 @@ import { apiFetch } from "@/server";
 import { ICreditCardList, IAccountSearchingParams } from "@/models";
 
 export async function fetchCreditCardList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/creditCard/List", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/creditCard/list", "POST", {
     body: JSON.stringify(data),
   });
 
@@ -60,8 +60,6 @@ export async function fetchCreditCardDelete(creditCardId: string) {
 
   return await response.json();
 }
-
-
 
 export async function fetchEnableCreditCard(creditcardId: string) {
   const response = await apiFetch(`/accounting_system_backend/api/creditCard/enable/${creditcardId}`, "GET");

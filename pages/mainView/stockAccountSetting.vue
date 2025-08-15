@@ -1,10 +1,10 @@
 <template>
+  <div class="flex-col justify-start items-center">
+    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+    <div class="my-1"></div>
+    <stockAccountData  @dataReseaching="stockAccountSearching" />
+  </div>
   <div class="w-full px-3">
-    <div class="flex flex-wrap justify-start items-center">
-      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <stockAccountData  @dataReseaching="stockAccountSearching" />
-    </div>
-
     <template v-if="stockAccountList.length > 0">
       <ui-pagination
         :totalDataQuanity="stockAccountList.length"
@@ -14,8 +14,8 @@
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">帳戶名稱</div>
               <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
@@ -25,12 +25,12 @@
           </div>
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
-              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <ui-switch :switchValueGot="account.enable" @sendBackSwitchValue="(value: boolean) => { account.enable = value; adjustAbleStatus(account); }" />
               </div>
+              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
               <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} / {{ account.accountBankName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} {{ account.accountBankName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
@@ -106,7 +106,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 
 
 async function stockAccountSearching() {
-  console.log("searchingParams:", searchingParams);
+  // console.log("searchingParams:", searchingParams);
 
   try {
     const res = (await fetchStockAccountList(searchingParams)) as IResponse;
@@ -154,7 +154,6 @@ async function adjustAbleStatus(account: IStockAccountList) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
 
 
 

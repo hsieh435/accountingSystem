@@ -1,44 +1,42 @@
 <template>
-  <div class="w-full">
-    <div class="flex justify-start items-center mx-3 my-2">
+  <div class="w-full px-3">
+    <div class="flex flex-wrap justify-start items-center">
       <tradeCategoryData @dataReseaching="searchingTradeCategoryList" />
     </div>
 
-    <div class="mx-5 my-3">
-      <template v-if="tradeCategoryList.length > 0">
-        <ui-pagination
-          :currentPage="1"
-          :dataPerpage="tradeCategoryList.length"
-          :pageArrayGot="[tradeCategoryList.length]"
-          :totalDataQuanity="tradeCategoryList.length"
-          :showFilter="false" />
-        <template v-if="tradeCategoryListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">交易代碼</div>
-                <div :class="tailwindStyles.thClasses">交易名稱</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
-              </div>
+    <template v-if="tradeCategoryList.length > 0">
+      <ui-pagination
+        :currentPage="1"
+        :dataPerpage="tradeCategoryList.length"
+        :pageArrayGot="[tradeCategoryList.length]"
+        :totalDataQuanity="tradeCategoryList.length"
+        :showFilter="false" />
+      <template v-if="tradeCategoryListFiltered.length > 0">
+        <div :class="tailwindStyles.tableClasses">
+          <div :class="tailwindStyles.theadClasses">
+            <div :class="tailwindStyles.theadtrClasses">
+              <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">交易代碼</div>
+              <div :class="tailwindStyles.thClasses">交易名稱</div>
+              <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.categoryCode">
-                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <tradeCategoryData :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.categoryCode">
+              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <tradeCategoryData :categoryCodeGot="account.categoryCode" @dataReseaching="searchingTradeCategoryList" />
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
-      <template v-else-if="tradeCategoryList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
-      </template>
-    </div>
+    </template>
+    <template v-else-if="tradeCategoryList.length === 0">
+      <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
+    </template>
   </div>
 </template>
 <script setup lang="ts">

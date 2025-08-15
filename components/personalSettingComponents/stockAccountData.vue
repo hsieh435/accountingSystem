@@ -11,23 +11,19 @@
 import { reactive, createApp, defineAsyncComponent } from "vue";
 import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
 import { IStockAccountList, IResponse } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools"
+import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
 const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<IStockAccountList>({
   accountId: props.stockAccountIGot || "",
   userId: "",
+  accountType: "stockAccount",
   accountName: "",
-  accountType: "",
   accountBankCode: "",
   accountBankName: "",
   currency: "NTD",
@@ -41,13 +37,30 @@ const dataParams = reactive<IStockAccountList>({
   note: "",
 });
 
-
-
 async function searchingStockAccountData() {
-  stockAccountDataHandling();
+  console.log(props.stockAccountIGot);
+  try {
+    const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
+    if (res.data.returnCode === 0) {
+      dataParams.accountId = res.data.data.accountId;
+      dataParams.userId = res.data.data.userId;
+      dataParams.accountName = res.data.data.accountName;
+      dataParams.accountBankCode = res.data.data.accountBankCode;
+      dataParams.accountBankName = res.data.data.accountBankName;
+      dataParams.currency = res.data.data.currency;
+      dataParams.alertValue = res.data.data.alertValue;
+      dataParams.openAlert = res.data.data.openAlert;
+      dataParams.createdDate = res.data.data.createdDate;
+      dataParams.note = res.data.data.note;
+
+      await stockAccountDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
-
-
 
 async function stockAccountDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -60,13 +73,13 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶號碼：</span>
           <input class="${tailwindStyles.inputClasses}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶名稱：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="accountName" value="${dataParams.accountName}" />
         </div>
 
@@ -128,12 +141,15 @@ async function stockAccountDataHandling(apiMsg?: string) {
         </div>
 
 
-        ${props.stockAccountIGot ? `
+        ${
+          props.stockAccountIGot
+            ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${dataParams.createdDate}" disabled />
-        </div>` :
-        ""}
+          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+        </div>`
+            : ""
+        }
 
       </div>
     `,
@@ -142,8 +158,8 @@ async function stockAccountDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
-      let currencySelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let currencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
           sellectAll: false,
@@ -155,7 +171,6 @@ async function stockAccountDataHandling(apiMsg?: string) {
       );
       currencySelect.mount("#currencySelectComponent");
 
-
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
       minimumValueAllowed.addEventListener("change", () => {
@@ -166,19 +181,23 @@ async function stockAccountDataHandling(apiMsg?: string) {
       });
 
       function validateAlertValue() {
-        //
+        alertValue.min = minimumValueAllowed.value;
+
+        if (Number(alertValue.value) < Number(minimumValueAllowed.value)) {
+          alertValue.value = minimumValueAllowed.value;
+        }
       }
 
-
-      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
-        switchValueGot: dataParams.openAlert,
-        onSendBackSwitchValue: (switchValue: boolean) => {
-          dataParams.openAlert = switchValue;
+      let switchComponent = createApp(
+        defineAsyncComponent(() => import("@/components/ui/switch.vue")),
+        {
+          switchValueGot: dataParams.openAlert,
+          onSendBackSwitchValue: (switchValue: boolean) => {
+            dataParams.openAlert = switchValue;
+          },
         },
-      });
+      );
       switchComponent.mount("#switchComponent");
-
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -190,11 +209,17 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
       dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
-      dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllowed = Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
+      if (!props.stockAccountIGot) {
+        dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
+      }
+      dataParams.minimumValueAllowed =
+        Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
+
+      dataParams.presentAmount = props.stockAccountIGot
+        ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
+        : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
-
 
       if (!dataParams.accountId) {
         errors.push("請填寫存款帳戶號碼");
@@ -224,10 +249,11 @@ async function stockAccountDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
+      // console.log("result:", result.value);
       try {
-        const res: IResponse =
-          await (props.stockAccountIGot ? fetchStockAccountUpdate : fetchStockAccountCreate)(result.value);
+        const res: IResponse = await (props.stockAccountIGot ? fetchStockAccountUpdate : fetchStockAccountCreate)(
+          result.value,
+        );
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -242,11 +268,9 @@ async function stockAccountDataHandling(apiMsg?: string) {
   });
 }
 
-
-
 async function removeStockAccountData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除存款帳戶資料",
+    message: "即將刪除證券帳戶資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStockAccountDelete,
     apiParams: props.stockAccountIGot,
@@ -256,6 +280,5 @@ async function removeStockAccountData() {
     emits("dataReseaching");
   }
 }
-
 </script>
 <style lang="scss" scoped></style>

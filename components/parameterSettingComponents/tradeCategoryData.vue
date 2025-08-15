@@ -1,10 +1,10 @@
 <template>
   <template v-if="props.categoryCodeGot">
-    <ui-buttonGroup showView :viewText="'檢視交易代碼'" @dataView="searchingCategoryCode()" />
+    <ui-buttonGroup showView :viewText="'檢視交易代碼'" @dataView="searchingTradeCategory()" />
     <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory()" />
   </template>
   <template v-if="!props.categoryCodeGot">
-    <ui-buttonGroup showCreate :createText="'新增交易代碼'" @dataCreate="categoryCodeDataHandling()" />
+    <ui-buttonGroup showCreate :createText="'新增交易代碼'" @dataCreate="tradeCategoryDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
@@ -35,7 +35,7 @@ const dataParams = reactive<ITradeCategory>({
 
 
 
-async function searchingCategoryCode() {
+async function searchingTradeCategory() {
   // console.log("props:", props.categoryCodeGot);
 
   try {
@@ -50,7 +50,7 @@ async function searchingCategoryCode() {
       dataParams.isCuaccountAble = res.data.data.isCuaccountAble;
       dataParams.isStaccountAble = res.data.data.isStaccountAble;
       dataParams.sort = res.data.data.sort;
-      await categoryCodeDataHandling();
+      await tradeCategoryDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
     }
@@ -60,7 +60,7 @@ async function searchingCategoryCode() {
 }
 
 
-async function categoryCodeDataHandling(apiMsg?: string) {
+async function tradeCategoryDataHandling(apiMsg?: string) {
   console.log(dataParams);
 
   Swal.fire({
@@ -183,7 +183,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
         } else {
-          categoryCodeDataHandling(res.data.message);
+          tradeCategoryDataHandling(res.data.message);
         }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });
@@ -198,7 +198,7 @@ async function categoryCodeDataHandling(apiMsg?: string) {
 async function removeTradeCategory() {
 
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除該收支類別",
+    message: "即將刪除該交易代碼",
     confirmButtonMsg: "確定刪除",
     executionApi: fetchDeleteTradeCategory,
     apiParams: props.categoryCodeGot,

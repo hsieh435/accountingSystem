@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-start items-center">
-    <div class="flex flex-wrap justify-start items-center me-3 my-2">
+  <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
+    <div class="flex items-center me-3 my-1">
       <span>貨幣：</span><currencySelect sellectAll @sendbackCurrencyId="settingCurrency" />
     </div>
   </div>
@@ -25,10 +25,7 @@ const searchingParams = reactive<IAccountSearchingParams>({
 
 
 
-watch(
-  () => searchingParams,
-  () => {
-    // console.log("searchingParams:", searchingParams);
+watch(searchingParams, () => {
     emits("sendbackSearchingParams", searchingParams);
   },
   {

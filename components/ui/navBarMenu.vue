@@ -45,11 +45,11 @@ onMounted(() => {
   getbreadcrumbItemList();
 });
 
-watch(route.matched, async () => {
-    // console.log("Route changed:", route.matched);
-    // searchingFunctionList();
-    getbreadcrumbItemList();
+watch(route, () => {
+  // console.log("route:", route);
+  getbreadcrumbItemList();
 });
+
 
 
 async function searchingFunctionList() {

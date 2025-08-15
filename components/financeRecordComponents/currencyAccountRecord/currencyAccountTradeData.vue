@@ -65,7 +65,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
-          <div class="col-span-4" id="incomeOutgoSelectComponent"></div>
+          <div class="col-span-4" id="transactionTypeSelectComponent"></div>
         </div>
 
 
@@ -124,13 +124,13 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      let currencyAccountIncomeOutgo = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
+      let currencyAccountTransactionTypeSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
         tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
           dataParams.transactionType = type;
         },
       });
-      currencyAccountIncomeOutgo.mount("#incomeOutgoSelectComponent");
+      currencyAccountTransactionTypeSelect.mount("#transactionTypeSelectComponent");
 
 
       let currencyAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {

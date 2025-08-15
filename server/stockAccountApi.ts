@@ -2,7 +2,7 @@ import { apiFetch } from "@/server";
 import { IStockAccountList, IAccountSearchingParams } from "@/models";
 
 export async function fetchStockAccountList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/stockAccount/List", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/stockAccount/list", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
@@ -19,7 +19,7 @@ export async function fetchStockAccountById(stockAccountId: string) {
 }
 
 export async function fetchStockAccountCreate(data: IStockAccountList) {
-  const response = await apiFetch("/accounting_system_backend/api/stockAccountData/create", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/stockAccount/create", "POST", {
     body: JSON.stringify(data),
   });
   // if (!response.ok) {
@@ -31,7 +31,7 @@ export async function fetchStockAccountCreate(data: IStockAccountList) {
 }
 
 export async function fetchStockAccountUpdate(data: IStockAccountList) {
-  const response = await apiFetch("/accounting_system_backend/api/stockAccountData/update", "PUT", {
+  const response = await apiFetch("/accounting_system_backend/api/stockAccount/update", "PUT", {
     body: JSON.stringify(data),
   });
   // if (!response.ok) {

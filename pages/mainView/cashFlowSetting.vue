@@ -1,13 +1,14 @@
 <template>
-  <div class="w-full px-3">
-    <div class="flex flex-wrap justify-start items-center">
-      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <cashFlowData
-        :currencyIdGot="searchingParams.currencyId"
-        :isDisable="!searchingParams.currencyId || currencyArray.includes(searchingParams.currencyId)"
-        @dataReseaching="cashFlowSearching()" />
-    </div>
+  <div class="flex-col justify-start items-center">
+    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+    <div class="my-1"></div>
+    <cashFlowData
+      :currencyIdGot="searchingParams.currencyId"
+      :isDisable="!searchingParams.currencyId || currencyArray.includes(searchingParams.currencyId)"
+      @dataReseaching="cashFlowSearching()" />
+  </div>
 
+  <div class="w-full px-3">
     <template v-if="cashFlowList.length > 0">
       <ui-pagination
         :totalDataQuanity="cashFlowListFiltered.length"

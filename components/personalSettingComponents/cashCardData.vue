@@ -22,6 +22,7 @@ const emits = defineEmits(["dataReseaching"]);
 const dataParams = reactive<ICashCardList>({
   cashcardId: props.cashCardIdGot || "",
   userId: "",
+  accountType: "cashCard",
   cashcardName: "",
   currency: "NTD",
   startingAmount: 0,
