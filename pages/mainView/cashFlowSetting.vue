@@ -2,10 +2,7 @@
   <div class="flex-col justify-start items-center">
     <accountSearching @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashFlowData
-      :currencyIdGot="searchingParams.currencyId"
-      :isDisable="!searchingParams.currencyId || currencyArray.includes(searchingParams.currencyId)"
-      @dataReseaching="cashFlowSearching()" />
+    <cashFlowData @dataReseaching="cashFlowSearching()" />
   </div>
 
   <div class="w-full px-3">
@@ -19,6 +16,7 @@
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
               <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">現金流名稱</div>
               <div :class="tailwindStyles.thClasses">貨幣</div>
               <div :class="tailwindStyles.thClasses">初始金額</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
@@ -31,6 +29,7 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
@@ -101,7 +100,7 @@ async function cashFlowSearching() {
 
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashFlowList.value = res.data.data;
       for (const item of cashFlowList.value) {

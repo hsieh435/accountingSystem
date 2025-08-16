@@ -186,7 +186,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
       function validateAlertValue() {
         alertValue.max = minimumValueAllowed.value;
-        if (Number(alertValue.value) > Number(minimumValueAllowed.value)) {
+        if (Number(alertValue.value) < Number(minimumValueAllowed.value)) {
           alertValue.value = minimumValueAllowed.value;
         }
       }
@@ -218,7 +218,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
       if (!props.currencyAccountIdGot) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
-      dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.presentAmount = props.currencyAccountIdGot
         ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
         : Number((document.getElementById("startingAmount") as HTMLInputElement).value);

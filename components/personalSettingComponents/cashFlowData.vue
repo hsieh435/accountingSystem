@@ -8,7 +8,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, onMounted, watch, createApp } from "vue";
+import { defineAsyncComponent, reactive, createApp } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
@@ -16,9 +16,8 @@ import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composab
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; currencyIdGot?: string; isDisable?: boolean }>(), {
+const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: boolean }>(), {
   cashflowIdIdGot: "",
-  currencyIdGot: "",
   isDisable: false,
 });
 const emits = defineEmits(["dataReseaching"]);
@@ -27,7 +26,8 @@ const dataParams = reactive<ICashFlowList>({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
   accountType: "cashFlow",
-  currency: props.currencyIdGot,
+  cashflowName: "",
+  currency: props.cashflowIdIdGot ? "" : "NTD",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -37,15 +37,7 @@ const dataParams = reactive<ICashFlowList>({
   note: "",
 });
 
-onMounted(() => {
-  // console.log("onMounted props:", props);
-  dataParams.currency = props.currencyIdGot;
-});
 
-watch(props, async () => {
-  // console.log("watch props:", props);
-  dataParams.currency = props.currencyIdGot;
-});
 
 async function searchingCashflowData() {
   // console.log("props:", props);
@@ -55,6 +47,7 @@ async function searchingCashflowData() {
     if (res.data.returnCode === 0) {
       dataParams.cashflowId = res.data.data.cashflowId;
       dataParams.userId = res.data.data.userId;
+      dataParams.cashflowName = res.data.data.cashflowName;
       dataParams.currency = res.data.data.currency;
       dataParams.startingAmount = res.data.data.startingAmount;
       dataParams.presentAmount = res.data.data.presentAmount;
@@ -81,6 +74,13 @@ async function cashflowDataHandling(apiMsg?: string) {
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
+          <input class="${tailwindStyles.inputClasses}" id="cashflowName" value="${dataParams.cashflowName}" />
+        </div>
+
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -117,7 +117,10 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span><div class="mx-2" id="switchComponent"></div>
+          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <div class="flex justify-start items-center">
+            <div id="switchComponent"></div>
+          </div>
         </div>
 
 
@@ -147,9 +150,9 @@ async function cashflowDataHandling(apiMsg?: string) {
       let currencySelect = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
-          currencyIdGot: dataParams.currency,
+          currencyIdGot: "NTD",
           sellectAll: false,
-          isDisable: true,
+          isDisable: props.cashflowIdIdGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
             dataParams.currency = currencyId;
           },
@@ -198,6 +201,7 @@ async function cashflowDataHandling(apiMsg?: string) {
       if (!props.cashflowIdIdGot) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
+      dataParams.cashflowName = (document.getElementById("cashflowName") as HTMLInputElement).value;
       dataParams.presentAmount = props.cashflowIdIdGot
         ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
         : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
@@ -207,6 +211,9 @@ async function cashflowDataHandling(apiMsg?: string) {
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
+      if (!dataParams.cashflowName) {
+        errors.push("請填寫現金流名稱");
+      }
       if (!dataParams.currency) {
         errors.push("請填寫貨幣");
       }
@@ -231,7 +238,7 @@ async function cashflowDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      // console.log("result:", result.value);
+      console.log("result:", result.value);
       try {
         const res = (await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(
           result.value,

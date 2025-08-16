@@ -65,7 +65,7 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     case "isCashflowAble": {
       const res = await fetchCashFlowList(params);
       return res.data.data.map((item: any) => ({
-        label: item.currencyName + "現金流",
+        label: item.cashflowName,
         value: item.cashflowId,
       }));
     }

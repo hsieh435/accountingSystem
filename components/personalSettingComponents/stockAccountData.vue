@@ -209,6 +209,8 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
       dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
+      dataParams.accountBankCode = (document.getElementById("accountBankCode") as HTMLInputElement).value;
+      dataParams.accountBankName = (document.getElementById("accountBankName") as HTMLInputElement).value;
       if (!props.stockAccountIGot) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }

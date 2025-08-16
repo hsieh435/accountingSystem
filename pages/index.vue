@@ -45,9 +45,6 @@ import { encryptString } from "@/composables/crypto";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
-  middleware: "auth",
-  functionTitle: "",
-  subTitle: "",
   layout: false,
 });
 

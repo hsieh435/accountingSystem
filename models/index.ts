@@ -86,6 +86,7 @@ export interface ICashFlowList {
   no?: number;
   cashflowId: string;
   userId: string;
+  cashflowName: string
   accountType: string;
   currency: string;
   currencyName?: string;

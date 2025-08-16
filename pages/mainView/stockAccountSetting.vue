@@ -17,7 +17,7 @@
               <div :class="tailwindStyles.thClasses">啟用</div>
               <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">帳戶名稱</div>
-              <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+              <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
               <div :class="tailwindStyles.thClasses">建立時間</div>
               <div :class="tailwindStyles.thClasses">操作</div>

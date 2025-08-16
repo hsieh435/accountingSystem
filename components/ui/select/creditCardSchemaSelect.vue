@@ -24,8 +24,10 @@ const schemaArray = ref<ISelectData[]>([]);
 
 
 onMounted(async () => {
+  // console.log("props:", props);
   await searchingSchemaList();
   if (props.selectId) {
+    schemaId.value = props.selectId;
     isSelectDisabled.value = false;
   }
 });
