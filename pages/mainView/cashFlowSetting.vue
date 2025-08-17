@@ -15,6 +15,7 @@
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
+              <div :class="tailwindStyles.thClasses">啟用</div>
               <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">現金流名稱</div>
               <div :class="tailwindStyles.thClasses">貨幣</div>
@@ -28,8 +29,10 @@
           </div>
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
+              <div :class="tailwindStyles.tdClasses">
+                <ui-switch :switchValueGot="cashFlow.enable" @sendBackSwitchValue="(value: boolean) => { cashFlow.enable = value; adjustAbleStatus(cashFlow); }" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
@@ -53,11 +56,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashFlowList } from "@/server/cashFlowApi";
+import { fetchCashFlowList, fetchEnableCashFlow, fetchDisableCashFlow } from "@/server/cashFlowApi";
 import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -100,7 +103,7 @@ async function cashFlowSearching() {
 
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    console.log("res:", res.data.data);
+    // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashFlowList.value = res.data.data;
       for (const item of cashFlowList.value) {
@@ -121,6 +124,21 @@ async function cashFlowListFilterEvent() {
 }
 
 
+
+async function adjustAbleStatus(card: ICashFlowList) {
+
+  try {
+    const res: IResponse =
+      await (card.enable === true ? fetchEnableCashFlow : fetchDisableCashFlow)(card.cashflowId);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
+}
 
 </script>
 <style lang="scss" scoped></style>

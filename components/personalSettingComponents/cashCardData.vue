@@ -290,7 +290,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 async function removeCashCardData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除儲值票卡資料",
+    message: "即將刪除儲值票卡資料與相關收支紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashCardDelete,
     apiParams: props.cashCardIdGot,

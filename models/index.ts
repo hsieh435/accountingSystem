@@ -95,6 +95,7 @@ export interface ICashFlowList {
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
+  enable: boolean;
   createdDate: string;
   note: string;
 }

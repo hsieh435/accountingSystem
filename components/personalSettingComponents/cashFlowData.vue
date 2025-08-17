@@ -33,6 +33,7 @@ const dataParams = reactive<ICashFlowList>({
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
+  enable: true,
   createdDate: "",
   note: "",
 });
@@ -261,7 +262,7 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 async function removeCashFlowData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除現金流資料",
+    message: "即將刪除現金流資料與相關收支紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowDelete,
     apiParams: props.cashflowIdIdGot,
