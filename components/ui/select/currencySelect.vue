@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
-import { ISelectData, ICurrency, IResponse } from "@/models/index";
+import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
@@ -54,10 +54,10 @@ async function searchingCurrencyList() {
   currencyArray.value = [];
 
   try {
-    const res = (await fetchCurrencyList()) as IResponse;
+    const res: IResponse = await fetchCurrencyList();
     // console.log("fetchCurrencyList:", res);
     if (res.data.returnCode === 0) {
-      currencyArray.value = res.data.data.map((item: ICurrency) => ({
+      currencyArray.value = res.data.data.map((item: ICurrencyList) => ({
         label: item.currencyName,
         value: item.currencyCode
       }));

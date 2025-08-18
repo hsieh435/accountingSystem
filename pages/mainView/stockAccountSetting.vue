@@ -109,7 +109,7 @@ async function stockAccountSearching() {
   // console.log("searchingParams:", searchingParams);
 
   try {
-    const res = (await fetchStockAccountList(searchingParams)) as IResponse;
+    const res: IResponse = await fetchStockAccountList(searchingParams);
     console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       stockAccountList.value = res.data.data;

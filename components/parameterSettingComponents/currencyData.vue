@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/parameterApi";
-import { ICurrency, IResponse } from "@/models/index";
+import { ICurrencyList, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
@@ -18,10 +18,11 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<ICurrency>({
+const dataParams = reactive<ICurrencyList>({
   currencyCode: props.currencyCodeGot || "",
   currencyName: "",
   currencySymbol: "",
+  minimumDenomination: 1,
   sort: 0,
 });
 
@@ -30,11 +31,12 @@ async function searchingCurrencyData() {
 
   try {
     const res: IResponse = await fetchCurrencyByCurrencyCode(props.currencyCodeGot);
-    // console.log("res:", res);
+    // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       dataParams.currencyCode = res.data.data.currencyCode;
       dataParams.currencyName = res.data.data.currencyName;
       dataParams.currencySymbol = res.data.data.currencySymbol;
+      dataParams.minimumDenomination = res.data.data.minimumDenomination;
       dataParams.sort = res.data.data.sort;
       await currencyDataHandling();
     } else {
@@ -66,9 +68,16 @@ async function currencyDataHandling(apiMsg?: string) {
           <input class="${tailwindStyles.inputClasses}" id="currencyName" value="${dataParams.currencyName}" />
         </div>
 
+
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣符號：</span>
           <input class="${tailwindStyles.inputClasses}" id="currencySymbol" value="${dataParams.currencySymbol}" />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right">最小面額：</span>
+          <input class="${tailwindStyles.inputClasses}" id="minimumDenomination" value="${dataParams.minimumDenomination}" type="number" />
         </div>
 
 
@@ -95,6 +104,8 @@ async function currencyDataHandling(apiMsg?: string) {
       dataParams.currencyCode = (document.getElementById("currencyCode") as HTMLInputElement).value;
       dataParams.currencyName = (document.getElementById("currencyName") as HTMLInputElement).value;
       dataParams.currencySymbol = (document.getElementById("currencySymbol") as HTMLInputElement).value;
+      dataParams.minimumDenomination =
+        Number((document.getElementById("minimumDenomination") as HTMLInputElement).value);
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
 
       if (!dataParams.currencyCode) {
@@ -102,6 +113,12 @@ async function currencyDataHandling(apiMsg?: string) {
       }
       if (!dataParams.currencyName) {
         errors.push("請填寫貨幣名稱");
+      }
+      if (!dataParams.currencySymbol) {
+        errors.push("請填寫貨幣符號");
+      }
+      if (isNaN(dataParams.minimumDenomination) || dataParams.minimumDenomination < 0) {
+        errors.push("最小面額需為正數");
       }
       if (isNaN(dataParams.sort) || dataParams.sort < 1 || dataParams.sort % 1 !== 0) {
         errors.push("排序需為正整數");

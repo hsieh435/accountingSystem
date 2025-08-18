@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index";
-import { ITradeCategory, ICurrency } from "@/models/index";
+import { ITradeCategory, ICurrencyList } from "@/models/index";
 
 
 
@@ -26,7 +26,7 @@ export async function fetchCurrencyByCurrencyCode(currencyCode: string) {
 
 
 
-export async function fetchCurrencyCreate(data: ICurrency) {
+export async function fetchCurrencyCreate(data: ICurrencyList) {
   const response =
     await apiFetch("/accounting_system_backend/api/parameters/currency/create", "POST", {
     body: JSON.stringify(data),
@@ -36,7 +36,7 @@ export async function fetchCurrencyCreate(data: ICurrency) {
 
 
 
-export async function fetchCurrencyUpdate(data: ICurrency) {
+export async function fetchCurrencyUpdate(data: ICurrencyList) {
   const response = await apiFetch("/accounting_system_backend/api/parameters/currency/update", "PUT", {
     body: JSON.stringify(data),
   });

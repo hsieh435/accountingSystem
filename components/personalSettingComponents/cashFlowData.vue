@@ -43,7 +43,7 @@ const dataParams = reactive<ICashFlowList>({
 async function searchingCashflowData() {
   // console.log("props:", props);
   try {
-    const res = (await fetchCashFlowById(props.cashflowIdIdGot)) as IResponse;
+    const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
     // console.log("fetchCashFlowById:", res.data.data);
     if (res.data.returnCode === 0) {
       dataParams.cashflowId = res.data.data.cashflowId;
@@ -241,9 +241,8 @@ async function cashflowDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       console.log("result:", result.value);
       try {
-        const res = (await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(
-          result.value,
-        )) as IResponse;
+        const res: IResponse =
+          await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

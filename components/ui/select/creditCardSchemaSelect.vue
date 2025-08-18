@@ -42,7 +42,7 @@ async function searchingSchemaList() {
   schemaArray.value = [];
 
   try {
-    const res = await fetchCreditcardSchemaList() as IResponse;
+    const res: IResponse = await fetchCreditcardSchemaList();
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       schemaArray.value = res.data.data.map((item: any) => ({

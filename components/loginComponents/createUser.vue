@@ -121,9 +121,9 @@ async function createUserDate(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
-      
+
       try {
-        const res = await fetchUserCategory(result.value) as IResponse;
+        const res: IResponse = await fetchUserCategory(result.value);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
         } else {

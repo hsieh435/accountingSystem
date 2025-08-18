@@ -39,7 +39,7 @@ async function searchingTradeCategory() {
   // console.log("props:", props.categoryCodeGot);
 
   try {
-    const res = await fetchTradeCategory(props.categoryCodeGot) as IResponse;
+    const res: IResponse = await fetchTradeCategory(props.categoryCodeGot);
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       dataParams.categoryCode = res.data.data.categoryCode;
@@ -177,7 +177,8 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value) as IResponse;
+        const res: IResponse =
+          await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value);
         console.log("res:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

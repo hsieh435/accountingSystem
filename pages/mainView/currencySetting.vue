@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
-import { ICurrency, IResponse } from "@/models/index";
+import { ICurrencyList, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -63,9 +63,9 @@ const currencyData = defineAsyncComponent(() => import("@/components/parameterSe
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 
-const currencyList = ref<ICurrency[]>([]);
-const currencyListFiltered = ref<ICurrency[]>([]);
-const tableData = ref<ICurrency[]>([]);
+const currencyList = ref<ICurrencyList[]>([]);
+const currencyListFiltered = ref<ICurrencyList[]>([]);
+const tableData = ref<ICurrencyList[]>([]);
 
 onMounted(async () => {
   await searchingCurrencyList();
@@ -79,8 +79,8 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function searchingCurrencyList() {
   try {
-    const res = (await fetchCurrencyList()) as IResponse;
-    // console.log("fetchCurrencyList:", res.data.data);
+    const res: IResponse = await fetchCurrencyList();
+    console.log("fetchCurrencyList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyList.value = res.data.data;
       await currencyListFilterEvent();

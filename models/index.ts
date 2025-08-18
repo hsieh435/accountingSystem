@@ -59,11 +59,12 @@ export interface ITradeCategory {
 }
 
 // 貨幣列表 interface
-export interface ICurrency {
+export interface ICurrencyList {
   no?: number;
   currencyCode: string;
   currencyName: string;
   currencySymbol: string;
+  minimumDenomination: number;
   sort: number;
 }
 

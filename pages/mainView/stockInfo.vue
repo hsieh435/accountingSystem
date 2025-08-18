@@ -1,7 +1,13 @@
 <template>
-  <div></div>
+  <div class="flex-col justify-start items-center">
+    <stockListSelect />
+  </div>
 </template>
 <script setup lang="ts">
+import { defineAsyncComponent, ref, onMounted } from "vue";
+import { fetchStockList } from "@/server/outSideWebApi";
+import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -12,6 +18,9 @@ definePageMeta({
   subTitle: "股市查詢",
 })
 
+
+
+const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 
 
 </script>
