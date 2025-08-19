@@ -220,8 +220,8 @@ async function creditCardDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue")),
         {
           yearMonthGot: dataParams.expirationDate,
-          onSendbackYearMonth: (yearMonth: string) => {
-            dataParams.expirationDate = yearMonth + "-01";
+          onSendbackYearMonth: (year: number, month: number) => {
+            dataParams.expirationDate = `${year}-${month.toString().padStart(2, "0")}-01`;
           },
         },
       );

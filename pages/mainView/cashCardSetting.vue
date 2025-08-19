@@ -99,7 +99,7 @@ async function cashCardSearching() {
 
   try {
     const res: IResponse = await fetchCashCardList(searchingParams);
-    console.log("res:", res.data.data);
+    console.log("fetchCashCardList:", res.data.data);
     if (res.data.returnCode === 0) {
       cashCardList.value = res.data.data;
       await cashCardListFilterEvent();

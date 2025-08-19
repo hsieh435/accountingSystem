@@ -1,6 +1,9 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <stockListSelect />
+    <stockSearching />
+  </div>
+  <div class="px-3">
+    <!--  -->
   </div>
 </template>
 <script setup lang="ts">
@@ -21,6 +24,7 @@ definePageMeta({
 
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
+const stockSearching = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockSearching.vue"));
 
 
 </script>

@@ -36,15 +36,15 @@ const months = Array.from({ length: 12 }, (_, i) => ({
 
 onMounted(() => {
   if (props.yearMonthGot) {
-    const [year, month] = props.yearMonthGot.split("-");
-    selectedYear.value = parseInt(year);
-    selectedMonth.value = parseInt(month);
+    const date = new Date(props.yearMonthGot);
+    selectedYear.value = date.getFullYear();
+    selectedMonth.value = date.getMonth() + 1;
   }
-  emits("sendbackYearMonth", selectedYear.value + "-" + selectedMonth.value.toString().padStart(2, "0"));
+  emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
 });
 
 watch([selectedYear, selectedMonth], () => {
-  emits("sendbackYearMonth", selectedYear.value + "-" + selectedMonth.value.toString().padStart(2, "0"));
+  emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
 });
 
 

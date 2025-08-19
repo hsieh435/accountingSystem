@@ -274,3 +274,13 @@ export interface IStockAccountRecordList {
   tradeDescription: string;
   tradeNote: string;
 }
+
+
+// 股票區間價位查詢 interface
+export interface IStockPriceSearchingParams {
+  stockNo: string;
+  startYear: number;
+  startMonth: number;
+  endMonth: number;
+  endYear: number;
+}
