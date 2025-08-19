@@ -14,21 +14,15 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { fetchStockRangeValue } from "@/server/outSideWebApi";
+import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
-
-
 const emits = defineEmits(["sendbackSearchingData"]);
-
-
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
-
-
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
@@ -37,8 +31,6 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
   endYear: getCurrentYear(),
   endMonth: getCurrentMonth(),
 });
-
-
 
 async function settingStockNo(stockNo: string) {
   searchingParams.stockNo = stockNo;
@@ -58,10 +50,9 @@ async function searchingStockPrice() {
   // console.log(searchingParams);
   // emits("sendbackSearchingData", searchingParams);
 
-
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
-    console.log("fetchStockRangeValue:", res.data.data);
+    // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
       //
     } else {
@@ -71,8 +62,5 @@ async function searchingStockPrice() {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

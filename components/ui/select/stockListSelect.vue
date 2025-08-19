@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchStockList } from "@/server/outSideWebApi";
+import { fetchStockList } from "@/server/outerWebApi";
 import { IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -23,20 +23,15 @@ const props = withDefaults(defineProps<{ multipleSelect?: boolean; isDisable?: b
 });
 const emits = defineEmits(["sendbackStockNo"]);
 
-
 const stockSelected = ref<string>("");
 const rawStockList = ref<any[]>([]); // Store original API data
 const filteredStockList = ref<{ label: string; value: string }[]>([]);
 const loading = ref<boolean>(false);
 
-
-
 watch(stockSelected, () => {
   // console.log("stockSelected:", stockSelected.value);
   emits("sendbackStockNo", stockSelected.value);
 });
-
-
 
 function onSearch(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -69,6 +64,4 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
     loading.value = false;
   }
 });
-
-
 </script>

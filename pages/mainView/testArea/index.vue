@@ -3,10 +3,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { fetchStockList, fetchEachStockList } from "@/server/outSideWebApi";
-
-
-
+import { fetchStockList, fetchEachStockList } from "@/server/outerWebApi";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -15,25 +12,17 @@ definePageMeta({
   subTitle: "測試區",
 });
 
-
-
 onMounted(async () => {
   await searchingStockList();
 });
-
-
 
 async function searchingStockList() {
   try {
     const res = await fetchStockList();
     console.log("res:", res);
-    
   } catch (error) {
     // showAxiosErrorMsg({ message: (error as Error).message });
   }
-
 }
-
-
 </script>
 <style lang="scss" scoped></style>

@@ -4,7 +4,7 @@ import { IStockPriceSearchingParams } from "@/models/index";
 
 
 export async function fetchStockList(keyword: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/outSideWebApi/stockInfo/${keyword}`, "GET");
+  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${keyword}`, "GET");
   // console.log("response:", response);
   // if (!response.ok) {
   //   throw new Error("HTTP error! status:" + response.status);
@@ -16,7 +16,7 @@ export async function fetchStockList(keyword: string) {
 
 
 export async function fetchEachStockList(ex_ch: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/outSideWebApi/stockInfo/${ex_ch}`, "GET");
+  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${ex_ch}`, "GET");
   // console.log("response:", response);
   // if (!response.ok) {
   //   throw new Error("HTTP error! status:" + response.status);
@@ -28,7 +28,7 @@ export async function fetchEachStockList(ex_ch: string) {
 
 
 export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
-  const response = await apiFetch(`/accounting_system_backend/api/outSideWebApi/stockInfo/rangeValue`, "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/stockInfo/rangeValue", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();

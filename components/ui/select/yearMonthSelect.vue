@@ -16,7 +16,7 @@ import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 
 
-const props = withDefaults(defineProps<{ yearMonthGot?: string }>(), { yearMonthGot: "" });
+const props = withDefaults(defineProps<{ yearMonthGot?: string; max?: string; min?: string }>(), { yearMonthGot: "", max: "", min: "" });
 const emits = defineEmits(["sendbackYearMonth"]);
 
 
