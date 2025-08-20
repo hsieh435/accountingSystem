@@ -87,7 +87,7 @@ export interface ICashFlowList {
   no?: number;
   cashflowId: string;
   userId: string;
-  cashflowName: string
+  cashflowName: string;
   accountType: string;
   currency: string;
   currencyName?: string;
@@ -275,12 +275,28 @@ export interface IStockAccountRecordList {
   tradeNote: string;
 }
 
-
-// 股票區間價位查詢 interface
+// 股票歷史價位查詢參數 interface
 export interface IStockPriceSearchingParams {
   stockNo: string;
   startYear: number;
   startMonth: number;
   endMonth: number;
   endYear: number;
+}
+
+// 股票歷史價位 interface
+export interface IStockPriceRecordList {
+  stockNo: string;
+  stockName: string;
+  date: string;
+  openingPrice: number;
+  highestPrice: number;
+  lowestPrice: number;
+  closingPrice: number;
+  transactionVolume: number;
+}
+
+// 貨幣匯率查詢參數 interface
+export interface ICurrencyExRateSearchingParams {
+  currencyId: string;
 }

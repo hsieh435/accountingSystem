@@ -99,7 +99,7 @@ async function currencyAccountSearching() {
 
   try {
     const res: IResponse = await fetchCurrencyAccountList(searchingParams);
-    console.log("res:", res.data.data);
+    console.log("fetchCurrencyAccountList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyAccountList.value = res.data.data;
       await currencyAccountListFilterEvent();

@@ -124,7 +124,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      let currencyAccountTransactionTypeSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
+      let currencyAccountTransactionTypeSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
         tradeCategoryGot: dataParams.transactionType,
         onSendbackIncomeExpense: (type: string) => {
           dataParams.transactionType = type;

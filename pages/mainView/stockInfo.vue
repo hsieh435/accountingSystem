@@ -7,7 +7,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, onMounted } from "vue";
+import { defineAsyncComponent } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -19,9 +19,8 @@ definePageMeta({
   subTitle: "股市查詢",
 });
 
-const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
-const stockSearching = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/stock/stockSearching.vue"),
-);
+const stockSearching = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockSearching.vue"));
+
+
 </script>
 <style lang="scss" scoped></style>

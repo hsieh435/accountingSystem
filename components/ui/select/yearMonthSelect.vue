@@ -1,51 +1,69 @@
 <template>
-  <div class="flex gap-4 items-center">
-    <select :class="tailwindStyles.selectClasses" v-model="selectedYear">
-      <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-    </select>
-
-    <select :class="tailwindStyles.selectClasses" v-model="selectedMonth">
-      <option v-for="month in months" :key="month.value" :value="month.value">{{ month.label }}</option>
-    </select>
+  <div style="width: 150px;">
+    <VueDatePicker v-model="selectedYearMonth" month-picker text-input :min-date="minDate" :max-date="maxDate" format="yyyy/MM" locale="zh-TW" select-text="選取" :action-row="{ showCancel: false, }" :highlight="{ options: { highlightDisabled: true } }">
+    </VueDatePicker>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import VueDatePicker from "@vuepic/vue-datepicker";
 
 
-
-const props = withDefaults(defineProps<{ yearMonthGot?: string; max?: string; min?: string }>(), { yearMonthGot: "", max: "", min: "" });
+const props = withDefaults(defineProps<{ yearMonthGot?: string; hasRange?: boolean; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number; }>(), { yearMonthGot: "", hasRange: false, maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 });
 const emits = defineEmits(["sendbackYearMonth"]);
 
 
 
 const selectedYear = ref<number>(getCurrentYear());
 const selectedMonth = ref<number>(getCurrentMonth());
+const selectedYearMonth = ref<{ year: number; month: number }>({
+  year: selectedYear.value,
+  month: selectedMonth.value - 1,
+});
 
+const minDate = computed(() => {
+  if (props.minYear && props.minMonth) {
+    return new Date(props.minYear, props.minMonth - 1);
+  }
+});
 
-
-const years = Array.from({ length: 20 }, (_, i) => (getCurrentYear() + 10) - i);
-const months = Array.from({ length: 12 }, (_, i) => ({
-  label: `${i + 1} 月`,
-  value: i + 1,
-}));
-
-
+const maxDate = computed(() => {
+  if (props.maxYear && props.maxMonth) {
+    return new Date(props.maxYear, props.maxMonth - 1);
+  }
+});
 
 onMounted(() => {
+  console.log("onMounted props:", props);
   if (props.yearMonthGot) {
     const date = new Date(props.yearMonthGot);
     selectedYear.value = date.getFullYear();
     selectedMonth.value = date.getMonth() + 1;
   }
+  // settingRange();
   emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
 });
 
-watch([selectedYear, selectedMonth], () => {
-  emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
+watch(props, () => {
+  console.log("watch props:", props);
+  // settingRange();
 });
+
+watch(selectedYearMonth, () => {
+  // console.log("watch selectedYearMonth:", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
+  emits("sendbackYearMonth", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
+});
+
+
+
+// async function settingRange() {
+//   console.log(props);
+//   if (props.hasRange) {
+//     console.log("maxDate:", maxDate);
+//     console.log("minDate:", minDate);
+//   }
+// }
 
 
 

@@ -39,7 +39,7 @@ const dataParams = reactive<ICurrencyAccountList>({
 });
 
 async function searchingCurrencyAccountData() {
-  console.log("props:", props.currencyAccountIdGot);
+  // console.log("props:", props.currencyAccountIdGot);
 
   const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
   if (res.data.returnCode === 0) {

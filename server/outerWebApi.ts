@@ -33,3 +33,10 @@ export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
   });
   return await response.json();
 }
+
+
+
+export async function fetchCurrencyExRateInfoList() {
+  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/list`, "GET");
+  return await response.json();
+}
