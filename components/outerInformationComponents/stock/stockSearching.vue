@@ -5,9 +5,21 @@
     </div>
     <div class="flex items-center me-3 my-1">
       <span>查詢區間：</span>
-      <yearMonthSelect :hasRange="true" :maxYear="searchingParams.endYear" :maxMonth="searchingParams.endMonth" @sendbackYearMonth="settingStart" />
+      <yearMonthSelect
+        :hasRange="true"
+        :minYear="1967"
+        :minMonth="1"
+        :maxYear="searchingParams.endYear"
+        :maxMonth="searchingParams.endMonth"
+        @sendbackYearMonth="settingStart" />
       <span class="mx-1">～</span>
-      <yearMonthSelect :hasRange="true" :maxYear="searchingParams.endYear" :maxMonth="searchingParams.endMonth" :minYear="searchingParams.startYear" :minMonth="searchingParams.startMonth" @sendbackYearMonth="settingEnd" />
+      <yearMonthSelect
+        :hasRange="true"
+        :maxYear="getCurrentYear()"
+        :maxMonth="getCurrentMonth()"
+        :minYear="searchingParams.startYear"
+        :minMonth="searchingParams.startMonth"
+        @sendbackYearMonth="settingEnd" />
     </div>
     <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo" @dataSearch="searchingStockPrice()" />
   </div>
@@ -24,8 +36,6 @@ const emits = defineEmits(["sendbackSearchingData"]);
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
 
-
-
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
   startYear: getCurrentYear(),
@@ -34,8 +44,6 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
   endMonth: getCurrentMonth(),
 });
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
-
-
 
 async function settingStockNo(stockNo: string) {
   searchingParams.stockNo = stockNo;

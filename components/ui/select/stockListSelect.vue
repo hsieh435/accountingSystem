@@ -48,7 +48,7 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
   loading.value = true;
   try {
     const res: IResponse = await fetchStockList(keyword);
-    console.log("res:", JSON.parse(res.data.data));
+    // console.log("res:", JSON.parse(res.data.data));
     if (res.data.returnCode === 0) {
       rawStockList.value = JSON.parse(res.data.data);
       filteredStockList.value = rawStockList.value.map((item: any) => ({
