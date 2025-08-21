@@ -8,9 +8,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { fetchCurrencyExRateInfoList } from "@/server/outerWebApi";
+import { fetchCurrencyLatestExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
@@ -30,7 +29,7 @@ async function searchingCurrencyExRate() {
   // emits("sendbackSearchingData", searchingParams);
 
   try {
-    const res: IResponse = await fetchCurrencyExRateInfoList(searchingParams.currencyId);
+    const res: IResponse = await fetchCurrencyLatestExRate(searchingParams.currencyId);
     console.log("fetchCurrencyExRateInfoList:", res.data.data);
     if (res.data.returnCode === 0) {
       //

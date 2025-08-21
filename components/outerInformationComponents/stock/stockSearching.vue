@@ -7,19 +7,19 @@
       <span>查詢區間：</span>
       <yearMonthSelect
         :yearMonthGot="searchingParams.startYear + '-' + searchingParams.startMonth.toString().padStart(2, '0')"
-        :minYear="searchingParams.endYear - 10 > 1967 ? searchingParams.endYear - 10 : 1967"
-        :minMonth="searchingParams.endYear - 10 > 1967 ? getCurrentMonth() : 1"
+        :minYear="searchingParams.endYear - 5 > 1967 ? searchingParams.endYear - 5 : 1967"
+        :minMonth="searchingParams.endYear - 5 > 1967 ? getCurrentMonth() : 1"
         :maxYear="searchingParams.endYear"
         :maxMonth="searchingParams.endMonth"
         @sendbackYearMonth="settingStart" />
       <span class="mx-1">～</span>
       <yearMonthSelect
-        :maxYear="searchingParams.startYear + 10 < getCurrentYear() ? searchingParams.startYear + 10 : getCurrentYear()"
-        :maxMonth="searchingParams.startYear + 10 < getCurrentYear() ? searchingParams.startMonth : getCurrentMonth()"
+        :maxYear="searchingParams.startYear + 5 < getCurrentYear() ? searchingParams.startYear + 5 : getCurrentYear()"
+        :maxMonth="searchingParams.startYear + 5 < getCurrentYear() ? searchingParams.startMonth : getCurrentMonth()"
         :minYear="searchingParams.startYear"
         :minMonth="searchingParams.startMonth"
         @sendbackYearMonth="settingEnd" />
-      <span>（區間以 10 年為限）</span>
+      <span>（區間以 5 年為限）</span>
     </div>
     <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo" @dataSearch="searchingStockPrice()" />
   </div>
@@ -38,7 +38,7 @@ const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/selec
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
-  startYear: getCurrentYear() - 1,
+  startYear: getCurrentYear() - 5,
   startMonth: getCurrentMonth(),
   endYear: getCurrentYear(),
   endMonth: getCurrentMonth(),
