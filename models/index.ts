@@ -286,14 +286,13 @@ export interface IStockPriceSearchingParams {
 
 // 股票歷史價位 interface
 export interface IStockPriceRecordList {
-  stockNo: string;
-  stockName: string;
+  data: any[];
   date: string;
-  openingPrice: number;
-  highestPrice: number;
-  lowestPrice: number;
-  closingPrice: number;
-  transactionVolume: number;
+  fields: string[];
+  notes: string[];
+  stat: string;
+  title: string;
+  total: number;
 }
 
 // 貨幣匯率查詢參數 interface

@@ -29,17 +29,17 @@ async function settingCurrencyId(currencyId: string) {
 async function searchingCurrencyExRate() {
   // emits("sendbackSearchingData", searchingParams);
 
-  // try {
-  //   const res: IResponse = await fetchCurrencyExRateInfoList(searchingParams);
-  //   console.log("fetchCurrencyExRateInfoList:", res.data.data);
-  //   if (res.data.returnCode === 0) {
-  //     //
-  //   } else {
-  //     showAxiosErrorMsg({ message: res.data.message });
-  //   }
-  // } catch (error) {
-  //   showAxiosErrorMsg({ message: (error as Error).message });
-  // }
+  try {
+    const res: IResponse = await fetchCurrencyExRateInfoList(searchingParams.currencyId);
+    console.log("fetchCurrencyExRateInfoList:", res.data.data);
+    if (res.data.returnCode === 0) {
+      //
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

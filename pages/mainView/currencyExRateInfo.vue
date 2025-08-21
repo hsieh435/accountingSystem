@@ -29,23 +29,9 @@ const currencyExRateSearching = defineAsyncComponent(() => import("@/components/
 
 
 onMounted(async () => {
-  await searchingCurrencyExRateInfo();
+  // 
 });
 
-async function searchingCurrencyExRateInfo() {
-
-  try {
-    const res: IResponse = await fetchCurrencyExRateInfoList();
-    console.log("fetchCurrencyExRateInfoList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      //
-    } else {
-      showAxiosErrorMsg({ message: res.data.message });
-    }
-  } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
-  }
-}
 
 </script>
 <style lang="scss" scoped></style>

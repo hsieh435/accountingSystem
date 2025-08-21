@@ -6,20 +6,20 @@
     <div class="flex items-center me-3 my-1">
       <span>查詢區間：</span>
       <yearMonthSelect
-        :hasRange="true"
-        :minYear="1967"
-        :minMonth="1"
+        :yearMonthGot="searchingParams.startYear + '-' + searchingParams.startMonth.toString().padStart(2, '0')"
+        :minYear="searchingParams.endYear - 10 > 1967 ? searchingParams.endYear - 10 : 1967"
+        :minMonth="searchingParams.endYear - 10 > 1967 ? getCurrentMonth() : 1"
         :maxYear="searchingParams.endYear"
         :maxMonth="searchingParams.endMonth"
         @sendbackYearMonth="settingStart" />
       <span class="mx-1">～</span>
       <yearMonthSelect
-        :hasRange="true"
-        :maxYear="getCurrentYear()"
-        :maxMonth="getCurrentMonth()"
+        :maxYear="searchingParams.startYear + 10 < getCurrentYear() ? searchingParams.startYear + 10 : getCurrentYear()"
+        :maxMonth="searchingParams.startYear + 10 < getCurrentYear() ? searchingParams.startMonth : getCurrentMonth()"
         :minYear="searchingParams.startYear"
         :minMonth="searchingParams.startMonth"
         @sendbackYearMonth="settingEnd" />
+      <span>（區間以 10 年為限）</span>
     </div>
     <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo" @dataSearch="searchingStockPrice()" />
   </div>
@@ -29,7 +29,7 @@ import { defineAsyncComponent, reactive, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
 import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 
@@ -38,12 +38,20 @@ const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/selec
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
-  startYear: getCurrentYear(),
+  startYear: getCurrentYear() - 1,
   startMonth: getCurrentMonth(),
   endYear: getCurrentYear(),
   endMonth: getCurrentMonth(),
 });
-const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
+const stockPriceRecord = ref<IStockPriceRecordList>({
+  data: [],
+  date: "",
+  fields: [],
+  notes: [],
+  stat: "",
+  title: "",
+  total: 0,
+});
 
 async function settingStockNo(stockNo: string) {
   searchingParams.stockNo = stockNo;
@@ -61,13 +69,13 @@ async function settingEnd(year: number, month: number) {
 
 async function searchingStockPrice() {
   // console.log(searchingParams);
-
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
-    console.log("fetchStockRangeValue:", res.data.data);
+    // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
       stockPriceRecord.value = res.data.data;
-      // emits("sendbackSearchingData", stockPriceRecord.value);
+      showAxiosToast({ message: res.data.message, icon: stockPriceRecord.value.data?.length > 0 ? "success" : "error" });
+      emits("sendbackSearchingData", searchingParams, stockPriceRecord.value);
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

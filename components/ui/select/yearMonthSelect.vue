@@ -10,7 +10,7 @@ import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 
-const props = withDefaults(defineProps<{ yearMonthGot?: string; hasRange?: boolean; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number; }>(), { yearMonthGot: "", hasRange: false, maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 });
+const props = withDefaults(defineProps<{ yearMonthGot?: string; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number; }>(), { yearMonthGot: "", maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 });
 const emits = defineEmits(["sendbackYearMonth"]);
 
 
@@ -40,30 +40,20 @@ onMounted(() => {
     const date = new Date(props.yearMonthGot);
     selectedYear.value = date.getFullYear();
     selectedMonth.value = date.getMonth() + 1;
+    selectedYearMonth.value.year = selectedYear.value;
+    selectedYearMonth.value.month = selectedMonth.value - 1;
   }
-  // settingRange();
   emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
 });
 
-watch(props, () => {
-  console.log("watch props:", props);
-  // settingRange();
-});
+// watch(props, () => {
+//   console.log("watch props:", props);
+// });
 
 watch(selectedYearMonth, () => {
   // console.log("watch selectedYearMonth:", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
   emits("sendbackYearMonth", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
 });
-
-
-
-// async function settingRange() {
-//   console.log(props);
-//   if (props.hasRange) {
-//     console.log("maxDate:", maxDate);
-//     console.log("minDate:", minDate);
-//   }
-// }
 
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <stockSearching />
+    <stockSearching @sendbackSearchingData="aaaaaaaaaaa" />
   </div>
   <div class="px-3">
     <!--  -->
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
-import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
+import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse, ISelectData, ICurrencyList } from "@/models/index";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
@@ -20,6 +20,14 @@ definePageMeta({
 });
 
 const stockSearching = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockSearching.vue"));
+
+
+
+
+async function aaaaaaaaaaa(searchingParams: IStockPriceSearchingParams, stockPriceRecord: IStockPriceRecordList[]) {
+  console.log(searchingParams);
+  console.log(stockPriceRecord);
+}
 
 
 </script>
