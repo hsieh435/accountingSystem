@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <stockSearching @sendbackSearchingData="aaaaaaaaaaa" />
+    <stockSearching @sendbackSearchingData="settingstockinfo" />
   </div>
   <div class="px-3">
     <!--  -->
@@ -11,6 +11,9 @@ import { defineAsyncComponent } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse, ISelectData, ICurrencyList } from "@/models/index";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import type { NuxtPlotlyHTMLElement } from 'nuxt-plotly';
+
+
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -24,9 +27,9 @@ const stockSearching = defineAsyncComponent(() => import("@/components/outerInfo
 
 
 
-async function aaaaaaaaaaa(searchingParams: IStockPriceSearchingParams, stockPriceRecord: IStockPriceRecordList[]) {
-  console.log(searchingParams);
-  console.log(stockPriceRecord);
+async function settingstockinfo(searchingParams: IStockPriceSearchingParams, stockPriceRecord: IStockPriceRecordList[]) {
+  // console.log(searchingParams);
+  // console.log(stockPriceRecord);
 }
 
 

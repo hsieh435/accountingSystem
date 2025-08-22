@@ -1,13 +1,21 @@
 <template>
-  <UInput v-model="dateString" type="date" />
+  <div style="width: 150px;">
+    <!-- <UInput v-model="dateString" type="date" :min="props.minDate" :max="props.maxDate" /> -->
+
+    <VueDatePicker v-model="dateString" :min-date="props.minDate" :max-date="props.maxDate" text-input auto-apply partial-flow  year-first format="yyyy/MM/dd" locale="zh-TW" week-start="0" :day-names="['日', '一', '二', '三', '四', '五', '六']" :enable-time-picker="false" :action-row="{ showNow: true }" now-button-label="今日" :highlight="{ options: { highlightDisabled: true } }">
+    </VueDatePicker>
+ <!-- :action-row="{ showNow: true }" now-button-label="今日" -->
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { getCurrentYMD } from "@/composables/tools"
+import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 
-const props = withDefaults(defineProps<{ dateSelect?: string; }>(), { dateSelect: "", });
+
+const props = withDefaults(defineProps<{ dateSelect?: string; minDate?: string; maxDate?: string; }>(), { dateSelect: "", minDate: "", maxDate: "" });
 const emits = defineEmits(["sendbackDate"]);
 
 

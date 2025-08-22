@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref } from "vue";
-import { fetchCurrencyExRateInfoList } from "@/server/outerWebApi";
+import { fetchCurrencyLatestExRate } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -29,7 +29,7 @@ const currencyExRateSearching = defineAsyncComponent(() => import("@/components/
 
 
 onMounted(async () => {
-  // 
+  //
 });
 
 

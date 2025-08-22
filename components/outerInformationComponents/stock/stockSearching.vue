@@ -43,15 +43,9 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
   endYear: getCurrentYear(),
   endMonth: getCurrentMonth(),
 });
-const stockPriceRecord = ref<IStockPriceRecordList>({
-  data: [],
-  date: "",
-  fields: [],
-  notes: [],
-  stat: "",
-  title: "",
-  total: 0,
-});
+const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
+
+
 
 async function settingStockNo(stockNo: string) {
   searchingParams.stockNo = stockNo;
@@ -68,13 +62,12 @@ async function settingEnd(year: number, month: number) {
 }
 
 async function searchingStockPrice() {
-  // console.log(searchingParams);
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
     // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
-      stockPriceRecord.value = res.data.data;
-      showAxiosToast({ message: res.data.message, icon: stockPriceRecord.value.data?.length > 0 ? "success" : "error" });
+      stockPriceRecord.value = res.data.data.data;
+      showAxiosToast({ message: res.data.message, icon: res.data.data.data.length > 0 ? "success" : "error" });
       emits("sendbackSearchingData", searchingParams, stockPriceRecord.value);
     } else {
       showAxiosErrorMsg({ message: res.data.message });

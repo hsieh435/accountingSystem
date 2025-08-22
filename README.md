@@ -19,7 +19,10 @@ npm run dev
 
 
 前端使用技術
-Nuxt 3 + Tailwind
+UI / UX：SCSS + Tailwind + Nuxt UI
+框架：Nuxt 3
+資料視覺化：plotly.js
+
 
 後端使用技術
 node.js

@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index";
-import { IStockPriceSearchingParams } from "@/models/index";
+import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/models/index";
 
 
 
@@ -38,5 +38,13 @@ export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
 
 export async function fetchCurrencyLatestExRate(currencyCode: string) {
   const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/latest/${currencyCode}`, "GET");
+  return await response.json();
+}
+
+
+export async function fetchCurrencyHistoryExRate(data: ICurrencyExRateSearchingParams) {
+  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/history`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }

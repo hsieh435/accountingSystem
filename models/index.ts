@@ -284,18 +284,33 @@ export interface IStockPriceSearchingParams {
   endYear: number;
 }
 
-// 股票歷史價位 interface
+// 股票歷史價位資料 interface
 export interface IStockPriceRecordList {
-  data: any[];
+  Trading_Volume: number;
+  Trading_money: number;
+  Trading_turnover: number;
+  close: number;
   date: string;
-  fields: string[];
-  notes: string[];
-  stat: string;
-  title: string;
-  total: number;
+  max: number;
+  min: number;
+  open: number;
+  spread: number;
+  stock_id: string;
 }
 
 // 貨幣匯率查詢參數 interface
 export interface ICurrencyExRateSearchingParams {
   currencyId: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+// 貨幣匯率歷史紀錄資料 interface
+export interface ICurrencyExRateRecordList {
+  cash_buy: number;
+  cash_sell: number;
+  currency: string;
+  date: string;
+  spot_buy: number;
+  spot_sell: number;
 }

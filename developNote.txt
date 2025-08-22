@@ -51,3 +51,5 @@ git ls-files | wc -l
 
 git ls-files | xargs cat | wc -l
 23794
+
+npm uninstall package-name

@@ -9,25 +9,14 @@ const baseURL = "http://localhost:3600";
 export async function apiFetch(url: string, method: string, options?: RequestInit) {
   const userToken = localStorage.getItem("userToken");
 
-  const response = await fetch(baseURL + url, {
+  return fetch(baseURL + url, {
     ...options,
     method: method,
     headers: {
       "Content-Type": "application/json",
-      Authorization: userToken ? `Bearer ${decryptString(userToken || "")}` : "",
+      "Authorization": userToken ? `Bearer ${decryptString(userToken || "")}` : "",
     },
   });
-  // console.log(response);
-  // console.log(response.ok);
-
-  if (response.ok) {
-    return response;
-  } else {
-    throw {
-      status: response.status,
-      message: "API 請求失敗",
-    };
-  }
 }
 
 
