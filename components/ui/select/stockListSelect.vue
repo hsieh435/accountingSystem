@@ -8,6 +8,7 @@
     :multiple="props.multipleSelect"
     delete-icon="i-lucide-trash"
     :loading="loading"
+    loading-icon="i-lucide-loader"
     :disabled="props.isDisable" />
 </template>
 <script setup lang="ts">
@@ -30,13 +31,18 @@ const loading = ref<boolean>(false);
 
 watch(stockSelected, () => {
   // console.log("stockSelected:", stockSelected.value);
-  emits("sendbackStockNo", stockSelected.value);
+  const selectedItem = filteredStockList.value.find((item) => item.value === stockSelected.value);
+  const selectedData = {
+    value: stockSelected.value,
+    label: selectedItem?.label || "",
+  };
+  emits("sendbackStockNo", selectedData);
 });
 
 function onSearch(event: Event) {
-  const target = event.target as HTMLInputElement;
-  const keyword = target.value;
-  debounceSearchStocks(keyword);
+  // const target = event.target as HTMLInputElement;
+  // const keyword = target.value;
+  debounceSearchStocks((event.target as HTMLInputElement).value);
 }
 
 const debounceSearchStocks = debounceFn(async (keyword: string) => {

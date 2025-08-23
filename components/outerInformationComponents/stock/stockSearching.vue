@@ -7,19 +7,18 @@
       <span>查詢區間：</span>
       <yearMonthSelect
         :yearMonthGot="searchingParams.startYear + '-' + searchingParams.startMonth.toString().padStart(2, '0')"
-        :minYear="searchingParams.endYear - 5 > 1967 ? searchingParams.endYear - 5 : 1967"
-        :minMonth="searchingParams.endYear - 5 > 1967 ? getCurrentMonth() : 1"
+        :minYear="1967"
+        :minMonth="1"
         :maxYear="searchingParams.endYear"
         :maxMonth="searchingParams.endMonth"
         @sendbackYearMonth="settingStart" />
       <span class="mx-1">～</span>
       <yearMonthSelect
-        :maxYear="searchingParams.startYear + 5 < getCurrentYear() ? searchingParams.startYear + 5 : getCurrentYear()"
-        :maxMonth="searchingParams.startYear + 5 < getCurrentYear() ? searchingParams.startMonth : getCurrentMonth()"
+        :maxYear="getCurrentYear()"
+        :maxMonth="getCurrentMonth()"
         :minYear="searchingParams.startYear"
         :minMonth="searchingParams.startMonth"
         @sendbackYearMonth="settingEnd" />
-      <span>（區間以 5 年為限）</span>
     </div>
     <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo" @dataSearch="searchingStockPrice()" />
   </div>
@@ -44,11 +43,13 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
   endMonth: getCurrentMonth(),
 });
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
+const stockName = ref<string>("");
 
 
 
-async function settingStockNo(stockNo: string) {
-  searchingParams.stockNo = stockNo;
+async function settingStockNo(selectedData: { value: string; label: string }) {
+  searchingParams.stockNo = selectedData.value;
+  stockName.value = selectedData.label;
 }
 
 async function settingStart(year: number, month: number) {
@@ -68,7 +69,15 @@ async function searchingStockPrice() {
     if (res.data.returnCode === 0) {
       stockPriceRecord.value = res.data.data.data;
       showAxiosToast({ message: res.data.message, icon: res.data.data.data.length > 0 ? "success" : "error" });
-      emits("sendbackSearchingData", searchingParams, stockPriceRecord.value);
+      const plotlyTitle =
+        stockName.value + " " + searchingParams.startYear + "/" + searchingParams.startMonth + " ~ " + searchingParams.endYear + "/" + searchingParams.endMonth + "股價走勢";
+
+      if (stockPriceRecord.value.length > 0) {
+        emits("sendbackSearchingData", plotlyTitle, stockPriceRecord.value);
+      } else {
+        emits("sendbackSearchingData", "", []);
+      }
+
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

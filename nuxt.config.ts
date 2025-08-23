@@ -1,7 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
 
-
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
@@ -12,7 +10,17 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   css: ["@/assets/css/index.scss", "sweetalert2/dist/sweetalert2.min.css", "@vuepic/vue-datepicker/dist/main.css"],
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@vesp/nuxt-fontawesome", "@nuxt/ui", ["nuxt-plotly", { inject: true }]],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@vesp/nuxt-fontawesome",
+    "@nuxt/ui",
+    [
+      "nuxt-plotly",
+      {
+        inject: true, // Set to true to inject Plotly functions globally
+      },
+    ],
+  ],
   imports: {
     autoImport: true,
   },
@@ -21,7 +29,12 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["plotly.js-dist-min"]
-    }
-  }
+      include: ["plotly.js-dist-min"],
+    },
+    resolve: {
+      alias: {
+        stream: "stream-browserify",
+      },
+    },
+  },
 });
