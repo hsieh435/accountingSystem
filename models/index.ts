@@ -278,10 +278,8 @@ export interface IStockAccountRecordList {
 // 股票歷史價位查詢參數 interface
 export interface IStockPriceSearchingParams {
   stockNo: string;
-  startYear: number;
-  startMonth: number;
-  endMonth: number;
-  endYear: number;
+  startDate: string;
+  endDate: string;
 }
 
 // 股票歷史價位資料 interface

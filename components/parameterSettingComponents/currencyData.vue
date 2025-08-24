@@ -9,7 +9,12 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/parameterApi";
+import {
+  fetchCurrencyByCurrencyCode,
+  fetchCurrencyCreate,
+  fetchCurrencyUpdate,
+  fetchCurrencyDelete,
+} from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -54,7 +59,7 @@ async function currencyDataHandling(apiMsg?: string) {
     title: props.currencyCodeGot ? "編輯貨幣資料" : "新增貨幣資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -104,8 +109,9 @@ async function currencyDataHandling(apiMsg?: string) {
       dataParams.currencyCode = (document.getElementById("currencyCode") as HTMLInputElement).value;
       dataParams.currencyName = (document.getElementById("currencyName") as HTMLInputElement).value;
       dataParams.currencySymbol = (document.getElementById("currencySymbol") as HTMLInputElement).value;
-      dataParams.minimumDenomination =
-        Number((document.getElementById("minimumDenomination") as HTMLInputElement).value);
+      dataParams.minimumDenomination = Number(
+        (document.getElementById("minimumDenomination") as HTMLInputElement).value,
+      );
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
 
       if (!dataParams.currencyCode) {
@@ -149,8 +155,6 @@ async function currencyDataHandling(apiMsg?: string) {
     }
   });
 }
-
-
 
 async function removeCurrency() {
   const confirmResult = await showConfirmDialog({

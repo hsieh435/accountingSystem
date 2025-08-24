@@ -9,18 +9,19 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory, fetchDeleteTradeCategory } from "@/server/parameterApi";
+import {
+  fetchTradeCategory,
+  fetchCreateTradeCategory,
+  fetchUpdateTradeCategory,
+  fetchDeleteTradeCategory,
+} from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ categoryCodeGot?: string; }>(), { categoryCodeGot: "" });
+const props = withDefaults(defineProps<{ categoryCodeGot?: string }>(), { categoryCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<ITradeCategory>({
   categoryCode: props.categoryCodeGot || "",
@@ -32,8 +33,6 @@ const dataParams = reactive<ITradeCategory>({
   isStaccountAble: false,
   sort: 0,
 });
-
-
 
 async function searchingTradeCategory() {
   // console.log("props:", props.categoryCodeGot);
@@ -59,7 +58,6 @@ async function searchingTradeCategory() {
   }
 }
 
-
 async function tradeCategoryDataHandling(apiMsg?: string) {
   console.log(dataParams);
 
@@ -67,12 +65,12 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
     title: props.categoryCodeGot ? "編輯交易代碼" : "新增交易代碼",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易代碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : "" } />
+          <input class="${tailwindStyles.inputClasses}" id="categoryCode" value="${dataParams.categoryCode}" ${props.categoryCodeGot ? "disabled" : ""} />
         </div>
 
 
@@ -121,7 +119,6 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
       const isCashflowAbleCheckbox = document.getElementById("isCashflowAble") as HTMLInputElement;
       isCashflowAbleCheckbox.checked = dataParams.isCashflowAble;
 
@@ -136,7 +133,6 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
 
       const isStaccountAbleCheckbox = document.getElementById("isStaccountAble") as HTMLInputElement;
       isStaccountAbleCheckbox.checked = dataParams.isStaccountAble;
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -154,7 +150,6 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
       dataParams.isCuaccountAble = (document.getElementById("isCuaccountAble") as HTMLInputElement).checked;
       dataParams.isStaccountAble = (document.getElementById("isStaccountAble") as HTMLInputElement).checked;
       dataParams.sort = Number((document.getElementById("sort") as HTMLInputElement).value);
-
 
       if (!dataParams.categoryCode) {
         errors.push("請填寫交易代碼");
@@ -177,8 +172,9 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse =
-          await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(result.value);
+        const res: IResponse = await (props.categoryCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(
+          result.value,
+        );
         console.log("res:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -191,13 +187,9 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
       }
     }
   });
-};
-
-
-
+}
 
 async function removeTradeCategory() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除該交易代碼",
     confirmButtonMsg: "確定刪除",

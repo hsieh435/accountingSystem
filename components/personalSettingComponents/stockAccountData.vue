@@ -9,7 +9,12 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
-import { fetchStockAccountById, fetchStockAccountCreate, fetchStockAccountUpdate, fetchStockAccountDelete } from "@/server/stockAccountApi";
+import {
+  fetchStockAccountById,
+  fetchStockAccountCreate,
+  fetchStockAccountUpdate,
+  fetchStockAccountDelete,
+} from "@/server/stockAccountApi";
 import { IStockAccountList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
@@ -69,7 +74,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
     title: props.stockAccountIGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -137,7 +142,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -214,8 +219,9 @@ async function stockAccountDataHandling(apiMsg?: string) {
       if (!props.stockAccountIGot) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
-      dataParams.minimumValueAllowed =
-        Number((document.getElementById("minimumValueAllowed") as HTMLInputElement).value);
+      dataParams.minimumValueAllowed = Number(
+        (document.getElementById("minimumValueAllowed") as HTMLInputElement).value,
+      );
 
       dataParams.presentAmount = props.stockAccountIGot
         ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)

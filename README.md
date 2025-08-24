@@ -12,10 +12,20 @@
 ## 安裝方式
 
 ```bash
+1.下載前端程式
 git clone https://github.com/hsieh435/accountingSystem.git
-cd accountingSystem
 npm i
 npm run dev
+
+2.下載後端程式
+git clone https://github.com/hsieh435/accountingSystemBackend.git
+npm i
+npm start
+
+3.於 pgadmin 資料庫建立名為 accountingSystem 的 Database
+
+4.將 accounting.sql 檔案以 restore 方式輸入資料庫
+
 
 
 前端使用技術

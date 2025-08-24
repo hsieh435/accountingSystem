@@ -55,7 +55,7 @@ async function searchingCurrencyList() {
 
   try {
     const res: IResponse = await fetchCurrencyList();
-    // console.log("fetchCurrencyList:", res);
+    // console.log("fetchCurrencyList:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyArray.value = res.data.data.map((item: ICurrencyList) => ({
         label: item.currencyName,

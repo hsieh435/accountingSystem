@@ -20,7 +20,7 @@
       <dateSelect :dateSelect="getCurrentYear() + '-12-31'" :minimumGot="searchParams.startingDate" @sendbackDate="settingEndDate" />
     </div>
 
-    <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
+    <ui-buttonGroup showSearch :searchDisable="!searchParams.accountId" @dataSearch="searchingRecord()" />
   </div>
 </template>
 <script setup lang="ts">

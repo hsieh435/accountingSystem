@@ -1,10 +1,22 @@
 <template>
   <template v-if="props.cashflowIdIdGot">
-    <ui-buttonGroup showView :viewText="'檢視現金流'" @dataView="searchingCashflowData()" :viewDisable="props.isDisable" />
-    <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData()" :removeDisable="props.isDisable" />
+    <ui-buttonGroup
+      showView
+      :viewText="'檢視現金流'"
+      @dataView="searchingCashflowData()"
+      :viewDisable="props.isDisable" />
+    <ui-buttonGroup
+      showRemove
+      :removeText="'刪除現金流'"
+      @dataRemove="removeCashFlowData()"
+      :removeDisable="props.isDisable" />
   </template>
   <template v-if="!props.cashflowIdIdGot">
-    <ui-buttonGroup showCreate :createText="'新增現金流'" @dataCreate="cashflowDataHandling()" :createDisable="props.isDisable" />
+    <ui-buttonGroup
+      showCreate
+      :createText="'新增現金流'"
+      @dataCreate="cashflowDataHandling()"
+      :createDisable="props.isDisable" />
   </template>
 </template>
 <script setup lang="ts">
@@ -27,7 +39,7 @@ const dataParams = reactive<ICashFlowList>({
   userId: "",
   accountType: "cashFlow",
   cashflowName: "",
-  currency: props.cashflowIdIdGot ? "" : "NTD",
+  currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -38,13 +50,10 @@ const dataParams = reactive<ICashFlowList>({
   note: "",
 });
 
-
-
 async function searchingCashflowData() {
   // console.log("props:", props);
   try {
     const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
-    // console.log("fetchCashFlowById:", res.data.data);
     if (res.data.returnCode === 0) {
       dataParams.cashflowId = res.data.data.cashflowId;
       dataParams.userId = res.data.data.userId;
@@ -74,14 +83,13 @@ async function cashflowDataHandling(apiMsg?: string) {
     title: props.cashflowIdIdGot ? "修改現金流資料" : "新增現金流資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="cashflowName" value="${dataParams.cashflowName}" />
         </div>
-
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -127,7 +135,7 @@ async function cashflowDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -151,7 +159,7 @@ async function cashflowDataHandling(apiMsg?: string) {
       let currencySelect = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
-          currencyIdGot: "NTD",
+          currencyIdGot: dataParams.currency,
           sellectAll: false,
           isDisable: props.cashflowIdIdGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
@@ -241,8 +249,7 @@ async function cashflowDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       console.log("result:", result.value);
       try {
-        const res: IResponse =
-          await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(result.value);
+        const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -256,8 +263,6 @@ async function cashflowDataHandling(apiMsg?: string) {
     }
   });
 }
-
-
 
 async function removeCashFlowData() {
   const confirmResult = await showConfirmDialog({

@@ -13,12 +13,11 @@ import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot?: string }>(), { tradeIdGot: "", bankIdGot: "" });
+const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot?: string }>(), {
+  tradeIdGot: "",
+  bankIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<IStockAccountRecordList>({
   tradeId: props.tradeIdGot || "",
@@ -39,12 +38,9 @@ const dataParams = reactive<IStockAccountRecordList>({
   tradeNote: "",
 });
 
-
-
 async function searchingStockAccountRecord() {
   // stockAccountRecordDataHandling();
 }
-
 
 async function stockAccountRecordDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -52,7 +48,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
     title: props.tradeIdGot ? "編輯證券帳戶收支紀錄" : "新增證券帳戶收支紀錄",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -126,8 +122,8 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">備註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="4" maxlength="500">${dataParams.tradeNote}</textarea>
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>
@@ -141,45 +137,51 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
     // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-
-
-      let stockAccountSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
-        selectId: "stockAccount",
-        selectTitle: "證券帳戶",
-        onSendbackAccountId: (accountId: string) => {
-          dataParams.accountId = accountId;
-          // console.log("選擇的票卡ID:", accountId);
+      let stockAccountSelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
+        {
+          selectId: "stockAccount",
+          selectTitle: "證券帳戶",
+          onSendbackAccountId: (accountId: string) => {
+            dataParams.accountId = accountId;
+            // console.log("選擇的票卡ID:", accountId);
+          },
         },
-      });
+      );
       stockAccountSelect.mount("#accountSelectComponent");
 
-
-      let stockAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
-        dateTimeGot: dataParams.tradeDatetime,
-        onSendbackDateTime: (dateTime: string) => {
-          dataParams.tradeDatetime = dateTime;
+      let stockAccountTradeDatetime = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
+        {
+          dateTimeGot: dataParams.tradeDatetime,
+          onSendbackDateTime: (dateTime: string) => {
+            dataParams.tradeDatetime = dateTime;
+          },
         },
-      });
+      );
       stockAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
-
-      let stockAccountTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/incomeOutgoSelect.vue")), {
-        tradeCategoryGot: dataParams.transactionType,
-        onSendbackIncomeExpense: (type: string) => {
-          dataParams.transactionType = type;
+      let stockAccountTransactionType = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
+        {
+          tradeCategoryGot: dataParams.transactionType,
+          onSendbackIncomeExpense: (type: string) => {
+            dataParams.transactionType = type;
+          },
         },
-      });
+      );
       stockAccountTransactionType.mount("#transactionTypeSelectComponent");
 
-
-      let stockAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")), {
-        tradeCategoryGot: dataParams.tradeCategory,
-        onSendbackTradeCategory: (tradeCategoryId: string) => {
-          dataParams.tradeCategory = tradeCategoryId;
+      let stockAccountCategory = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")),
+        {
+          tradeCategoryGot: dataParams.tradeCategory,
+          onSendbackTradeCategory: (tradeCategoryId: string) => {
+            dataParams.tradeCategory = tradeCategoryId;
+          },
         },
-      });
+      );
       stockAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
-
 
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
       const quantity = document.getElementById("quantity") as HTMLInputElement;
@@ -187,7 +189,9 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       const transactionTax = document.getElementById("transactionTax") as HTMLInputElement;
       const totalPriceInput = document.getElementById("totalPrice") as HTMLInputElement;
       const calculateDateDiff = () => {
-        const total = (Number(pricePerShare.value) * Number(quantity.value)) + (Number(handlingFee.value) + Number(transactionTax.value));
+        const total =
+          Number(pricePerShare.value) * Number(quantity.value) +
+          (Number(handlingFee.value) + Number(transactionTax.value));
         totalPriceInput.value = total.toString();
         dataParams.totalPrice = total;
       };
@@ -217,7 +221,6 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       dataParams.transactionTax = Number((document.getElementById("transactionTax") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
 
       if (!dataParams.accountId) {
         errors.push("請選擇存款帳戶");
@@ -254,11 +257,8 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

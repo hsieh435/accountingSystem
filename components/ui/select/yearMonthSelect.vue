@@ -1,6 +1,6 @@
 <template>
   <div style="width: 150px;">
-    <VueDatePicker v-model="selectedYearMonth" month-picker text-input auto-apply partial-flow  year-first  :min-date="minDate" :max-date="maxDate" format="yyyy/MM" locale="zh-TW" :highlight="{ options: { highlightDisabled: true } }">
+    <VueDatePicker v-model="selectedYearMonth" month-picker text-input auto-apply partial-flow year-first :min-date="minDate" :max-date="maxDate" format="yyyy/MM" locale="zh-TW" :highlight="{ options: { highlightDisabled: true } }">
     </VueDatePicker>
   </div>
 </template>

@@ -1,32 +1,44 @@
 <template>
-  <UInput v-model="dateString" type="datetime-local" :min="props.minimumGot ? props.minimumGot : ''" :max="props.maximumGot ? props.maximumGot : ''" />
+  <div style="width: 250px">
+    <VueDatePicker
+      v-model="dateTimeString"
+      time-picker-inline
+      text-input
+      auto-apply
+      partial-flow
+      year-first
+      format="yyyy/MM/dd HH:mm"
+      locale="zh-TW"
+      week-start="0"
+      :day-names="['日', '一', '二', '三', '四', '五', '六']"
+      :highlight="{ options: { highlightDisabled: true } }" />
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { getCurrentTimestamp, yearMonthDayTimeFormat} from "@/composables/tools";
+import { getCurrentTimestamp } from "@/composables/tools";
+import VueDatePicker from "@vuepic/vue-datepicker";
 
-
-
-const props = withDefaults(defineProps<{ dateTimeGot?: string; hasRange?: boolean; minimumGot?: string; maximumGot?: string; }>(), { dateTimeGot: "", hasRange: false, minimumGot: "", maximumGot: "" });
+const props = withDefaults(
+  defineProps<{ dateTimeGot?: string; hasRange?: boolean; minDateTime?: string; maxDateTime?: string }>(),
+  { dateTimeGot: "", hasRange: false, minDateTime: "", maxDateTime: "" },
+);
 const emits = defineEmits(["sendbackDateTime"]);
 
-
-
-const dateString = ref<string>("");
-
-
+const dateTimeString = ref<number>(getCurrentTimestamp());
 
 onMounted(async () => {
-  // dateString.value = props.dateTimeGot || yearMonthDayTimeFormat(getCurrentTimestamp(), true);
-  dateString.value = props.dateTimeGot || getCurrentTimestamp() + "";
-  // console.log("dateString:", dateString.value);
+  // console.log("props:", props);
+  dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
 });
 
-watch(() => dateString.value, () => {
-  emits("sendbackDateTime", dateString.value);
-}, { immediate: true });
-
-
-
+watch(
+  () => dateTimeString.value,
+  () => {
+    const newDateTime = new Date(dateTimeString.value);
+    const newDateTimeString = `${newDateTime.getFullYear()}-${newDateTime.getMonth() + 1}-${newDateTime.getDate()} ${newDateTime.getHours()}:${newDateTime.getMinutes().toString().padStart(2, "0")}:00`;
+    emits("sendbackDateTime", newDateTimeString);
+  },
+);
 </script>
 <style lang="scss" scoped></style>

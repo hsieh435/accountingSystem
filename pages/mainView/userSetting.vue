@@ -49,7 +49,7 @@ async function submitUserData(apiMsg?: string) {
     title: "編輯使用者資料",
     html: `
       <div class="items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">

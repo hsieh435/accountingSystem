@@ -5,20 +5,17 @@
     </div>
     <div class="flex items-center me-3 my-1">
       <span>查詢區間：</span>
-      <yearMonthSelect
-        :yearMonthGot="searchingParams.startYear + '-' + searchingParams.startMonth.toString().padStart(2, '0')"
-        :minYear="1967"
-        :minMonth="1"
-        :maxYear="searchingParams.endYear"
-        :maxMonth="searchingParams.endMonth"
-        @sendbackYearMonth="settingStart" />
+      <dateSelect
+        :dateSelect="getCurrentYMD()"
+        :minDate="'1967-01-01'"
+        :maxDate="searchingParams.endDate"
+        @sendbackDate="settingStart" />
       <span class="mx-1">～</span>
-      <yearMonthSelect
-        :maxYear="getCurrentYear()"
-        :maxMonth="getCurrentMonth()"
-        :minYear="searchingParams.startYear"
-        :minMonth="searchingParams.startMonth"
-        @sendbackYearMonth="settingEnd" />
+      <dateSelect
+        :dateSelect="getCurrentYMD()"
+        :minDate="searchingParams.startDate"
+        :maxDate="getCurrentYMD()"
+        @sendbackDate="settingEnd" />
     </div>
     <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo" @dataSearch="searchingStockPrice()" />
   </div>
@@ -27,57 +24,52 @@
 import { defineAsyncComponent, reactive, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
-import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
+import { getCurrentYMD, getCurrentYear, getCurrentMonth } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
-const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
+const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
-  startYear: getCurrentYear() - 5,
-  startMonth: getCurrentMonth(),
-  endYear: getCurrentYear(),
-  endMonth: getCurrentMonth(),
+  startDate: getCurrentYMD(),
+  endDate: getCurrentYMD(),
 });
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
 const stockName = ref<string>("");
-
-
 
 async function settingStockNo(selectedData: { value: string; label: string }) {
   searchingParams.stockNo = selectedData.value;
   stockName.value = selectedData.label;
 }
 
-async function settingStart(year: number, month: number) {
-  searchingParams.startYear = year;
-  searchingParams.startMonth = month;
+async function settingStart(date: string) {
+  searchingParams.startDate = date;
 }
 
-async function settingEnd(year: number, month: number) {
-  searchingParams.endYear = year;
-  searchingParams.endMonth = month;
+async function settingEnd(date: string) {
+  searchingParams.endDate = date;
 }
 
 async function searchingStockPrice() {
+  console.log("searchingParams:", searchingParams);
+
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
     // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
-      stockPriceRecord.value = res.data.data.data;
-      showAxiosToast({ message: res.data.message, icon: res.data.data.data.length > 0 ? "success" : "error" });
-      const plotlyTitle =
-        stockName.value + " " + searchingParams.startYear + "/" + searchingParams.startMonth + " ~ " + searchingParams.endYear + "/" + searchingParams.endMonth + "股價走勢";
+      stockPriceRecord.value = res.data.data.data;const plotlyTitle =
+        stockName.value + " " + searchingParams.startDate + " ~ " + searchingParams.endDate + "股價走勢";
 
       if (stockPriceRecord.value.length > 0) {
+        showAxiosToast({ message: res.data.message, icon: "success" });
         emits("sendbackSearchingData", plotlyTitle, stockPriceRecord.value);
       } else {
+        showAxiosToast({ message: "查無資料", icon: "warning" });
         emits("sendbackSearchingData", "", []);
       }
-
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

@@ -13,12 +13,11 @@ import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot: string }>(), { tradeIdGot: "", bankIdGot: "" });
+const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot: string }>(), {
+  tradeIdGot: "",
+  bankIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<IcurrencyAccountRecordList>({
   tradeId: props.tradeIdGot || "",
@@ -34,12 +33,9 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
   tradeNote: "",
 });
 
-
-
 async function searchingCurrencyAccountRecord() {
   // currencyAccountRecordDataHandling();
 }
-
 
 async function currencyAccountRecordDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -48,7 +44,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     title: props.tradeIdGot ? "編輯存款帳戶收支紀錄" : "新增存款帳戶收支紀錄",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -87,8 +83,8 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         </div>
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">備註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="4" maxlength="500">${dataParams.tradeNote}</textarea>
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>
@@ -102,45 +98,51 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-
-
-      let currencyAccountSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
-        selectId: "currencyAccount",
-        selectTitle: "存款帳戶",
-        onSendbackAccountId: (accountId: string) => {
-          dataParams.accountId = accountId;
-          // console.log("選擇的票卡ID:", accountId);
+      let currencyAccountSelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
+        {
+          selectId: "currencyAccount",
+          selectTitle: "存款帳戶",
+          onSendbackAccountId: (accountId: string) => {
+            dataParams.accountId = accountId;
+            // console.log("選擇的票卡ID:", accountId);
+          },
         },
-      });
+      );
       currencyAccountSelect.mount("#accountSelectComponent");
 
-
-      let currencyAccountTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
-        dateTimeGot: dataParams.tradeDatetime,
-        onSendbackDateTime: (dateTime: string) => {
-          dataParams.tradeDatetime = dateTime;
+      let currencyAccountTradeDatetime = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
+        {
+          dateTimeGot: dataParams.tradeDatetime,
+          onSendbackDateTime: (dateTime: string) => {
+            dataParams.tradeDatetime = dateTime;
+          },
         },
-      });
+      );
       currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
-
-      let currencyAccountTransactionTypeSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
-        tradeCategoryGot: dataParams.transactionType,
-        onSendbackIncomeExpense: (type: string) => {
-          dataParams.transactionType = type;
+      let currencyAccountTransactionTypeSelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
+        {
+          tradeCategoryGot: dataParams.transactionType,
+          onSendbackIncomeExpense: (type: string) => {
+            dataParams.transactionType = type;
+          },
         },
-      });
+      );
       currencyAccountTransactionTypeSelect.mount("#transactionTypeSelectComponent");
 
-
-      let currencyAccountCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
-        tradeCategoryId: dataParams.tradeCategory,
-        onSendbackTradeCategory: (tradeCategoryId: string) => {
-          dataParams.tradeCategory = tradeCategoryId;
+      let currencyAccountCategory = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
+        {
+          tradeCategoryId: dataParams.tradeCategory,
+          onSendbackTradeCategory: (tradeCategoryId: string) => {
+            dataParams.tradeCategory = tradeCategoryId;
+          },
         },
-      });
+      );
       currencyAccountCategory.mount("#tradeCategorySelectComponent");
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -156,7 +158,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
 
       if (!dataParams.accountId) {
         errors.push("請選擇存款帳戶");
@@ -184,11 +185,8 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

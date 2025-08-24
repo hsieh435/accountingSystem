@@ -48,12 +48,18 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     title: props.tradeIdGot ? "編輯現金收支紀錄" : "新增現金收支紀錄",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
-          <div id="tradeDatetimeComponent"></div>
+          <div class="col-span-4" id="tradeDatetimeComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>現金流：</span>
+          <div class="col-span-4" id="accountComponent"></div>
         </div>
 
 
@@ -76,14 +82,20 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
           <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">備註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="4" maxlength="500">${dataParams.tradeNote}</textarea>
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>
@@ -91,21 +103,25 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.tradeIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
 
+      let cashFlowTradeAccount = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
+        selectTargetId: "isCashflowAble",
+        accountIdGot: dataParams.cashflowId,
+        onSendbackAccount: (account: string) => {
+          dataParams.cashflowId = account;
+        },
+      });
+      cashFlowTradeAccount.mount("#accountComponent");
 
-      let cashCardTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
+      let cashFlowTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
         dateTimeGot: dataParams.tradeDatetime,
         onSendbackDateTime: (dateTime: string) => {
           dataParams.tradeDatetime = dateTime;
         },
       });
-      cashCardTradeDatetime.mount("#tradeDatetimeComponent");
+      cashFlowTradeDatetime.mount("#tradeDatetimeComponent");
 
 
       let cashFlowTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
@@ -117,13 +133,22 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       cashFlowTransactionType.mount("#transactionTypeSelectComponent");
 
 
-      let cashCardTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
+      let cashFlowTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
         tradeCategoryId: dataParams.tradeCategory,
         onSendbackTradeCategory: (tradeCategoryId: string) => {
           dataParams.tradeCategory = tradeCategoryId;
         },
       });
-      cashCardTradeCategory.mount("#tradeCategorySelectComponent");
+      cashFlowTradeCategory.mount("#tradeCategorySelectComponent");
+
+
+      let cashFlowCurrencySelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")), {
+        currencyGot: dataParams.currency,
+        onSendbackCurrency: (currency: string) => {
+          dataParams.currency = currency;
+        },
+      });
+      cashFlowCurrencySelect.mount("#currencySelectComponent");
 
 
       if (apiMsg) {
@@ -142,6 +167,9 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
 
 
+      if (!dataParams.cashflowId) {
+        errors.push("請選擇現金流帳戶");
+      }
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }

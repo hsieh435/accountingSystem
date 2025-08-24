@@ -3,9 +3,9 @@
     <stockSearching @sendbackSearchingData="settingstockinfo" />
   </div>
   <div class="px-1">
-    <template v-if="stockData.length > 0">
+    <!-- <client-only>
       <div id="myStockLineChart"></div>
-    </template>
+    </client-only> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -27,6 +27,7 @@ const stockData = ref<IStockPriceRecordList[]>([]);
 async function settingstockinfo(plotlyTitle: string, stockPriceRecord: IStockPriceRecordList[]) {
   // console.log(plotlyTitle);
   console.log(stockPriceRecord);
+  stockData.value = JSON.parse(JSON.stringify(stockPriceRecord));
 
   var data: Plotly.Data[] = [
     {
@@ -70,8 +71,7 @@ async function settingstockinfo(plotlyTitle: string, stockPriceRecord: IStockPri
     },
   } as Partial<Plotly.Layout>;
 
-  // as Partial<Plotly.Layout>;
-  Plotly.newPlot("myStockLineChart", data, layout);
+  // Plotly.newPlot("myStockLineChart", data, layout);
 }
 </script>
 <style lang="scss" scoped></style>

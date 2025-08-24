@@ -10,37 +10,28 @@ import { encryptString } from "@/composables/crypto";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
-
-
 const userAccount = ref<string>("");
 const userName = ref<string>("");
 const userPassword = ref<string>("");
 const userSsecondPassword = ref<string>("");
 
-
-
 onMounted(async () => {
   // console.log("onMounted props:", props);
-  await searchingUser()
+  await searchingUser();
 });
 
-
-
 async function searchingUser() {
-  if (await fetchUserList() === 0) {
+  if ((await fetchUserList()) === 0) {
     await createUserDate();
   }
 }
 
-
-
 async function createUserDate(apiMsg?: string) {
-
   Swal.fire({
     title: "新增使用者資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
@@ -85,7 +76,6 @@ async function createUserDate(apiMsg?: string) {
       userPassword.value = (document.getElementById("userPassword") as HTMLInputElement).value;
       userSsecondPassword.value = (document.getElementById("userSsecondPassword") as HTMLInputElement).value;
 
-
       // 驗證單位代碼與單位名稱
       if (!userAccount.value) {
         errors.push("請填寫使用者帳號");
@@ -129,9 +119,6 @@ async function createUserDate(apiMsg?: string) {
       }
     }
   });
-};
-
-
-
+}
 </script>
 <style lang="scss" scoped></style>

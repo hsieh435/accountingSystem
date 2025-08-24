@@ -13,12 +13,11 @@ import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ tradeIdGot?: string; cashCardIdGot?: string }>(), { tradeIdGot: "", cashCardIdGot: "" });
+const props = withDefaults(defineProps<{ tradeIdGot?: string; cashCardIdGot?: string }>(), {
+  tradeIdGot: "",
+  cashCardIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const dataParams = reactive<ICashCardRecordList>({
   tradeId: props.tradeIdGot || "",
@@ -34,12 +33,9 @@ const dataParams = reactive<ICashCardRecordList>({
   tradeNote: "",
 });
 
-
-
 async function searchingCashCardRecord() {
   // cashCardRecordDataHandling();
 }
-
 
 async function cashCardRecordDataHandling(apiMsg?: string) {
   // console.log(dataParams);
@@ -48,7 +44,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     title: props.tradeIdGot ? "編輯儲值票卡收支紀錄" : "新增儲值票卡收支紀錄",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -87,8 +83,8 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
         </div>
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">備註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="4" maxlength="500">${dataParams.tradeNote}</textarea>
+          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.inputClasses}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>
@@ -102,45 +98,51 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-
-
-      let cashCardAccountSelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
-        selectId: "cashCard",
-        selectTitle: "儲值票卡",
-        onSendbackAccountId: (accountId: string) => {
-          dataParams.cashcardId = accountId;
-          // console.log("選擇的票卡ID:", accountId);
+      let cashCardAccountSelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
+        {
+          selectId: "cashCard",
+          selectTitle: "儲值票卡",
+          onSendbackAccountId: (accountId: string) => {
+            dataParams.cashcardId = accountId;
+            // console.log("選擇的票卡ID:", accountId);
+          },
         },
-      });
+      );
       cashCardAccountSelect.mount("#accountSelectComponent");
 
-
-      let cashCardTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
-        dateTimeGot: dataParams.tradeDatetime,
-        onSendbackDateTime: (dateTime: string) => {
-          dataParams.tradeDatetime = dateTime;
+      let cashCardTradeDatetime = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
+        {
+          dateTimeGot: dataParams.tradeDatetime,
+          onSendbackDateTime: (dateTime: string) => {
+            dataParams.tradeDatetime = dateTime;
+          },
         },
-      });
+      );
       cashCardTradeDatetime.mount("#tradeDatetimeComponent");
 
-
-      let cashCardTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
-        tradeCategoryGot: dataParams.transactionType,
-        onSendbackIncomeExpense: (type: string) => {
-          dataParams.transactionType = type;
+      let cashCardTransactionType = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
+        {
+          tradeCategoryGot: dataParams.transactionType,
+          onSendbackIncomeExpense: (type: string) => {
+            dataParams.transactionType = type;
+          },
         },
-      });
+      );
       cashCardTransactionType.mount("#transactionTypeSelectComponent");
 
-
-      let cashCardTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
-        tradeCategoryId: dataParams.tradeCategory,
-        onSendbackTradeCategory: (tradeCategoryId: string) => {
-          dataParams.tradeCategory = tradeCategoryId;
+      let cashCardTradeCategory = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
+        {
+          tradeCategoryId: dataParams.tradeCategory,
+          onSendbackTradeCategory: (tradeCategoryId: string) => {
+            dataParams.tradeCategory = tradeCategoryId;
+          },
         },
-      });
+      );
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -156,7 +158,6 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
 
       if (!dataParams.cashcardId) {
         errors.push("請選擇儲值票卡");
@@ -184,11 +185,8 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
-
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

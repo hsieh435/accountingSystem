@@ -10,7 +10,12 @@
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
 import { ICurrencyAccountList, IResponse } from "@/models/index";
-import { fetchCurrencyAccountById, fetchCurrencyAccountCreate, fetchCurrencyAccountUpdate, fetchCurrencyAccountDelete } from "@/server/currencyAccountApi";
+import {
+  fetchCurrencyAccountById,
+  fetchCurrencyAccountCreate,
+  fetchCurrencyAccountUpdate,
+  fetchCurrencyAccountDelete,
+} from "@/server/currencyAccountApi";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -67,7 +72,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     title: props.currencyAccountIdGot ? "修改存款帳戶資料" : "新增存款帳戶資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -139,7 +144,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -160,7 +165,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
       let currencySelect = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
@@ -173,7 +177,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         },
       );
       currencySelect.mount("#currencySelectComponent");
-
 
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;
@@ -191,19 +194,19 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         }
       }
 
-
-      let switchComponent = createApp(defineAsyncComponent(() => import("@/components/ui/switch.vue")), {
-        switchValueGot: dataParams.openAlert,
-        onSendBackSwitchValue: (switchValue: boolean) => {
-          dataParams.openAlert = switchValue;
+      let switchComponent = createApp(
+        defineAsyncComponent(() => import("@/components/ui/switch.vue")),
+        {
+          switchValueGot: dataParams.openAlert,
+          onSendBackSwitchValue: (switchValue: boolean) => {
+            dataParams.openAlert = switchValue;
+          },
         },
-      });
+      );
       switchComponent.mount("#switchComponent");
-
 
       const isSalaryAccountCheckbox = document.getElementById("isSalaryAccount") as HTMLInputElement;
       isSalaryAccountCheckbox.checked = dataParams.isSalaryAccount;
-
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -261,8 +264,9 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       console.log("result:", result.value);
       try {
-        const res: IResponse =
-          await (props.currencyAccountIdGot ? fetchCurrencyAccountUpdate : fetchCurrencyAccountCreate)(result.value);
+        const res: IResponse = await (
+          props.currencyAccountIdGot ? fetchCurrencyAccountUpdate : fetchCurrencyAccountCreate
+        )(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -276,8 +280,6 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     }
   });
 }
-
-
 
 async function removeCurrencyAccountData() {
   const confirmResult = await showConfirmDialog({

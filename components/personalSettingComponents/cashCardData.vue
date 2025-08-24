@@ -70,7 +70,7 @@ async function cashCardDataHandling(apiMsg?: string) {
     title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span class="my-3"><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
@@ -126,7 +126,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="4" maxlength="500">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
