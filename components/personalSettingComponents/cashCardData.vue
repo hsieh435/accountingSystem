@@ -24,7 +24,7 @@ const dataParams = reactive<ICashCardList>({
   userId: "",
   accountType: "cashCard",
   cashcardName: "",
-  currency: "NTD",
+  currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,

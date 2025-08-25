@@ -1,8 +1,7 @@
 <template>
-  <!-- <USwitch v-model="switchValue" :label="props.switchLabel" :disabled="props.isDisable" /> -->
   <div class="flex justify-center items-center">
     <input class="relative w-10 h-5 transition-all duration-200 ease-in-out bg-gray-400 rounded-full shadow-inner outline-none appearance-none" v-model="switchValue" type="checkbox" :disabled="props.isDisable" />
- </div>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";

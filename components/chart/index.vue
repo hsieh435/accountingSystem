@@ -145,6 +145,19 @@ async function renderingChart() {
             max: Math.max(...getData(props.data).map((data) => data)) * 1.2,
           },
         },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              footer: (tooltipItems: any[]) => {
+                let sum = 0;
+                tooltipItems.forEach(function (tooltipItem) {
+                  sum = tooltipItem.parsed.y;
+                });
+                return "Sum: " + sum;
+              },
+            },
+          },
+        },
       },
     });
   } else if (props.chartType === "bubble") {

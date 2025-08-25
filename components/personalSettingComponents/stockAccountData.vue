@@ -31,7 +31,7 @@ const dataParams = reactive<IStockAccountList>({
   accountName: "",
   accountBankCode: "",
   accountBankName: "",
-  currency: "NTD",
+  currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,

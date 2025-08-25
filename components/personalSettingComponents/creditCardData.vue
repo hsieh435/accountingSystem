@@ -32,7 +32,7 @@ const dataParams = reactive<ICreditCardList>({
   creditcardBankCode: "",
   creditcardBankName: "",
   creditcardSchema: "",
-  currency: "NTD",
+  currency: "",
   creditPerMonth: 0,
   expirationDate: "",
   alertValue: 0,
