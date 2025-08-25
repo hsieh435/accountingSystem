@@ -126,6 +126,17 @@ export function yearMonthFormat(dateString: string) {
 
 
 
+// 日期前後推移
+export function dateMove(dateStr: string  , days: number = 0): string {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() + days + 1);
+  // console.log("dateMove:", date.toISOString().split('T')[0]);
+  // console.log("dateMove:", date.toString());
+  return date.toISOString().split('T')[0];
+}
+
+
+
 // 金額，三位一撇
 export function currencyFormat(numberGot: any) {
   return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";

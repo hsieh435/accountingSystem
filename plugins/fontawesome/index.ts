@@ -31,7 +31,7 @@ library.add(
   faBinoculars,
   faSignOutAlt,
   faX,
-  faCheck 
+  faCheck
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";

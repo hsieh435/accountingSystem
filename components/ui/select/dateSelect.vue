@@ -36,7 +36,6 @@ watch(props, () => {
 watch(() => dateString.value, () => {
   // console.log("watch dateString:", dateString.value);
   const newDate = new Date(dateString.value);
-
   emits("sendbackDate", `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}` );
 });
 

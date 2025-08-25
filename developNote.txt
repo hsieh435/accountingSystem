@@ -11,6 +11,10 @@
 
 6.收支紀錄餘額呈現方式、修改調整方式
 
+7.執行以下指令
+rm -rf node_modules package-lock.json
+npm install
+
 
 
 Nuxt.js 3
