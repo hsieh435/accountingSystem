@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive, createApp, defineAsyncComponent } from "vue";
+import { reactive, createApp, defineAsyncComponent, onUnmounted } from "vue";
 import { ICashFlowRecordList } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -20,6 +20,10 @@ const emits = defineEmits(["dataReseaching"]);
 
 
 
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+
+
+
 const dataParams = reactive<ICashFlowRecordList>({
   tradeId: props.tradeIdGot || "",
   cashflowId: "",
@@ -29,7 +33,7 @@ const dataParams = reactive<ICashFlowRecordList>({
   transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
-  currency: "TWD",
+  currency: "",
   tradeDescription: "",
   tradeNote: "",
 });
@@ -109,8 +113,12 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       let cashFlowTradeAccount = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
         selectTargetId: "isCashflowAble",
         accountIdGot: dataParams.cashflowId,
-        onSendbackAccount: (account: string) => {
+        isDisable: props.tradeIdGot ? true : false,
+        onSendbackAccountId: (account: string, currency: string) => {
+          console.log(account, currency);
           dataParams.cashflowId = account;
+          dataParams.currency = currency;
+
         },
       });
       cashFlowTradeAccount.mount("#accountComponent");
@@ -142,9 +150,10 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       cashFlowTradeCategory.mount("#tradeCategorySelectComponent");
 
 
-      let cashFlowCurrencySelect = createApp(defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")), {
-        currencyGot: dataParams.currency,
-        onSendbackCurrency: (currency: string) => {
+      let cashFlowCurrencySelect = createApp(currencySelect, {
+        currencyIdGot: dataParams.currency,
+        isDisable: true,
+        onSendbackCurrencyId: (currency: string) => {
           dataParams.currency = currency;
         },
       });

@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchUserList, fetchUserCategory } from "@/server/userDataApi";
-import { IUserData, IResponse } from "@/models/index";
+import { IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { encryptString } from "@/composables/crypto";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";

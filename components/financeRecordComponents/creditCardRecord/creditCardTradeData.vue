@@ -94,8 +94,9 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
           selectId: "creditCard",
           selectTitle: "信用卡",
           accountIdGot: props.creditCardIdGot,
-          onSendbackAccountId: (accountId: string) => {
+          onSendbackAccountId: (accountId: string, currencyId: string) => {
             dataParams.creditCardId = accountId;
+            dataParams.currency = currencyId;
             // console.log("accountId:", dataParams.creditCardId);
           },
         },

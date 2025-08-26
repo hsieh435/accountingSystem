@@ -32,6 +32,7 @@ const emits = defineEmits(["sendbackAccountId"]);
 const accountId = ref<string>("");
 const accountList = ref<{ label: string; value: string }[]>([]);
 const searchParams = reactive<IAccountSearchingParams>({ currencyId: "" });
+const oriAccountList = ref<any[]>([]);
 
 const isDisabled = computed(() => props.isDisable);
 
@@ -44,12 +45,14 @@ onMounted(async () => {
 });
 
 watch(accountId, () => {
-  emits("sendbackAccountId", accountId.value);
+  const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
+  emits("sendbackAccountId", accountId.value, selectedItem ? selectedItem.currency : "");
 });
 
 async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchParams);
+    console.log("list:", list);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
 
     // console.log("list:", list);
@@ -64,6 +67,11 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
   switch (type) {
     case "isCashflowAble": {
       const res = await fetchCashFlowList(params);
+      oriAccountList.value = res.data.data;
+      for (let i = 0; i < oriAccountList.value.length; i++) {
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].cashflowId;
+      }
+      // console.log("res:", res.data.data);
       return res.data.data.map((item: any) => ({
         label: item.cashflowName,
         value: item.cashflowId,
@@ -71,6 +79,10 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     }
     case "isCashcardAble": {
       const res = await fetchCashCardList(params);
+      oriAccountList.value = res.data.data;
+      for (let i = 0; i < oriAccountList.value.length; i++) {
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].cashcardId;
+      }
       return res.data.data.map((item: any) => ({
         label: item.cashcardName,
         value: item.cashcardId,
@@ -78,6 +90,10 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     }
     case "isCreditcardAble": {
       const res = await fetchCreditCardList(params);
+      oriAccountList.value = res.data.data;
+      for (let i = 0; i < oriAccountList.value.length; i++) {
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].creditcardId;
+      }
       return res.data.data.map((item: any) => ({
         label: item.creditcardName,
         value: item.creditcardId,
@@ -85,6 +101,10 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     }
     case "isCuaccountAble": {
       const res = await fetchCurrencyAccountList(params);
+      oriAccountList.value = res.data.data;
+      for (let i = 0; i < oriAccountList.value.length; i++) {
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].accountId;
+      }
       return res.data.data.map((item: any) => ({
         label: item.accountName,
         value: item.accountName,
@@ -92,12 +112,17 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     }
     case "isStaccountAble": {
       const res = await fetchStockAccountList(params);
+      oriAccountList.value = res.data.data;
+      for (let i = 0; i < oriAccountList.value.length; i++) {
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].accountId;
+      }
       return res.data.data.map((item: any) => ({
         label: item.accountName,
         value: item.accountId,
       }));
     }
     default:
+      oriAccountList.value = [];
       return [];
   }
 }

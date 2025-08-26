@@ -124,7 +124,8 @@ async function renderingChart() {
       ],
     };
   } else if (props.chartType === "line") {
-    console.log(props.chartType);
+    // console.log(props.chartType);
+    let variation = 0;
 
     chartInstance = new Chart(myChart, {
       type: "line",
@@ -141,20 +142,55 @@ async function renderingChart() {
       options: {
         scales: {
           y: {
-            min: Math.min(...getData(props.data).map((data) => data)) * 0.8,
-            max: Math.max(...getData(props.data).map((data) => data)) * 1.2,
+            min: getData(props.data) ? Math.min(...getData(props.data).map((data) => data)) * 0.9 : 0,
+            max: getData(props.data) ? Math.max(...getData(props.data).map((data) => data)) * 1.1 : 100,
           },
         },
         plugins: {
           tooltip: {
             callbacks: {
-              footer: (tooltipItems: any[]) => {
-                let sum = 0;
-                tooltipItems.forEach(function (tooltipItem) {
-                  sum = tooltipItem.parsed.y;
-                });
-                return "Sum: " + sum;
+              title: function (tooltipItems) {
+                return tooltipItems[0].label;
               },
+              label: function () {
+                return "";
+              },
+              footer: function (tooltipItems) {
+                // console.log("tooltipItems:", tooltipItems);
+                let currentValue = 0;
+                let lastValue = 0;
+                tooltipItems.forEach(function (tooltipItem) {
+                  const index = tooltipItem.dataIndex;
+                  currentValue = Number(tooltipItem.dataset.data[index]);
+                  lastValue = index > 0 ? Number(tooltipItem.dataset.data[index - 1]) : 0;
+                  variation =
+                    index === 0 ||
+                    !Array.isArray(tooltipItem.dataset.data) ||
+                    currentValue === null ||
+                    lastValue === null
+                      ? 0
+                      : currentValue - lastValue;
+                });
+                return (
+                  currentValue +
+                  "\n" +
+                  (variation > 0 ? "▲" : variation < 0 ? "▼" : "") +
+                  (variation === 0
+                    ? "0.00 ( 0.00 % ）"
+                    : (lastValue <= 0 ? "" : variation.toFixed(2)) +
+                      `（ ${lastValue <= 0 ? "N/A" : ((variation / lastValue) * 100).toFixed(2) + "%"} ）`)
+                );
+              },
+            },
+            footerColor: function () {
+              switch (true) {
+                case variation > 0:
+                  return "rgb(255, 0, 0)";
+                case variation < 0:
+                  return "rgb(0, 128, 0)";
+                default:
+                  return "rgb(255, 255, 255)";
+              }
             },
           },
         },

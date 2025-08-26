@@ -15,9 +15,9 @@
 
     <div class="flex items-center me-3 my-1">
       <span>時間區間：</span>
-      <dateSelect :dateSelect="getCurrentYear() + '-01-01'" :maximumGot="searchParams.endDate" @sendbackDate="settingSettingDate" />
+      <dateSelect :dateSelect="searchParams.startingDate" :maxDate="searchParams.endDate" @sendbackDate="settingSettingDate" />
       <span class="mx-1">～</span>
-      <dateSelect :dateSelect="getCurrentYear() + '-12-31'" :minimumGot="searchParams.startingDate" @sendbackDate="settingEndDate" />
+      <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
     </div>
 
     <ui-buttonGroup showSearch :searchDisable="!searchParams.accountId" @dataSearch="searchingRecord()" />
@@ -65,11 +65,11 @@ async function settingTradeCategory(tradeCategorySendback: string) {
 }
 
 async function settingSettingDate(dateSendback: string) {
-  searchParams.startingDate = dateSendback + " 00:00:00";
+  searchParams.startingDate = dateSendback + " 00:00:00.001";
 }
 
 async function settingEndDate(dateSendback: string) {
-  searchParams.endDate = dateSendback + " 23:59:59";
+  searchParams.endDate = dateSendback + " 23:59:59.999";
 }
 
 

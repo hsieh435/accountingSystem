@@ -103,8 +103,9 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
         {
           selectId: "cashCard",
           selectTitle: "儲值票卡",
-          onSendbackAccountId: (accountId: string) => {
-            dataParams.cashcardId = accountId;
+          onSendbackAccount: (account: string, currency: string) => {
+            dataParams.cashcardId = account;
+            dataParams.currency = currency;
             // console.log("選擇的票卡ID:", accountId);
           },
         },

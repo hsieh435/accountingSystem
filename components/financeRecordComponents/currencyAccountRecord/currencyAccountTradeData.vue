@@ -103,9 +103,10 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         {
           selectId: "currencyAccount",
           selectTitle: "存款帳戶",
-          onSendbackAccountId: (accountId: string) => {
+          onSendbackAccountId: (accountId: string, currencyId: string) => {
             dataParams.accountId = accountId;
-            // console.log("選擇的票卡ID:", accountId);
+            dataParams.currency = currencyId;
+            // console.log("存款帳戶:", accountId);
           },
         },
       );
