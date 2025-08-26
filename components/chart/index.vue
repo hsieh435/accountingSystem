@@ -30,7 +30,7 @@ const props = defineProps({
     type: [Array],
     default: () => [],
   },
-  // data未設定backgrong時的預設值
+  // data 未設定 background 時的預設值
   defaultBackground: {
     type: [String],
     default: "#E46651",
@@ -44,7 +44,7 @@ const props = defineProps({
     type: [Boolean],
     default: false,
   },
-  // 圖表的options設置
+  // 圖表的 options 設置
   chartOptions: {
     type: [Object],
     default: () => {},
@@ -84,6 +84,7 @@ let chartInstance: Chart | null = null;
 
 // CanvasRenderingContext2D
 async function renderingChart() {
+  // console.log(props.chartType);
   const myChart = document.getElementById("myChart") as HTMLCanvasElement;
 
   if (chartInstance) {
@@ -124,7 +125,6 @@ async function renderingChart() {
       ],
     };
   } else if (props.chartType === "line") {
-    // console.log(props.chartType);
     let variation = 0;
 
     chartInstance = new Chart(myChart, {

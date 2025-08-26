@@ -54,7 +54,6 @@ async function loadAccountList() {
     const list = await getAccountListByType(props.selectTargetId, searchParams);
     console.log("list:", list);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
-
     // console.log("list:", list);
     // console.log("accountList:", accountList.value);
 

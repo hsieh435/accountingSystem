@@ -13,10 +13,6 @@ const userNewPassword = ref<string>("");
 const userNewPasswordSecond = ref<string>("");
 
 async function userPasswordChange(apiMsg?: string) {
-  // console.log(userAccount.value);
-  // console.log(userOldPassword.value);
-  // console.log(userNewPassword.value);
-  // console.log(userNewPasswordSecond.value);
 
   Swal.fire({
     title: "重設使用者密碼",
@@ -51,9 +47,6 @@ async function userPasswordChange(apiMsg?: string) {
     confirmButtonText: "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
     background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
@@ -74,15 +67,12 @@ async function userPasswordChange(apiMsg?: string) {
       if (!userAccount.value) {
         errors.push("請填寫使用者帳號");
       }
-
       if (!userName.value) {
         errors.push("請填寫使用者名稱");
       }
-
       if (!userOldPassword.value) {
         errors.push("請填寫使用者密碼");
       }
-
       if (userNewPassword.value !== userNewPasswordSecond.value) {
         errors.push("兩次密碼不同");
       }

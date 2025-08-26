@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp } from "vue";
+import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { IStockAccountRecordList } from "@/models/index";
 import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -18,6 +18,13 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot?: string
   bankIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
+
+
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+
+
 
 const dataParams = reactive<IStockAccountRecordList>({
   tradeId: props.tradeIdGot || "",
@@ -33,7 +40,7 @@ const dataParams = reactive<IStockAccountRecordList>({
   handlingFee: 0,
   transactionTax: 0,
   totalPrice: 0,
-  currency: "TWD",
+  currency: "",
   tradeDescription: "",
   tradeNote: "",
 });
@@ -116,6 +123,12 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
           <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
@@ -131,24 +144,21 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.tradeIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      let stockAccountSelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
-        {
-          selectId: "stockAccount",
-          selectTitle: "證券帳戶",
-          onSendbackAccountId: (accountId: string, currencyId: string) => {
-            dataParams.accountId = accountId;
-            dataParams.currency = currencyId;
-            // console.log("證券帳戶:", accountId);
-          },
+      let stockAccountSelect = createApp({
+        render() {
+          return h(accountSelect, {
+            selectTargetId: "isStaccountAble",
+            accountIdGot: dataParams.accountId,
+            isDisable: props.tradeIdGot ? true : false,
+            sendbackAccountId: (account: string, currency: string) => {
+              dataParams.accountId = account;
+              dataParams.currency = currency;
+            },
+          });
         },
-      );
+      });
       stockAccountSelect.mount("#accountSelectComponent");
 
       let stockAccountTradeDatetime = createApp(
@@ -201,6 +211,18 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       quantity.addEventListener("input", calculateDateDiff);
       handlingFee.addEventListener("input", calculateDateDiff);
       transactionTax.addEventListener("input", calculateDateDiff);
+
+
+      let stockAccountCurrencySelect = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
+        },
+      });
+      stockAccountCurrencySelect.mount("#currencySelectComponent");
+
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);

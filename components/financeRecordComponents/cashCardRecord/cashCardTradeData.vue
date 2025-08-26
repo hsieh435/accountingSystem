@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp } from "vue";
+import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { ICashCardRecordList } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -19,6 +19,13 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; cashCardIdGot?: st
 });
 const emits = defineEmits(["dataReseaching"]);
 
+
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+
+
+
 const dataParams = reactive<ICashCardRecordList>({
   tradeId: props.tradeIdGot || "",
   cashcardId: props.cashCardIdGot || "",
@@ -28,7 +35,7 @@ const dataParams = reactive<ICashCardRecordList>({
   transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
-  currency: "TWD",
+  currency: "",
   tradeDescription: "",
   tradeNote: "",
 });
@@ -78,6 +85,12 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
           <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
@@ -92,24 +105,22 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      let cashCardAccountSelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
-        {
-          selectId: "cashCard",
-          selectTitle: "儲值票卡",
-          onSendbackAccount: (account: string, currency: string) => {
-            dataParams.cashcardId = account;
-            dataParams.currency = currency;
-            // console.log("選擇的票卡ID:", accountId);
-          },
+
+      let cashCardAccountSelect = createApp({
+        render() {
+          return h(accountSelect, {
+            selectTargetId: "isCashcardAble",
+            accountIdGot: dataParams.cashcardId,
+            isDisable: props.tradeIdGot ? true : false,
+            sendbackAccountId: (account: string, currency: string) => {
+              dataParams.cashcardId = account;
+              dataParams.currency = currency;
+            },
+          });
         },
-      );
+      });
       cashCardAccountSelect.mount("#accountSelectComponent");
 
       let cashCardTradeDatetime = createApp(
@@ -134,16 +145,27 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       );
       cashCardTransactionType.mount("#transactionTypeSelectComponent");
 
-      let cashCardTradeCategory = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
-        {
-          tradeCategoryId: dataParams.tradeCategory,
-          onSendbackTradeCategory: (tradeCategoryId: string) => {
-            dataParams.tradeCategory = tradeCategoryId;
-          },
+      let cashCardTradeCategory = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
         },
-      );
+      });
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
+
+
+
+      let cashCardCurrencySelect = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
+        },
+      });
+      cashCardCurrencySelect.mount("#currencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);

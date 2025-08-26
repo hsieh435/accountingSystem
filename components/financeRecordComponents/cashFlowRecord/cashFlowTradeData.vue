@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive, createApp, defineAsyncComponent, onUnmounted } from "vue";
+import { reactive, createApp, defineAsyncComponent, h } from "vue";
 import { ICashFlowRecordList } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -15,11 +15,12 @@ import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; }>(), { tradeIdGot: "", });
+const props = withDefaults(defineProps<{ tradeIdGot?: string }>(), { tradeIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
 
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
 
 
@@ -43,6 +44,7 @@ const dataParams = reactive<ICashFlowRecordList>({
 async function searchingCashFlowRecord() {
   // cashFlowRecordDataHandling();
 }
+
 
 
 async function cashFlowRecordDataHandling(apiMsg?: string) {
@@ -110,51 +112,64 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     allowOutsideClick: false,
     didOpen: () => {
 
-      let cashFlowTradeAccount = createApp(defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")), {
-        selectTargetId: "isCashflowAble",
-        accountIdGot: dataParams.cashflowId,
-        isDisable: props.tradeIdGot ? true : false,
-        onSendbackAccountId: (account: string, currency: string) => {
-          console.log(account, currency);
-          dataParams.cashflowId = account;
-          dataParams.currency = currency;
-
+      let cashFlowTradeAccount = createApp({
+        render() {
+          return h(accountSelect, {
+            selectTargetId: "isCashflowAble",
+            accountIdGot: dataParams.cashflowId,
+            isDisable: props.tradeIdGot ? true : false,
+            sendbackAccountId: (account: string, currency: string) => {
+              dataParams.cashflowId = account;
+              dataParams.currency = currency;
+            },
+          });
         },
       });
       cashFlowTradeAccount.mount("#accountComponent");
 
-      let cashFlowTradeDatetime = createApp(defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")), {
-        dateTimeGot: dataParams.tradeDatetime,
-        onSendbackDateTime: (dateTime: string) => {
-          dataParams.tradeDatetime = dateTime;
+
+      let cashFlowTradeDatetime = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
+        {
+          dateTimeGot: dataParams.tradeDatetime,
+          onSendbackDateTime: (dateTime: string) => {
+            dataParams.tradeDatetime = dateTime;
+          },
         },
-      });
+      );
       cashFlowTradeDatetime.mount("#tradeDatetimeComponent");
 
 
-      let cashFlowTransactionType = createApp(defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")), {
-        tradeCategoryGot: dataParams.transactionType,
-        onSendbackIncomeExpense: (type: string) => {
-          dataParams.transactionType = type;
+      let cashFlowTransactionType = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
+        {
+          tradeCategoryGot: dataParams.transactionType,
+          onSendbackIncomeExpense: (type: string) => {
+            dataParams.transactionType = type;
+          },
         },
-      });
+      );
       cashFlowTransactionType.mount("#transactionTypeSelectComponent");
 
 
-      let cashFlowTradeCategory = createApp(defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")), {
-        tradeCategoryId: dataParams.tradeCategory,
-        onSendbackTradeCategory: (tradeCategoryId: string) => {
-          dataParams.tradeCategory = tradeCategoryId;
+      let cashFlowTradeCategory = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
+        {
+          tradeCategoryId: dataParams.tradeCategory,
+          onSendbackTradeCategory: (tradeCategoryId: string) => {
+            dataParams.tradeCategory = tradeCategoryId;
+          },
         },
-      });
+      );
       cashFlowTradeCategory.mount("#tradeCategorySelectComponent");
 
 
-      let cashFlowCurrencySelect = createApp(currencySelect, {
-        currencyIdGot: dataParams.currency,
-        isDisable: true,
-        onSendbackCurrencyId: (currency: string) => {
-          dataParams.currency = currency;
+      let cashFlowCurrencySelect = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
         },
       });
       cashFlowCurrencySelect.mount("#currencySelectComponent");

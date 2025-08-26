@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive, createApp, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { ICreditCardRecordList } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -19,6 +19,13 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot: s
 });
 const emits = defineEmits(["dataReseaching"]);
 
+
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+
+
+
 const dataParams = reactive<ICreditCardRecordList>({
   tradeId: props.tradeIdGot || "",
   creditCardId: props.creditCardIdGot,
@@ -27,7 +34,7 @@ const dataParams = reactive<ICreditCardRecordList>({
   accountType: "",
   tradeCategory: "",
   tradeAmount: 0,
-  currency: "TWD",
+  currency: "",
   billMonth: "",
   tradeDescription: "",
   tradeNote: "",
@@ -72,6 +79,12 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
           <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
@@ -88,19 +101,20 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      let creditCardAccountSelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
-        {
-          selectId: "creditCard",
-          selectTitle: "信用卡",
-          accountIdGot: props.creditCardIdGot,
-          onSendbackAccountId: (accountId: string, currencyId: string) => {
-            dataParams.creditCardId = accountId;
-            dataParams.currency = currencyId;
-            // console.log("accountId:", dataParams.creditCardId);
-          },
+
+      let creditCardAccountSelect = createApp({
+        render() {
+          return h(accountSelect, {
+            selectTargetId: "isCreditcardAble",
+            accountIdGot: dataParams.creditCardId,
+            isDisable: props.tradeIdGot ? true : false,
+            sendbackAccountId: (account: string, currency: string) => {
+              dataParams.creditCardId = account;
+              dataParams.currency = currency;
+            },
+          });
         },
-      );
+      });
       creditCardAccountSelect.mount("#accountSelectComponent");
 
       let cashCardTradeDatetime = createApp(
@@ -124,6 +138,17 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
         },
       );
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
+
+
+      let creditCardCurrencySelect = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
+        },
+      });
+      creditCardCurrencySelect.mount("#currencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);

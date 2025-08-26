@@ -7,7 +7,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { reactive, createApp, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { IcurrencyAccountRecordList } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
@@ -19,6 +19,9 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot: string 
 });
 const emits = defineEmits(["dataReseaching"]);
 
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+
 const dataParams = reactive<IcurrencyAccountRecordList>({
   tradeId: props.tradeIdGot || "",
   accountId: props.bankIdGot,
@@ -28,7 +31,7 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
   transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
-  currency: "TWD",
+  currency: "",
   tradeDescription: "",
   tradeNote: "",
 });
@@ -78,6 +81,12 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <div id="currencySelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
           <input class="${tailwindStyles.inputClasses}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
@@ -92,24 +101,22 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     confirmButtonText: props.tradeIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
-    // confirmButtonColor: "#007fff",
-    // cancelButtonColor: "#ff4337",
-    // color: "#000",
-    // background: "#fff",
     allowOutsideClick: false,
     didOpen: () => {
-      let currencyAccountSelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue")),
-        {
-          selectId: "currencyAccount",
-          selectTitle: "存款帳戶",
-          onSendbackAccountId: (accountId: string, currencyId: string) => {
-            dataParams.accountId = accountId;
-            dataParams.currency = currencyId;
-            // console.log("存款帳戶:", accountId);
-          },
+
+      let currencyAccountSelect = createApp({
+        render() {
+          return h(accountSelect, {
+            selectTargetId: "isCuaccountAble",
+            accountIdGot: dataParams.accountId,
+            isDisable: props.tradeIdGot ? true : false,
+            sendbackAccountId: (account: string, currency: string) => {
+              dataParams.accountId = account;
+              dataParams.currency = currency;
+            },
+          });
         },
-      );
+      });
       currencyAccountSelect.mount("#accountSelectComponent");
 
       let currencyAccountTradeDatetime = createApp(
@@ -144,6 +151,17 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         },
       );
       currencyAccountCategory.mount("#tradeCategorySelectComponent");
+
+
+      let currencyAccountCurrencySelect = createApp({
+        render() {
+          return h(currencySelect, {
+            currencyIdGot: dataParams.currency,
+            isDisable: true,
+          });
+        },
+      });
+      currencyAccountCurrencySelect.mount("#currencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
