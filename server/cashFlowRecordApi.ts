@@ -1,75 +1,35 @@
 import { apiFetch } from "@/server";
-import { ICashFlowList, IAccountSearchingParams } from "@/models";
+import { ICashFlowRecordList, IFinanceRecordSearchingParams } from "@/models";
 
-export async function fetchCashFlowList(data: IAccountSearchingParams) {
-  const response = await apiFetch("/accounting_system_backend/api/cashFlow/list", "POST", {
+export async function fetchCashFlowRecordList(data: IFinanceRecordSearchingParams) {
+  const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/list", "POST", {
     body: JSON.stringify(data),
   });
-
-  // if (!response.ok) {
-  //   throw new Error("HTTP error! status:" + response.status);
-  // }
-  // const result = (await response.json()) as { data: ICashFlowList[] };
   return await response.json();
 }
 
-export async function fetchCashFlowById(cashFlowId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/cashFlowData/${cashFlowId}`, "GET");
-
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: ICashFlowList[] };
-  return await response.json();
-}
-
-export async function fetchCashFlowCreate(data: ICashFlowList) {
-  const response = await apiFetch("/accounting_system_backend/api/cashFlow/create", "POST", {
+export async function fetchCashFlowRecordByTradeId(data: { cashflowId: string; tradeId: string }) {
+  const response = await apiFetch(`/accounting_system_backend/api/cashFlowRecord`, "POST", {
     body: JSON.stringify(data),
   });
-
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: ICashFlowList[] };
   return await response.json();
 }
 
-export async function fetchCashFlowUpdate(data: ICashFlowList) {
-  const response = await apiFetch("/accounting_system_backend/api/cashFlow/update", "PUT", {
+export async function fetchCashFlowRecordCreate(data: ICashFlowRecordList) {
+  const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/create", "POST", {
     body: JSON.stringify(data),
   });
-
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: ICashFlowList[] };
   return await response.json();
 }
 
-
-
-export async function fetchEnableCashFlow(cashFlowId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/cashFlow/enable/${cashFlowId}`, "GET");
+export async function fetchCashFlowRecordUpdate(data: ICashFlowRecordList) {
+  const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/update", "PUT", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
 
-export async function fetchDisableCashFlow(cashFlowId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/cashFlow/disable/${cashFlowId}`, "GET");
-  return await response.json();
-}
-
-
-export async function fetchCashFlowDelete(cashflowId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/cashFlow/delete/${cashflowId}`, "GET");
-
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = await response.json();
+export async function fetchCashFlowDelete(cashFlowRecordId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/cashFlowRecord/delete/${cashFlowRecordId}`, "GET");
   return await response.json();
 }

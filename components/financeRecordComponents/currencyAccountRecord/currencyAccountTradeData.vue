@@ -110,7 +110,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
             selectTargetId: "isCuaccountAble",
             accountIdGot: dataParams.accountId,
             isDisable: props.tradeIdGot ? true : false,
-            sendbackAccountId: (account: string, currency: string) => {
+            onSendbackAccountId: (account: string, currency: string) => {
               dataParams.accountId = account;
               dataParams.currency = currency;
             },
@@ -144,6 +144,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       let currencyAccountCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
+          accountType: "isCuaccountAble",
           tradeCategoryId: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;

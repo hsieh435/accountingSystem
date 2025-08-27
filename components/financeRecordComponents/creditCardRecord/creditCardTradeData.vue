@@ -13,7 +13,7 @@ import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: string }>(), {
   tradeIdGot: "",
   creditCardIdGot: "",
 });
@@ -48,7 +48,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.tradeIdGot ? "編輯現金收支紀錄" : "新增現金收支紀錄",
+    title: props.tradeIdGot ? "編輯信用卡收支紀錄" : "新增信用卡收支紀錄",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
@@ -108,7 +108,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
             selectTargetId: "isCreditcardAble",
             accountIdGot: dataParams.creditCardId,
             isDisable: props.tradeIdGot ? true : false,
-            sendbackAccountId: (account: string, currency: string) => {
+            onSendbackAccountId: (account: string, currency: string) => {
               dataParams.creditCardId = account;
               dataParams.currency = currency;
             },
@@ -131,6 +131,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       let cashCardTradeCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
+          accountType: "isCreditcardAble",
           tradeCategoryId: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;

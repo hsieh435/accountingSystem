@@ -37,7 +37,7 @@ const oriAccountList = ref<any[]>([]);
 const isDisabled = computed(() => props.isDisable);
 
 onMounted(async () => {
-  // console.log("onMounted props:", props.accountIdGot);
+  // console.log("onMounted props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
     accountId.value = props.accountIdGot;
@@ -52,10 +52,9 @@ watch(accountId, () => {
 async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchParams);
-    console.log("list:", list);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
     // console.log("list:", list);
-    // console.log("accountList:", accountList.value);
+    // console.log("oriAccountList:", oriAccountList.value);
 
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
@@ -106,7 +105,7 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
       }
       return res.data.data.map((item: any) => ({
         label: item.accountName,
-        value: item.accountName,
+        value: item.accountId,
       }));
     }
     case "isStaccountAble": {

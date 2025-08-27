@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses" v-model="currencyId" :disabled="props.isDisable">
+  <select :class="tailwindStyles.selectClasses" v-model="currencyId" :disabled="isSelectDisabled">
     <option v-for="currency in currencyArray" :key="currency.value" :value="currency.value">
       {{ currency.value }} {{ currency.label }}
     </option>
@@ -36,8 +36,8 @@ onMounted(async () => {
 
 watch(props, async () => {
   // console.log("watch props:", props);
+  isSelectDisabled.value = props.isDisable;
   if (props.currencyIdGot) {
-    isSelectDisabled.value = props.isDisable;
     currencyId.value = props.currencyIdGot;
   }
 });

@@ -1,37 +1,17 @@
-// import { createStore } from "vuex";
-// import { AxiosResponse, AxiosError } from "axios";
-// import { apiGetDistrictJson } from "@/config/apiConfig";
-// import { showAxiosErrorMsg } from "@/tools/swalDialog";
+
+export const actions = {
+  nuxtServerInit({ commit }: any) {
+    // 不執行任何操作，這樣就不會在 SSR 階段加載任何數據
+  }
+}
 
 
 
-// const store = createStore({
-//   state: {
-//   },
-//   getters: {
-//   },
-//   mutations: {
-//   },
-//   actions: {
-//   },
-//   modules: {
-//   },
-// });
-
-// export default store;
 
 // console.log("store:", store);
 // console.log("state:", store.state);
 // console.log("getters:", store.getters);
 
-
-
-// apiExecuting：執行 API 時出現 Loading 畫面
-// hasOpenNavbar：控制 Navbar 寬度
-// updateNavbarSignal：修改角色與修改角色權限時同步更新 Navbar 與 Breadcrumb
-// dataResearchSingle：新增修改資料時重新搜尋資料列表
-// hasFullScreenComponents：移動 Navbar 的 z-index 數值
-// handlingUpdateAdministrative：更新行政區域資料
 
 
 

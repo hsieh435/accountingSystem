@@ -78,7 +78,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
-          <div class="col-span-4" id="stockAccountTradeCategorySelectComponent"></div>
+          <div class="col-span-4" id="tradeCategorySelectComponent"></div>
         </div>
 
 
@@ -152,7 +152,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
             selectTargetId: "isStaccountAble",
             accountIdGot: dataParams.accountId,
             isDisable: props.tradeIdGot ? true : false,
-            sendbackAccountId: (account: string, currency: string) => {
+            onSendbackAccountId: (account: string, currency: string) => {
               dataParams.accountId = account;
               dataParams.currency = currency;
             },
@@ -184,15 +184,16 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       stockAccountTransactionType.mount("#transactionTypeSelectComponent");
 
       let stockAccountCategory = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/stockAccountTradeCategorySelect.vue")),
+        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
+          accountType: "isStaccountAble",
           tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },
         },
       );
-      stockAccountCategory.mount("#stockAccountTradeCategorySelectComponent");
+      stockAccountCategory.mount("#tradeCategorySelectComponent");
 
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
       const quantity = document.getElementById("quantity") as HTMLInputElement;

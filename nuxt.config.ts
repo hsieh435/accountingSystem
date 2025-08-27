@@ -2,6 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: true,  // 默認開啟 SSR，如果要禁用 SSR 可以設為 false
   app: {
     head: {
       title: "記帳系統",

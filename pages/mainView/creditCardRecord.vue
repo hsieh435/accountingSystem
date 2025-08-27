@@ -5,7 +5,7 @@
       :accountTypeName="'信用卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <creditCardTradeData :creditCardIdGot="'123456'" />
+    <creditCardTradeData />
   </div>
   <div class="px-3">
     <template v-if="creditCardRecord.length > 0">

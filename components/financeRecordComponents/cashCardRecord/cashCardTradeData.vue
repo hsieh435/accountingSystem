@@ -114,7 +114,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
             selectTargetId: "isCashcardAble",
             accountIdGot: dataParams.cashcardId,
             isDisable: props.tradeIdGot ? true : false,
-            sendbackAccountId: (account: string, currency: string) => {
+            onSendbackAccountId: (account: string, currency: string) => {
               dataParams.cashcardId = account;
               dataParams.currency = currency;
             },
@@ -145,14 +145,16 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       );
       cashCardTransactionType.mount("#transactionTypeSelectComponent");
 
-      let cashCardTradeCategory = createApp({
-        render() {
-          return h(currencySelect, {
-            currencyIdGot: dataParams.currency,
-            isDisable: true,
-          });
+      let cashCardTradeCategory = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
+        {
+          accountType: "isCashcardAble",
+          tradeCategoryId: dataParams.tradeCategory,
+          onSendbackTradeCategory: (tradeCategoryId: string) => {
+            dataParams.tradeCategory = tradeCategoryId;
+          },
         },
-      });
+      );
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
 
 

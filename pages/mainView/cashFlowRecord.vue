@@ -5,7 +5,7 @@
       :accountTypeName="'現金流'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashFlowTradeData />
+    <cashFlowTradeData @dataReseaching="searchingfinancerecord" />
   </div>
   <div class="px-3">
     <template v-if="cashFlowRecord.length > 0">
@@ -36,7 +36,7 @@
                 <div :class="tailwindStyles.tdClasses">0</div>
                 <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
                 <div :class="tailwindStyles.tdClasses">
-                  <cashFlowTradeData :tradeIdGot="record.tradeId" />
+                  <cashFlowTradeData :cashflowIdGot="record.cashflowId" :tradeIdGot="record.tradeId" @dataReseaching="searchingfinancerecord" />
                 </div>
               </div>
             </div>
@@ -50,10 +50,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
-import { ICashFlowRecordList, IFinanceRecordSearchingParams } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
+import { ICashFlowRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -62,12 +64,8 @@ definePageMeta({
   subTitle: "現金收支",
 });
 
-const accountRecordSearching = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/accountRecordSearching.vue"),
-);
-const cashFlowTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/cashFlowRecord/cashFlowTradeData.vue"),
-);
+const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecordComponents/accountRecordSearching.vue"));
+const cashFlowTradeData = defineAsyncComponent(() => import("@/components/financeRecordComponents/cashFlowRecord/cashFlowTradeData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -83,6 +81,14 @@ const cashFlowRecord = ref<ICashFlowRecordList[]>([]);
 const cashFlowRecordFiltered = ref<ICashFlowRecordList[]>([]);
 const tableData = ref<ICashFlowRecordList[]>([]);
 
+
+
+onMounted(() => {
+  searchingfinancerecord();
+});
+
+
+
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
@@ -90,17 +96,30 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  searchingParams.accountId = params.accountId;
-  searchingParams.currencyId = params.currencyId;
-  searchingParams.tradeCategory = params.tradeCategory;
-  searchingParams.startingDate = params.startingDate;
-  searchingParams.endDate = params.endDate;
+  // searchingParams.accountId = params.accountId;
+  // searchingParams.currencyId = params.currencyId;
+  // searchingParams.tradeCategory = params.tradeCategory;
+  // searchingParams.startingDate = params.startingDate;
+  // searchingParams.endDate = params.endDate;
+  Object.assign(searchingParams, params);
+  console.log("searchingParams:", searchingParams);
   await searchingfinancerecord();
 }
 
 async function searchingfinancerecord() {
-  //
-  // await cashFlowRecordFilterEvent();
+
+  try {
+    const res: IResponse = await fetchCashFlowRecordList(searchingParams);
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      cashFlowRecord.value = res.data.data;
+      await cashFlowRecordFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function cashFlowRecordFilterEvent() {

@@ -75,7 +75,6 @@ const cashFlowData = defineAsyncComponent(() => import("@/components/personalSet
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
 
-const currencyArray = ref<string[]>([]);
 const cashFlowList = ref<ICashFlowList[]>([]);
 const cashFlowListFiltered = ref<ICashFlowList[]>([]);
 const tableData = ref<ICashFlowList[]>([]);
@@ -99,16 +98,12 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function cashFlowSearching() {
-  currencyArray.value = [];
 
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       cashFlowList.value = res.data.data;
-      for (const item of cashFlowList.value) {
-        currencyArray.value.push(item.currency);
-      }
       await cashFlowListFilterEvent();
     } else {
       showAxiosErrorMsg({ message: res.data.message });

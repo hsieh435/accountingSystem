@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span><currencySelect  @sendbackCurrencyId="settingCurrency" />
+      <span>貨幣：</span><currencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId !== ''" @sendbackCurrencyId="settingCurrency" />
     </div>
 
     <div class="flex items-center me-3 my-1">
@@ -52,8 +52,9 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
 
 
 
-async function settingAccountId(accountIdSendback: string) {
+async function settingAccountId(accountIdSendback: string, currencyIdSendback: string) {
   searchParams.accountId = accountIdSendback;
+  searchParams.currencyId = searchParams.accountId ? currencyIdSendback : "";
 }
 
 async function settingCurrency(currencyIdSendback: string) {

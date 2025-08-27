@@ -1,10 +1,9 @@
 import { defineNuxtRouteMiddleware, navigateTo, abortNavigation } from "nuxt/app";
+// import { useRoute } from "vue-router";
 import { fetchJwtVerification } from "@/server/generalApi";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { decryptString } from "@/composables/crypto";
 import { clearLocalStorageKey } from "@/composables/tools";
-
-
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   // console.log("Navigating from:", from.path);
@@ -17,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if (!userToken && to.path !== "") {
       clearLocalStorageKey(false);
-      return abortNavigation();
+      // return abortNavigation();
     } else if (userToken) {
       try {
         const res = await fetchJwtVerification({ token: decryptString(userToken) });
@@ -27,12 +26,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         } else {
           showAxiosErrorMsg({ message: res.data.message || "" });
           clearLocalStorageKey(true);
-          return abortNavigation();
+          // return abortNavigation();
         }
       } catch (error) {
         showAxiosErrorMsg({ message: (error as Error).message });
         clearLocalStorageKey(true);
-        return abortNavigation();
+        // return abortNavigation();
       }
     }
   }

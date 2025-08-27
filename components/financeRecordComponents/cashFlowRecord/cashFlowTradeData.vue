@@ -8,14 +8,16 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent, h } from "vue";
-import { ICashFlowRecordList } from "@/models/index";
+import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate } from "@/server/cashFlowRecordApi";
+import { ICashFlowRecordList, IResponse } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string }>(), { tradeIdGot: "" });
+const props = withDefaults(defineProps<{ cashflowIdGot?: string; tradeIdGot?: string }>(), { cashflowIdGot: "", tradeIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
 
@@ -30,7 +32,7 @@ const dataParams = reactive<ICashFlowRecordList>({
   cashflowId: "",
   userId: "",
   tradeDatetime: "",
-  accountType: "",
+  accountType: "cashFlow",
   transactionType: "",
   tradeCategory: "",
   tradeAmount: 0,
@@ -42,7 +44,31 @@ const dataParams = reactive<ICashFlowRecordList>({
 
 
 async function searchingCashFlowRecord() {
-  // cashFlowRecordDataHandling();
+  // console.log("props:", props);
+  try {
+    const res: IResponse = await fetchCashFlowRecordByTradeId({
+      cashflowId:  props.cashflowIdGot,
+      tradeId: props.tradeIdGot
+    });
+    console.log("fetchCashFlowRecordByTradeId:", res.data.data);
+    if (res.data.returnCode === 0) {
+      dataParams.tradeId = res.data.data.tradeId;
+      dataParams.cashflowId = res.data.data.cashflowId;
+      dataParams.userId = res.data.data.userId;
+      dataParams.tradeDatetime = res.data.data.tradeDatetime;
+      dataParams.transactionType = res.data.data.transactionType;
+      dataParams.tradeCategory = res.data.data.tradeCategory;
+      dataParams.tradeAmount = res.data.data.tradeAmount;
+      dataParams.currency = res.data.data.currency;
+      dataParams.tradeDescription = res.data.data.tradeDescription;
+      dataParams.tradeNote = res.data.data.tradeNote;
+      await cashFlowRecordDataHandling();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 
@@ -118,9 +144,10 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
             selectTargetId: "isCashflowAble",
             accountIdGot: dataParams.cashflowId,
             isDisable: props.tradeIdGot ? true : false,
-            sendbackAccountId: (account: string, currency: string) => {
+            onSendbackAccountId: (account: string, currency: string) => {
               dataParams.cashflowId = account;
               dataParams.currency = currency;
+              console.log("dataParams:", dataParams);
             },
           });
         },
@@ -155,6 +182,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       let cashFlowTradeCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
+          accountType: "isCashflowAble",
           tradeCategoryId: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
@@ -183,9 +211,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.tradeIdGot) {
-        dataParams.tradeId = getCurrentTimestamp() + "";
-      }
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
@@ -216,8 +241,19 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-
+      // console.log("result:", result.value);
+      try {
+        const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(result.value);
+        console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 };

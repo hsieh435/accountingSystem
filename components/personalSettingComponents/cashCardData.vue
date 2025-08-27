@@ -53,7 +53,6 @@ async function searchingCashCardData() {
       dataParams.openAlert = res.data.data.openAlert;
       dataParams.createdDate = res.data.data.createdDate;
       dataParams.note = res.data.data.note;
-
       await cashCardDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
