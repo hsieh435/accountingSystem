@@ -10,7 +10,6 @@
 import { reactive, createApp, defineAsyncComponent, h } from "vue";
 import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordList, IResponse } from "@/models/index";
-import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
@@ -74,7 +73,8 @@ async function searchingCashFlowRecord() {
 
 
 async function cashFlowRecordDataHandling(apiMsg?: string) {
-  // console.log(dataParams);
+  console.log("props:", props);
+  console.log(dataParams);
 
   Swal.fire({
     title: props.tradeIdGot ? "編輯現金收支紀錄" : "新增現金收支紀錄",
@@ -147,7 +147,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.cashflowId = account;
               dataParams.currency = currency;
-              console.log("dataParams:", dataParams);
             },
           });
         },
@@ -170,8 +169,8 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       let cashFlowTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
-          tradeCategoryGot: dataParams.transactionType,
-          onSendbackIncomeExpense: (type: string) => {
+          transactionType: dataParams.transactionType,
+          onSendbackTransactionType: (type: string) => {
             dataParams.transactionType = type;
           },
         },

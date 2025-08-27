@@ -175,8 +175,8 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       let stockAccountTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
-          tradeCategoryGot: dataParams.transactionType,
-          onSendbackIncomeExpense: (type: string) => {
+          transactionType: dataParams.transactionType,
+          onSendbackTransactionType: (type: string) => {
             dataParams.transactionType = type;
           },
         },

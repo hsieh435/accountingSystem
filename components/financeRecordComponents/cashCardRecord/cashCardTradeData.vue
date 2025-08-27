@@ -134,11 +134,12 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       );
       cashCardTradeDatetime.mount("#tradeDatetimeComponent");
 
+
       let cashCardTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
-          tradeCategoryGot: dataParams.transactionType,
-          onSendbackIncomeExpense: (type: string) => {
+          transactionType: dataParams.transactionType,
+          onSendbackTransactionType: (type: string) => {
             dataParams.transactionType = type;
           },
         },

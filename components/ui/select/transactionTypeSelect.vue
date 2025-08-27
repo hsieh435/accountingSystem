@@ -1,5 +1,5 @@
 <template>
-  <URadioGroup orientation="horizontal" color="neutral" variant="list" :items="items" v-model="incomeExpenseValue" />
+  <URadioGroup orientation="horizontal" color="neutral" variant="list" :items="items" v-model="transactionTypeValue" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -7,8 +7,8 @@ import type { RadioGroupItem, RadioGroupValue } from "@nuxt/ui"
 
 
 
-const props = withDefaults(defineProps<{ incomeExpense?: string; }>(), { incomeExpense: "", });
-const emits = defineEmits(["sendbackIncomeExpense"]);
+const props = withDefaults(defineProps<{ transactionType?: string; }>(), { transactionType: "", });
+const emits = defineEmits(["sendbackTransactionType"]);
 
 
 
@@ -19,17 +19,21 @@ const items = ref<RadioGroupItem[]>([
 
 
 
-const incomeExpenseValue = ref<RadioGroupValue>("");
+const transactionTypeValue = ref<RadioGroupValue>("");
 
 
 
 onMounted(() => {
-  incomeExpenseValue.value = props.incomeExpense || "";
+  transactionTypeValue.value = props.transactionType || "";
 });
 
-watch(incomeExpenseValue, () => {
-//   console.log("Selected value:", incomeExpenseValue.value);
-  emits("sendbackIncomeExpense", incomeExpenseValue.value);
+watch(props, () => {
+  transactionTypeValue.value = props.transactionType || "";
+}, { immediate: true });
+
+watch(transactionTypeValue, () => {
+  // console.log("Selected value:", transactionTypeValue.value);
+  emits("sendbackTransactionType", transactionTypeValue.value);
 }, { immediate: true });
 
 

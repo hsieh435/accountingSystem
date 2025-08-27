@@ -26,18 +26,21 @@
               <div :class="tailwindStyles.thClasses">內容</div>
               <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-                <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ record.transactionType }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
-                <div :class="tailwindStyles.tdClasses">0</div>
-                <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <cashFlowTradeData :cashflowIdGot="record.cashflowId" :tradeIdGot="record.tradeId" @dataReseaching="searchingfinancerecord" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+              <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.transactionType }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
+              <div :class="tailwindStyles.tdClasses">0</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <cashFlowTradeData
+                  :cashflowIdGot="record.cashflowId"
+                  :tradeIdGot="record.tradeId"
+                  @dataReseaching="searchingfinancerecord" />
               </div>
             </div>
           </div>
@@ -64,8 +67,12 @@ definePageMeta({
   subTitle: "現金收支",
 });
 
-const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecordComponents/accountRecordSearching.vue"));
-const cashFlowTradeData = defineAsyncComponent(() => import("@/components/financeRecordComponents/cashFlowRecord/cashFlowTradeData.vue"));
+const accountRecordSearching = defineAsyncComponent(
+  () => import("@/components/financeRecordComponents/accountRecordSearching.vue"),
+);
+const cashFlowTradeData = defineAsyncComponent(
+  () => import("@/components/financeRecordComponents/cashFlowRecord/cashFlowTradeData.vue"),
+);
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -81,13 +88,9 @@ const cashFlowRecord = ref<ICashFlowRecordList[]>([]);
 const cashFlowRecordFiltered = ref<ICashFlowRecordList[]>([]);
 const tableData = ref<ICashFlowRecordList[]>([]);
 
-
-
 onMounted(() => {
   searchingfinancerecord();
 });
-
-
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
@@ -107,7 +110,6 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingfinancerecord() {
-
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
     console.log("res:", res.data.data);

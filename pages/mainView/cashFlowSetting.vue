@@ -33,6 +33,7 @@
                 <ui-switch :switchValueGot="cashFlow.enable" @sendBackSwitchValue="(value: boolean) => { cashFlow.enable = value; adjustAbleStatus(cashFlow); }" />
               </div>
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
