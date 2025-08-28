@@ -30,8 +30,6 @@ let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 
 async function settingstockinfo(chartTitle: string, stockPriceRecord: IStockPriceRecordList[]) {
   stockDataLineChart.value = [];
-  // console.log(chartTitle);
-  // console.log(stockPriceRecord);
   lineChartTitle.value = chartTitle;
   stockData = JSON.parse(JSON.stringify(stockPriceRecord));
   stockDataLineChart.value = stockData.map((record) => {
@@ -40,7 +38,6 @@ async function settingstockinfo(chartTitle: string, stockPriceRecord: IStockPric
       data: record.close,
     };
   });
-  // console.log("stockDataLineChart:", stockDataLineChart.value);
 }
 </script>
 <style lang="scss" scoped></style>

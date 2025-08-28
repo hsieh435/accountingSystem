@@ -25,17 +25,17 @@
               <div :class="tailwindStyles.thClasses">內容</div>
               <div :class="tailwindStyles.thClasses">操作</div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-                <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
-                <div :class="tailwindStyles.tdClasses">0</div>
-                <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
-                <div :class="tailwindStyles.tdClasses">
-                  <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" />
-                </div>
+          </div>
+          <div :class="tailwindStyles.tbodyClasses">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+              <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
+              <div :class="tailwindStyles.tdClasses">0</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" />
               </div>
             </div>
           </div>

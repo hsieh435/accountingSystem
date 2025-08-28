@@ -54,7 +54,7 @@ async function settingEnd(date: string) {
 }
 
 async function searchingStockPrice() {
-  console.log("searchingParams:", searchingParams);
+  // console.log("searchingParams:", searchingParams);
 
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
