@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
+import { IStockPriceSearchingParams, IStockList, IStockPriceRecordList, IResponse } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
@@ -40,9 +40,9 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
 const stockName = ref<string>("");
 
-async function settingStockNo(selectedData: { value: string; label: string }) {
-  searchingParams.stockNo = selectedData.value;
-  stockName.value = selectedData.label;
+async function settingStockNo(selectedData: IStockList) {
+  searchingParams.stockNo = selectedData.stock_id;
+  stockName.value = selectedData.stock_name;
 }
 
 async function settingStart(date: string) {

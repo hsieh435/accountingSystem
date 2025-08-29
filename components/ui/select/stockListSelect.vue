@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
-import { IResponse } from "@/models/index";
+import { IStockList, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
@@ -20,18 +20,19 @@ const props = withDefaults(defineProps<{ isDisable?: boolean }>(), { isDisable: 
 const emits = defineEmits(["sendbackStockNo"]);
 
 const stockSelected = ref<string>("");
-const rawStockList = ref<{ label: string; value: string }[]>([]);
+const rawStockList = ref<IStockList[]>([]);
 const filteredStockList = ref<{ label: string; value: string }[]>([]);
 const loading = ref<boolean>(false);
 
 watch(stockSelected, () => {
   // console.log("stockSelected:", stockSelected.value);
-  const selectedItem = filteredStockList.value.find((item) => item.value === stockSelected.value);
-  const selectedData = {
-    value: stockSelected.value,
-    label: selectedItem?.label || "",
-  };
-  emits("sendbackStockNo", selectedData);
+  if (stockSelected.value) {
+    const selectedItem = rawStockList.value.find((item) => item.stock_id === stockSelected.value);
+    // console.log("selectedItem:", selectedItem);
+    emits("sendbackStockNo", selectedItem);
+  } else {
+    return;
+  }
 });
 
 function onSearch(event: Event) {
@@ -43,16 +44,15 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
     filteredStockList.value = [];
     stockSelected.value = "";
   } else {
-
     loading.value = true;
     try {
       const res: IResponse = await fetchStockList(keyword.trim());
       // console.log("res:", JSON.parse(res.data.data));
       if (res.data.returnCode === 0) {
         rawStockList.value = JSON.parse(res.data.data);
-        filteredStockList.value = rawStockList.value.map((item: { label: string; value: string }) => ({
-          label: item.label,
-          value: item.value,
+        filteredStockList.value = rawStockList.value.map((item: IStockList) => ({
+          value: item.stock_id,
+          label: `${item.stock_name}（${item.stock_id}）`,
         }));
       } else {
         showAxiosErrorMsg({ message: res.data.message });

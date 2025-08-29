@@ -282,6 +282,14 @@ export interface IStockPriceSearchingParams {
   endDate: string;
 }
 
+export interface IStockList {
+  date: string;
+  industry_category: string;
+  stock_id: string;
+  stock_name: string;
+  type: string;
+}
+
 // 股票歷史價位資料 interface
 export interface IStockPriceRecordList {
   Trading_Volume: number;
