@@ -24,7 +24,10 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<ICurrencyAccountList>({
+
+
+
+const getDefaultDataParams = (): ICurrencyAccountList => ({
   accountId: props.currencyAccountIdGot || "",
   userId: "",
   accountType: "currencyAccount",
@@ -42,6 +45,9 @@ const dataParams = reactive<ICurrencyAccountList>({
   createdDate: "",
   note: "",
 });
+const dataParams = reactive<ICurrencyAccountList>(getDefaultDataParams());
+
+
 
 async function searchingCurrencyAccountData() {
   // console.log("props:", props.currencyAccountIdGot);
@@ -218,6 +224,8 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
       dataParams.accountId = (document.getElementById("accountId") as HTMLInputElement).value;
       dataParams.accountName = (document.getElementById("accountName") as HTMLInputElement).value;
+      dataParams.accountBankCode = (document.getElementById("accountBankCode") as HTMLInputElement).value;
+      dataParams.accountBankName = (document.getElementById("accountBankName") as HTMLInputElement).value;
       if (!props.currencyAccountIdGot) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
@@ -271,6 +279,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }

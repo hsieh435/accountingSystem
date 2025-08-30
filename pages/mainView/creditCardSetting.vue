@@ -1,53 +1,69 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-    <div class="my-1"></div>
-    <creditCardData @dataReseaching="creditCardSearching" />
-  </div>
-  <div class="w-full px-3">
-    <template v-if="creditCardList.length > 0">
-      <ui-pagination
-        :totalDataQuanity="creditCardList.length"
-        :searchingPlaceholder="'搜尋信用卡名稱'"
-        @tableSliceChange="settingTableSlice" />
-      <template v-if="creditCardListFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">啟用</div>
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">信用卡名稱</div>
-              <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
-              <div :class="tailwindStyles.thClasses">發卡機構</div>
-              <div :class="tailwindStyles.thClasses">結算貨幣</div>
-              <div :class="tailwindStyles.thClasses">每月額度</div>
-              <div :class="tailwindStyles.thClasses">到期</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
-            </div>
-          </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
-              <div :class="tailwindStyles.tdClasses">
-                <ui-switch :switchValueGot="card.enable" @sendBackSwitchValue="(value: boolean) => { card.enable = value; adjustAbleStatus(card); }" />
-              </div>
-              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.creditcardBankCode }} {{ card.creditcardBankName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.expirationDate.slice(0, 7) }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
+    <div>
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+      <div class="my-1"></div>
+      <creditCardData @dataReseaching="creditCardSearching" />
+    </div>
+
+    <div class="px-3">
+      <template v-if="creditCardList.length > 0">
+        <ui-pagination
+          :totalDataQuanity="creditCardList.length"
+          :searchingPlaceholder="'搜尋信用卡名稱'"
+          @tableSliceChange="settingTableSlice" />
+        <template v-if="creditCardListFiltered.length > 0">
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">啟用</div>
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">信用卡名稱</div>
+                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.thClasses">發卡機構</div>
+                <div :class="tailwindStyles.thClasses">結算貨幣</div>
+                <div :class="tailwindStyles.thClasses">每月額度</div>
+                <div :class="tailwindStyles.thClasses">消費提醒</div>
+                <div :class="tailwindStyles.thClasses">到期</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
+                <div :class="tailwindStyles.tdClasses">
+                  <ui-switch
+                    :switchValueGot="card.enable"
+                    @sendBackSwitchValue="
+                      (value: boolean) => {
+                        card.enable = value;
+                        adjustAbleStatus(card);
+                      }
+                    " />
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditcardName }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ card.expirationDate.slice(0, 7) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
-    </template>
-    <template v-else-if="creditCardList.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無信用卡資料</span>
-    </template>
+      <template v-else-if="creditCardList.length === 0">
+        <span :class="tailwindStyles.noDataClasses">無信用卡資料</span>
+      </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -65,7 +81,9 @@ definePageMeta({
   subTitle: "信用卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
 const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardData.vue"));
 
 const currentPage = ref<number>(1);
@@ -96,7 +114,6 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function creditCardSearching() {
-
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
     console.log("res:", res.data.data);
@@ -127,10 +144,10 @@ async function creditCardListFilterEvent() {
 }
 
 async function adjustAbleStatus(card: ICreditCardList) {
-
   try {
-    const res: IResponse =
-      await (card.enable === true ? fetchEnableCreditCard : fetchDisableCreditCard)(card.creditcardId);
+    const res: IResponse = await (card.enable === true ? fetchEnableCreditCard : fetchDisableCreditCard)(
+      card.creditcardId,
+    );
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
     } else {

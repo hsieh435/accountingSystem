@@ -1,58 +1,79 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-    <div class="my-1"></div>
-    <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
-  </div>
-  <div class="w-full px-3">
-    <template v-if="currencyAccountList.length > 0">
-      <ui-pagination
-        :totalDataQuanity="currencyAccountList.length"
-        :searchingPlaceholder="'搜尋帳戶名稱'"
-        @tableSliceChange="settingTableSlice" />
-      <template v-if="currencyAccountListFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">啟用</div>
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">帳戶名稱</div>
-              <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
-              <div :class="tailwindStyles.thClasses">目前金額</div>
-              <div :class="tailwindStyles.thClasses">薪資帳戶</div>
-              <div :class="tailwindStyles.thClasses">建立時間</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
-            </div>
-          </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
-              <div :class="tailwindStyles.tdClasses">
-                <ui-switch :switchValueGot="account.enable" @sendBackSwitchValue="(value: boolean) => { account.enable = value; adjustAbleStatus(account); }" />
-              </div>
-              <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ account.accountBankCode }} {{ account.accountBankName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>
-              </div>
-              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <currencyAccountsData :currencyAccountIdGot="account.accountId" @dataReseaching="currencyAccountSearching()" />
+    <div>
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+      <div class="my-1"></div>
+      <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
+    </div>
+    <div class="px-3">
+      <template v-if="currencyAccountList.length > 0">
+        <ui-pagination
+          :totalDataQuanity="currencyAccountList.length"
+          :searchingPlaceholder="'搜尋帳戶名稱'"
+          @tableSliceChange="settingTableSlice" />
+        <template v-if="currencyAccountListFiltered.length > 0">
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">啟用</div>
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">帳戶名稱</div>
+                <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.thClasses">目前金額</div>
+                <div :class="tailwindStyles.thClasses">提醒</div>
+                <div :class="tailwindStyles.thClasses">薪資帳戶</div>
+                <div :class="tailwindStyles.thClasses">建立時間</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+                <div :class="tailwindStyles.tdClasses">
+                  <ui-switch
+                    :switchValueGot="account.enable"
+                    @sendBackSwitchValue="
+                      (value: boolean) => {
+                        account.enable = value;
+                        adjustAbleStatus(account);
+                      }
+                    " />
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
+                <div :class="tailwindStyles.tdClasses"
+                  >{{ account.accountBankCode }} / {{ account.accountBankName }}</div
+                >
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <i class="fa-solid fa-check mx-1" v-if="account.openAlert"></i>
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <i class="fa-solid fa-check mx-1" v-if="account.isSalaryAccount"></i>
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <currencyAccountsData
+                    :currencyAccountIdGot="account.accountId"
+                    @dataReseaching="currencyAccountSearching()" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
-    </template>
-    <template v-else-if="currencyAccountList.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
-    </template>
+      <template v-else-if="currencyAccountList.length === 0">
+        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+      </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCurrencyAccountList, fetchEnableCurrencyAccount, fetchDisableCurrencyAccount } from "@/server/currencyAccountApi";
+import {
+  fetchCurrencyAccountList,
+  fetchEnableCurrencyAccount,
+  fetchDisableCurrencyAccount,
+} from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -65,8 +86,12 @@ definePageMeta({
   subTitle: "存款帳戶資料設定",
 });
 
-const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
-const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSettingComponents/currencyAccountsData.vue"));
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
+const currencyAccountsData = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/currencyAccountsData.vue"),
+);
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -96,7 +121,6 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function currencyAccountSearching() {
-
   try {
     const res: IResponse = await fetchCurrencyAccountList(searchingParams);
     console.log("fetchCurrencyAccountList:", res.data.data);
@@ -125,13 +149,11 @@ async function currencyAccountListFilterEvent() {
   tableData.value = sliceArray(currencyAccountListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-
-
 async function adjustAbleStatus(account: ICurrencyAccountList) {
-
   try {
-    const res: IResponse =
-      await (account.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(account.accountId);
+    const res: IResponse = await (account.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(
+      account.accountId,
+    );
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
     } else {
@@ -141,6 +163,5 @@ async function adjustAbleStatus(account: ICurrencyAccountList) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
 </script>
 <style lang="scss" scoped></style>

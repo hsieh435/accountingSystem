@@ -24,7 +24,7 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<IStockAccountList>({
+const getDefaultDataParams = (): IStockAccountList => ({
   accountId: props.stockAccountIGot || "",
   userId: "",
   accountType: "stockAccount",
@@ -41,6 +41,9 @@ const dataParams = reactive<IStockAccountList>({
   createdDate: "",
   note: "",
 });
+const dataParams = reactive<IStockAccountList>(getDefaultDataParams());
+
+
 
 async function searchingStockAccountData() {
   console.log(props.stockAccountIGot);
@@ -266,6 +269,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }

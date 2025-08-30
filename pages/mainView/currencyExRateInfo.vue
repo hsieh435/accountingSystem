@@ -1,9 +1,11 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <currencyExRateSearching />
-  </div>
-  <div class="px-3">
-    <!--  -->
+    <div class="px-3">
+      <currencyExRateSearching />
+    </div>
+    <div class="px-3">
+      <div></div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

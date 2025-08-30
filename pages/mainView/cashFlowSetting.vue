@@ -1,58 +1,67 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-    <div class="my-1"></div>
-    <cashFlowData @dataReseaching="cashFlowSearching()" />
-  </div>
+    <div>
+      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+      <div class="my-1"></div>
+      <cashFlowData @dataReseaching="cashFlowSearching()" />
+    </div>
 
-  <div class="w-full px-3">
-    <template v-if="cashFlowList.length > 0">
-      <ui-pagination
-        :totalDataQuanity="cashFlowListFiltered.length"
-        :showFilter="false"
-        @tableSliceChange="settingTableSlice" />
-      <template v-if="cashFlowListFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">啟用</div>
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">現金流名稱</div>
-              <div :class="tailwindStyles.thClasses">貨幣</div>
-              <div :class="tailwindStyles.thClasses">初始金額</div>
-              <div :class="tailwindStyles.thClasses">目前金額</div>
-              <div :class="tailwindStyles.thClasses">提醒金額</div>
-              <div :class="tailwindStyles.thClasses">提醒</div>
-              <div :class="tailwindStyles.thClasses">建立時間</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
-            </div>
-          </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
-              <div :class="tailwindStyles.tdClasses">
-                <ui-switch :switchValueGot="cashFlow.enable" @sendBackSwitchValue="(value: boolean) => { cashFlow.enable = value; adjustAbleStatus(cashFlow); }" />
-              </div>
-              <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.alertValue) }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
-              </div>
-              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+    <div class="px-3">
+      <template v-if="cashFlowList.length > 0">
+        <ui-pagination
+          :totalDataQuanity="cashFlowListFiltered.length"
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
+        <template v-if="cashFlowListFiltered.length > 0">
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">啟用</div>
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">現金流名稱</div>
+                <div :class="tailwindStyles.thClasses">貨幣</div>
+                <div :class="tailwindStyles.thClasses">初始金額</div>
+                <div :class="tailwindStyles.thClasses">目前金額</div>
+                <div :class="tailwindStyles.thClasses">提醒金額</div>
+                <div :class="tailwindStyles.thClasses">提醒</div>
+                <div :class="tailwindStyles.thClasses">建立時間</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
+                <div :class="tailwindStyles.tdClasses">
+                  <ui-switch
+                    :switchValueGot="cashFlow.enable"
+                    @sendBackSwitchValue="
+                      (value: boolean) => {
+                        cashFlow.enable = value;
+                        adjustAbleStatus(cashFlow);
+                      }
+                    " />
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ cashFlow.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ cashFlow.currencyName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(cashFlow.alertValue) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
-    </template>
-    <template v-else-if="cashFlowList.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無現金流資料</span>
-    </template>
+      <template v-else-if="cashFlowList.length === 0">
+        <span :class="tailwindStyles.noDataClasses">無現金流資料</span>
+      </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -70,7 +79,9 @@ definePageMeta({
   subTitle: "現金資料設定",
 });
 
-const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
 const cashFlowData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowData.vue"));
 
 const currentPage = ref<number>(1);
@@ -99,7 +110,6 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function cashFlowSearching() {
-
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
     // console.log("res:", res.data.data);
@@ -119,13 +129,9 @@ async function cashFlowListFilterEvent() {
   tableData.value = sliceArray(cashFlowListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-
-
 async function adjustAbleStatus(card: ICashFlowList) {
-
   try {
-    const res: IResponse =
-      await (card.enable === true ? fetchEnableCashFlow : fetchDisableCashFlow)(card.cashflowId);
+    const res: IResponse = await (card.enable === true ? fetchEnableCashFlow : fetchDisableCashFlow)(card.cashflowId);
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
     } else {
@@ -135,6 +141,5 @@ async function adjustAbleStatus(card: ICashFlowList) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
 </script>
 <style lang="scss" scoped></style>

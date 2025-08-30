@@ -34,7 +34,9 @@ const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: b
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<ICashFlowList>({
+
+
+const getDefaultDataParams = (): ICashFlowList => ({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
   accountType: "cashFlow",
@@ -49,6 +51,9 @@ const dataParams = reactive<ICashFlowList>({
   createdDate: "",
   note: "",
 });
+const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
+
+
 
 async function searchingCashflowData() {
   // console.log("props:", props);
@@ -254,6 +259,7 @@ async function cashflowDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }
@@ -266,7 +272,7 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 async function removeCashFlowData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除現金流資料與相關收支紀錄",
+    message: "即將刪除現金流資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowDelete,
     apiParams: props.cashflowIdIdGot,

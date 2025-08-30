@@ -19,7 +19,10 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ cashCardIdGot?: string }>(), { cashCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<ICashCardList>({
+
+
+
+const getDefaultDataParams = (): ICashCardList => ({
   cashcardId: props.cashCardIdGot || "",
   userId: "",
   accountType: "cashCard",
@@ -35,6 +38,9 @@ const dataParams = reactive<ICashCardList>({
   createdDate: "",
   note: "",
 });
+const dataParams = reactive<ICashCardList>(getDefaultDataParams());
+
+
 
 async function searchingCashCardData() {
   // console.log("props:", props);
@@ -69,17 +75,17 @@ async function cashCardDataHandling(apiMsg?: string) {
     title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
-        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">儲值票卡名稱：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
           <input class="${tailwindStyles.inputClasses}" id="cashcardName" value="${dataParams.cashcardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">結算貨幣：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
           <div id="currencySelectComponent"></div>
         </div>
 
@@ -92,19 +98,19 @@ async function cashCardDataHandling(apiMsg?: string) {
         </div>`
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">初始金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">最小儲值金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">最大儲值金額：</span>
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
         </div>
 
@@ -277,6 +283,7 @@ async function cashCardDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }
@@ -289,7 +296,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 async function removeCashCardData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除儲值票卡資料與相關收支紀錄",
+    message: "即將刪除儲值票卡資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashCardDelete,
     apiParams: props.cashCardIdGot,

@@ -3,10 +3,12 @@ import { decryptString } from "@/composables/crypto";
 
 
 const baseURL = "http://localhost:3600";
+const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 
 
 export async function apiFetch(url: string, method: string, options?: RequestInit) {
+  // console.log("userTimezone:", userTimezone);
   const userToken = localStorage.getItem("userToken");
 
   const response = await fetch(baseURL + url, {
@@ -15,6 +17,7 @@ export async function apiFetch(url: string, method: string, options?: RequestIni
     headers: {
       "Content-Type": "application/json",
       Authorization: userToken ? `Bearer ${decryptString(userToken || "")}` : "",
+      "X-Timezone": userTimezone,
     },
   });
   // console.log(response);

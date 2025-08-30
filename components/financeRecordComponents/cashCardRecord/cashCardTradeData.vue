@@ -26,7 +26,7 @@ const currencySelect = defineAsyncComponent(() => import("@/components/ui/select
 
 
 
-const dataParams = reactive<ICashCardRecordList>({
+const getDefaultDataParams = (): ICashCardRecordList => ({
   tradeId: props.tradeIdGot || "",
   cashcardId: props.cashCardIdGot || "",
   cashcardName: "",
@@ -39,6 +39,9 @@ const dataParams = reactive<ICashCardRecordList>({
   tradeDescription: "",
   tradeNote: "",
 });
+const dataParams = reactive<ICashCardRecordList>(getDefaultDataParams());
+
+
 
 async function searchingCashCardRecord() {
   // cashCardRecordDataHandling();
@@ -211,6 +214,12 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
+
+
+
+
+
+      // Object.assign(dataParams, getDefaultDataParams());
     }
   });
 }

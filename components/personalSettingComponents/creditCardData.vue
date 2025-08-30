@@ -24,7 +24,9 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const dataParams = reactive<ICreditCardList>({
+
+
+const getDefaultDataParams = (): ICreditCardList => ({
   creditcardId: props.creditCardIdGot || "",
   userId: "",
   accountType: "creditCard",
@@ -41,6 +43,9 @@ const dataParams = reactive<ICreditCardList>({
   createdDate: "",
   note: "",
 });
+const dataParams = reactive<ICreditCardList>(getDefaultDataParams());
+
+
 
 async function searchingCreditCardData() {
   try {
@@ -245,12 +250,6 @@ async function creditCardDataHandling(apiMsg?: string) {
       if (!dataParams.creditcardName) {
         errors.push("請填寫信用卡名稱");
       }
-      if (!dataParams.creditcardBankCode) {
-        errors.push("請填寫發卡銀行代碼");
-      }
-      if (!dataParams.creditcardBankName) {
-        errors.push("請填寫發卡銀行名稱");
-      }
       if (!dataParams.creditcardSchema) {
         errors.push("請選擇發卡機構");
       }
@@ -282,6 +281,7 @@ async function creditCardDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }

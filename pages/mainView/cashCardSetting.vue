@@ -18,9 +18,11 @@
               <div :class="tailwindStyles.thClasses">NO.</div>
               <div :class="tailwindStyles.thClasses">票卡名稱</div>
               <div :class="tailwindStyles.thClasses">使用貨幣</div>
+              <div :class="tailwindStyles.thClasses">初始金額</div>
               <div :class="tailwindStyles.thClasses">目前金額</div>
               <div :class="tailwindStyles.thClasses">最小儲值金額</div>
               <div :class="tailwindStyles.thClasses">最大儲值金額</div>
+              <div :class="tailwindStyles.thClasses">提醒</div>
               <div :class="tailwindStyles.thClasses">建立時間</div>
               <div :class="tailwindStyles.thClasses">操作</div>
             </div>
@@ -33,9 +35,13 @@
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.startingAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.minimumValueAllowed) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.maximumValueAllowed) }}</div>
+              <div :class="tailwindStyles.tdClasses">
+                <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
+              </div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
                 <cashCardData :cashCardIdGot="card.cashcardId" @dataReseaching="cashCardSearching" />

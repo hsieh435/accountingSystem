@@ -23,7 +23,7 @@ export async function fetchCashFlowRecordCreate(data: ICashFlowRecordList) {
 }
 
 export async function fetchCashFlowRecordUpdate(data: ICashFlowRecordList) {
-  const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/update", "PUT", {
+  const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/update", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
