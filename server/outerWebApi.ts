@@ -3,6 +3,15 @@ import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/mo
 
 
 
+export async function testConnection(data: { finMindAccount: string; finMindPassword: string }) {
+  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
+
+
 export async function fetchStockList(keyword: string) {
   const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${keyword}`, "GET");
   // console.log("response:", response);
@@ -12,8 +21,6 @@ export async function fetchStockList(keyword: string) {
   // const result = await response.json() as { data: any };
   return await response.json();
 }
-
-
 
 export async function fetchEachStockList(ex_ch: string) {
   const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${ex_ch}`, "GET");
@@ -25,8 +32,6 @@ export async function fetchEachStockList(ex_ch: string) {
   return await response.json();
 }
 
-
-
 export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/stockInfo/rangeValue", "POST", {
     body: JSON.stringify(data),
@@ -34,13 +39,13 @@ export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
   return await response.json();
 }
 
-
-
 export async function fetchCurrencyLatestExRate(currencyCode: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/latest/${currencyCode}`, "GET");
+  const response = await apiFetch(
+    `/accounting_system_backend/api/outerWebApi/currencyExRateInfo/latest/${currencyCode}`,
+    "GET",
+  );
   return await response.json();
 }
-
 
 export async function fetchCurrencyHistoryExRate(data: ICurrencyExRateSearchingParams) {
   const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/history`, "POST", {

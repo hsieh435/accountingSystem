@@ -8,9 +8,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { ICreditCardRecordList } from "@/models/index";
+import { fetchCreditCardRecordById, fetchCreditCardRecordCreate, fetchCreditCardRecordUpdate } from "@/server/creditCardRecordApi";
+import { ICreditCardRecordList, IResponse } from "@/models/index";
 import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: string }>(), {
@@ -26,7 +28,7 @@ const currencySelect = defineAsyncComponent(() => import("@/components/ui/select
 
 
 
-const dataParams = reactive<ICreditCardRecordList>({
+const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeId: props.tradeIdGot || "",
   creditCardId: props.creditCardIdGot,
   tradeDatetime: "",
@@ -39,9 +41,41 @@ const dataParams = reactive<ICreditCardRecordList>({
   tradeDescription: "",
   tradeNote: "",
 });
+const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
+
+
 
 async function searchingCreditCardRecord() {
   // creditCardRecordDataHandling();
+
+  try {
+    const res: IResponse = await fetchCreditCardRecordById({
+      creditCardId:  props.creditCardIdGot,
+      tradeId: props.tradeIdGot
+    });
+    if (res.data.returnCode === 0) {
+      // dataParams.creditcardId = res.data.data.creditcardId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.creditcardName = res.data.data.creditcardName;
+      // dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
+      // dataParams.creditcardBankName = res.data.data.creditcardBankName;
+      // dataParams.creditcardSchema = res.data.data.creditcardSchema;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.creditPerMonth = res.data.data.creditPerMonth;
+      // dataParams.expirationDate = res.data.data.expirationDate;
+      // dataParams.alertValue = res.data.data.alertValue;
+      // dataParams.openAlert = res.data.data.openAlert;
+      // dataParams.createdDate = res.data.data.createdDate;
+      // dataParams.note = res.data.data.note;
+      Object.assign(dataParams, getDefaultDataParams());
+
+      await creditCardRecordDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function creditCardRecordDataHandling(apiMsg?: string) {
@@ -110,7 +144,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.creditCardId = account;
-              dataParams.currency = currency;
+              dataParams.currency = dataParams.creditCardId ? currency : "";
             },
           });
         },
@@ -175,7 +209,6 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       if (dataParams.tradeAmount < 0) {
         errors.push("交易金額不得為負");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;
@@ -186,6 +219,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
+      // Object.assign(dataParams, getDefaultDataParams());
     }
   });
 }

@@ -8,9 +8,10 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { ICashCardRecordList } from "@/models/index";
-import { getCurrentTimestamp } from "@/composables/tools";
+import { fetchCashCardRecordById, fetchCashCardRecordCreate, fetchCashCardRecordUpdate } from "@/server/cashCardRecordApi";
+import { ICashCardRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; cashCardIdGot?: string }>(), {
@@ -45,6 +46,33 @@ const dataParams = reactive<ICashCardRecordList>(getDefaultDataParams());
 
 async function searchingCashCardRecord() {
   // cashCardRecordDataHandling();
+
+
+
+  // console.log("props:", props);
+  try {
+    const res: IResponse = await fetchCashCardRecordById({
+      cashcardId:  props.cashCardIdGot,
+      tradeId: props.tradeIdGot
+    });
+    console.log("fetchCashCardRecordById:", res.data.data);
+    if (res.data.returnCode === 0) {
+      dataParams.tradeId = res.data.data.tradeId;
+      dataParams.cashcardId = res.data.data.cashcardId;
+      dataParams.tradeDatetime = res.data.data.tradeDatetime;
+      dataParams.transactionType = res.data.data.transactionType;
+      dataParams.tradeCategory = res.data.data.tradeCategory;
+      dataParams.tradeAmount = res.data.data.tradeAmount;
+      dataParams.currency = res.data.data.currency;
+      dataParams.tradeDescription = res.data.data.tradeDescription;
+      dataParams.tradeNote = res.data.data.tradeNote;
+      await cashCardRecordDataHandling();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function cashCardRecordDataHandling(apiMsg?: string) {
@@ -119,7 +147,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.cashcardId = account;
-              dataParams.currency = currency;
+              dataParams.currency = dataParams.cashcardId ? currency : "";
             },
           });
         },
@@ -162,7 +190,6 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       cashCardTradeCategory.mount("#tradeCategorySelectComponent");
 
 
-
       let cashCardCurrencySelect = createApp({
         render() {
           return h(currencySelect, {
@@ -181,9 +208,6 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.tradeIdGot) {
-        dataParams.tradeId = getCurrentTimestamp() + "";
-      }
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
@@ -203,7 +227,6 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       if (dataParams.tradeAmount < 0) {
         errors.push("交易金額不得為負");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;
@@ -213,13 +236,20 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-
-
-
-
-
-      // Object.assign(dataParams, getDefaultDataParams());
+      // console.log("result:", result.value);
+      try {
+        const res: IResponse = await (props.tradeIdGot ? fetchCashCardRecordUpdate : fetchCashCardRecordCreate)(result.value);
+        console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 }

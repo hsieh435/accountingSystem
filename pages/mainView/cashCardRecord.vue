@@ -52,9 +52,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
-import { ICashCardRecordList, IFinanceRecordSearchingParams } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCashCardRecordList } from "@/server/cashCardRecordApi";
+import { ICashCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
@@ -73,7 +75,6 @@ const cashCardTradeData = defineAsyncComponent(
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
-
 const searchingParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
   currencyId: "",
@@ -84,6 +85,11 @@ const searchingParams = reactive<IFinanceRecordSearchingParams>({
 const cashCardRecord = ref<ICashCardRecordList[]>([]);
 const cashCardRecordFiltered = ref<ICashCardRecordList[]>([]);
 const tableData = ref<ICashCardRecordList[]>([]);
+
+
+onMounted(() => {
+  searchingfinancerecord();
+});
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
@@ -101,8 +107,19 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingfinancerecord() {
-  //
-  // await cashCardRecordFilterEvent();
+
+  try {
+    const res: IResponse = await fetchCashCardRecordList(searchingParams);
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      cashCardRecord.value = res.data.data;
+      await cashCardRecordFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function cashCardRecordFilterEvent() {

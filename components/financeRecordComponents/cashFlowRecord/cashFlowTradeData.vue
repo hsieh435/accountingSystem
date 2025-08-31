@@ -73,8 +73,8 @@ async function searchingCashFlowRecord() {
 
 
 async function cashFlowRecordDataHandling(apiMsg?: string) {
-  console.log("props:", props);
-  console.log(dataParams);
+  // console.log("props:", props);
+  // console.log(dataParams);
 
   Swal.fire({
     title: props.tradeIdGot ? "編輯現金收支紀錄" : "新增現金收支紀錄",
@@ -146,7 +146,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.cashflowId = account;
-              dataParams.currency = currency;
+              dataParams.currency = dataParams.cashflowId ? currency : "";
             },
           });
         },

@@ -9,7 +9,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-// import { testConnection } from "@/server/outerWebApi";
+import { testConnection } from "@/server/outerWebApi";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
 
@@ -28,8 +29,16 @@ const finMindPassword = ref<string>("");
 
 
 async function handleSearch() {
-  //
 
+  try {
+    const result = await testConnection({
+      finMindAccount: finMindAccount.value,
+      finMindPassword: finMindPassword.value,
+    });
+    console.log("Connection test result:", result);
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

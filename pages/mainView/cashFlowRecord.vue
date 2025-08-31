@@ -58,7 +58,7 @@ import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -99,11 +99,6 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  // searchingParams.accountId = params.accountId;
-  // searchingParams.currencyId = params.currencyId;
-  // searchingParams.tradeCategory = params.tradeCategory;
-  // searchingParams.startingDate = params.startingDate;
-  // searchingParams.endDate = params.endDate;
   Object.assign(searchingParams, params);
   console.log("searchingParams:", searchingParams);
   await searchingfinancerecord();
