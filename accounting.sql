@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-08-27 23:26:22
+-- Started on 2025-08-31 23:51:05
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -479,6 +479,7 @@ stockAccount	證券帳戶
 --
 
 COPY public.cashcard_list (cashcard_id, user_id, account_type, cashcard_name, currency, starting_amount, present_amount, minimum_value_allowed, maximum_value_allowed, alert_value, open_alert, enable, created_date, note) FROM stdin;
+1756477469930	mike	cashCard	行政院月票	TWD	0.000	0.000	-100.000	9999.000	500.000	f	t	2025-08-29 00:00:00+08	
 \.
 
 
@@ -510,7 +511,7 @@ COPY public.cashflow_list (cashflow_id, user_id, account_type, cashflow_name, cu
 --
 
 COPY public.cashflow_trade (trade_id, cashflow_id, user_id, trade_datetime, trade_category, transaction_type, trade_amount, currency, trade_description, trade_note) FROM stdin;
-1756307714218	1756304792236	mike	2025-08-27 23:15:00+08	currency	income	5000.000	TWD		
+1756307714218	1756304792236	mike	2025-08-25 23:15:00+08	currency	income	5000.000	TWD		
 \.
 
 
@@ -521,6 +522,8 @@ COPY public.cashflow_trade (trade_id, cashflow_id, user_id, trade_datetime, trad
 --
 
 COPY public.creditcard_list (creditcard_id, user_id, account_type, creditcard_name, creditcard_bank_code, creditcard_bank_name, creditcard_schema, currency, credit_per_month, expiration_date, alert_value, open_alert, enable, created_date, note) FROM stdin;
+1756477756722	mike	creditCard	J POINT	012	富邦銀行	JCB	TWD	100000.000	2027-01-01 00:00:00+08	10000.000	f	t	2025-08-29 00:00:00+08	
+1756477841311	mike	creditCard	Open Possible聯名卡	012	富邦銀行	VISA	TWD	100000.000	2032-06-01 00:00:00+08	10000.000	f	t	2025-08-29 00:00:00+08	
 \.
 
 
@@ -557,6 +560,7 @@ COPY public.creditcard_trade (trade_id, credit_card_id, trade_datetime, user_id,
 --
 
 COPY public.currency_account_list (account_id, user_id, account_type, account_name, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, is_salary_account, open_alert, enable, created_date, note) FROM stdin;
+111007722765	mike	currencyAccount	LINE BANK 帳戶	824	LINE BANK	TWD	0.000	0.000	0.000	5000.000	f	f	t	2025-08-29 00:00:00+08	
 \.
 
 
@@ -619,8 +623,8 @@ financeStatement	financeStatement	財務報表	financeStatement	clipboard-pen-li
 financeStatement	stockInvestmentStatement	證券投資報表	stockInvestmentStatement	clipboard-pen-line	3
 financeStatement	consumptionAnalysis	消費分析	consumptionAnalysis	clipboard-pen-line	2
 outerInformation	currencyExRateInfo	貨幣匯率查詢	currencyExRateInfo	chart-candlestick	2
-outerInformation	outerSystemConnect	連線測試	outerSystemConnect	radio	1
 outerInformation	stockInfo	股市查詢	stockInfo	chart-candlestick	3
+outerInformation	outerSystemConnect	連線測試	outerSystemConnect	radio	1
 \.
 
 
@@ -646,6 +650,7 @@ outerInformation	資訊查詢	book-open	4
 --
 
 COPY public.stock_account_list (account_id, user_id, account_type, account_name, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, enable, created_date, note) FROM stdin;
+20152730138617	mike	stockAccount	元大證券帳戶	806	元大銀行	TWD	0.000	0.000	0.000	50000.000	t	t	2025-08-29 00:00:00+08	
 \.
 
 
@@ -692,7 +697,6 @@ transferIn	轉帳進入	f	f	f	t	t	52
 transferOut	轉帳轉出	f	f	f	t	t	53
 books	書籍費	t	t	t	t	f	8
 investments	投資	t	f	f	f	f	11
-addValue	票卡儲值	t	f	f	f	f	12
 creditcardBill	信用卡帳單	t	f	f	f	f	13
 insurance	保險費	t	f	t	t	f	14
 education	教育費	t	t	t	t	f	10
@@ -719,6 +723,7 @@ miscellaneous	雜支	t	t	t	t	f	25
 currencyExchange	換匯	t	f	f	t	f	20
 taxRrefund	退稅	t	f	t	t	f	22
 payTaxes	繳稅	t	f	t	t	f	21
+addValue	票卡儲值	t	t	f	f	f	12
 \.
 
 
@@ -913,7 +918,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-08-27 23:26:22
+-- Completed on 2025-08-31 23:51:05
 
 --
 -- PostgreSQL database dump complete
