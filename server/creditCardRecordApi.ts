@@ -1,7 +1,7 @@
 import { apiFetch } from "@/server";
-import { ICreditCardList, IAccountSearchingParams } from "@/models";
+import { ICreditCardRecordList, IFinanceRecordSearchingParams } from "@/models";
 
-export async function fetchCreditCardRecordList(data: IAccountSearchingParams) {
+export async function fetchCreditCardRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/creditCardRecord/list", "POST", {
     body: JSON.stringify(data),
   });
@@ -15,14 +15,14 @@ export async function fetchCreditCardRecordById(data: { tradeId: string; creditC
   return await response.json();
 }
 
-export async function fetchCreditCardRecordCreate(data: ICreditCardList) {
+export async function fetchCreditCardRecordCreate(data: ICreditCardRecordList) {
   const response = await apiFetch("/accounting_system_backend/api/creditCardRecord/create", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
 
-export async function fetchCreditCardRecordUpdate(data: ICreditCardList) {
+export async function fetchCreditCardRecordUpdate(data: ICreditCardRecordList) {
   const response = await apiFetch("/accounting_system_backend/api/creditCardRecord/update", "POST", {
     body: JSON.stringify(data),
   });

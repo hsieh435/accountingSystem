@@ -18,9 +18,11 @@
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
               <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">現金流</div>
               <div :class="tailwindStyles.thClasses">交易時間</div>
               <div :class="tailwindStyles.thClasses">收支</div>
               <div :class="tailwindStyles.thClasses">項目</div>
+              <div :class="tailwindStyles.thClasses">貨幣</div>
               <div :class="tailwindStyles.thClasses">金額</div>
               <div :class="tailwindStyles.thClasses">餘額</div>
               <div :class="tailwindStyles.thClasses">內容</div>
@@ -30,17 +32,16 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
               <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.cashflowName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.transactionType }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.transactionName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <cashFlowTradeData
-                  :cashflowIdGot="record.cashflowId"
-                  :tradeIdGot="record.tradeId"
-                  @dataReseaching="searchingfinancerecord" />
+                <cashFlowTradeData :cashflowIdGot="record.cashflowId" :tradeIdGot="record.tradeId" @dataReseaching="searchingfinancerecord" />
               </div>
             </div>
           </div>

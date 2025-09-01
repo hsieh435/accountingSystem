@@ -48,8 +48,8 @@ export interface IFunctionList {
 // 收支類型 interface
 export interface ITradeCategory {
   no?: number;
-  categoryCode: string;
-  categoryName: string;
+  tradeCode: string;
+  tradeName: string;
   isCashflowAble: boolean;
   isCashcardAble: boolean;
   isCreditcardAble: boolean;
@@ -106,11 +106,14 @@ export interface ICashFlowRecordList {
   no?: number;
   tradeId: string;
   cashflowId: string;
+  cashflowName?: string;
   userId: string;
   tradeDatetime: string;
   accountType: string;
   transactionType: string;
+  transactionName?: string;
   tradeCategory: string;
+  tradeName?: string;
   tradeAmount: number;
   currency: string;
   currencyName?: string;
@@ -147,7 +150,9 @@ export interface ICashCardRecordList {
   accountType: string;
   tradeDatetime: string;
   transactionType: string;
+  transactionName?: string;
   tradeCategory: string;
+  tradeName?: string;
   tradeAmount: number;
   currency: string;
   currencyName?: string;
@@ -181,10 +186,12 @@ export interface ICreditCardRecordList {
   no?: number;
   tradeId: string;
   creditCardId: string;
+  creditcardName?: string;
   tradeDatetime: string;
-  creditCardUser: string;
+  userId: string;
   accountType: string;
   tradeCategory: string;
+  tradeName?: string;
   tradeAmount: number;
   currency: string;
   currencyName?: string;

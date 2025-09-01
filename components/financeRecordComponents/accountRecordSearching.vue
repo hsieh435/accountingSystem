@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span><currencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId !== ''" @sendbackCurrencyId="settingCurrency" />
+      <span>貨幣：</span><currencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId.length > 0" @sendbackCurrencyId="settingCurrency" />
     </div>
 
     <div class="flex items-center me-3 my-1">
@@ -20,7 +20,7 @@
       <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
     </div>
 
-    <ui-buttonGroup showSearch :searchDisable="!searchParams.accountId" @dataSearch="searchingRecord()" />
+    <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>
 </template>
 <script setup lang="ts">
@@ -43,7 +43,7 @@ const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dat
 
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
-  accountId: props.accountTypeId || "",
+  accountId: "",
   currencyId: "",
   tradeCategory: "",
   startingDate: getCurrentYear() + "-01-01",

@@ -1,22 +1,10 @@
 <template>
   <template v-if="props.cashflowIdIdGot">
-    <ui-buttonGroup
-      showView
-      :viewText="'檢視現金流'"
-      @dataView="searchingCashflowData()"
-      :viewDisable="props.isDisable" />
-    <ui-buttonGroup
-      showRemove
-      :removeText="'刪除現金流'"
-      @dataRemove="removeCashFlowData()"
-      :removeDisable="props.isDisable" />
+    <ui-buttonGroup showView :viewText="'檢視現金流'" @dataView="searchingCashflowData()" />
+    <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData()" />
   </template>
   <template v-if="!props.cashflowIdIdGot">
-    <ui-buttonGroup
-      showCreate
-      :createText="'新增現金流'"
-      @dataCreate="cashflowDataHandling()"
-      :createDisable="props.isDisable" />
+    <ui-buttonGroup showCreate :createText="'新增現金流'" @dataCreate="cashflowDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">

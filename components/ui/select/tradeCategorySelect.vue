@@ -38,14 +38,14 @@ async function searchingTradeType() {
 
   try {
     const res: IResponse = await fetchTradeCategoryList();
-    // console.log("res:", res.data.data);
+    // console.log("fetchTradeCategoryList:", res.data.data);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data.filter((item: ITradeCategory) => {
         return props.accountType ? (item[props.accountType as keyof ITradeCategory] === true) : true;
       })
       .map((item: ITradeCategory) => ({
-        label: item.categoryName,
-        value: item.categoryCode
+        label: item.tradeName,
+        value: item.tradeCode
       }));
       if (props.sellectAll) {
         tradeCategoryList.value.unshift({ label: "所有項目", value: "" });

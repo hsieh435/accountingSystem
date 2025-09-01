@@ -5,7 +5,7 @@
       :accountTypeName="'信用卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <creditCardTradeData />
+    <creditCardTradeData @dataReseaching="searchingfinancerecord" />
   </div>
   <div class="px-3">
     <template v-if="creditCardRecord.length > 0">
@@ -18,8 +18,10 @@
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
               <div :class="tailwindStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.thClasses">信用卡</div>
               <div :class="tailwindStyles.thClasses">交易時間</div>
               <div :class="tailwindStyles.thClasses">項目</div>
+              <div :class="tailwindStyles.thClasses">貨幣</div>
               <div :class="tailwindStyles.thClasses">金額</div>
               <div :class="tailwindStyles.thClasses">剩餘額度</div>
               <div :class="tailwindStyles.thClasses">內容</div>
@@ -29,13 +31,15 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
               <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.creditcardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.tradeCategory }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.tradeName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" />
+                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" @dataReseaching="searchingfinancerecord" />
               </div>
             </div>
           </div>
@@ -48,11 +52,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchCashCardRecordById, fetchCashCardRecordCreate, fetchCashCardRecordUpdate } from "@/server/cashCardRecordApi";
-import { ICreditCardRecordList, IFinanceRecordSearchingParams } from "@/models/index";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi";
+import { ICreditCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -82,13 +87,19 @@ const creditCardRecord = ref<ICreditCardRecordList[]>([]);
 const creditCardRecordFiltered = ref<ICreditCardRecordList[]>([]);
 const tableData = ref<ICreditCardRecordList[]>([]);
 
+onMounted(() => {
+  searchingfinancerecord();
+});
+
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
-  await cashCardRecordFilterEvent();
+  await creditCardRecordFilterEvent();
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
+  // console.log("params:", params);
+
   searchingParams.accountId = params.accountId;
   searchingParams.currencyId = params.currencyId;
   searchingParams.tradeCategory = params.tradeCategory;
@@ -98,11 +109,22 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingfinancerecord() {
-  //
-  // await cashCardRecordFilterEvent();
+
+  try {
+    const res: IResponse = await fetchCreditCardRecordList(searchingParams);
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      creditCardRecord.value = res.data.data;
+      await creditCardRecordFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
-async function cashCardRecordFilterEvent() {
+async function creditCardRecordFilterEvent() {
   creditCardRecordFiltered.value = creditCardRecord.value;
   tableData.value = sliceArray(creditCardRecordFiltered.value, currentPage.value, itemsPerPage.value);
 }

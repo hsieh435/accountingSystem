@@ -10,7 +10,6 @@
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { fetchCreditCardRecordById, fetchCreditCardRecordCreate, fetchCreditCardRecordUpdate } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, IResponse } from "@/models/index";
-import { getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
@@ -32,7 +31,7 @@ const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeId: props.tradeIdGot || "",
   creditCardId: props.creditCardIdGot,
   tradeDatetime: "",
-  creditCardUser: "",
+  userId: "",
   accountType: "",
   tradeCategory: "",
   tradeAmount: 0,
@@ -46,7 +45,6 @@ const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
 
 
 async function searchingCreditCardRecord() {
-  // creditCardRecordDataHandling();
 
   try {
     const res: IResponse = await fetchCreditCardRecordById({
@@ -67,8 +65,7 @@ async function searchingCreditCardRecord() {
       // dataParams.openAlert = res.data.data.openAlert;
       // dataParams.createdDate = res.data.data.createdDate;
       // dataParams.note = res.data.data.note;
-      Object.assign(dataParams, getDefaultDataParams());
-
+      Object.assign(dataParams, res.data.data);
       await creditCardRecordDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
@@ -157,6 +154,9 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
           dateTimeGot: dataParams.tradeDatetime,
           onSendbackDateTime: (dateTime: string) => {
             dataParams.tradeDatetime = dateTime;
+            dataParams.billMonth =
+              dataParams.tradeDatetime ? ((new Date(dataParams.tradeDatetime)).toISOString()).slice(0, 7) + "-01" : "";
+            console.log("dataParams:", dataParams);
           },
         },
       );
@@ -193,13 +193,13 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.tradeIdGot) {
-        dataParams.tradeId = getCurrentTimestamp() + "";
-      }
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
 
+      if (!dataParams.creditCardId) {
+        errors.push("請選擇信用卡");
+      }
       if (!dataParams.tradeDatetime) {
         errors.push("請填寫交易時間");
       }
@@ -218,8 +218,20 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
-      // Object.assign(dataParams, getDefaultDataParams());
+      // console.log("result:", result.value);
+      try {
+        const res: IResponse = await (props.tradeIdGot ? fetchCreditCardRecordUpdate : fetchCreditCardRecordCreate)(result.value);
+        console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 }

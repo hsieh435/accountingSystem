@@ -32,13 +32,6 @@ export function clearLocalStorageKey(isReturn: boolean) {
 
 
 
-// 取得 localStorage associationIdOperating
-export function getAssociationOperating() {
-  return getLocalStorageItem("associationIdOperating") || getLocalStorageItem("userAssociationId") || "";
-}
-
-
-
 // Base64 解碼
 const Base64decoded = (str: string) => {
   str = str.replace(/-/g, "+").replace(/_/g, "/");
@@ -61,11 +54,14 @@ export function jwtTokenEncoded(str: string) {
 
 
 
-// 西元年日期格式 yyyy / mm / dd hh:mm 或 yyyy / mm / dd
-export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTime: boolean = false): string {
-  // console.log("dateString:", dateString);
+// 西元年日期格式 yyyy / mm / dd hh:mm:ss 或 yyyy / mm / dd
+export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTime: boolean = true): string {
+  // const localDate = new Date();
+  // 轉換為 UTC 字串
+  // const utcString = localDate.toISOString();
+  // console.log("UTC 時間:", utcString);
 
-  // if (!dateString) return "";
+
   const date = new Date(dateString);
   if (isNaN(date.getTime()) || !dateString) return "";
 
@@ -74,8 +70,9 @@ export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTi
   const day = String(date.getDate()).padStart(2, "0");
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
 
-  return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}` : `${year} / ${month} / ${day}`;
+  return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}:${seconds}` : `${year} / ${month} / ${day}`;
 }
 
 

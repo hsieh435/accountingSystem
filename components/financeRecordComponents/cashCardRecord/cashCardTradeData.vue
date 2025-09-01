@@ -45,10 +45,6 @@ const dataParams = reactive<ICashCardRecordList>(getDefaultDataParams());
 
 
 async function searchingCashCardRecord() {
-  // cashCardRecordDataHandling();
-
-
-
   // console.log("props:", props);
   try {
     const res: IResponse = await fetchCashCardRecordById({
@@ -57,15 +53,16 @@ async function searchingCashCardRecord() {
     });
     console.log("fetchCashCardRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
-      dataParams.tradeId = res.data.data.tradeId;
-      dataParams.cashcardId = res.data.data.cashcardId;
-      dataParams.tradeDatetime = res.data.data.tradeDatetime;
-      dataParams.transactionType = res.data.data.transactionType;
-      dataParams.tradeCategory = res.data.data.tradeCategory;
-      dataParams.tradeAmount = res.data.data.tradeAmount;
-      dataParams.currency = res.data.data.currency;
-      dataParams.tradeDescription = res.data.data.tradeDescription;
-      dataParams.tradeNote = res.data.data.tradeNote;
+      // dataParams.tradeId = res.data.data.tradeId;
+      // dataParams.cashcardId = res.data.data.cashcardId;
+      // dataParams.tradeDatetime = res.data.data.tradeDatetime;
+      // dataParams.transactionType = res.data.data.transactionType;
+      // dataParams.tradeCategory = res.data.data.tradeCategory;
+      // dataParams.tradeAmount = res.data.data.tradeAmount;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.tradeDescription = res.data.data.tradeDescription;
+      // dataParams.tradeNote = res.data.data.tradeNote;
+      Object.assign(dataParams, res.data.data);
       await cashCardRecordDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });

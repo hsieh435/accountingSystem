@@ -26,7 +26,8 @@ const currencySelect = defineAsyncComponent(() => import("@/components/ui/select
 
 
 
-const dataParams = reactive<ICashFlowRecordList>({
+
+const getDefaultDataParams = (): ICashFlowRecordList => ({
   tradeId: props.tradeIdGot || "",
   cashflowId: "",
   userId: "",
@@ -39,6 +40,7 @@ const dataParams = reactive<ICashFlowRecordList>({
   tradeDescription: "",
   tradeNote: "",
 });
+const dataParams = reactive<ICashFlowRecordList>(getDefaultDataParams());
 
 
 
@@ -51,16 +53,17 @@ async function searchingCashFlowRecord() {
     });
     console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     if (res.data.returnCode === 0) {
-      dataParams.tradeId = res.data.data.tradeId;
-      dataParams.cashflowId = res.data.data.cashflowId;
-      dataParams.userId = res.data.data.userId;
-      dataParams.tradeDatetime = res.data.data.tradeDatetime;
-      dataParams.transactionType = res.data.data.transactionType;
-      dataParams.tradeCategory = res.data.data.tradeCategory;
-      dataParams.tradeAmount = res.data.data.tradeAmount;
-      dataParams.currency = res.data.data.currency;
-      dataParams.tradeDescription = res.data.data.tradeDescription;
-      dataParams.tradeNote = res.data.data.tradeNote;
+      // dataParams.tradeId = res.data.data.tradeId;
+      // dataParams.cashflowId = res.data.data.cashflowId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.tradeDatetime = res.data.data.tradeDatetime;
+      // dataParams.transactionType = res.data.data.transactionType;
+      // dataParams.tradeCategory = res.data.data.tradeCategory;
+      // dataParams.tradeAmount = res.data.data.tradeAmount;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.tradeDescription = res.data.data.tradeDescription;
+      // dataParams.tradeNote = res.data.data.tradeNote;
+      Object.assign(dataParams, res.data.data);
       await cashFlowRecordDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
@@ -247,6 +250,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }
