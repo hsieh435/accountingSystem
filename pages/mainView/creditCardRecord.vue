@@ -5,7 +5,7 @@
       :accountTypeName="'信用卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <creditCardTradeData @dataReseaching="searchingfinancerecord" />
+    <creditCardTradeData @dataReseaching="searchingFinanceRecord" />
   </div>
   <div class="px-3">
     <template v-if="creditCardRecord.length > 0">
@@ -39,7 +39,7 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" @dataReseaching="searchingfinancerecord" />
+                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ const creditCardRecordFiltered = ref<ICreditCardRecordList[]>([]);
 const tableData = ref<ICreditCardRecordList[]>([]);
 
 onMounted(() => {
-  searchingfinancerecord();
+  searchingFinanceRecord();
 });
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
@@ -99,16 +99,15 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   // console.log("params:", params);
-
   searchingParams.accountId = params.accountId;
   searchingParams.currencyId = params.currencyId;
   searchingParams.tradeCategory = params.tradeCategory;
   searchingParams.startingDate = params.startingDate;
   searchingParams.endDate = params.endDate;
-  await searchingfinancerecord();
+  await searchingFinanceRecord();
 }
 
-async function searchingfinancerecord() {
+async function searchingFinanceRecord() {
 
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchingParams);

@@ -8,23 +8,24 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { IcurrencyAccountRecordList } from "@/models/index";
-import { getCurrentTimestamp } from "@/composables/tools";
+import { fetchCurrencyAccountRecordById, fetchCurrencyAccountRecordCreate, fetchCurrencyAccountRecordUpdate } from "@/server/currencyAccountRecordApi";
+import { IcurrencyAccountRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string }>(), {
   tradeIdGot: "",
-  bankIdGot: "",
+  accountIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
 
-const dataParams = reactive<IcurrencyAccountRecordList>({
+const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
   tradeId: props.tradeIdGot || "",
-  accountId: props.bankIdGot,
+  accountId: props.accountIdGot,
   tradeDatetime: "",
   accountUser: "",
   accountType: "",
@@ -35,9 +36,28 @@ const dataParams = reactive<IcurrencyAccountRecordList>({
   tradeDescription: "",
   tradeNote: "",
 });
+const dataParams = reactive<IcurrencyAccountRecordList>(getDefaultDataParams());
+
+
 
 async function searchingCurrencyAccountRecord() {
-  // currencyAccountRecordDataHandling();
+
+  try {
+    const res: IResponse = await fetchCurrencyAccountRecordById({
+      accountId:  props.accountIdGot,
+      tradeId: props.tradeIdGot
+    });
+    console.log(res);
+
+    if (res.data.returnCode === 0) {
+      Object.assign(dataParams, res.data.data);
+      await currencyAccountRecordDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function currencyAccountRecordDataHandling(apiMsg?: string) {
@@ -112,7 +132,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.accountId = account;
-              dataParams.currency = currency;
+              dataParams.currency = account ? currency : "";
             },
           });
         },
@@ -146,7 +166,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
           accountType: "isCuaccountAble",
-          tradeCategoryId: dataParams.tradeCategory,
+          tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },
@@ -173,9 +193,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      if (!props.tradeIdGot) {
-        dataParams.tradeId = getCurrentTimestamp() + "";
-      }
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
@@ -195,7 +212,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       if (dataParams.tradeAmount < 0) {
         errors.push("交易金額不得為負");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;
@@ -205,7 +221,20 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("result:", result.value);
+      // console.log("result:", result.value);
+      try {
+        const res: IResponse = await (props.tradeIdGot ? fetchCurrencyAccountRecordUpdate : fetchCurrencyAccountRecordCreate)(result.value);
+        console.log("RES:", res);
+        if (res.data.returnCode === 0) {
+          showAxiosToast({ message: res.data.message });
+          emits("dataReseaching");
+          Object.assign(dataParams, getDefaultDataParams());
+        } else {
+          showAxiosErrorMsg({ message: res.data.message });
+        }
+      } catch (error) {
+        showAxiosErrorMsg({ message: (error as Error).message });
+      }
     }
   });
 }

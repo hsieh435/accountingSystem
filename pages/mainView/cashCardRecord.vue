@@ -5,7 +5,7 @@
       :accountTypeName="'儲值票卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashCardTradeData />
+    <cashCardTradeData @dataReseaching="searchingFinanceRecord" />
   </div>
   <div class="px-3">
     <template v-if="cashCardRecord.length > 0">
@@ -41,7 +41,7 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <cashCardTradeData :tradeIdGot="record.tradeId" />
+                <cashCardTradeData :tradeIdGot="record.tradeId" :cashCardIdGot="record.cashcardId" @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@ const tableData = ref<ICashCardRecordList[]>([]);
 
 
 onMounted(() => {
-  searchingfinancerecord();
+  searchingFinanceRecord();
 });
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
@@ -105,10 +105,10 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   searchingParams.tradeCategory = params.tradeCategory;
   searchingParams.startingDate = params.startingDate;
   searchingParams.endDate = params.endDate;
-  await searchingfinancerecord();
+  await searchingFinanceRecord();
 }
 
-async function searchingfinancerecord() {
+async function searchingFinanceRecord() {
 
   try {
     const res: IResponse = await fetchCashCardRecordList(searchingParams);

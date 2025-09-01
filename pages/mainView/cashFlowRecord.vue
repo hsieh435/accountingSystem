@@ -5,7 +5,7 @@
       :accountTypeName="'現金流'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashFlowTradeData @dataReseaching="searchingfinancerecord" />
+    <cashFlowTradeData @dataReseaching="searchingFinanceRecord" />
   </div>
   <div class="px-3">
     <template v-if="cashFlowRecord.length > 0">
@@ -41,7 +41,7 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <cashFlowTradeData :cashflowIdGot="record.cashflowId" :tradeIdGot="record.tradeId" @dataReseaching="searchingfinancerecord" />
+                <cashFlowTradeData :cashflowIdGot="record.cashflowId" :tradeIdGot="record.tradeId" @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@ const cashFlowRecordFiltered = ref<ICashFlowRecordList[]>([]);
 const tableData = ref<ICashFlowRecordList[]>([]);
 
 onMounted(() => {
-  searchingfinancerecord();
+  searchingFinanceRecord();
 });
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
@@ -102,10 +102,10 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   Object.assign(searchingParams, params);
   console.log("searchingParams:", searchingParams);
-  await searchingfinancerecord();
+  await searchingFinanceRecord();
 }
 
-async function searchingfinancerecord() {
+async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
     console.log("res:", res.data.data);

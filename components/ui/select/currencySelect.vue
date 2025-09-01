@@ -29,17 +29,13 @@ onMounted(async () => {
   // console.log("onMounted props:", props);
   await searchingCurrencyList();
   isSelectDisabled.value = props.isDisable;
-  if (props.currencyIdGot) {
-    currencyId.value = props.currencyIdGot;
-  }
+  currencyId.value = props.currencyIdGot;
 });
 
 watch(props, async () => {
   // console.log("watch props:", props);
   isSelectDisabled.value = props.isDisable;
-  if (props.currencyIdGot) {
-    currencyId.value = props.currencyIdGot;
-  }
+  currencyId.value = props.currencyIdGot;
 });
 
 watch(currencyId, () => {

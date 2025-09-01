@@ -185,7 +185,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
           accountType: "isCashflowAble",
-          tradeCategoryId: dataParams.tradeCategory,
+          tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },

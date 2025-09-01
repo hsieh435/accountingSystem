@@ -166,7 +166,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
           accountType: "isCreditcardAble",
-          tradeCategoryId: dataParams.tradeCategory,
+          tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },

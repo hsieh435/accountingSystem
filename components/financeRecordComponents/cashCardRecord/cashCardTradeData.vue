@@ -178,7 +178,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
           accountType: "isCashcardAble",
-          tradeCategoryId: dataParams.tradeCategory,
+          tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },

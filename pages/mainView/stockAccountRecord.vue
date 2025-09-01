@@ -5,7 +5,7 @@
       :accountTypeName="'證券帳戶'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <stockAccountTradeData />
+    <stockAccountTradeData @dataReseaching="searchingFinanceRecord" />
   </div>
   <div class="px-5">
     <template v-if="stockAccountRecord.length > 0">
@@ -45,7 +45,7 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <stockAccountTradeData :tradeIdGot="record.tradeId" />
+                <stockAccountTradeData :tradeIdGot="record.tradeId" @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -58,7 +58,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
 import { IStockAccountRecordList, IFinanceRecordSearchingParams } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -91,6 +92,10 @@ const stockAccountRecord = ref<IStockAccountRecordList[]>([]);
 const stockAccountRecordFiltered = ref<IStockAccountRecordList[]>([]);
 const tableData = ref<IStockAccountRecordList[]>([]);
 
+onMounted(() => {
+  searchingFinanceRecord();
+});
+
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
@@ -103,10 +108,10 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   searchingParams.tradeCategory = params.tradeCategory;
   searchingParams.startingDate = params.startingDate;
   searchingParams.endDate = params.endDate;
-  await searchingfinancerecord();
+  await searchingFinanceRecord();
 }
 
-async function searchingfinancerecord() {
+async function searchingFinanceRecord() {
   //
   // await stockAccountRecordFilterEvent();
 }

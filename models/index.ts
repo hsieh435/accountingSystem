@@ -227,11 +227,14 @@ export interface IcurrencyAccountRecordList {
   no?: number;
   tradeId: string;
   accountId: string;
+  accountName?: string;
   tradeDatetime: string;
   accountUser: string;
   accountType: string;
   transactionType: string;
+  transactionName?: string;
   tradeCategory: string;
+  tradeName?: string;
   tradeAmount: number;
   currency: string;
   currencyName?: string;

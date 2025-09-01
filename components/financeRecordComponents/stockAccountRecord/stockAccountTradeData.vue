@@ -8,9 +8,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { IStockAccountRecordList } from "@/models/index";
+import { fetchStockAccountRecordById, fetchStockAccountRecordCreate, fetchStockAccountRecordUpdate } from "@/server/stockAccountRecordApi";
+import { IStockAccountRecordList, IResponse} from "@/models/index";
 import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot?: string }>(), {
@@ -25,8 +27,7 @@ const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
 
 
-
-const dataParams = reactive<IStockAccountRecordList>({
+const getDefaultDataParams = (): IStockAccountRecordList => ({
   tradeId: props.tradeIdGot || "",
   accountId: props.bankIdGot,
   tradeDatetime: "",
@@ -44,6 +45,9 @@ const dataParams = reactive<IStockAccountRecordList>({
   tradeDescription: "",
   tradeNote: "",
 });
+const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
+
+
 
 async function searchingStockAccountRecord() {
   // stockAccountRecordDataHandling();
@@ -281,6 +285,9 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       console.log("result:", result.value);
+      // showAxiosToast({ message: res.data.message });
+      // emits("dataReseaching");
+      // Object.assign(dataParams, getDefaultDataParams());
     }
   });
 }

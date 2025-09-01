@@ -23,13 +23,13 @@
               </div>
             </div>
             <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.categoryCode">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.tradeCode">
                 <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.categoryCode }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.categoryName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.tradeCode }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ account.tradeName }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <tradeCategoryData
-                    :categoryCodeGot="account.categoryCode"
+                    :tradeCodeGot="account.tradeCode"
                     @dataReseaching="searchingTradeCategoryList" />
                 </div>
               </div>
