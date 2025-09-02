@@ -116,7 +116,6 @@ async function submitUserData(apiMsg?: string) {
       if ((!dataParams.userNewPassword || !secondPassword.value) && dataParams.userNewPassword !== secondPassword.value) {
         errors.push("兩次密碼輸入不一致");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;
@@ -128,7 +127,6 @@ async function submitUserData(apiMsg?: string) {
     if (result.isConfirmed) {
       result.value.userOldPassword = encryptString(result.value.userOldPassword);
       result.value.userNewPassword = encryptString(result.value.userNewPassword);
-      // console.log("result:", result.value);
 
       try {
         const res: IResponse = await fetchUserDataChange(result.value);

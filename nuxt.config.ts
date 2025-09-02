@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: "2025-05-15",
+  components: true,
   css: ["@/assets/css/index.scss", "sweetalert2/dist/sweetalert2.min.css", "@vuepic/vue-datepicker/dist/main.css"],
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "@vesp/nuxt-fontawesome", "@nuxt/ui"],
@@ -18,4 +19,5 @@ export default defineNuxtConfig({
   build: {
     transpile: ["@vuepic/vue-datepicker"],
   },
+  plugins: ["@/plugins/fontawesome"],
 });

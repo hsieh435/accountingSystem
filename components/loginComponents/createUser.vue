@@ -58,9 +58,9 @@ async function createUserDate(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: `<i class="bi bi-plus-lg mx-1"></i>新增`,
+    confirmButtonText: `新增`,
     showCancelButton: true,
-    cancelButtonText: `<i class="bi bi-x-lg mx-1"></i>取消`,
+    cancelButtonText: `取消`,
     allowOutsideClick: false,
     didOpen: () => {
       if (apiMsg) {

@@ -6,6 +6,7 @@
   font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  overflow: visible !important;
 }
 
 
@@ -44,4 +45,5 @@
 
 .swal2-html-container {
   color: colors.$kuro;
+  overflow: visible !important;
 }

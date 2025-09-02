@@ -9,15 +9,15 @@
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
 import { fetchStockAccountRecordById, fetchStockAccountRecordCreate, fetchStockAccountRecordUpdate } from "@/server/stockAccountRecordApi";
-import { IStockAccountRecordList, IResponse} from "@/models/index";
+import { IStockAccountRecordList, IStockList, IResponse} from "@/models/index";
 import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; bankIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string }>(), {
   tradeIdGot: "",
-  bankIdGot: "",
+  accountIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -25,11 +25,13 @@ const emits = defineEmits(["dataReseaching"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
+
 
 
 const getDefaultDataParams = (): IStockAccountRecordList => ({
   tradeId: props.tradeIdGot || "",
-  accountId: props.bankIdGot,
+  accountId: props.accountIdGot,
   tradeDatetime: "",
   accountUser: "",
   transactionType: "",
@@ -40,6 +42,7 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
   quantity: 0,
   handlingFee: 0,
   transactionTax: 0,
+  tradePrice: 0,
   totalPrice: 0,
   currency: "",
   tradeDescription: "",
@@ -50,7 +53,22 @@ const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
 
 
 async function searchingStockAccountRecord() {
-  // stockAccountRecordDataHandling();
+
+  try {
+    const res: IResponse = await fetchStockAccountRecordById({
+      accountId:  props.accountIdGot,
+      tradeId: props.tradeIdGot
+    });
+    console.log(res);
+    if (res.data.returnCode === 0) {
+      Object.assign(dataParams, res.data.data);
+      await stockAccountRecordDataHandling();
+    } else {
+      showAxiosToast({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function stockAccountRecordDataHandling(apiMsg?: string) {
@@ -81,18 +99,14 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
+          <div class="col-span-3" id="stockSelectComponent"></div>
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
           <div class="col-span-4" id="tradeCategorySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>股票代號：</span>
-          <input class="${tailwindStyles.inputClasses}" id="stockNo" value="${dataParams.stockNo}" />
-        </div>
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>股票名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="stockName" value="${dataParams.stockName}" />
         </div>
 
 
@@ -149,6 +163,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
     showCancelButton: true,
     cancelButtonText: "取消",
     allowOutsideClick: false,
+    // background: "#e1e1e11a",
     didOpen: () => {
       let stockAccountSelect = createApp({
         render() {
@@ -158,7 +173,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
               dataParams.accountId = account;
-              dataParams.currency = currency;
+              dataParams.currency = account ? currency : "";
             },
           });
         },
@@ -176,6 +191,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       );
       stockAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
+
       let stockAccountTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
@@ -186,6 +202,22 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         },
       );
       stockAccountTransactionType.mount("#transactionTypeSelectComponent");
+
+
+      let stockSelect = createApp({
+        render() {
+          return h(stockListSelect, {
+            stockNoGot: dataParams.stockNo,
+            onSendbackStockNo: (stockItem: IStockList) => {
+              dataParams.stockNo = stockItem.stock_id;
+              dataParams.stockName = stockItem.stock_name;
+              console.log("dataParams:", dataParams);
+            },
+          });
+        },
+      });
+      stockSelect.mount("#stockSelectComponent");
+
 
       let stockAccountCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
@@ -199,12 +231,13 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       );
       stockAccountCategory.mount("#tradeCategorySelectComponent");
 
+
       const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
       const quantity = document.getElementById("quantity") as HTMLInputElement;
       const handlingFee = document.getElementById("handlingFee") as HTMLInputElement;
       const transactionTax = document.getElementById("transactionTax") as HTMLInputElement;
       const totalPriceInput = document.getElementById("totalPrice") as HTMLInputElement;
-      const calculateDateDiff = () => {
+      const calculateAmount = () => {
         const total =
           Number(pricePerShare.value) * Number(quantity.value) +
           (Number(handlingFee.value) + Number(transactionTax.value));
@@ -212,10 +245,10 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         dataParams.totalPrice = total;
       };
 
-      pricePerShare.addEventListener("input", calculateDateDiff);
-      quantity.addEventListener("input", calculateDateDiff);
-      handlingFee.addEventListener("input", calculateDateDiff);
-      transactionTax.addEventListener("input", calculateDateDiff);
+      pricePerShare.addEventListener("input", calculateAmount);
+      quantity.addEventListener("input", calculateAmount);
+      handlingFee.addEventListener("input", calculateAmount);
+      transactionTax.addEventListener("input", calculateAmount);
 
 
       let stockAccountCurrencySelect = createApp({
@@ -287,7 +320,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       console.log("result:", result.value);
       // showAxiosToast({ message: res.data.message });
       // emits("dataReseaching");
-      // Object.assign(dataParams, getDefaultDataParams());
+      Object.assign(dataParams, getDefaultDataParams());
     }
   });
 }

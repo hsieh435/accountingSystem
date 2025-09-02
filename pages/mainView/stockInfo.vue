@@ -23,15 +23,32 @@
         :searchDisable="!searchingParams.stockNo || searchingParams.startDate === searchingParams.endDate"
         @dataSearch="searchingStockPrice()" />
     </div>
-  </div>
-  <template v-if="stockDataLineChart.length > 0">
-    <div class="px-1">
-      <stockPriceLineChart
-        :chartType="'line'"
-        :chartTitle="lineChartTitle"
-        :data="stockDataLineChart" />
+
+    <div class="px-5">
+      <UTabs :items="items" variant="link" :ui="{ trigger: 'grow' }" class="gap-4">
+        <template #chart="{ item }">
+          <!-- <UForm class="flex flex-col gap-4"> -->
+            <template v-if="stockDataLineChart.length > 0">
+              <div class="px-1">
+                <stockPriceLineChart :chartType="'line'" :chartTitle="lineChartTitle" :data="stockDataLineChart" />
+              </div>
+            </template>
+          <!-- </UForm> -->
+        </template>
+
+        <template #earningsPerShare="{ item }">
+          <!-- <UForm class="flex flex-col gap-4"> -->
+          <!-- </UForm> -->
+        </template>
+
+        <template #interest="{ item }">
+          <!-- <UForm class="flex flex-col gap-4"> -->
+          <!-- </UForm> -->
+        </template>
+      </UTabs>
     </div>
-  </template>
+
+  </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
@@ -39,6 +56,7 @@ import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockPriceRecordList, IStockList, IResponse } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import type { TabsItem } from "@nuxt/ui";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -46,8 +64,6 @@ definePageMeta({
   functionTitle: "資訊查詢",
   subTitle: "股市查詢",
 });
-
-
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
@@ -66,6 +82,24 @@ let stockData = reactive<IStockPriceRecordList[]>([]);
 let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
 const stockName = ref<string>("");
+
+const items = [
+  {
+    label: "股價走勢",
+    icon: "i-lucide-chart-no-axes-combined",
+    slot: "chart" as const,
+  },
+  {
+    label: "EPS",
+    icon: "i-lucide-circle-dollar-sign",
+    slot: "earningsPerShare" as const,
+  },
+  {
+    label: "除權息",
+    icon: "i-lucide-circle-dollar-sign",
+    slot: "interest" as const,
+  },
+] satisfies TabsItem[];
 
 async function settingStockNo(selectedData: IStockList) {
   searchingParams.stockNo = selectedData.stock_id;
@@ -121,7 +155,5 @@ async function settingstockinfo(chartTitle: string, stockPriceRecord: IStockPric
     };
   });
 }
-
-
 </script>
 <style lang="scss" scoped></style>

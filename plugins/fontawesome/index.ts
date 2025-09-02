@@ -35,7 +35,7 @@ library.add(
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false;
+config.autoAddCss = true;
 // Important for Vue applications
 
 export default defineNuxtPlugin((nuxtApp) => {

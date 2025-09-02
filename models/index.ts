@@ -279,6 +279,7 @@ export interface IStockAccountRecordList {
   handlingFee: number;
   transactionTax: number;
   totalPrice: number;
+  tradePrice: number;
   currency: string;
   currencyName?: string;
   tradeDescription: string;

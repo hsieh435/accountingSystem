@@ -45,7 +45,7 @@
                 </div>
                 <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
                 <div :class="tailwindStyles.tdClasses">
-                  <i class="fa-solid fa-check mx-1" v-if="account.openAlert"></i>
+                  <font-awesome-icon icon="check" v-if="account.openAlert" />
                 </div>
                 <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
                 <div :class="tailwindStyles.tdClasses">

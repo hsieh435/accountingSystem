@@ -45,7 +45,7 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <stockAccountTradeData :tradeIdGot="record.tradeId" @dataReseaching="searchingFinanceRecord" />
+                <stockAccountTradeData :tradeIdGot="record.tradeId" :accountIdGot="record.accountId" @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -60,9 +60,11 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
-import { IStockAccountRecordList, IFinanceRecordSearchingParams } from "@/models/index";
+import { IStockAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
+
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -112,8 +114,19 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingFinanceRecord() {
-  //
-  // await stockAccountRecordFilterEvent();
+
+  try {
+    const res: IResponse = await fetchStockAccountRecordList(searchingParams);
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      stockAccountRecord.value = res.data.data;
+      await stockAccountRecordFilterEvent();
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function stockAccountRecordFilterEvent() {

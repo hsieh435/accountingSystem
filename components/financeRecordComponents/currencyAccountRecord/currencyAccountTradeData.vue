@@ -47,8 +47,7 @@ async function searchingCurrencyAccountRecord() {
       accountId:  props.accountIdGot,
       tradeId: props.tradeIdGot
     });
-    console.log(res);
-
+    console.log(res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       await currencyAccountRecordDataHandling();
@@ -228,7 +227,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
           emits("dataReseaching");
-          Object.assign(dataParams, getDefaultDataParams());
         } else {
           showAxiosErrorMsg({ message: res.data.message });
         }
@@ -236,6 +234,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
         showAxiosErrorMsg({ message: (error as Error).message });
       }
     }
+    // Object.assign(dataParams, getDefaultDataParams());
   });
 }
 </script>

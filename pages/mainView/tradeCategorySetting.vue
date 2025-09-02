@@ -19,18 +19,36 @@
                 <div :class="tailwindStyles.thClasses">NO.</div>
                 <div :class="tailwindStyles.thClasses">交易代碼</div>
                 <div :class="tailwindStyles.thClasses">交易名稱</div>
+                <div :class="tailwindStyles.thClasses">現金流</div>
+                <div :class="tailwindStyles.thClasses">儲值票卡</div>
+                <div :class="tailwindStyles.thClasses">信用卡</div>
+                <div :class="tailwindStyles.thClasses">存款帳戶</div>
+                <div :class="tailwindStyles.thClasses">證券帳戶</div>
                 <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
             <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.tradeCode">
-                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.tradeCode }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.tradeName }}</div>
+              <div :class="tailwindStyles.tbodytrClasses" v-for="trade in tableData" :key="trade.tradeCode">
+                <div :class="tailwindStyles.tdClasses">{{ trade.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ trade.tradeCode }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ trade.tradeName }}</div>
                 <div :class="tailwindStyles.tdClasses">
-                  <tradeCategoryData
-                    :tradeCodeGot="account.tradeCode"
-                    @dataReseaching="searchingTradeCategoryList" />
+                  <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon icon="check" v-if="trade.isCashcardAble" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon icon="check" v-if="trade.isCuaccountAble" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <font-awesome-icon icon="check" v-if="trade.isStaccountAble" />
+                </div>
+                <div :class="tailwindStyles.tdClasses">
+                  <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />
                 </div>
               </div>
             </div>
@@ -73,7 +91,7 @@ onMounted(async () => {
 async function searchingTradeCategoryList() {
   try {
     const res: IResponse = await fetchTradeCategoryList();
-    // console.log("res:", res);
+    console.log("fetchTradeCategoryList:", res.data.data);
     if (res.data.returnCode === 0) {
       tradeCategoryList.value = res.data.data;
       await tradeCategoryListFilterEvent();

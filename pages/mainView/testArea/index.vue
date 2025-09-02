@@ -18,7 +18,7 @@ onMounted(async () => {
 
 async function searchingStockList() {
   try {
-    const res = await fetchStockList();
+    const res = await fetchStockList("");
     console.log("res:", res);
   } catch (error) {
     // showAxiosErrorMsg({ message: (error as Error).message });

@@ -36,10 +36,10 @@ watch(
   () => dateTimeString.value,
   () => {
     const newDateTime = new Date(dateTimeString.value);
-    const newDateTimeString = `${newDateTime.getFullYear()}-${(newDateTime.getMonth() + 1).toString().padStart(2, "0")}-${newDateTime.getDate().toString().padStart(2, "0")} ${newDateTime.getHours().toString().padStart(2, "0")}:${newDateTime.getMinutes().toString().padStart(2, "0")}:00`;
+    // const newDateTimeString = `${newDateTime.getFullYear()}-${(newDateTime.getMonth() + 1).toString().padStart(2, "0")}-${newDateTime.getDate().toString().padStart(2, "0")} ${newDateTime.getHours().toString().padStart(2, "0")}:${newDateTime.getMinutes().toString().padStart(2, "0")}:00`;
     // console.log("newDateTime.toISOString():", newDateTime.toISOString());
     // console.log("new Date(newDateTimeString):", new Date(newDateTimeString));
-    emits("sendbackDateTime", new Date(newDateTimeString));
+    emits("sendbackDateTime", newDateTime.toISOString());
   },
 );
 </script>
