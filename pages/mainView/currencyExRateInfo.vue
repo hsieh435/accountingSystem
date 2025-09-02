@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="px-3">
+    <div>
       <currencyExRateSearching />
     </div>
     <div class="px-3">

@@ -27,16 +27,12 @@
     <div class="px-5">
       <UTabs :items="items" variant="link" :ui="{ trigger: 'grow' }" class="gap-4">
         <template #chart="{ item }">
-          <!-- <UForm class="flex flex-col gap-4"> -->
-            <template v-if="stockDataLineChart.length > 0">
-              <div class="px-1">
-                <stockPriceLineChart :chartType="'line'" :chartTitle="lineChartTitle" :data="stockDataLineChart" />
-              </div>
-            </template>
-          <!-- </UForm> -->
+          <template v-if="stockDataLineChart.length > 0">
+            <stockPriceLineChart :chartType="'line'" :chartTitle="lineChartTitle" :data="stockDataLineChart" />
+          </template>
         </template>
 
-        <template #earningsPerShare="{ item }">
+        <template #perpbr="{ item }">
           <!-- <UForm class="flex flex-col gap-4"> -->
           <!-- </UForm> -->
         </template>
@@ -47,7 +43,6 @@
         </template>
       </UTabs>
     </div>
-
   </div>
 </template>
 <script setup lang="ts">
@@ -78,9 +73,9 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
 });
 
 const lineChartTitle = ref<string>("");
-let stockData = reactive<IStockPriceRecordList[]>([]);
 let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
+const stockData = ref<IStockPriceRecordList[]>([]);
 const stockName = ref<string>("");
 
 const items = [
@@ -90,9 +85,9 @@ const items = [
     slot: "chart" as const,
   },
   {
-    label: "EPS",
+    label: "本益比 / 股價淨值比",
     icon: "i-lucide-circle-dollar-sign",
-    slot: "earningsPerShare" as const,
+    slot: "perpbr" as const,
   },
   {
     label: "除權息",
@@ -100,6 +95,9 @@ const items = [
     slot: "interest" as const,
   },
 ] satisfies TabsItem[];
+
+// PER：本益比（Price-to-Earning Ratio）
+// PBR：股價淨值比（Price-to-Book Ratio）
 
 async function settingStockNo(selectedData: IStockList) {
   searchingParams.stockNo = selectedData.stock_id;
@@ -119,20 +117,27 @@ async function searchingStockPrice() {
 
   try {
     const res: IResponse = await fetchStockRangeValue(searchingParams);
-    // console.log("fetchStockRangeValue:", res.data.data);
+    console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
-      stockPriceRecord.value = res.data.data.data;
-      const lineChartTitle =
-        stockName.value +
-        " " +
-        searchingParams.startDate.replace(/-/g, "/") +
-        " ~ " +
-        searchingParams.endDate.replace(/-/g, "/") +
-        "股價走勢";
+      stockPriceRecord.value = res.data.data.data
 
       if (stockPriceRecord.value.length > 0) {
+        stockDataLineChart.value = [];
+        lineChartTitle.value =
+          stockName.value +
+          " " +
+          searchingParams.startDate.replace(/-/g, "/") +
+          " ~ " +
+          searchingParams.endDate.replace(/-/g, "/") +
+          "股價走勢";
+        stockData.value = stockPriceRecord.value;
+        stockDataLineChart.value = stockData.value.map((record) => {
+          return {
+            label: record.date.replace(/-/g, "/"),
+            data: record.close,
+          };
+        });
         showAxiosToast({ message: res.data.message, icon: "success" });
-        settingstockinfo(lineChartTitle, stockPriceRecord.value);
       } else {
         showAxiosToast({ message: "查無資料", icon: "warning" });
       }
@@ -144,16 +149,7 @@ async function searchingStockPrice() {
   }
 }
 
-async function settingstockinfo(chartTitle: string, stockPriceRecord: IStockPriceRecordList[]) {
-  stockDataLineChart.value = [];
-  lineChartTitle.value = chartTitle;
-  stockData = JSON.parse(JSON.stringify(stockPriceRecord));
-  stockDataLineChart.value = stockData.map((record) => {
-    return {
-      label: record.date.replace(/-/g, "/"),
-      data: record.close,
-    };
-  });
-}
+
+
 </script>
 <style lang="scss" scoped></style>

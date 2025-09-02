@@ -88,8 +88,8 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax = getData(props.data) ? Math.ceil(Math.max(...getData(props.data).map((data) => data)) * 1.02) : 10;
-  const scalesMin = getData(props.data) ? Math.floor(Math.min(...getData(props.data).map((data) => data)) * 0.85) : 0;
+  const scalesMax = getData(props.data) ? Math.ceil(Math.max(...getData(props.data).map((data) => data))) : 10;
+  const scalesMin = getData(props.data) ? Math.floor(Math.min(...getData(props.data).map((data) => data))) : 0;
 
   let variation = 0;
 
@@ -109,10 +109,10 @@ async function renderingChart() {
       scales: {
         y: {
           min:
-            Math.ceil(scalesMin - (scalesMax - scalesMin) * 0.1) <= 0
+            Math.floor(scalesMin - (scalesMax - scalesMin) * 0.1) <= 0
               ? 0
-              : Math.ceil(scalesMin - (scalesMax - scalesMin) * 0.1),
-          max: Math.floor(scalesMax + (scalesMax - scalesMin) * 0.1),
+              : Math.floor(scalesMin - (scalesMax - scalesMin) * 0.1),
+          max: Math.ceil(scalesMax + (scalesMax - scalesMin) * 0.1),
         },
       },
       plugins: {

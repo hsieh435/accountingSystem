@@ -7,7 +7,7 @@
       <span>查詢區間：</span><dateSelect :dateSelect="searchingParams.startDate" :minDate="'2006-01-01'" :maxDate="getCurrentYMD()" @sendbackDateRange="settingStartDate" />
       <span class="mx-1">～ 至今（自 2006 年開始）</span>
     </div>
-    <ui-buttonGroup showSearch :searchText="'查詢今日匯率'" :searchDisable="!searchingParams.currencyId" @dataSearch="searchingCurrencyExRate()" />
+    <ui-buttonGroup showSearch :searchText="'查詢今日匯率'" :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'" @dataSearch="searchingCurrencyExRate()" />
     <ui-buttonGroup showSearch :searchText="'查詢歷史紀錄'" :searchDisable="!searchingParams.currencyId" @dataSearch="searchingCurrencyHistoryExRate()" />
   </div>
 </template>

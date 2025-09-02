@@ -53,3 +53,14 @@ git ls-files | xargs cat | wc -l
 23794
 
 npm uninstall package-name
+
+
+git config --global user.name
+hsieh435
+
+git config --global user.email
+hsieh435@gmail.com
+
+
+git config --global user.name "新的名稱"
+git config --global user.email "新的email@example.com"
