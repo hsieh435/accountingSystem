@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, watch, reactive } from "vue";
+import { onMounted, watch, ref, reactive } from "vue";
 import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockPriceRecordList, IStockList, IResponse } from "@/models/index";
@@ -13,47 +13,57 @@ import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 // 父元件傳來的值
-const props = defineProps({
-  // 圖表屬性
-  // 當前可設置：bar、bubble、doughnut、pie、line、polar-area、radar、scatter
-  chartType: {
-    type: [String],
-    default: "",
-  },
-  // 長條圖、折線圖才需要設置的值
-  chartTitle: {
-    type: [String],
-    default: "",
-  },
-  // 雷達圖才需要設置的外圍值
-  chartScope: {
-    type: [Array],
-    default: () => [],
-  },
-  data: {
-    type: [Array],
-    default: () => [],
-  },
-  // data 未設定 background 時的預設值
-  defaultBackground: {
-    type: [String],
-    default: "#E46651",
-  },
-  borderColor: {
-    type: [String],
-    default: "",
-  },
-  // 目前只給予折線圖設置
-  fill: {
-    type: [Boolean],
-    default: false,
-  },
-  // 圖表的 options 設置
-  chartOptions: {
-    type: [Object],
-    default: () => {},
-  },
-});
+const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), { searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }) });
+
+
+
+const lineChartTitle = ref<string>("");
+let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
+const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
+const stockData = ref<IStockPriceRecordList[]>([]);
+
+
+
+watch(props, () => {
+  searchingStockPrice();
+}, { deep: true });
+
+
+
+async function searchingStockPrice() {
+  // console.log("searchingParams:", props.searchingParamsGot);
+  try {
+    const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
+    // console.log("fetchStockRangeValue:", res.data.data);
+    if (res.data.returnCode === 0) {
+      stockPriceRecord.value = res.data.data.data;
+
+      if (stockPriceRecord.value.length > 0) {
+        stockDataLineChart.value = [];
+        lineChartTitle.value =
+          props.searchingParamsGot.stockName + " " +
+          props.searchingParamsGot.startDate.replace(/-/g, "/") + " ~ " +
+          props.searchingParamsGot.endDate.replace(/-/g, "/") + "股價走勢";
+        stockData.value = stockPriceRecord.value;
+        stockDataLineChart.value = stockData.value.map((record) => {
+          return {
+            label: record.date.replace(/-/g, "/"),
+            data: record.close,
+          };
+        });
+        renderingChart();
+      } else {
+        showAxiosToast({ message: "查無資料", icon: "warning" });
+      }
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
+    }
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
+}
+
+
 
 const getLabels = (chartData: any[]) => {
   const labels = chartData.map((v) => v.label);
@@ -64,21 +74,6 @@ const getData = (chartData: any[]) => {
   const data = chartData.map((v) => v.data);
   return data;
 };
-
-// 圖標資料設置
-// const chartData = ref({});
-
-onMounted(() => {
-  renderingChart();
-});
-
-watch(
-  props,
-  () => {
-    renderingChart();
-  },
-  { deep: true },
-);
 
 let chartInstance: Chart | null = null;
 
@@ -92,20 +87,20 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax = getData(props.data) ? Math.ceil(Math.max(...getData(props.data).map((data) => data))) : 10;
-  const scalesMin = getData(props.data) ? Math.floor(Math.min(...getData(props.data).map((data) => data))) : 0;
+  const scalesMax = getData(stockDataLineChart.value) ? Math.ceil(Math.max(...getData(stockDataLineChart.value).map((data) => data))) : 10;
+  const scalesMin = getData(stockDataLineChart.value) ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data))) : 0;
 
   let variation = 0;
 
   chartInstance = new Chart(myChart, {
     type: "line",
     data: {
-      labels: getLabels(props.data) ? getLabels(props.data) : [],
+      labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],
       datasets: [
         {
-          label: props.chartTitle,
-          data: getData(props.data),
-          fill: props.fill,
+          label: lineChartTitle.value,
+          data: getData(stockDataLineChart.value),
+          fill: false,
         },
       ],
     },
@@ -167,42 +162,8 @@ async function renderingChart() {
       },
     },
   });
-
-  // 預設的options
-  const chartOptions = reactive({
-    responsive: true,
-    maintainAspectRatio: false,
-  });
-
-  // 父元件如果有設定options，將新得更新至當前的options內
-  if (props.chartOptions) {
-    Object.assign(chartOptions, props.chartOptions);
-  }
 }
 
-const actions = [
-  {
-    name: "增加資料",
-    handler(chartinstance: Chart) {
-      const data = chartinstance.data;
-      // Replace Utils with dummy color and data generation for demonstration
-      const dsColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
-      const transparentize = (color: string, opacity: number) => {
-        // Simple transparentize function for demonstration
-        return color.replace("hsl", "hsla").replace(")", `, ${opacity})`);
-      };
-      const numbers = ({ count, min, max }: { count: number; min: number; max: number }) =>
-        Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min);
 
-      const newDataset = {
-        label: "Dataset " + (data.datasets.length + 1),
-        backgroundColor: transparentize(dsColor, 0.5),
-        borderColor: dsColor,
-        data: numbers({ count: (data.labels ?? []).length, min: -100, max: 100 }),
-      };
-      chartinstance.data.datasets.push(newDataset);
-      chartinstance.update();
-    },
-  },
-];
+
 </script>

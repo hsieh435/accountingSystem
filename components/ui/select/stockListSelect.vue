@@ -28,7 +28,7 @@ const filteredStockList = ref<{ label: string; value: string }[]>([]);
 const loading = ref<boolean>(false);
 
 onMounted(async () => {
-  console.log("onMounted props:", props);
+  // console.log("onMounted props:", props);
   debounceSearchStocks(props.stockNoGot);
   if (rawStockList.value.length > 0) {
     stockSelected.value = props.stockNoGot;
@@ -47,11 +47,11 @@ onMounted(async () => {
 // });
 
 watch(stockSelected, () => {
-  console.log("stockSelected:", stockSelected.value);
+  // console.log("stockSelected:", stockSelected.value);
 
   if (stockSelected.value) {
     const selectedItem = rawStockList.value.find((item) => item.stock_id === stockSelected.value);
-    console.log("selectedItem:", selectedItem);
+    // console.log("selectedItem:", selectedItem);
     emits("sendbackStockNo", selectedItem);
   } else {
     return;

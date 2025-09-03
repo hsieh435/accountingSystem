@@ -21,23 +21,19 @@
       <ui-buttonGroup
         showSearch
         :searchDisable="!searchingParams.stockNo || searchingParams.startDate === searchingParams.endDate"
-        @dataSearch="searchingStockPrice()" />
+        @dataSearch="sendingParams()" />
     </div>
 
     <div class="px-5">
       <UTabs :items="items" variant="link" :ui="{ trigger: 'grow' }" class="gap-4">
-        <template #chart="{ item }">
-          <template v-if="stockDataLineChart.length > 0">
-            <stockPriceLineChart :chartType="'line'" :chartTitle="lineChartTitle" :data="stockDataLineChart" />
-          </template>
+        <template #chart>
+          <stockPriceLineChart :searchingParamsGot="stockPriceParams" />
         </template>
-
-        <template #perpbr="{ item }">
+        <template #perpbr>
           <stockPerPrb />
         </template>
-
-        <template #interest="{ item }">
-          <stockInterest />
+        <template #interest>
+          <stockInterest :searchingParamsGot="stockPriceParams" />
         </template>
       </UTabs>
     </div>
@@ -45,10 +41,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IStockPriceRecordList, IStockList, IResponse } from "@/models/index";
+import { IStockPriceSearchingParams, IStockList } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import type { TabsItem } from "@nuxt/ui";
 
 declare function definePageMeta(meta: any): void;
@@ -64,19 +58,23 @@ const stockPriceLineChart = defineAsyncComponent(
   () => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"),
 );
 const stockPerPrb = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPrb.vue"));
-const stockInterest = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInterest.vue"));
+const stockInterest = defineAsyncComponent(
+  () => import("@/components/outerInformationComponents/stock/stockInterest.vue"),
+);
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
+  stockName: "",
   startDate: `${getCurrentYear()}-${getCurrentMonth() - 1}-${getCurrentDate()}`,
   endDate: getCurrentYMD(),
 });
 
-const lineChartTitle = ref<string>("");
-let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
-const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
-const stockData = ref<IStockPriceRecordList[]>([]);
-const stockName = ref<string>("");
+const stockPriceParams = ref<IStockPriceSearchingParams>({
+  stockNo: "",
+  stockName: "",
+  startDate: "",
+  endDate: "",
+});
 
 const items = [
   {
@@ -101,7 +99,7 @@ const items = [
 
 async function settingStockNo(selectedData: IStockList) {
   searchingParams.stockNo = selectedData.stock_id;
-  stockName.value = selectedData.stock_name;
+  searchingParams.stockName = selectedData.stock_name;
 }
 
 async function settingStart(date: string) {
@@ -112,44 +110,9 @@ async function settingEnd(date: string) {
   searchingParams.endDate = date;
 }
 
-async function searchingStockPrice() {
+async function sendingParams() {
   // console.log("searchingParams:", searchingParams);
-
-  try {
-    const res: IResponse = await fetchStockRangeValue(searchingParams);
-    console.log("fetchStockRangeValue:", res.data.data);
-    if (res.data.returnCode === 0) {
-      stockPriceRecord.value = res.data.data.data
-
-      if (stockPriceRecord.value.length > 0) {
-        stockDataLineChart.value = [];
-        lineChartTitle.value =
-          stockName.value +
-          " " +
-          searchingParams.startDate.replace(/-/g, "/") +
-          " ~ " +
-          searchingParams.endDate.replace(/-/g, "/") +
-          "股價走勢";
-        stockData.value = stockPriceRecord.value;
-        stockDataLineChart.value = stockData.value.map((record) => {
-          return {
-            label: record.date.replace(/-/g, "/"),
-            data: record.close,
-          };
-        });
-        showAxiosToast({ message: res.data.message, icon: "success" });
-      } else {
-        showAxiosToast({ message: "查無資料", icon: "warning" });
-      }
-    } else {
-      showAxiosErrorMsg({ message: res.data.message });
-    }
-  } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
-  }
+  stockPriceParams.value = { ...searchingParams };
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

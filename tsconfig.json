@@ -21,7 +21,6 @@
     "types": [
       "@nuxt/types"
     ],
-    "ignoreDeprecations": "6.0"
   },
   "exclude": [
     "node_modules",

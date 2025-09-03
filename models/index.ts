@@ -291,6 +291,7 @@ export interface IStockAccountRecordList {
 // 股票歷史價位查詢參數 interface
 export interface IStockPriceSearchingParams {
   stockNo: string;
+  stockName?: string;
   startDate: string;
   endDate: string;
 }
