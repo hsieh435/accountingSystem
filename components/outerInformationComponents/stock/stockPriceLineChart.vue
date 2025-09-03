@@ -6,6 +6,10 @@
 <script setup lang="ts">
 import { onMounted, watch, reactive } from "vue";
 import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
+import { fetchStockRangeValue } from "@/server/outerWebApi";
+import { IStockPriceSearchingParams, IStockPriceRecordList, IStockList, IResponse } from "@/models/index";
+import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
+import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 // 父元件傳來的值

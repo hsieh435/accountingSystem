@@ -33,13 +33,11 @@
         </template>
 
         <template #perpbr="{ item }">
-          <!-- <UForm class="flex flex-col gap-4"> -->
-          <!-- </UForm> -->
+          <stockPerPrb />
         </template>
 
         <template #interest="{ item }">
-          <!-- <UForm class="flex flex-col gap-4"> -->
-          <!-- </UForm> -->
+          <stockInterest />
         </template>
       </UTabs>
     </div>
@@ -65,6 +63,8 @@ const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dat
 const stockPriceLineChart = defineAsyncComponent(
   () => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"),
 );
+const stockPerPrb = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPrb.vue"));
+const stockInterest = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInterest.vue"));
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",

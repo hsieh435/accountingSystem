@@ -7,8 +7,7 @@
     placeholder="搜尋 股票代碼或名稱"
     :loading="loading"
     loading-icon="i-lucide-loader"
-    :disabled="props.isDisable"
-    :popper="{ teleport: 'body', zIndex: 6000, popperClass: 'high-z-index-dropdown' }" />
+    :disabled="props.isDisable" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -17,7 +16,10 @@ import { IStockList, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
-const props = withDefaults(defineProps<{ stockNoGot?: string; isDisable?: boolean }>(), { stockNoGot: "", isDisable: false });
+const props = withDefaults(defineProps<{ stockNoGot?: string; isDisable?: boolean }>(), {
+  stockNoGot: "",
+  isDisable: false,
+});
 const emits = defineEmits(["sendbackStockNo"]);
 
 const stockSelected = ref<string>("");
@@ -25,22 +27,28 @@ const rawStockList = ref<IStockList[]>([]);
 const filteredStockList = ref<{ label: string; value: string }[]>([]);
 const loading = ref<boolean>(false);
 
-// onMounted(() => {
-//   console.log("onMounted props:", props);
-//   stockSelected.value = props.stockNoGot || "";
-//   filteredStockList.value = [
-//     { label: "台積電（2330）", value: "2330" },
-//     { label: "鴻海（2317）", value: "2317" }
-//   ];
-// });
+onMounted(async () => {
+  console.log("onMounted props:", props);
+  debounceSearchStocks(props.stockNoGot);
+  if (rawStockList.value.length > 0) {
+    stockSelected.value = props.stockNoGot;
+    const selectedItem = filteredStockList.value.find((item) => item.value === props.stockNoGot);
+    stockSelected.value = selectedItem?.value || "";
+  }
+});
 
-// watch(() => props, () => {
-//   console.log("onMounted props:", props);
+// watch(props, () => {
+//   console.log("watch props:", props);
+
 //   stockSelected.value = props.stockNoGot || "";
+//   if (stockSelected.value) {
+//     debounceSearchStocks(stockSelected.value);
+//   }
 // });
 
 watch(stockSelected, () => {
   console.log("stockSelected:", stockSelected.value);
+
   if (stockSelected.value) {
     const selectedItem = rawStockList.value.find((item) => item.stock_id === stockSelected.value);
     console.log("selectedItem:", selectedItem);
@@ -69,7 +77,7 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
           value: item.stock_id,
           label: `${item.stock_name}（${item.stock_id}）`,
         }));
-        console.log("fetchStockList:", filteredStockList.value);
+        // console.log("filteredStockList:", filteredStockList.value);
       } else {
         showAxiosErrorMsg({ message: res.data.message });
       }
@@ -81,12 +89,4 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
   }
 });
 </script>
-<style lang="scss" scoped>
-
-/* 將 UInputMenu 的選單 z-index 提高，避免被 Swal2 遮蓋 */
-.high-z-index-dropdown {
-  z-index: 6000 !important;
-}
-
-
-</style>
+<style lang="scss" scoped></style>

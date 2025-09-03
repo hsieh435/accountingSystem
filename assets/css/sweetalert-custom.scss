@@ -47,3 +47,7 @@
   color: colors.$kuro;
   overflow: visible !important;
 }
+
+.swal2-container {
+  z-index: 0 !important;
+}

@@ -11,7 +11,8 @@
       locale="zh-TW"
       week-start="0"
       :day-names="['日', '一', '二', '三', '四', '五', '六']"
-      :highlight="{ options: { highlightDisabled: true } }" />
+      :highlight="{ options: { highlightDisabled: true } }"
+      :disabled="isDisabled" />
   </div>
 </template>
 <script setup lang="ts">
@@ -20,8 +21,8 @@ import { getCurrentTimestamp } from "@/composables/tools";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 const props = withDefaults(
-  defineProps<{ dateTimeGot?: string; hasRange?: boolean; minDateTime?: string; maxDateTime?: string }>(),
-  { dateTimeGot: "", hasRange: false, minDateTime: "", maxDateTime: "" },
+  defineProps<{ dateTimeGot?: string; hasRange?: boolean; minDateTime?: string; maxDateTime?: string; isDisabled?: boolean }>(),
+  { dateTimeGot: "", hasRange: false, minDateTime: "", maxDateTime: "", isDisabled: false },
 );
 const emits = defineEmits(["sendbackDateTime"]);
 

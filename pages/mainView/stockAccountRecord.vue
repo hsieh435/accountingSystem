@@ -1,60 +1,67 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <accountRecordSearching
-      :accountTypeId="'isStaccountAble'"
-      :accountTypeName="'證券帳戶'"
-      @sendbackSearchingParams="settingSearchingParams" />
-    <div class="my-1"></div>
-    <stockAccountTradeData @dataReseaching="searchingFinanceRecord" />
-  </div>
-  <div class="px-5">
-    <template v-if="stockAccountRecord.length > 0">
-      <ui-pagination
-        :totalDataQuanity="stockAccountRecordFiltered.length"
-        :showFilter="false"
-        @tableSliceChange="settingTableSlice" />
-      <template v-if="stockAccountRecordFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">交易時間</div>
-              <div :class="tailwindStyles.thClasses">買/賣</div>
-              <div :class="tailwindStyles.thClasses">股票</div>
-              <div :class="tailwindStyles.thClasses">金額</div>
-              <div :class="tailwindStyles.thClasses">股數</div>
-              <div :class="tailwindStyles.thClasses">手續費</div>
-              <div :class="tailwindStyles.thClasses">交易稅</div>
-              <div :class="tailwindStyles.thClasses">交易總額</div>
-              <div :class="tailwindStyles.thClasses">帳戶餘額</div>
-              <div :class="tailwindStyles.thClasses">內容</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
+    <div>
+      <accountRecordSearching
+        :accountTypeId="'isStaccountAble'"
+        :accountTypeName="'證券帳戶'"
+        @sendbackSearchingParams="settingSearchingParams" />
+      <div class="my-1"></div>
+      <stockAccountTradeData @dataReseaching="searchingFinanceRecord" />
+    </div>
+    <div class="px-3">
+      <template v-if="stockAccountRecord.length > 0">
+        <ui-pagination
+          :totalDataQuanity="stockAccountRecordFiltered.length"
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
+        <template v-if="stockAccountRecordFiltered.length > 0">
+          <div :class="tailwindStyles.tableClasses">
+            <div :class="tailwindStyles.theadClasses">
+              <div :class="tailwindStyles.theadtrClasses">
+                <div :class="tailwindStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.thClasses">交易時間</div>
+                <div :class="tailwindStyles.thClasses">收支</div>
+                <div :class="tailwindStyles.thClasses">項目</div>
+                <div :class="tailwindStyles.thClasses">股票</div>
+                <div :class="tailwindStyles.thClasses">金額</div>
+                <div :class="tailwindStyles.thClasses">股數</div>
+                <div :class="tailwindStyles.thClasses">手續費</div>
+                <div :class="tailwindStyles.thClasses">交易稅</div>
+                <div :class="tailwindStyles.thClasses">交易總額</div>
+                <div :class="tailwindStyles.thClasses">帳戶餘額</div>
+                <div :class="tailwindStyles.thClasses">內容</div>
+                <div :class="tailwindStyles.thClasses">操作</div>
+              </div>
             </div>
-          </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-              <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.transactionType }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.stockNo }} / {{ record.stockName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.pricePerShare) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.quantity) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.handlingFee) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.transactionTax) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.totalPrice) }}</div>
-              <div :class="tailwindStyles.tdClasses">0</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
-              <div :class="tailwindStyles.tdClasses">
-                <stockAccountTradeData :tradeIdGot="record.tradeId" :accountIdGot="record.accountId" @dataReseaching="searchingFinanceRecord" />
+            <div :class="tailwindStyles.tbodyClasses">
+              <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+                <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.transactionName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.tradeName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.stockNo + " " + record.stockName }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.pricePerShare) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.quantity) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.handlingFee) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.transactionTax) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeTotalPrice) }}</div>
+                <div :class="tailwindStyles.tdClasses">0</div>
+                <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
+                <div :class="tailwindStyles.tdClasses">
+                  <stockAccountTradeData
+                    :tradeIdGot="record.tradeId"
+                    :accountIdGot="record.accountId"
+                    @dataReseaching="searchingFinanceRecord" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </template>
-    </template>
-    <template v-else-if="stockAccountRecord.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無交易資料</span>
-    </template>
+      <template v-else-if="stockAccountRecord.length === 0">
+        <span :class="tailwindStyles.noDataClasses">無交易資料</span>
+      </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -64,7 +71,6 @@ import { IStockAccountRecordList, IFinanceRecordSearchingParams, IResponse } fro
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
-
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -114,7 +120,6 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingFinanceRecord() {
-
   try {
     const res: IResponse = await fetchStockAccountRecordList(searchingParams);
     console.log("res:", res.data.data);
