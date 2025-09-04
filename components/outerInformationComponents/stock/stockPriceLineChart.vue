@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-container">
     <canvas id="myChart"></canvas>
   </div>
 </template>
@@ -163,7 +163,5 @@ async function renderingChart() {
     },
   });
 }
-
-
 
 </script>
