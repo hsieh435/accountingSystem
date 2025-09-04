@@ -116,3 +116,8 @@ async function sendingParams() {
 }
 </script>
 <style lang="scss" scoped></style>
+
+<!-- https://codepen.io/woranov/pen/NRqLWK/ -->
+<!-- https://codepen.io/mildrenben/pen/bdGdOb/ -->
+<!-- https://codepen.io/celcarpe/pen/VwZrJpj -->
+<!-- https://codepen.io/alvarotrigo/pen/bGoPzmw -->
