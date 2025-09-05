@@ -1,32 +1,34 @@
 <template>
-  <template v-if="props.cashCardIdGot">
-    <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="searchingCashCardData()" />
-    <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeCashCardData()" />
+  <template v-if="props.storedValueCardIdGot">
+    <ui-buttonGroup showView :viewText="'檢視儲值票卡'" @dataView="searchingStoredValueCardData()" />
+    <ui-buttonGroup showRemove :createText="'刪除儲值票卡'" @dataRemove="removeStoredValueCardData()" />
   </template>
-  <template v-if="!props.cashCardIdGot">
-    <ui-buttonGroup showCreate :createText="'新增儲值票卡'" @dataCreate="cashCardDataHandling()" />
+  <template v-if="!props.storedValueCardIdGot">
+    <ui-buttonGroup showCreate :createText="'新增儲值票卡'" @dataCreate="storedValueCardDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent } from "vue";
-import { fetchCashCardById, fetchCashCardCreate, fetchCashCardUpdate, fetchCashCardDelete } from "@/server/cashCardApi";
-import { ICashCardList, IResponse } from "@/models/index";
+import {
+  fetchStoredValueCardById,
+  fetchStoredValueCardCreate,
+  fetchStoredValueCardUpdate,
+  fetchStoredValueCardDelete,
+} from "@/server/storedValueCardApi";
+import { IStoredValueCardList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ cashCardIdGot?: string }>(), { cashCardIdGot: "" });
+const props = withDefaults(defineProps<{ storedValueCardIdGot?: string }>(), { storedValueCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-
-
-
-const getDefaultDataParams = (): ICashCardList => ({
-  cashcardId: props.cashCardIdGot || "",
+const getDefaultDataParams = (): IStoredValueCardList => ({
+  storedValueCardId: props.storedValueCardIdGot || "",
   userId: "",
-  accountType: "cashCard",
-  cashcardName: "",
+  accountType: "storedValueCard",
+  storedValueCardName: "",
   currency: "",
   startingAmount: 0,
   presentAmount: 0,
@@ -38,28 +40,27 @@ const getDefaultDataParams = (): ICashCardList => ({
   createdDate: "",
   note: "",
 });
-const dataParams = reactive<ICashCardList>(getDefaultDataParams());
+const dataParams = reactive<IStoredValueCardList>(getDefaultDataParams());
 
-
-
-async function searchingCashCardData() {
-  // console.log("props:", props);
+async function searchingStoredValueCardData() {
+  console.log("props:", props);
   try {
-    const res: IResponse = await fetchCashCardById(props.cashCardIdGot);
-    // console.log("fetchCashCardById:", res.data.data);
+    const res: IResponse = await fetchStoredValueCardById(props.storedValueCardIdGot);
+    console.log("fetchStoredValueCardById:", res.data.data);
     if (res.data.returnCode === 0) {
-      dataParams.cashcardId = res.data.data.cashcardId;
+      dataParams.storedValueCardId = res.data.data.storedValueCardId;
       dataParams.userId = res.data.data.userId;
-      dataParams.cashcardName = res.data.data.cashcardName;
+      dataParams.storedValueCardName = res.data.data.storedValueCardName;
       dataParams.currency = res.data.data.currency;
       dataParams.startingAmount = res.data.data.startingAmount;
       dataParams.presentAmount = res.data.data.presentAmount;
       dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
+      dataParams.maximumValueAllowed = res.data.data.maximumValueAllowed;
       dataParams.alertValue = res.data.data.alertValue;
       dataParams.openAlert = res.data.data.openAlert;
       dataParams.createdDate = res.data.data.createdDate;
       dataParams.note = res.data.data.note;
-      await cashCardDataHandling();
+      await storedValueCardDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }
@@ -68,11 +69,11 @@ async function searchingCashCardData() {
   }
 }
 
-async function cashCardDataHandling(apiMsg?: string) {
+async function storedValueCardDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
-    title: props.cashCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
+    title: props.storedValueCardIdGot ? "修改儲值票卡資料" : "新增儲值票卡資料",
     html: `
       <div class="d-flex flex-row items-center rounded-md">
         <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
@@ -80,7 +81,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="cashcardName" value="${dataParams.cashcardName}" />
+          <input class="${tailwindStyles.inputClasses}" id="storedValueCardName" value="${dataParams.storedValueCardName}" />
         </div>
 
 
@@ -91,7 +92,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         ${
-          props.cashCardIdGot
+          props.storedValueCardIdGot
             ? `<div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
           <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
@@ -99,7 +100,7 @@ async function cashCardDataHandling(apiMsg?: string) {
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.cashCardIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.storedValueCardIdGot ? "disabled" : ""} />
         </div>`
         }
 
@@ -136,7 +137,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
 
         ${
-          props.cashCardIdGot
+          props.storedValueCardIdGot
             ? `
           <div class="flex justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">建立時間：</span>
@@ -147,7 +148,7 @@ async function cashCardDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
+    confirmButtonText: props.storedValueCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     allowOutsideClick: false,
@@ -157,7 +158,7 @@ async function cashCardDataHandling(apiMsg?: string) {
         {
           currencyIdGot: dataParams.currency || "",
           sellectAll: false,
-          isDisable: props.cashCardIdGot ? true : false,
+          isDisable: props.storedValueCardIdGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
             dataParams.currency = currencyId;
           },
@@ -224,11 +225,11 @@ async function cashCardDataHandling(apiMsg?: string) {
     preConfirm: () => {
       const errors: string[] = [];
 
-      dataParams.cashcardName = (document.getElementById("cashcardName") as HTMLInputElement).value;
-      if (!dataParams.cashcardId) {
+      dataParams.storedValueCardName = (document.getElementById("storedValueCardName") as HTMLInputElement).value;
+      if (!dataParams.storedValueCardId) {
         dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       }
-      dataParams.presentAmount = props.cashCardIdGot
+      dataParams.presentAmount = props.storedValueCardIdGot
         ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
         : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
       dataParams.minimumValueAllowed = Number(
@@ -240,7 +241,7 @@ async function cashCardDataHandling(apiMsg?: string) {
       dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
       dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
 
-      if (!dataParams.cashcardName) {
+      if (!dataParams.storedValueCardName) {
         errors.push("請填寫儲值票卡名稱");
       }
       if (!dataParams.currency) {
@@ -278,7 +279,9 @@ async function cashCardDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.cashCardIdGot ? fetchCashCardUpdate : fetchCashCardCreate)(result.value);
+        const res: IResponse = await (props.storedValueCardIdGot ? fetchStoredValueCardUpdate : fetchStoredValueCardCreate)(
+          result.value,
+        );
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -294,12 +297,12 @@ async function cashCardDataHandling(apiMsg?: string) {
   });
 }
 
-async function removeCashCardData() {
+async function removeStoredValueCardData() {
   const confirmResult = await showConfirmDialog({
     message: "即將刪除儲值票卡資料",
     confirmButtonMsg: "確認刪除",
-    executionApi: fetchCashCardDelete,
-    apiParams: props.cashCardIdGot,
+    executionApi: fetchStoredValueCardDelete,
+    apiParams: props.storedValueCardIdGot,
   });
 
   if (confirmResult) {

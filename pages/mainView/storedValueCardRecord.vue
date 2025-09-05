@@ -1,19 +1,19 @@
 <template>
   <div class="flex-col justify-start items-center">
     <accountRecordSearching
-      :accountTypeId="'isCashcardAble'"
+      :accountTypeId="'isStoredvaluecardAble'"
       :accountTypeName="'儲值票卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashCardTradeData @dataReseaching="searchingFinanceRecord" />
+    <storedValueCardTradeData @dataReseaching="searchingFinanceRecord" />
   </div>
   <div class="px-3">
-    <template v-if="cashCardRecord.length > 0">
+    <template v-if="storedValueCardRecordList.length > 0">
       <ui-pagination
-        :totalDataQuanity="cashCardRecordFiltered.length"
+        :totalDataQuanity="storedValueCardRecordListFiltered.length"
         :showFilter="false"
         @tableSliceChange="settingTableSlice" />
-      <template v-if="cashCardRecordFiltered.length > 0">
+      <template v-if="storedValueCardRecordListFiltered.length > 0">
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
@@ -32,7 +32,7 @@
           <div :class="tailwindStyles.tbodyClasses">
             <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
               <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.cashcardName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ record.storedValueCardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ record.transactionName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeName }}</div>
@@ -41,22 +41,25 @@
               <div :class="tailwindStyles.tdClasses">0</div>
               <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <cashCardTradeData :tradeIdGot="record.tradeId" :cashCardIdGot="record.cashcardId" @dataReseaching="searchingFinanceRecord" />
+                <storedValueCardTradeData
+                  :tradeIdGot="record.tradeId"
+                  :storedValueCardIdGot="record.storedValueCardId"
+                  @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
         </div>
       </template>
     </template>
-    <template v-else-if="cashCardRecord.length === 0">
+    <template v-else-if="storedValueCardRecordList.length === 0">
       <span :class="tailwindStyles.noDataClasses">無交易資料</span>
     </template>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashCardRecordList } from "@/server/cashCardRecordApi";
-import { ICashCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
+import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi";
+import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
@@ -71,8 +74,8 @@ definePageMeta({
 const accountRecordSearching = defineAsyncComponent(
   () => import("@/components/financeRecordComponents/accountRecordSearching.vue"),
 );
-const cashCardTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/cashCardRecord/cashCardTradeData.vue"),
+const storedValueCardTradeData = defineAsyncComponent(
+  () => import("@/components/financeRecordComponents/storedValueCardRecord/storedValueCardTradeData.vue"),
 );
 
 const currentPage = ref<number>(1);
@@ -84,10 +87,9 @@ const searchingParams = reactive<IFinanceRecordSearchingParams>({
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",
 });
-const cashCardRecord = ref<ICashCardRecordList[]>([]);
-const cashCardRecordFiltered = ref<ICashCardRecordList[]>([]);
-const tableData = ref<ICashCardRecordList[]>([]);
-
+const storedValueCardRecordList = ref<IStoredValueCardRecordList[]>([]);
+const storedValueCardRecordListFiltered = ref<IStoredValueCardRecordList[]>([]);
+const tableData = ref<IStoredValueCardRecordList[]>([]);
 
 onMounted(() => {
   searchingFinanceRecord();
@@ -96,7 +98,7 @@ onMounted(() => {
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
-  await cashCardRecordFilterEvent();
+  await storedValueCardRecordListFilterEvent();
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
@@ -109,13 +111,12 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingFinanceRecord() {
-
   try {
-    const res: IResponse = await fetchCashCardRecordList(searchingParams);
-    console.log("res:", res.data.data);
+    const res: IResponse = await fetchStoredValueCardRecordList(searchingParams);
+    console.log("fetchStoredValueCardRecordList:", res.data.data);
     if (res.data.returnCode === 0) {
-      cashCardRecord.value = res.data.data;
-      await cashCardRecordFilterEvent();
+      storedValueCardRecordList.value = res.data.data;
+      await storedValueCardRecordListFilterEvent();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }
@@ -124,9 +125,9 @@ async function searchingFinanceRecord() {
   }
 }
 
-async function cashCardRecordFilterEvent() {
-  cashCardRecordFiltered.value = cashCardRecord.value;
-  tableData.value = sliceArray(cashCardRecordFiltered.value, currentPage.value, itemsPerPage.value);
+async function storedValueCardRecordListFilterEvent() {
+  storedValueCardRecordListFiltered.value = storedValueCardRecordList.value;
+  tableData.value = sliceArray(storedValueCardRecordListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 </script>
 <style lang="scss" scoped></style>

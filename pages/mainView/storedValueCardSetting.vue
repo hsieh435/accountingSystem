@@ -2,15 +2,15 @@
   <div class="flex-col justify-start items-center">
     <accountSearching @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1"></div>
-    <cashCardData @dataReseaching="cashCardSearching" />
+    <storedValueCardData @dataReseaching="storedValueCardSearching" />
   </div>
   <div class="w-full px-3">
-    <template v-if="cashCardList.length > 0">
+    <template v-if="storedValueCardList.length > 0">
       <ui-pagination
-        :totalDataQuanity="cashCardList.length"
+        :totalDataQuanity="storedValueCardList.length"
         :searchingPlaceholder="'搜尋儲值票名稱'"
         @tableSliceChange="settingTableSlice" />
-      <template v-if="cashCardListFiltered.length > 0">
+      <template v-if="storedValueCardListFiltered.length > 0">
         <div :class="tailwindStyles.tableClasses">
           <div :class="tailwindStyles.theadClasses">
             <div :class="tailwindStyles.theadtrClasses">
@@ -28,12 +28,19 @@
             </div>
           </div>
           <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.cashcardId">
+            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.storedValueCardId">
               <div :class="tailwindStyles.tdClasses">
-                <ui-switch :switchValueGot="card.enable" @sendBackSwitchValue="(value: boolean) => { card.enable = value; adjustAbleStatus(card); }" />
+                <ui-switch
+                  :switchValueGot="card.enable"
+                  @sendBackSwitchValue="
+                    (value: boolean) => {
+                      card.enable = value;
+                      adjustAbleStatus(card);
+                    }
+                  " />
               </div>
               <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.cashcardName }}</div>
+              <div :class="tailwindStyles.tdClasses">{{ card.storedValueCardName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.startingAmount) }}</div>
               <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
@@ -44,22 +51,26 @@
               </div>
               <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
               <div :class="tailwindStyles.tdClasses">
-                <cashCardData :cashCardIdGot="card.cashcardId" @dataReseaching="cashCardSearching" />
+                <storedValueCardData :storedValueCardIdGot="card.storedValueCardId" @dataReseaching="storedValueCardSearching" />
               </div>
             </div>
           </div>
         </div>
       </template>
     </template>
-    <template v-else-if="cashCardList.length === 0">
+    <template v-else-if="storedValueCardList.length === 0">
       <span :class="tailwindStyles.noDataClasses">無儲值票卡資料</span>
     </template>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCashCardList, fetchEnableCashCard, fetchDisableCashCard } from "@/server/cashCardApi";
-import { IResponse, ICashCardList, IAccountSearchingParams } from "@/models/index";
+import {
+  fetchStoredValueCardList,
+  fetchEnableStoredValueCard,
+  fetchDisableStoredValueCard,
+} from "@/server/storedValueCardApi";
+import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -71,8 +82,10 @@ definePageMeta({
   subTitle: "儲值票卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(() => import("@/components/personalSettingComponents/accountSearching.vue"));
-const cashCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashCardData.vue"));
+const accountSearching = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/accountSearching.vue"),
+);
+const storedValueCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/storedValueCardData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -81,34 +94,33 @@ const searchWord = ref<string>("");
 const searchingParams = reactive<IAccountSearchingParams>({
   currencyId: "",
 });
-const cashCardList = ref<any[]>([]);
-const cashCardListFiltered = ref<ICashCardList[]>([]);
-const tableData = ref<ICashCardList[]>([]);
+const storedValueCardList = ref<IStoredValueCardList[]>([]);
+const storedValueCardListFiltered = ref<IStoredValueCardList[]>([]);
+const tableData = ref<IStoredValueCardList[]>([]);
 
 onMounted(() => {
-  cashCardSearching();
+  storedValueCardSearching();
 });
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number; keyWord: string }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
   searchWord.value = sliceData.keyWord.trim();
-  await cashCardListFilterEvent();
+  await storedValueCardListFilterEvent();
 }
 
 async function settingSearchingParams(params: IAccountSearchingParams) {
   searchingParams.currencyId = params.currencyId;
-  await cashCardSearching();
+  await storedValueCardSearching();
 }
 
-async function cashCardSearching() {
-
+async function storedValueCardSearching() {
   try {
-    const res: IResponse = await fetchCashCardList(searchingParams);
-    console.log("fetchCashCardList:", res.data.data);
+    const res: IResponse = await fetchStoredValueCardList(searchingParams);
+    console.log("fetchStoredValueCardList:", res.data.data);
     if (res.data.returnCode === 0) {
-      cashCardList.value = res.data.data;
-      await cashCardListFilterEvent();
+      storedValueCardList.value = res.data.data;
+      await storedValueCardListFilterEvent();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }
@@ -117,24 +129,22 @@ async function cashCardSearching() {
   }
 }
 
-async function cashCardListFilterEvent() {
-  cashCardListFiltered.value = cashCardList.value;
+async function storedValueCardListFilterEvent() {
+  storedValueCardListFiltered.value = storedValueCardList.value;
   if (searchWord.value.length > 0) {
-    cashCardListFiltered.value = cashCardListFiltered.value.filter((row: ICashCardList) => {
-      return row.cashcardName.toLowerCase().includes(searchWord.value.toLowerCase());
+    storedValueCardListFiltered.value = storedValueCardListFiltered.value.filter((row: IStoredValueCardList) => {
+      return row.storedValueCardName.toLowerCase().includes(searchWord.value.toLowerCase());
     });
   }
 
-  tableData.value = sliceArray(cashCardListFiltered.value, currentPage.value, itemsPerPage.value);
+  tableData.value = sliceArray(storedValueCardListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 
-
-
-async function adjustAbleStatus(card: ICashCardList) {
-
+async function adjustAbleStatus(card: IStoredValueCardList) {
   try {
-    const res: IResponse =
-      await (card.enable === true ? fetchEnableCashCard : fetchDisableCashCard)(card.cashcardId);
+    const res: IResponse = await (card.enable === true ? fetchEnableStoredValueCard : fetchDisableStoredValueCard)(
+      card.storedValueCardId,
+    );
     if (res.data.returnCode === 0) {
       showAxiosToast({ message: res.data.message });
     } else {

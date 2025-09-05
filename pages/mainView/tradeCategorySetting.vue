@@ -36,7 +36,7 @@
                   <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
                 </div>
                 <div :class="tailwindStyles.tdClasses">
-                  <font-awesome-icon icon="check" v-if="trade.isCashcardAble" />
+                  <font-awesome-icon icon="check" v-if="trade.isStoredvaluecardAble" />
                 </div>
                 <div :class="tailwindStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />

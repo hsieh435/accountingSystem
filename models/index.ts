@@ -51,7 +51,7 @@ export interface ITradeCategory {
   tradeCode: string;
   tradeName: string;
   isCashflowAble: boolean;
-  isCashcardAble: boolean;
+  isStoredvaluecardAble: boolean;
   isCreditcardAble: boolean;
   isCuaccountAble: boolean;
   isStaccountAble: boolean;
@@ -122,12 +122,12 @@ export interface ICashFlowRecordList {
 }
 
 // 儲值票卡列表 interface
-export interface ICashCardList {
+export interface IStoredValueCardList {
   no?: number;
-  cashcardId: string;
+  storedValueCardId: string;
   userId: string;
   accountType: string;
-  cashcardName: string;
+  storedValueCardName: string;
   currency: string;
   currencyName?: string;
   startingAmount: number;
@@ -142,11 +142,11 @@ export interface ICashCardList {
 }
 
 // 儲值票卡收支紀錄 interface
-export interface ICashCardRecordList {
+export interface IStoredValueCardRecordList {
   no?: number;
   tradeId: string;
-  cashcardId: string;
-  cashcardName?: string;
+  storedValueCardId: string;
+  storedValueCardName?: string;
   accountType: string;
   tradeDatetime: string;
   transactionType: string;

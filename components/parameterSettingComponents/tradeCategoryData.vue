@@ -27,7 +27,7 @@ const dataParams = reactive<ITradeCategory>({
   tradeCode: props.tradeCodeGot || "",
   tradeName: "",
   isCashflowAble: false,
-  isCashcardAble: false,
+  isStoredvaluecardAble: false,
   isCreditcardAble: false,
   isCuaccountAble: false,
   isStaccountAble: false,
@@ -44,7 +44,7 @@ async function searchingTradeCategory() {
       dataParams.tradeCode = res.data.data.tradeCode;
       dataParams.tradeName = res.data.data.tradeName;
       dataParams.isCashflowAble = res.data.data.isCashflowAble;
-      dataParams.isCashcardAble = res.data.data.isCashcardAble;
+      dataParams.isStoredvaluecardAble = res.data.data.isStoredvaluecardAble;
       dataParams.isCreditcardAble = res.data.data.isCreditcardAble;
       dataParams.isCuaccountAble = res.data.data.isCuaccountAble;
       dataParams.isStaccountAble = res.data.data.isStaccountAble;
@@ -94,8 +94,8 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
               <label for="isCashflowAble">現金</label>
             </div>
             <div class="me-2">
-              <input class="border border-gray-300 mx-1" id="isCashcardAble" value="${dataParams.isCashcardAble}" type="checkbox" />
-              <label for="isCashcardAble">儲值票卡</label>
+              <input class="border border-gray-300 mx-1" id="isStoredvaluecardAble" value="${dataParams.isStoredvaluecardAble}" type="checkbox" />
+              <label for="isStoredvaluecardAble">儲值票卡</label>
             </div>
             <div class="me-2">
               <input class="border border-gray-300 mx-1" id="isCreditcardAble" value="${dataParams.isCreditcardAble}" type="checkbox" />
@@ -122,8 +122,8 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
       const isCashflowAbleCheckbox = document.getElementById("isCashflowAble") as HTMLInputElement;
       isCashflowAbleCheckbox.checked = dataParams.isCashflowAble;
 
-      const isCashcardAbleAbleCheckbox = document.getElementById("isCashcardAble") as HTMLInputElement;
-      isCashcardAbleAbleCheckbox.checked = dataParams.isCashcardAble;
+      const isStoredvaluecardAbleAbleCheckbox = document.getElementById("isStoredvaluecardAble") as HTMLInputElement;
+      isStoredvaluecardAbleAbleCheckbox.checked = dataParams.isStoredvaluecardAble;
 
       const isCreditcardAbleCheckbox = document.getElementById("isCreditcardAble") as HTMLInputElement;
       isCreditcardAbleCheckbox.checked = dataParams.isCreditcardAble;
@@ -145,7 +145,7 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
       dataParams.tradeCode = (document.getElementById("tradeCode") as HTMLInputElement).value;
       dataParams.tradeName = (document.getElementById("tradeName") as HTMLInputElement).value;
       dataParams.isCashflowAble = (document.getElementById("isCashflowAble") as HTMLInputElement).checked;
-      dataParams.isCashcardAble = (document.getElementById("isCashcardAble") as HTMLInputElement).checked;
+      dataParams.isStoredvaluecardAble = (document.getElementById("isStoredvaluecardAble") as HTMLInputElement).checked;
       dataParams.isCreditcardAble = (document.getElementById("isCreditcardAble") as HTMLInputElement).checked;
       dataParams.isCuaccountAble = (document.getElementById("isCuaccountAble") as HTMLInputElement).checked;
       dataParams.isStaccountAble = (document.getElementById("isStaccountAble") as HTMLInputElement).checked;

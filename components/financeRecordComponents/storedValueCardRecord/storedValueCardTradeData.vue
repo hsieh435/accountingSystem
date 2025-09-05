@@ -1,36 +1,35 @@
 <template>
   <template v-if="props.tradeIdGot">
-    <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" @dataView="searchingCashCardRecord()" />
+    <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" @dataView="searchingStoredValueCardRecord()" />
   </template>
   <template v-if="!props.tradeIdGot">
-    <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" @dataCreate="cashCardRecordDataHandling()" />
+    <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" @dataCreate="storedValueCardRecordDataHandling()" />
   </template>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { fetchCashCardRecordById, fetchCashCardRecordCreate, fetchCashCardRecordUpdate } from "@/server/cashCardRecordApi";
-import { ICashCardRecordList, IResponse } from "@/models/index";
+import {
+  fetchStoredValueCardRecordById,
+  fetchStoredValueCardRecordCreate,
+  fetchStoredValueCardRecordUpdate,
+} from "@/server/storedValueCardRecordApi";
+import { IStoredValueCardRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; cashCardIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdGot?: string }>(), {
   tradeIdGot: "",
-  cashCardIdGot: "",
+  storedValueCardIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
-
-
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
 
-
-
-const getDefaultDataParams = (): ICashCardRecordList => ({
+const getDefaultDataParams = (): IStoredValueCardRecordList => ({
   tradeId: props.tradeIdGot || "",
-  cashcardId: props.cashCardIdGot || "",
-  cashcardName: "",
+  storedValueCardId: props.storedValueCardIdGot || "",
   accountType: "",
   tradeDatetime: "",
   transactionType: "",
@@ -40,30 +39,19 @@ const getDefaultDataParams = (): ICashCardRecordList => ({
   tradeDescription: "",
   tradeNote: "",
 });
-const dataParams = reactive<ICashCardRecordList>(getDefaultDataParams());
+const dataParams = reactive<IStoredValueCardRecordList>(getDefaultDataParams());
 
-
-
-async function searchingCashCardRecord() {
-  // console.log("props:", props);
+async function searchingStoredValueCardRecord() {
+  console.log("props:", props);
   try {
-    const res: IResponse = await fetchCashCardRecordById({
-      cashcardId:  props.cashCardIdGot,
-      tradeId: props.tradeIdGot
+    const res: IResponse = await fetchStoredValueCardRecordById({
+      storedValueCardId: props.storedValueCardIdGot,
+      tradeId: props.tradeIdGot,
     });
-    console.log("fetchCashCardRecordById:", res.data.data);
+    console.log("fetchStoredValueCardRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
-      // dataParams.tradeId = res.data.data.tradeId;
-      // dataParams.cashcardId = res.data.data.cashcardId;
-      // dataParams.tradeDatetime = res.data.data.tradeDatetime;
-      // dataParams.transactionType = res.data.data.transactionType;
-      // dataParams.tradeCategory = res.data.data.tradeCategory;
-      // dataParams.tradeAmount = res.data.data.tradeAmount;
-      // dataParams.currency = res.data.data.currency;
-      // dataParams.tradeDescription = res.data.data.tradeDescription;
-      // dataParams.tradeNote = res.data.data.tradeNote;
       Object.assign(dataParams, res.data.data);
-      await cashCardRecordDataHandling();
+      await storedValueCardRecordDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }
@@ -72,7 +60,7 @@ async function searchingCashCardRecord() {
   }
 }
 
-async function cashCardRecordDataHandling(apiMsg?: string) {
+async function storedValueCardRecordDataHandling(apiMsg?: string) {
   // console.log(dataParams);
 
   Swal.fire({
@@ -130,28 +118,27 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
 
       </div>
     `,
-    confirmButtonText: props.cashCardIdGot ? "修改" : "新增",
+    confirmButtonText: props.storedValueCardIdGot ? "修改" : "新增",
     showCancelButton: true,
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
-      let cashCardAccountSelect = createApp({
+      let storedValueCardAccountSelect = createApp({
         render() {
           return h(accountSelect, {
-            selectTargetId: "isCashcardAble",
-            accountIdGot: dataParams.cashcardId,
+            selectTargetId: "isStoredvaluecardAble",
+            accountIdGot: dataParams.storedValueCardId,
             isDisable: props.tradeIdGot ? true : false,
             onSendbackAccountId: (account: string, currency: string) => {
-              dataParams.cashcardId = account;
-              dataParams.currency = dataParams.cashcardId ? currency : "";
+              dataParams.storedValueCardId = account;
+              dataParams.currency = dataParams.storedValueCardId ? currency : "";
             },
           });
         },
       });
-      cashCardAccountSelect.mount("#accountSelectComponent");
+      storedValueCardAccountSelect.mount("#accountSelectComponent");
 
-      let cashCardTradeDatetime = createApp(
+      let storedValueCardTradeDatetime = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
         {
           dateTimeGot: dataParams.tradeDatetime,
@@ -160,10 +147,9 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
           },
         },
       );
-      cashCardTradeDatetime.mount("#tradeDatetimeComponent");
+      storedValueCardTradeDatetime.mount("#tradeDatetimeComponent");
 
-
-      let cashCardTransactionType = createApp(
+      let storedValueCardTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
           transactionType: dataParams.transactionType,
@@ -172,22 +158,21 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
           },
         },
       );
-      cashCardTransactionType.mount("#transactionTypeSelectComponent");
+      storedValueCardTransactionType.mount("#transactionTypeSelectComponent");
 
-      let cashCardTradeCategory = createApp(
+      let storedValueCardTradeCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
-          accountType: "isCashcardAble",
+          accountType: "isStoredvaluecardAble",
           tradeCategoryGot: dataParams.tradeCategory,
           onSendbackTradeCategory: (tradeCategoryId: string) => {
             dataParams.tradeCategory = tradeCategoryId;
           },
         },
       );
-      cashCardTradeCategory.mount("#tradeCategorySelectComponent");
+      storedValueCardTradeCategory.mount("#tradeCategorySelectComponent");
 
-
-      let cashCardCurrencySelect = createApp({
+      let storedValueCardCurrencySelect = createApp({
         render() {
           return h(currencySelect, {
             currencyIdGot: dataParams.currency,
@@ -195,7 +180,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
           });
         },
       });
-      cashCardCurrencySelect.mount("#currencySelectComponent");
+      storedValueCardCurrencySelect.mount("#currencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -209,7 +194,7 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
 
-      if (!dataParams.cashcardId) {
+      if (!dataParams.storedValueCardId) {
         errors.push("請選擇儲值票卡");
       }
       if (!dataParams.tradeDatetime) {
@@ -235,7 +220,9 @@ async function cashCardRecordDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.tradeIdGot ? fetchCashCardRecordUpdate : fetchCashCardRecordCreate)(result.value);
+        const res: IResponse = await (props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate)(
+          result.value,
+        );
         console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

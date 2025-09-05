@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { fetchCashFlowList } from "@/server/cashFlowApi";
-import { fetchCashCardList } from "@/server/cashCardApi";
+import { fetchStoredValueCardList } from "@/server/storedValueCardApi";
 import { fetchCreditCardList } from "@/server/creditCardApi";
 import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
 import { fetchStockAccountList } from "@/server/stockAccountApi";
@@ -55,7 +55,6 @@ async function loadAccountList() {
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
     // console.log("list:", list);
     // console.log("oriAccountList:", oriAccountList.value);
-
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
@@ -75,15 +74,15 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
         value: item.cashflowId,
       }));
     }
-    case "isCashcardAble": {
-      const res = await fetchCashCardList(params);
+    case "isStoredvaluecardAble": {
+      const res = await fetchStoredValueCardList(params);
       oriAccountList.value = res.data.data;
       for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].cashcardId;
+        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].storedValueCardId;
       }
       return res.data.data.map((item: any) => ({
-        label: item.cashcardName,
-        value: item.cashcardId,
+        label: item.storedValueCardName,
+        value: item.storedValueCardId,
       }));
     }
     case "isCreditcardAble": {

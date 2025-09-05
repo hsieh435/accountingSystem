@@ -135,8 +135,6 @@ async function sendingParams() {
 }
 </script>
 <style lang="scss" scoped>
-// @import "https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:300,400";
-
 .tabs {
   padding: 20px;
 }
@@ -147,17 +145,17 @@ async function sendingParams() {
   list-style-type: none;
   padding-left: 0;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
-  margin-bottom: 10px;
   justify-content: space-between;
   align-items: flex-end;
-  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 .tabs ul li {
   box-sizing: border-box;
   flex: 1;
-  width: 25%;
-  padding: 0 10px;
+  width: 32%;
+  padding: 0px 10px;
   text-align: center;
 }
 .tabs ul li label {
@@ -175,9 +173,6 @@ async function sendingParams() {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-.tabs ul li label br {
-  display: none;
 }
 .tabs ul li label svg {
   fill: rgb(146, 157, 175);
@@ -208,7 +203,7 @@ async function sendingParams() {
   margin: 0 auto;
   height: 4px;
   background: rgb(0, 193, 106);
-  border-radius: 1px;
+  border-radius: 5px;
 }
 .tabs .content {
   width: 100%;

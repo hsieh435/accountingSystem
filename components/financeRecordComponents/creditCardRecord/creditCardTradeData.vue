@@ -148,7 +148,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       });
       creditCardAccountSelect.mount("#accountSelectComponent");
 
-      let cashCardTradeDatetime = createApp(
+      let creditCardTradeDatetime = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
         {
           dateTimeGot: dataParams.tradeDatetime,
@@ -160,9 +160,9 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
           },
         },
       );
-      cashCardTradeDatetime.mount("#tradeDatetimeComponent");
+      creditCardTradeDatetime.mount("#tradeDatetimeComponent");
 
-      let cashCardTradeCategory = createApp(
+      let creditCardTradeCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
         {
           accountType: "isCreditcardAble",
@@ -172,7 +172,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
           },
         },
       );
-      cashCardTradeCategory.mount("#tradeCategorySelectComponent");
+      creditCardTradeCategory.mount("#tradeCategorySelectComponent");
 
 
       let creditCardCurrencySelect = createApp({
