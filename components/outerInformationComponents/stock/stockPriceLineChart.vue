@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="stockDataLineChart.length > 0 ? 'chart-container' : ''">
     <canvas id="myChart"></canvas>
   </div>
 </template>
