@@ -77,17 +77,17 @@ onMounted(async () => {
   list-style-type: none;
   padding-left: 0;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
-  margin-bottom: 10px;
   justify-content: space-between;
   align-items: flex-end;
-  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 .tabs ul li {
   box-sizing: border-box;
   flex: 1;
-  width: 25%;
-  padding: 0 10px;
+  width: 32%;
+  padding: 0px 10px;
   text-align: center;
 }
 .tabs ul li label {
@@ -105,9 +105,6 @@ onMounted(async () => {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-.tabs ul li label br {
-  display: none;
 }
 .tabs ul li label svg {
   fill: rgb(146, 157, 175);
@@ -244,25 +241,6 @@ onMounted(async () => {
     height: 1.5em;
   }
 }
-@media (max-width: 600px) {
-  .tabs ul li label {
-    padding: 5px;
-    border-radius: 5px;
-  }
-  .tabs ul li label span {
-    display: none;
-  }
-  .tabs .slider {
-    display: none;
-  }
-  .tabs .content {
-    margin-top: 20px;
-  }
-  .tabs .content section h2 {
-    display: block;
-  }
-}
-
 
 </style>
 <!-- https://codepen.io/woranov/pen/NRqLWK/ -->

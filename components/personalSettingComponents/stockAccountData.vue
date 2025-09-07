@@ -170,7 +170,6 @@ async function stockAccountDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
-          sellectAll: false,
           isDisable: props.stockAccountIGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
             dataParams.currency = currencyId;

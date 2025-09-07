@@ -309,25 +309,6 @@ async function sendingParams() {
     height: 1.5em;
   }
 }
-@media (max-width: 600px) {
-  .tabs ul li label {
-    padding: 5px;
-    border-radius: 5px;
-  }
-  .tabs ul li label span {
-    display: none;
-  }
-  .tabs .slider {
-    display: none;
-  }
-  .tabs .content {
-    margin-top: 20px;
-  }
-  .tabs .content section h2 {
-    display: block;
-  }
-}
-
 
 </style>
 <!-- https://codepen.io/woranov/pen/NRqLWK/ -->

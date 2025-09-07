@@ -185,7 +185,6 @@ async function creditCardDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
-          sellectAll: false,
           isDisable: props.creditCardIdGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
             dataParams.currency = currencyId;

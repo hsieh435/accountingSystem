@@ -19,12 +19,13 @@
                 <div :class="tailwindStyles.thClasses">啟用</div>
                 <div :class="tailwindStyles.thClasses">NO.</div>
                 <div :class="tailwindStyles.thClasses">信用卡名稱</div>
-                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.thClasses">發卡銀行代號 / 名稱</div>
                 <div :class="tailwindStyles.thClasses">發卡機構</div>
                 <div :class="tailwindStyles.thClasses">結算貨幣</div>
                 <div :class="tailwindStyles.thClasses">每月額度</div>
                 <div :class="tailwindStyles.thClasses">消費提醒</div>
                 <div :class="tailwindStyles.thClasses">到期</div>
+                <div :class="tailwindStyles.thClasses">建立時間</div>
                 <div :class="tailwindStyles.thClasses">操作</div>
               </div>
             </div>
@@ -46,12 +47,13 @@
                   {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
                 </div>
                 <div :class="tailwindStyles.tdClasses">{{ card.creditcardSchema }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ card.currency }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
                 <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
                 </div>
                 <div :class="tailwindStyles.tdClasses">{{ card.expirationDate.slice(0, 7) }}</div>
+                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
                 <div :class="tailwindStyles.tdClasses">
                   <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
                 </div>
@@ -70,7 +72,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi";
 import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
-import { currencyFormat, sliceArray } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import { tailwindStyles } from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 

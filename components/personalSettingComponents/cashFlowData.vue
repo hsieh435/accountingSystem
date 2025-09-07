@@ -153,7 +153,6 @@ async function cashflowDataHandling(apiMsg?: string) {
         defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
         {
           currencyIdGot: dataParams.currency,
-          sellectAll: false,
           isDisable: props.cashflowIdIdGot ? true : false,
           onSendbackCurrencyId: (currencyId: string) => {
             dataParams.currency = currencyId;

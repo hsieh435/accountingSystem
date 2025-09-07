@@ -1,5 +1,5 @@
 <template>
-  <div :class="stockDataLineChart.length > 0 ? 'chart-container' : ''">
+  <div style="width: 100%; height: 400px;">
     <canvas id="myChart"></canvas>
   </div>
 </template>
@@ -92,6 +92,7 @@ async function renderingChart() {
 
   let variation = 0;
 
+
   chartInstance = new Chart(myChart, {
     type: "line",
     data: {
@@ -160,6 +161,8 @@ async function renderingChart() {
           backgroundColor: "rgb(0, 0, 0)",
         },
       },
+      responsive: true,
+      maintainAspectRatio: false,
     },
   });
 }

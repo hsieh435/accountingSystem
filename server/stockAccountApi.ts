@@ -8,13 +8,8 @@ export async function fetchStockAccountList(data: IAccountSearchingParams) {
   return await response.json();
 }
 
-export async function fetchStockAccountById(stockAccountId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/stockAccountData/${stockAccountId}`, "GET");
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: IStockAccountList[] };
+export async function fetchStockAccountById(accountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/stockAccountData/${accountId}`, "GET");
   return await response.json();
 }
 
@@ -22,11 +17,6 @@ export async function fetchStockAccountCreate(data: IStockAccountList) {
   const response = await apiFetch("/accounting_system_backend/api/stockAccount/create", "POST", {
     body: JSON.stringify(data),
   });
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: IStockAccountList[] };
   return await response.json();
 }
 
@@ -34,30 +24,20 @@ export async function fetchStockAccountUpdate(data: IStockAccountList) {
   const response = await apiFetch("/accounting_system_backend/api/stockAccount/update", "PUT", {
     body: JSON.stringify(data),
   });
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = (await response.json()) as { data: IStockAccountList[] };
   return await response.json();
 }
 
-export async function fetchEnableStockAccount(stockAccountId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/stockAccount/enable/${stockAccountId}`, "GET");
+export async function fetchEnableStockAccount(accountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/stockAccount/enable/${accountId}`, "GET");
   return await response.json();
 }
 
-export async function fetchDisableStockAccount(stockAccountId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/stockAccount/disable/${stockAccountId}`, "GET");
+export async function fetchDisableStockAccount(accountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/stockAccount/disable/${accountId}`, "GET");
   return await response.json();
 }
 
-export async function fetchStockAccountDelete(stockAccountId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/stockAccountData/delete/${stockAccountId}`, "GET");
-  // if (!response.ok) {
-  //   const errorText = await response.text();
-  //   throw new Error("HTTP error! status:" + response.status + ", message:" + errorText);
-  // }
-  // const result = await response.json();
+export async function fetchStockAccountDelete(accountId: string) {
+  const response = await apiFetch(`/accounting_system_backend/api/stockAccount/delete/${accountId}`, "GET");
   return await response.json();
 }
