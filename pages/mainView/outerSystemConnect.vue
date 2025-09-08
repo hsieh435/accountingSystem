@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { testConnection } from "@/server/outerWebApi";
+import { fetchTestConnection } from "@/server/outerWebApi";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 
@@ -29,16 +29,34 @@ const finMindPassword = ref<string>("");
 
 
 async function handleSearch() {
-
   try {
-    const result = await testConnection({
+    const result = await fetchTestConnection({
       finMindAccount: finMindAccount.value,
       finMindPassword: finMindPassword.value,
     });
-    console.log("Connection test result:", result);
+    console.log("result:", result);
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
+  // console.log("Request Body:", JSON.stringify(payload));
+
+  // try {
+  //   const result = await fetch("https://api.finmindtrade.com/api/v4/login", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ user_id, password }),
+  //   });
+  //   const jsonData = await result.json();
+  //   console.log("result:", result);
+  //   console.log("jsonData:", jsonData);
+  //   res.json(success({ data: jsonData, message: "查詢成功", req, res }));
+  // } catch (err) {
+  //   res.status(500).json(error({ message: "查詢失敗", req, res }));
+  // }
+
 }
+
 </script>
 <style lang="scss" scoped></style>

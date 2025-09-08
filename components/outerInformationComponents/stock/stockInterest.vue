@@ -20,19 +20,16 @@ const stockDividendList = ref<any[]>([]);
 
 
 
-watch(
-  props,
-  () => {
-    searchingStockPrice();
-  },
-  { deep: true },
-);
+watch(props, () => {
+  searchingStockInterest();
+}, { deep: true });
 
-async function searchingStockPrice() {
+async function searchingStockInterest() {
   // console.log("searchingParams:", props.searchingParamsGot);
   try {
     const res: IResponse = await fetchStockDividendResult(props.searchingParamsGot);
-    console.log("fetchStockDividendResult:", res.data.data);
+    console.log("fetchStockDividendResult:", res.data.data.data);
+    console.log("length:", res.data.data.data.length);
     if (res.data.returnCode === 0) {
       stockDividendList.value = res.data.data.data;
       if (stockDividendList.value.length > 0) {
@@ -48,6 +45,13 @@ async function searchingStockPrice() {
       //     };
       //   });
       //   renderingChart();
+
+
+
+      //
+      // CashEarningsDistribution：配息
+      // StockEarningsDistribution：配股
+      //
       } else {
         showAxiosToast({ message: "查無資料", icon: "warning" });
       }
@@ -101,3 +105,4 @@ async function renderingChart() {
 }
 </script>
 <style lang="scss" scoped></style>
+<!-- https://www.chartjs.org/docs/latest/charts/mixed.html -->

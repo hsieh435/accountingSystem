@@ -3,7 +3,7 @@ import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/mo
 
 
 
-export async function testConnection(data: { finMindAccount: string; finMindPassword: string }) {
+export async function fetchTestConnection(data: { finMindAccount: string; finMindPassword: string }) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {
     body: JSON.stringify(data),
   });
