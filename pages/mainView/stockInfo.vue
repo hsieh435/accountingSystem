@@ -28,15 +28,14 @@
       <input type="radio" id="tab1" name="tab-control" checked />
       <input type="radio" id="tab2" name="tab-control" />
       <input type="radio" id="tab3" name="tab-control" />
-      <input type="radio" id="tab4" name="tab-control" />
       <ul>
-        <li title="Features">
+        <li title="股價走勢">
           <label for="tab1" role="button"><span>股價走勢</span></label>
         </li>
-        <li title="Delivery Contents">
+        <li title="本益比 / 股價淨值比">
           <label for="tab2" role="button"><span>本益比 / 股價淨值比</span></label>
         </li>
-        <li title="Shipping">
+        <li title="除權息">
           <label for="tab3" role="button"><span>除權息</span></label>
         </li>
       </ul>
@@ -62,7 +61,8 @@
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { IStockPriceSearchingParams, IStockList } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
-import type { TabsItem } from "@nuxt/ui";
+
+
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -95,23 +95,7 @@ const stockPriceParams = ref<IStockPriceSearchingParams>({
   endDate: "",
 });
 
-const items = [
-  {
-    label: "股價走勢",
-    icon: "i-lucide-chart-no-axes-combined",
-    slot: "chart" as const,
-  },
-  {
-    label: "本益比 / 股價淨值比",
-    icon: "i-lucide-circle-dollar-sign",
-    slot: "perpbr" as const,
-  },
-  {
-    label: "除權息",
-    icon: "i-lucide-circle-dollar-sign",
-    slot: "interest" as const,
-  },
-] satisfies TabsItem[];
+
 
 // PER：本益比（Price-to-Earning Ratio）
 // PBR：股價淨值比（Price-to-Book Ratio）

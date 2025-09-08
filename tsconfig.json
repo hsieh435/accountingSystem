@@ -10,9 +10,9 @@
     "allowJs": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -21,7 +21,6 @@
     "types": [
       "@nuxt/types"
     ],
-    "ignoreDeprecations": "6.0",
   },
   "exclude": [
     "node_modules",

@@ -1,15 +1,14 @@
 <template>
   <div style="width: 100%; height: 400px;">
-    <canvas id="myChart"></canvas>
+    <canvas id="stockPriceChart"></canvas>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, watch, ref, reactive } from "vue";
-import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
+import { watch, ref } from "vue";
+// import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IStockPriceRecordList, IStockList, IResponse } from "@/models/index";
-import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
+import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 // 父元件傳來的值
@@ -30,6 +29,7 @@ watch(props, () => {
 
 
 
+let chartInstance: Chart | null = null;
 async function searchingStockPrice() {
   // console.log("searchingParams:", props.searchingParamsGot);
   try {
@@ -53,7 +53,10 @@ async function searchingStockPrice() {
         });
         renderingChart();
       } else {
-        showAxiosToast({ message: "查無資料", icon: "warning" });
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
       }
     } else {
       showAxiosErrorMsg({ message: res.data.message });
@@ -75,12 +78,11 @@ const getData = (chartData: any[]) => {
   return data;
 };
 
-let chartInstance: Chart | null = null;
 
 // CanvasRenderingContext2D
 async function renderingChart() {
   // console.log(props.chartType);
-  const myChart = document.getElementById("myChart") as HTMLCanvasElement;
+  const stockPriceChart = document.getElementById("stockPriceChart") as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -89,11 +91,10 @@ async function renderingChart() {
 
   const scalesMax = getData(stockDataLineChart.value) ? Math.ceil(Math.max(...getData(stockDataLineChart.value).map((data) => data))) : 10;
   const scalesMin = getData(stockDataLineChart.value) ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data))) : 0;
-
   let variation = 0;
 
 
-  chartInstance = new Chart(myChart, {
+  chartInstance = new Chart(stockPriceChart, {
     type: "line",
     data: {
       labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],
