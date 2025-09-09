@@ -30,13 +30,19 @@
       <input type="radio" id="tab3" name="tab-control" />
       <ul>
         <li title="股價走勢">
-          <label for="tab1" role="button"><span>股價走勢</span></label>
-        </li>
-        <li title="本益比 / 股價淨值比">
-          <label for="tab2" role="button"><span>本益比 / 股價淨值比</span></label>
+          <label for="tab1" role="button">
+            <font-awesome-icon icon="fa-solid fa-chart-line" /><span>股價走勢</span>
+          </label>
         </li>
         <li title="除權息">
-          <label for="tab3" role="button"><span>除權息</span></label>
+          <label for="tab2" role="button">
+            <font-awesome-icon icon="fa-solid fa-money-bill-trend-up" /><span>除權息</span>
+          </label>
+        </li>
+        <li title="本益比 / 股價淨值比">
+          <label for="tab3" role="button">
+            <font-awesome-icon icon="fa-solid fa-percent" /><span>本益比 / 股價淨值比</span>
+          </label>
         </li>
       </ul>
 
@@ -45,13 +51,14 @@
       </div>
       <div class="content">
         <section>
+          <div class="icon-activity"></div>
           <stockPriceLineChart :searchingParamsGot="stockPriceParams" />
         </section>
         <section>
-          <stockPerPrb />
+          <stockInterest :searchingParamsGot="stockPriceParams" />
         </section>
         <section>
-          <stockInterest :searchingParamsGot="stockPriceParams" />
+          <stockPerPbr :searchingParamsGot="stockPriceParams" />
         </section>
       </div>
     </div>
@@ -61,8 +68,6 @@
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { IStockPriceSearchingParams, IStockList } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
-
-
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -76,7 +81,7 @@ const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dat
 const stockPriceLineChart = defineAsyncComponent(
   () => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"),
 );
-const stockPerPrb = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPrb.vue"));
+const stockPerPbr = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPbr.vue"));
 const stockInterest = defineAsyncComponent(
   () => import("@/components/outerInformationComponents/stock/stockInterest.vue"),
 );
@@ -96,9 +101,6 @@ const stockPriceParams = ref<IStockPriceSearchingParams>({
 });
 
 
-
-// PER：本益比（Price-to-Earning Ratio）
-// PBR：股價淨值比（Price-to-Book Ratio）
 
 async function settingStockNo(selectedData: IStockList) {
   searchingParams.stockNo = selectedData.stock_id;
@@ -195,7 +197,7 @@ async function sendingParams() {
 }
 .tabs .content section {
   display: none;
-  width: 100%; /* Ensure full width */
+  width: 100%;
   -webkit-animation-name: content;
   animation-name: content;
   -webkit-animation-direction: normal;
@@ -208,17 +210,11 @@ async function sendingParams() {
   animation-iteration-count: 1;
   line-height: 1.4;
 }
-.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label {
+
+.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label,
+.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label svg {
   cursor: default;
   color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
 }
 .tabs input[name="tab-control"]:nth-of-type(1):checked ~ .slider {
   transform: translateX(0%);
@@ -226,17 +222,11 @@ async function sendingParams() {
 .tabs input[name="tab-control"]:nth-of-type(1):checked ~ .content > section:nth-child(1) {
   display: block;
 }
-.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label {
+
+.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label,
+.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label svg {
   cursor: default;
   color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
 }
 .tabs input[name="tab-control"]:nth-of-type(2):checked ~ .slider {
   transform: translateX(100%);
@@ -244,17 +234,11 @@ async function sendingParams() {
 .tabs input[name="tab-control"]:nth-of-type(2):checked ~ .content > section:nth-child(2) {
   display: block;
 }
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label {
+
+.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label,
+.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label svg {
   cursor: default;
   color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
 }
 .tabs input[name="tab-control"]:nth-of-type(3):checked ~ .slider {
   transform: translateX(200%);
@@ -262,6 +246,7 @@ async function sendingParams() {
 .tabs input[name="tab-control"]:nth-of-type(3):checked ~ .content > section:nth-child(3) {
   display: block;
 }
+
 @-webkit-keyframes content {
   from {
     opacity: 0;
@@ -286,14 +271,10 @@ async function sendingParams() {
   .tabs ul li label {
     white-space: initial;
   }
-  .tabs ul li label br {
-    display: initial;
-  }
   .tabs ul li label svg {
     height: 1.5em;
   }
 }
-
 </style>
 <!-- https://codepen.io/woranov/pen/NRqLWK/ -->
 <!-- https://codepen.io/mildrenben/pen/bdGdOb/ -->

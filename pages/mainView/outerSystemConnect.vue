@@ -3,7 +3,7 @@
     <div class="flex justify-start items-center my-1 px-3">
       <UInput class="mx-1" v-model="finMindAccount" placeholder="請輸入帳號" type="search" />
       <UInput class="mx-1" v-model="finMindPassword" placeholder="請輸入密碼" type="password" />
-      <ui-buttonGroup showSearch :searchText="'連線'" @dataSearch="handleSearch"></ui-buttonGroup>
+      <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="handleSearch"></ui-buttonGroup>
     </div>
   </div>
 </template>
@@ -31,10 +31,15 @@ const finMindPassword = ref<string>("");
 async function handleSearch() {
   try {
     const result = await fetchTestConnection({
-      finMindAccount: finMindAccount.value,
-      finMindPassword: finMindPassword.value,
+      user_id: finMindAccount.value,
+      password: finMindPassword.value,
     });
     console.log("result:", result);
+    if (result.data.data.status === 200) {
+      showAxiosToast({ message: "連線成功" });
+    } else {
+      showAxiosErrorMsg({ message: result.data.message });
+    }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
   }

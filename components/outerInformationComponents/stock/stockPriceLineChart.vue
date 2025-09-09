@@ -11,7 +11,8 @@ import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
-// 父元件傳來的值
+
+
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), { searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }) });
 
 
@@ -109,11 +110,8 @@ async function renderingChart() {
     options: {
       scales: {
         y: {
-          min:
-            Math.floor(scalesMin - (scalesMax - scalesMin) * 0.1) <= 0
-              ? 0
-              : Math.floor(scalesMin - (scalesMax - scalesMin) * 0.1),
-          max: Math.ceil(scalesMax + (scalesMax - scalesMin) * 0.1),
+          min: Math.floor(scalesMin * 0.9) <= 5 ? 0 : Math.floor(scalesMin * 0.9),
+          max: Math.ceil(scalesMax * 1.1) > 10 ? Math.ceil(scalesMax * 1.1) : 10,
         },
       },
       plugins: {

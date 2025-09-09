@@ -3,7 +3,7 @@ import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/mo
 
 
 
-export async function fetchTestConnection(data: { finMindAccount: string; finMindPassword: string }) {
+export async function fetchTestConnection(data: { user_id: string; password: string; }) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {
     body: JSON.stringify(data),
   });
@@ -17,11 +17,6 @@ export async function fetchStockList(keyword: string) {
   return await response.json();
 }
 
-export async function fetchEachStockList(ex_ch: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${ex_ch}`, "GET");
-  return await response.json();
-}
-
 export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/stockInfo/rangeValue", "POST", {
     body: JSON.stringify(data),
@@ -31,6 +26,13 @@ export async function fetchStockRangeValue(data: IStockPriceSearchingParams) {
 
 export async function fetchStockDividendResult(data: IStockPriceSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/stockInfo/dividendResult", "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
+export async function fetchStockPerPbr(data: IStockPriceSearchingParams) {
+  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/stockInfo/stockPerPbr", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();

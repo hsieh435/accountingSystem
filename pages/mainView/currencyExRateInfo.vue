@@ -1,23 +1,26 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div>
-      <currencyExRateSearching />
+    <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
+      <div class="flex items-center me-3 my-1">
+        <span>貨幣：</span><currencySelect @sendbackCurrencyId="settingCurrencyId" />
+      </div>
+      <div class="flex items-center me-3 my-1">
+        <span>查詢區間：</span>
+        <dateSelect :dateSelect="searchingParams.startDate" :minDate="'2006-01-01'" :maxDate="getCurrentYMD()" @sendbackDateRange="settingStartDate" />
+        <span class="mx-1">～ 至今（自 2006 年開始）</span>
+      </div>
+      <ui-buttonGroup showSearch :searchText="'查詢'" :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'" @dataSearch="sendingParams()" />
     </div>
 
     <div class="tabs">
       <input type="radio" id="tab1" name="tab-control" checked />
       <input type="radio" id="tab2" name="tab-control" />
-      <input type="radio" id="tab3" name="tab-control" />
-      <input type="radio" id="tab4" name="tab-control" />
       <ul>
-        <li title="Features">
-          <label for="tab1" role="button"><span>1</span></label>
+        <li title="歷史紀錄">
+          <label for="tab1" role="button"><span>歷史紀錄</span></label>
         </li>
-        <li title="Delivery Contents">
-          <label for="tab2" role="button"><span>2</span></label>
-        </li>
-        <li title="Shipping">
-          <label for="tab3" role="button"><span>3</span></label>
+        <li title="今日匯率">
+          <label for="tab2" role="button"><span>今日匯率</span></label>
         </li>
       </ul>
 
@@ -26,44 +29,59 @@
       </div>
       <div class="content">
         <section>
-          <!-- <stockPriceLineChart :searchingParamsGot="stockPriceParams" /> -->
+          <currencyExRateRecord :searchingParamsGot="currencyExRateParams" />
         </section>
         <section>
-          <!-- <stockPerPrb /> -->
-        </section>
-        <section>
-          <!-- <stockInterest :searchingParamsGot="stockPriceParams" /> -->
+          <currencyLatestExRate :searchingParamsGot="currencyExRateParams" />
         </section>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref } from "vue";
-import { fetchCurrencyLatestExRate } from "@/server/outerWebApi";
-import { IResponse } from "@/models/index";
-import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
-
-
+import { defineAsyncComponent, reactive, ref } from "vue";
+import { ICurrencyExRateSearchingParams } from "@/models/index";
+import { getCurrentYMD, getCurrentYear } from "@/composables/tools";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "資訊查詢",
   subTitle: "貨幣匯率查詢",
-})
-
-
-
-const currencyExRateSearching = defineAsyncComponent(() => import("@/components/outerInformationComponents/currency/currencyExRateSearching.vue"));
-
-
-
-onMounted(async () => {
-  //
 });
 
+const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
+const currencyExRateRecord = defineAsyncComponent(() => import("@/components/outerInformationComponents/currency/currencyExRateRecord.vue"));
+const currencyLatestExRate = defineAsyncComponent(() => import("@/components/outerInformationComponents/currency/currencyLatestExRate.vue"));
+
+const searchingParams = reactive<ICurrencyExRateSearchingParams>({
+  currencyId: "",
+  startDate: (getCurrentYear() - 1) + "-01-01",
+  endDate: getCurrentYMD(),
+});
+
+const currencyExRateParams = ref<ICurrencyExRateSearchingParams>({
+  currencyId: "",
+  startDate: "",
+  endDate: "",
+});
+
+
+async function settingCurrencyId(currencyId: string) {
+  searchingParams.currencyId = currencyId;
+}
+
+async function settingStartDate(startDate: string) {
+  searchingParams.startDate = startDate;
+}
+
+
+
+async function sendingParams() {
+  // console.log("searchingParams:", searchingParams);
+  currencyExRateParams.value = { ...searchingParams };
+}
 
 </script>
 <style lang="scss" scoped>
@@ -126,7 +144,7 @@ onMounted(async () => {
 }
 .tabs .slider {
   position: relative;
-  width: 33%;
+  width: 50%;
   transition: all 0.33s cubic-bezier(0.38, 0.8, 0.32, 1.07);
 }
 .tabs .slider .indicator {
@@ -143,7 +161,7 @@ onMounted(async () => {
 }
 .tabs .content section {
   display: none;
-  width: 100%; /* Ensure full width */
+  width: 100%;
   -webkit-animation-name: content;
   animation-name: content;
   -webkit-animation-direction: normal;
@@ -156,17 +174,11 @@ onMounted(async () => {
   animation-iteration-count: 1;
   line-height: 1.4;
 }
-.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label {
+
+.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label,
+.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label svg {
   cursor: default;
   color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(1):checked ~ ul > li:nth-child(1) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
 }
 .tabs input[name="tab-control"]:nth-of-type(1):checked ~ .slider {
   transform: translateX(0%);
@@ -174,17 +186,11 @@ onMounted(async () => {
 .tabs input[name="tab-control"]:nth-of-type(1):checked ~ .content > section:nth-child(1) {
   display: block;
 }
-.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label {
+
+.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label,
+.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label svg {
   cursor: default;
   color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(2):checked ~ ul > li:nth-child(2) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
 }
 .tabs input[name="tab-control"]:nth-of-type(2):checked ~ .slider {
   transform: translateX(100%);
@@ -192,24 +198,7 @@ onMounted(async () => {
 .tabs input[name="tab-control"]:nth-of-type(2):checked ~ .content > section:nth-child(2) {
   display: block;
 }
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label {
-  cursor: default;
-  color: rgb(0, 193, 106);
-}
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label svg {
-  fill: rgb(0, 193, 106);
-}
-@media (max-width: 600px) {
-  .tabs input[name="tab-control"]:nth-of-type(3):checked ~ ul > li:nth-child(3) > label {
-    background: rgba(0, 0, 0, 0.08);
-  }
-}
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ .slider {
-  transform: translateX(200%);
-}
-.tabs input[name="tab-control"]:nth-of-type(3):checked ~ .content > section:nth-child(3) {
-  display: block;
-}
+
 @-webkit-keyframes content {
   from {
     opacity: 0;
@@ -234,14 +223,10 @@ onMounted(async () => {
   .tabs ul li label {
     white-space: initial;
   }
-  .tabs ul li label br {
-    display: initial;
-  }
   .tabs ul li label svg {
     height: 1.5em;
   }
 }
-
 </style>
 <!-- https://codepen.io/woranov/pen/NRqLWK/ -->
 <!-- https://codepen.io/mildrenben/pen/bdGdOb/ -->

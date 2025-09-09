@@ -18,7 +18,6 @@ const dataLabels = ref<string[]>([]);
 const cashEarningsData = ref<number[]>([]);
 const stockEarningsData = ref<number[]>([]);
 
-
 watch(
   props,
   () => {
@@ -33,7 +32,6 @@ async function searchingStockInterest() {
   try {
     const res: IResponse = await fetchStockDividendResult(props.searchingParamsGot);
     // console.log("fetchStockDividendResult:", res.data.data.data);
-    // console.log("length:", res.data.data.data.length);
     if (res.data.returnCode === 0) {
       if (res.data.data.data.length > 0) {
         dataLabels.value = res.data.data.data.map((stock: any) => {
@@ -46,12 +44,6 @@ async function searchingStockInterest() {
           return stock.StockEarningsDistribution;
         });
         renderingChart();
-
-
-        // CashEarningsDistribution：配息
-        // StockEarningsDistribution：配股
-        //
-        //
         // console.log("dataLabels:", dataLabels.value);
         // console.log("cashEarningsData:", cashEarningsData.value);
         // console.log("stockEarningsData:", stockEarningsData.value);
@@ -69,8 +61,6 @@ async function searchingStockInterest() {
   }
 }
 
-
-
 async function renderingChart() {
   // console.log(props.chartType);
   const earningsChart = document.getElementById("earningsChart") as HTMLCanvasElement;
@@ -80,11 +70,7 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-
-  const scalesMax = Math.max(...cashEarningsData.value) ? Math.ceil(Math.max(...cashEarningsData.value)) : 10;
-  const scalesMin = Math.min(...cashEarningsData.value) ? Math.floor(Math.min(...cashEarningsData.value)) : 0;
-  let variation = 0;
-
+  const scalesMax = Math.max(...[...cashEarningsData.value, ...stockEarningsData.value]);
   chartInstance = new Chart(earningsChart, {
     data: {
       datasets: [
@@ -98,19 +84,38 @@ async function renderingChart() {
           label: "配股",
           data: stockEarningsData.value,
         },
-        // {
-        //   type: "line",
-        //   label: "Line Dataset",
-        //   data: [50, 50, 50, 50],
-        // },
       ],
       labels: dataLabels.value,
     },
     options: {
       scales: {
+        x: {
+          stacked: true,
+        },
         y: {
           min: 0,
-          max: Math.ceil(scalesMax + (scalesMax - scalesMin) * 0.1),
+          max: Math.ceil(scalesMax * 1.1),
+          stacked: true,
+        },
+      },
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title: function (tooltipItems) {
+              // console.log(tooltipItems);
+              return tooltipItems[0].label;
+            },
+            label: function (tooltipItems) {
+              return tooltipItems.dataset.label + "：" + tooltipItems.formattedValue;
+            },
+            // footer: function () {
+            //   return "";
+            // },
+          },
         },
       },
       responsive: true,

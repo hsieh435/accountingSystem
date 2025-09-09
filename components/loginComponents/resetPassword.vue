@@ -76,7 +76,6 @@ async function userPasswordChange(apiMsg?: string) {
       if (userNewPassword.value !== userNewPasswordSecond.value) {
         errors.push("兩次密碼不同");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;
