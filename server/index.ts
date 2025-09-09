@@ -20,7 +20,7 @@ export async function apiFetch(url: string, method: string, options?: RequestIni
     },
   });
   // console.log("options:", options);
-  console.log("response:", response);
+  // console.log("response:", response);
   // console.log(response.ok);
 
   if (response.ok) {
