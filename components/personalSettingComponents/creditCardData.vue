@@ -24,8 +24,6 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-
-
 const getDefaultDataParams = (): ICreditCardList => ({
   creditcardId: props.creditCardIdGot || "",
   userId: "",
@@ -44,8 +42,6 @@ const getDefaultDataParams = (): ICreditCardList => ({
   note: "",
 });
 const dataParams = reactive<ICreditCardList>(getDefaultDataParams());
-
-
 
 async function searchingCreditCardData() {
   try {
@@ -109,7 +105,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -181,8 +177,8 @@ async function creditCardDataHandling(apiMsg?: string) {
       );
       creditCardSchemaSelect.mount("#creditcardSchemaSelectComponent");
 
-      let currencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let dataBaseCurrencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
           isDisable: props.creditCardIdGot ? true : false,
@@ -191,7 +187,7 @@ async function creditCardDataHandling(apiMsg?: string) {
           },
         },
       );
-      currencySelect.mount("#currencySelectComponent");
+      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       const creditPerMonth = document.getElementById("creditPerMonth") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;

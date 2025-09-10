@@ -1,14 +1,27 @@
 <template>
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span><currencySelect @sendbackCurrencyId="settingCurrencyId" />
+      <span>貨幣：</span><dataBaseCurrencySelect @sendbackCurrencyId="settingCurrencyId" />
     </div>
     <div class="flex items-center me-3 my-1">
-      <span>查詢區間：</span><dateSelect :dateSelect="searchingParams.startDate" :minDate="'2006-01-01'" :maxDate="getCurrentYMD()" @sendbackDateRange="settingStartDate" />
+      <span>查詢區間：</span
+      ><dateSelect
+        :dateSelect="searchingParams.startDate"
+        :minDate="'2006-01-01'"
+        :maxDate="getCurrentYMD()"
+        @sendbackDateRange="settingStartDate" />
       <span class="mx-1">～ 至今（自 2006 年開始）</span>
     </div>
-    <ui-buttonGroup showSearch :searchText="'查詢今日匯率'" :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'" @dataSearch="searchingCurrencyExRate()" />
-    <ui-buttonGroup showSearch :searchText="'查詢歷史紀錄'" :searchDisable="!searchingParams.currencyId" @dataSearch="searchingCurrencyHistoryExRate()" />
+    <ui-buttonGroup
+      showSearch
+      :searchText="'查詢今日匯率'"
+      :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'"
+      @dataSearch="searchingCurrencyExRate()" />
+    <ui-buttonGroup
+      showSearch
+      :searchText="'查詢歷史紀錄'"
+      :searchDisable="!searchingParams.currencyId"
+      @dataSearch="searchingCurrencyHistoryExRate()" />
   </div>
 </template>
 <script setup lang="ts">
@@ -20,7 +33,7 @@ import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
 const searchingParams = reactive<ICurrencyExRateSearchingParams>({
@@ -37,7 +50,6 @@ async function settingStartDate(startDate: string) {
   searchingParams.startDate = startDate;
 }
 
-
 async function searchingCurrencyExRate() {
   // emits("sendbackSearchingData", searchingParams);
 
@@ -53,7 +65,6 @@ async function searchingCurrencyExRate() {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
 
 async function searchingCurrencyHistoryExRate() {
   try {

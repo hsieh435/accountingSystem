@@ -8,24 +8,24 @@
 </template>
 <script setup lang="ts">
 import { reactive, createApp, defineAsyncComponent, h } from "vue";
-import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate } from "@/server/cashFlowRecordApi";
+import {
+  fetchCashFlowRecordByTradeId,
+  fetchCashFlowRecordCreate,
+  fetchCashFlowRecordUpdate,
+} from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
-
-
-const props = withDefaults(defineProps<{ cashflowIdGot?: string; tradeIdGot?: string }>(), { cashflowIdGot: "", tradeIdGot: "" });
+const props = withDefaults(defineProps<{ cashflowIdGot?: string; tradeIdGot?: string }>(), {
+  cashflowIdGot: "",
+  tradeIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
 
-
-
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
-
-
-
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const getDefaultDataParams = (): ICashFlowRecordList => ({
   tradeId: props.tradeIdGot || "",
@@ -42,14 +42,12 @@ const getDefaultDataParams = (): ICashFlowRecordList => ({
 });
 const dataParams = reactive<ICashFlowRecordList>(getDefaultDataParams());
 
-
-
 async function searchingCashFlowRecord() {
   // console.log("props:", props);
   try {
     const res: IResponse = await fetchCashFlowRecordByTradeId({
-      cashflowId:  props.cashflowIdGot,
-      tradeId: props.tradeIdGot
+      cashflowId: props.cashflowIdGot,
+      tradeId: props.tradeIdGot,
     });
     console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     if (res.data.returnCode === 0) {
@@ -72,8 +70,6 @@ async function searchingCashFlowRecord() {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
-
 
 async function cashFlowRecordDataHandling(apiMsg?: string) {
   // console.log("props:", props);
@@ -118,7 +114,7 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -140,7 +136,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
       let cashFlowTradeAccount = createApp({
         render() {
           return h(accountSelect, {
@@ -156,7 +151,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       });
       cashFlowTradeAccount.mount("#accountComponent");
 
-
       let cashFlowTradeDatetime = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
         {
@@ -168,7 +162,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       );
       cashFlowTradeDatetime.mount("#tradeDatetimeComponent");
 
-
       let cashFlowTransactionType = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
@@ -179,7 +172,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
         },
       );
       cashFlowTransactionType.mount("#transactionTypeSelectComponent");
-
 
       let cashFlowTradeCategory = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
@@ -193,17 +185,15 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       );
       cashFlowTradeCategory.mount("#tradeCategorySelectComponent");
 
-
-      let cashFlowCurrencySelect = createApp({
+      let cashFlowdataBaseCurrencySelect = createApp({
         render() {
-          return h(currencySelect, {
+          return h(dataBaseCurrencySelect, {
             currencyIdGot: dataParams.currency,
             isDisable: true,
           });
         },
       });
-      cashFlowCurrencySelect.mount("#currencySelectComponent");
-
+      cashFlowdataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -216,7 +206,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
       dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
       dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
 
       if (!dataParams.cashflowId) {
         errors.push("請選擇現金流帳戶");
@@ -245,7 +234,9 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(result.value);
+        const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(
+          result.value,
+        );
         console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
@@ -259,8 +250,6 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
       }
     }
   });
-};
-
-
+}
 </script>
 <style lang="scss" scoped></style>

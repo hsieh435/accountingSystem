@@ -43,16 +43,15 @@ async function searchingStockInterest() {
         stockEarningsData.value = res.data.data.data.map((stock: any) => {
           return stock.StockEarningsDistribution;
         });
-        renderingChart();
-        // console.log("dataLabels:", dataLabels.value);
-        // console.log("cashEarningsData:", cashEarningsData.value);
-        // console.log("stockEarningsData:", stockEarningsData.value);
       } else {
-        if (chartInstance) {
-          chartInstance.destroy();
-          chartInstance = null;
-        }
+        dataLabels.value = ["無資料"];
+        cashEarningsData.value = [0];
+        stockEarningsData.value = [0];
       }
+      renderingChart();
+      // console.log("dataLabels:", dataLabels.value);
+      // console.log("cashEarningsData:", cashEarningsData.value);
+      // console.log("stockEarningsData:", stockEarningsData.value);
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

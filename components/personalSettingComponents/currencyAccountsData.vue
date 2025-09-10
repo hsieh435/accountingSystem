@@ -24,9 +24,6 @@ import Swal from "sweetalert2";
 const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-
-
-
 const getDefaultDataParams = (): ICurrencyAccountList => ({
   accountId: props.currencyAccountIdGot || "",
   userId: "",
@@ -46,8 +43,6 @@ const getDefaultDataParams = (): ICurrencyAccountList => ({
   note: "",
 });
 const dataParams = reactive<ICurrencyAccountList>(getDefaultDataParams());
-
-
 
 async function searchingCurrencyAccountData() {
   // console.log("props:", props.currencyAccountIdGot);
@@ -106,7 +101,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -171,8 +166,8 @@ async function currencyAccountDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      let currencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let dataBaseCurrencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
           isDisable: props.currencyAccountIdGot ? true : false,
@@ -181,7 +176,7 @@ async function currencyAccountDataHandling(apiMsg?: string) {
           },
         },
       );
-      currencySelect.mount("#currencySelectComponent");
+      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;

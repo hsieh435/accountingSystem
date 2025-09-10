@@ -43,8 +43,6 @@ const getDefaultDataParams = (): IStockAccountList => ({
 });
 const dataParams = reactive<IStockAccountList>(getDefaultDataParams());
 
-
-
 async function searchingStockAccountData() {
   console.log(props.stockAccountIGot);
   try {
@@ -105,7 +103,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -166,8 +164,8 @@ async function stockAccountDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      let currencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let dataBaseCurrencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
           isDisable: props.stockAccountIGot ? true : false,
@@ -176,7 +174,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
           },
         },
       );
-      currencySelect.mount("#currencySelectComponent");
+      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;

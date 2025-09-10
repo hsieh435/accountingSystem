@@ -8,7 +8,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { fetchCurrencyAccountRecordById, fetchCurrencyAccountRecordCreate, fetchCurrencyAccountRecordUpdate } from "@/server/currencyAccountRecordApi";
+import {
+  fetchCurrencyAccountRecordById,
+  fetchCurrencyAccountRecordCreate,
+  fetchCurrencyAccountRecordUpdate,
+} from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -21,7 +25,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 const emits = defineEmits(["dataReseaching"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
   tradeId: props.tradeIdGot || "",
@@ -38,14 +42,11 @@ const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
 });
 const dataParams = reactive<IcurrencyAccountRecordList>(getDefaultDataParams());
 
-
-
 async function searchingCurrencyAccountRecord() {
-
   try {
     const res: IResponse = await fetchCurrencyAccountRecordById({
-      accountId:  props.accountIdGot,
-      tradeId: props.tradeIdGot
+      accountId: props.accountIdGot,
+      tradeId: props.tradeIdGot,
     });
     console.log(res.data.data);
     if (res.data.returnCode === 0) {
@@ -101,7 +102,7 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -122,7 +123,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
       let currencyAccountSelect = createApp({
         render() {
           return h(accountSelect, {
@@ -149,7 +149,6 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       );
       currencyAccountTradeDatetime.mount("#tradeDatetimeComponent");
 
-
       let currencyAccountTransactionTypeSelect = createApp(
         defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
         {
@@ -173,16 +172,15 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
       );
       currencyAccountCategory.mount("#tradeCategorySelectComponent");
 
-
-      let currencyAccountCurrencySelect = createApp({
+      let currencyAccountdataBaseCurrencySelect = createApp({
         render() {
-          return h(currencySelect, {
+          return h(dataBaseCurrencySelect, {
             currencyIdGot: dataParams.currency,
             isDisable: true,
           });
         },
       });
-      currencyAccountCurrencySelect.mount("#currencySelectComponent");
+      currencyAccountdataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -222,7 +220,9 @@ async function currencyAccountRecordDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.tradeIdGot ? fetchCurrencyAccountRecordUpdate : fetchCurrencyAccountRecordCreate)(result.value);
+        const res: IResponse = await (
+          props.tradeIdGot ? fetchCurrencyAccountRecordUpdate : fetchCurrencyAccountRecordCreate
+        )(result.value);
         console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

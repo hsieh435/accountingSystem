@@ -49,13 +49,13 @@ async function searchingStockPerPbr() {
           return stock.dividend_yield;
         });
 
-        renderingChart();
       } else {
-        if (chartInstance) {
-          chartInstance.destroy();
-          chartInstance = null;
-        }
+        dataLabels.value = ["無資料"];
+        stockPer.value = [0];
+        stockPbr.value = [0];
+        stockDividendYield.value = [0];
       }
+      renderingChart();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

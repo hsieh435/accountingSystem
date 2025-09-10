@@ -87,7 +87,7 @@ async function storedValueCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -153,8 +153,8 @@ async function storedValueCardDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      let currencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let dataBaseCurrencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
         {
           currencyIdGot: dataParams.currency || "",
           isDisable: props.storedValueCardIdGot ? true : false,
@@ -163,7 +163,7 @@ async function storedValueCardDataHandling(apiMsg?: string) {
           },
         },
       );
-      currencySelect.mount("#currencySelectComponent");
+      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       // const startingAmount = document.getElementById("startingAmount") as HTMLInputElement;
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
@@ -278,9 +278,9 @@ async function storedValueCardDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.storedValueCardIdGot ? fetchStoredValueCardUpdate : fetchStoredValueCardCreate)(
-          result.value,
-        );
+        const res: IResponse = await (
+          props.storedValueCardIdGot ? fetchStoredValueCardUpdate : fetchStoredValueCardCreate
+        )(result.value);
         // console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

@@ -2,14 +2,22 @@
   <div class="flex-col justify-start items-center">
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
-        <span>貨幣：</span><currencySelect @sendbackCurrencyId="settingCurrencyId" />
+        <span>貨幣：</span><currencyCodeSelect @sendbackCurrencyId="settingCurrencyId" />
       </div>
       <div class="flex items-center me-3 my-1">
         <span>查詢區間：</span>
-        <dateSelect :dateSelect="searchingParams.startDate" :minDate="'2006-01-01'" :maxDate="getCurrentYMD()" @sendbackDateRange="settingStartDate" />
+        <dateSelect
+          :dateSelect="searchingParams.startDate"
+          :minDate="'2006-01-01'"
+          :maxDate="getCurrentYMD()"
+          @sendbackDateRange="settingStartDate" />
         <span class="mx-1">～ 至今（自 2006 年開始）</span>
       </div>
-      <ui-buttonGroup showSearch :searchText="'查詢'" :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'" @dataSearch="sendingParams()" />
+      <ui-buttonGroup
+        showSearch
+        :searchText="'查詢'"
+        :searchDisable="!searchingParams.currencyId || searchingParams.currencyId === 'TWD'"
+        @dataSearch="sendingParams()" />
     </div>
 
     <div class="tabs">
@@ -50,14 +58,18 @@ definePageMeta({
   subTitle: "貨幣匯率查詢",
 });
 
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const currencyCodeSelect = defineAsyncComponent(() => import("@/components/ui/select/currencyCodeSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
-const currencyExRateRecord = defineAsyncComponent(() => import("@/components/outerInformationComponents/currency/currencyExRateRecord.vue"));
-const currencyLatestExRate = defineAsyncComponent(() => import("@/components/outerInformationComponents/currency/currencyLatestExRate.vue"));
+const currencyExRateRecord = defineAsyncComponent(
+  () => import("@/components/outerInformationComponents/currency/currencyExRateRecord.vue"),
+);
+const currencyLatestExRate = defineAsyncComponent(
+  () => import("@/components/outerInformationComponents/currency/currencyLatestExRate.vue"),
+);
 
 const searchingParams = reactive<ICurrencyExRateSearchingParams>({
   currencyId: "",
-  startDate: (getCurrentYear() - 1) + "-01-01",
+  startDate: getCurrentYear() - 1 + "-01-01",
   endDate: getCurrentYMD(),
 });
 
@@ -67,7 +79,6 @@ const currencyExRateParams = ref<ICurrencyExRateSearchingParams>({
   endDate: "",
 });
 
-
 async function settingCurrencyId(currencyId: string) {
   searchingParams.currencyId = currencyId;
 }
@@ -76,13 +87,10 @@ async function settingStartDate(startDate: string) {
   searchingParams.startDate = startDate;
 }
 
-
-
 async function sendingParams() {
   // console.log("searchingParams:", searchingParams);
   currencyExRateParams.value = { ...searchingParams };
 }
-
 </script>
 <style lang="scss" scoped>
 .tabs {

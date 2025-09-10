@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 const emits = defineEmits(["dataReseaching"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 
 const getDefaultDataParams = (): IStockAccountRecordList => ({
@@ -139,7 +139,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -251,15 +251,15 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
       handlingFee.addEventListener("input", calculateAmount);
       transactionTax.addEventListener("input", calculateAmount);
 
-      let stockAccountCurrencySelect = createApp({
+      let stockAccountdataBaseCurrencySelect = createApp({
         render() {
-          return h(currencySelect, {
+          return h(dataBaseCurrencySelect, {
             currencyIdGot: dataParams.currency,
             isDisable: true,
           });
         },
       });
-      stockAccountCurrencySelect.mount("#currencySelectComponent");
+      stockAccountdataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);

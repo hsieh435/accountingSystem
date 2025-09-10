@@ -22,8 +22,6 @@ const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: b
 });
 const emits = defineEmits(["dataReseaching"]);
 
-
-
 const getDefaultDataParams = (): ICashFlowList => ({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
@@ -40,8 +38,6 @@ const getDefaultDataParams = (): ICashFlowList => ({
   note: "",
 });
 const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
-
-
 
 async function searchingCashflowData() {
   // console.log("props:", props);
@@ -87,7 +83,7 @@ async function cashflowDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">現金流貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -149,8 +145,8 @@ async function cashflowDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-      let currencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue")),
+      let dataBaseCurrencySelect = createApp(
+        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
         {
           currencyIdGot: dataParams.currency,
           isDisable: props.cashflowIdIdGot ? true : false,
@@ -159,7 +155,7 @@ async function cashflowDataHandling(apiMsg?: string) {
           },
         },
       );
-      currencySelect.mount("#currencySelectComponent");
+      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
       const alertValue = document.getElementById("alertValue") as HTMLInputElement;

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span><currencySelect sellectAll @sendbackCurrencyId="settingCurrency" />
+      <span>貨幣：</span><dataBaseCurrencySelect sellectAll @sendbackCurrencyId="settingCurrency" />
     </div>
   </div>
 </template>
@@ -9,23 +9,17 @@
 import { defineAsyncComponent, reactive, watch } from "vue";
 import { IAccountSearchingParams } from "@/models/index";
 
-
-
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
-
-
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const emits = defineEmits(["sendbackSearchingParams"]);
-
-
 
 const searchingParams = reactive<IAccountSearchingParams>({
   currencyId: "",
 });
 
-
-
-watch(searchingParams, () => {
+watch(
+  searchingParams,
+  () => {
     emits("sendbackSearchingParams", searchingParams);
   },
   {
@@ -33,12 +27,8 @@ watch(searchingParams, () => {
   },
 );
 
-
-
 async function settingCurrency(currencyIdSendback: string) {
   searchingParams.currencyId = currencyIdSendback;
 }
-
-
 </script>
 <style lang="scss" scoped></style>

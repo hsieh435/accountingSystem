@@ -8,7 +8,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, createApp, h } from "vue";
-import { fetchCreditCardRecordById, fetchCreditCardRecordCreate, fetchCreditCardRecordUpdate } from "@/server/creditCardRecordApi";
+import {
+  fetchCreditCardRecordById,
+  fetchCreditCardRecordCreate,
+  fetchCreditCardRecordUpdate,
+} from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
@@ -20,12 +24,8 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: 
 });
 const emits = defineEmits(["dataReseaching"]);
 
-
-
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
-
-
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeId: props.tradeIdGot || "",
@@ -42,14 +42,11 @@ const getDefaultDataParams = (): ICreditCardRecordList => ({
 });
 const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
 
-
-
 async function searchingCreditCardRecord() {
-
   try {
     const res: IResponse = await fetchCreditCardRecordById({
-      creditCardId:  props.creditCardIdGot,
-      tradeId: props.tradeIdGot
+      creditCardId: props.creditCardIdGot,
+      tradeId: props.tradeIdGot,
     });
     if (res.data.returnCode === 0) {
       // dataParams.creditcardId = res.data.data.creditcardId;
@@ -111,7 +108,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -132,7 +129,6 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     cancelButtonText: "取消",
     allowOutsideClick: false,
     didOpen: () => {
-
       let creditCardAccountSelect = createApp({
         render() {
           return h(accountSelect, {
@@ -154,8 +150,9 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
           dateTimeGot: dataParams.tradeDatetime,
           onSendbackDateTime: (dateTime: string) => {
             dataParams.tradeDatetime = dateTime;
-            dataParams.billMonth =
-              dataParams.tradeDatetime ? ((new Date(dataParams.tradeDatetime)).toISOString()).slice(0, 7) + "-01" : "";
+            dataParams.billMonth = dataParams.tradeDatetime
+              ? new Date(dataParams.tradeDatetime).toISOString().slice(0, 7) + "-01"
+              : "";
             console.log("dataParams:", dataParams);
           },
         },
@@ -174,16 +171,15 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
       );
       creditCardTradeCategory.mount("#tradeCategorySelectComponent");
 
-
-      let creditCardCurrencySelect = createApp({
+      let creditCarddataBaseCurrencySelect = createApp({
         render() {
-          return h(currencySelect, {
+          return h(dataBaseCurrencySelect, {
             currencyIdGot: dataParams.currency,
             isDisable: true,
           });
         },
       });
-      creditCardCurrencySelect.mount("#currencySelectComponent");
+      creditCarddataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -220,7 +216,9 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.tradeIdGot ? fetchCreditCardRecordUpdate : fetchCreditCardRecordCreate)(result.value);
+        const res: IResponse = await (props.tradeIdGot ? fetchCreditCardRecordUpdate : fetchCreditCardRecordCreate)(
+          result.value,
+        );
         console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

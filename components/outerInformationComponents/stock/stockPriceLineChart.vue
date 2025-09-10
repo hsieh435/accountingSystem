@@ -7,7 +7,7 @@
 import { watch, ref } from "vue";
 // import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
+import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
@@ -18,9 +18,7 @@ const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchin
 
 
 const lineChartTitle = ref<string>("");
-let stockDataLineChart = ref<{ label: string; data: number }[]>([]);
-const stockPriceRecord = ref<IStockPriceRecordList[]>([]);
-const stockData = ref<IStockPriceRecordList[]>([]);
+const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 
 
 
@@ -37,28 +35,21 @@ async function searchingStockPrice() {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
     // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
-      stockPriceRecord.value = res.data.data.data;
-
-      if (stockPriceRecord.value.length > 0) {
-        stockDataLineChart.value = [];
-        lineChartTitle.value =
-          props.searchingParamsGot.stockName + " " +
-          props.searchingParamsGot.startDate.replace(/-/g, "/") + " ~ " +
-          props.searchingParamsGot.endDate.replace(/-/g, "/") + "股價走勢";
-        stockData.value = stockPriceRecord.value;
-        stockDataLineChart.value = stockData.value.map((record) => {
+      lineChartTitle.value =
+      props.searchingParamsGot.stockName + " " +
+      props.searchingParamsGot.startDate.replace(/-/g, "/") + " ~ " +
+      props.searchingParamsGot.endDate.replace(/-/g, "/") + "股價走勢";
+      if (res.data.data.data.length > 0) {
+        stockDataLineChart.value = res.data.data.data.map((record: any) => {
           return {
             label: record.date.replace(/-/g, "/"),
             data: record.close,
           };
         });
-        renderingChart();
       } else {
-        if (chartInstance) {
-          chartInstance.destroy();
-          chartInstance = null;
-        }
+        stockDataLineChart.value = [{ label: "無資料", data: 0 }];
       }
+      renderingChart();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }

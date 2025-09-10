@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdG
 const emits = defineEmits(["dataReseaching"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const currencySelect = defineAsyncComponent(() => import("@/components/ui/select/currencySelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const getDefaultDataParams = (): IStoredValueCardRecordList => ({
   tradeId: props.tradeIdGot || "",
@@ -102,7 +102,7 @@ async function storedValueCardRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="currencySelectComponent"></div>
+          <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
@@ -172,15 +172,15 @@ async function storedValueCardRecordDataHandling(apiMsg?: string) {
       );
       storedValueCardTradeCategory.mount("#tradeCategorySelectComponent");
 
-      let storedValueCardCurrencySelect = createApp({
+      let storedValueCarddataBaseCurrencySelect = createApp({
         render() {
-          return h(currencySelect, {
+          return h(dataBaseCurrencySelect, {
             currencyIdGot: dataParams.currency,
             isDisable: true,
           });
         },
       });
-      storedValueCardCurrencySelect.mount("#currencySelectComponent");
+      storedValueCarddataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
 
       if (apiMsg) {
         Swal.showValidationMessage(apiMsg);
@@ -220,9 +220,9 @@ async function storedValueCardRecordDataHandling(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await (props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate)(
-          result.value,
-        );
+        const res: IResponse = await (
+          props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate
+        )(result.value);
         console.log("RES:", res);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });

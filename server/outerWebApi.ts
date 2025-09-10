@@ -40,6 +40,12 @@ export async function fetchStockPerPbr(data: IStockPriceSearchingParams) {
 
 
 
+export async function fetchCurrencyListFromWeb(keyword: string) {
+  const response =
+    await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/currencyListFromOuterApi/${keyword}`, "GET");
+  return await response.json();
+}
+
 export async function fetchCurrencyLatestExRate(currencyCode: string) {
   const response = await apiFetch(
     `/accounting_system_backend/api/outerWebApi/currencyExRateInfo/latest/${currencyCode}`,
