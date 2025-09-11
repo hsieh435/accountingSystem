@@ -15,8 +15,8 @@ const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSear
   searchingParamsGot: () => ({ currencyId: "", startDate: "", endDate: "" }),
 });
 
-const dataLabels = ref<string[]>([]);
-const currencyExRate = ref<number[]>([]);
+
+const currencyExRate = ref<{ currencyName: string; exchangeRate: number }[]>([]);
 
 watch(props, () => {
   searchingCurrencyExRate();
@@ -29,10 +29,12 @@ async function searchingCurrencyExRate() {
     const res: IResponse = await fetchCurrencyLatestExRate(props.searchingParamsGot.currencyId);
     console.log("fetchCurrencyLatestExRate:", res.data.data);
     if (res.data.returnCode === 0) {
-      currencyExRate.value = res.data.data.rates.map((exRate: any) => {
-        return exRate.exrate;
-      });
-      // renderingChart();
+      currencyExRate.value = Object.entries(res.data.data.rates).map(([key, value]) => ({
+        currencyName: key || "?",
+        exchangeRate: Number(value) || 0
+      }));
+      console.log("currencyExRate.value:", currencyExRate.value);
+      renderingChart();
     }
   } catch (error) {
     showAxiosErrorMsg({ message: (error as Error).message });
@@ -47,50 +49,51 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax = Math.max(...currencyExRate.value);
-  chartInstance = new Chart(currencyLatestExRateChart, {
-    data: {
-      datasets: [
-        {
-          type: "line",
-          label: "匯率",
-          data: currencyExRate.value,
-        },
-      ],
-      labels: dataLabels.value,
-    },
-    options: {
-      scales: {
-        y: {
-          min: 0,
-          max: Math.ceil(scalesMax * 1.1),
-        },
-      },
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            title: function (tooltipItems) {
-              // console.log(tooltipItems);
-              return yearMonthDayTimeFormat(tooltipItems[0].label, false);
-            },
-            label: function (tooltipItems) {
-              // console.log(tooltipItems);
-              return tooltipItems.dataset.label + "：" + tooltipItems.formattedValue + "%";
-            },
-            // footer: function () {
-            //   return   "";
-            // },
-          },
-        },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-    },
-  });
+  // const scalesMax = Math.max(...currencyExRate.value);
+  const scalesMax = 150;
+  // chartInstance = new Chart(currencyLatestExRateChart, {
+  //   data: {
+  //     datasets: [
+  //       {
+  //         type: "line",
+  //         label: "匯率",
+  //         data: currencyExRate.value,
+  //       },
+  //     ],
+  //     labels: dataLabels.value,
+  //   },
+  //   options: {
+  //     scales: {
+  //       y: {
+  //         min: 0,
+  //         max: Math.ceil(scalesMax * 1.1),
+  //       },
+  //     },
+  //   interaction: {
+  //     mode: "index",
+  //     intersect: false,
+  //   },
+  //     plugins: {
+  //       tooltip: {
+  //         callbacks: {
+  //           title: function (tooltipItems) {
+  //             // console.log(tooltipItems);
+  //             return yearMonthDayTimeFormat(tooltipItems[0].label, false);
+  //           },
+  //           label: function (tooltipItems) {
+  //             // console.log(tooltipItems);
+  //             return tooltipItems.dataset.label + "：" + tooltipItems.formattedValue + "%";
+  //           },
+  //           // footer: function () {
+  //           //   return   "";
+  //           // },
+  //         },
+  //       },
+  //     },
+  //     responsive: true,
+  //     maintainAspectRatio: false,
+  //   },
+  // });
 }
 </script>
 <style lang="scss" scoped></style>

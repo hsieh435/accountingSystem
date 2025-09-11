@@ -24,11 +24,11 @@
       <input type="radio" id="tab1" name="tab-control" checked />
       <input type="radio" id="tab2" name="tab-control" />
       <ul>
-        <li title="歷史紀錄">
-          <label for="tab1" role="button"><span>歷史紀錄</span></label>
-        </li>
         <li title="今日匯率">
-          <label for="tab2" role="button"><span>今日匯率</span></label>
+          <label for="tab1" role="button"><span>今日匯率</span></label>
+        </li>
+        <li title="歷史紀錄">
+          <label for="tab2" role="button"><span>歷史紀錄</span></label>
         </li>
       </ul>
 
@@ -37,10 +37,10 @@
       </div>
       <div class="content">
         <section>
-          <currencyExRateRecord :searchingParamsGot="currencyExRateParams" />
+          <currencyLatestExRate :searchingParamsGot="currencyExRateParams" />
         </section>
         <section>
-          <currencyLatestExRate :searchingParamsGot="currencyExRateParams" />
+          <currencyExRateRecord :searchingParamsGot="currencyExRateParams" />
         </section>
       </div>
     </div>
@@ -79,8 +79,8 @@ const currencyExRateParams = ref<ICurrencyExRateSearchingParams>({
   endDate: "",
 });
 
-async function settingCurrencyId(currencyId: string) {
-  searchingParams.currencyId = currencyId;
+async function settingCurrencyId(currency: {currencyCode: string, currencyName: string}) {
+  searchingParams.currencyId = currency.currencyCode;
 }
 
 async function settingStartDate(startDate: string) {

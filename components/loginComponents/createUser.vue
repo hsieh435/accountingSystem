@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchUserList, fetchUserCategory } from "@/server/userDataApi";
+import { fetchUserList, fetchUserCreate } from "@/server/userDataApi";
 import { IResponse } from "@/models/index";
 import tailwindStyles from "@/assets/css/tailwindStyles";
 import { encryptString } from "@/composables/crypto";
@@ -108,7 +108,7 @@ async function createUserDate(apiMsg?: string) {
     if (result.isConfirmed) {
       // console.log("result:", result.value);
       try {
-        const res: IResponse = await fetchUserCategory(result.value);
+        const res: IResponse = await fetchUserCreate(result.value);
         if (res.data.returnCode === 0) {
           showAxiosToast({ message: res.data.message });
         } else {

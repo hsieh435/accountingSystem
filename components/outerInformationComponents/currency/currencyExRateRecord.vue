@@ -29,7 +29,7 @@ async function searchingCurrencyExRate() {
 
   try {
     const res: IResponse = await fetchCurrencyHistoryExRate(props.searchingParamsGot);
-    console.log("fetchCurrencyHistoryExRate:", res.data.data);
+    // console.log("fetchCurrencyHistoryExRate:", res.data.data);
     if (res.data.returnCode === 0) {
       if (res.data.data.data.length > 0) {
         dataLabels.value = res.data.data.data.map((exRate: any) => {

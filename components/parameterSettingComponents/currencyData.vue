@@ -129,7 +129,6 @@ async function currencyDataHandling(apiMsg?: string) {
       if (isNaN(dataParams.sort) || dataParams.sort < 1 || dataParams.sort % 1 !== 0) {
         errors.push("排序需為正整數");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;

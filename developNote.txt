@@ -64,3 +64,6 @@ hsieh435@gmail.com
 
 git config --global user.name "新的名稱"
 git config --global user.email "新的email@example.com"
+
+
+Ctrl+Shift+P，選擇 Developer: Reload Window 重新整理工作區

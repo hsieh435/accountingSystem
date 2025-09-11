@@ -28,7 +28,7 @@ export async function fetchUserDataChange(data: string) {
 
 
 
-export async function fetchUserCategory(data: { userAccount: string; userName: string; userPassword: string }) {
+export async function fetchUserCreate(data: { userAccount: string; userName: string; userPassword: string }) {
   const response = await apiFetch("/accounting_system_backend/api/user/create", "POST", { body: JSON.stringify(data) });
   const result = await response.json() as IResponse;
   return result;

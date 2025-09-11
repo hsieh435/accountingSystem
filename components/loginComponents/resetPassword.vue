@@ -63,7 +63,7 @@ async function userPasswordChange(apiMsg?: string) {
       userNewPassword.value = (document.getElementById("userNewPassword") as HTMLInputElement).value;
       userNewPasswordSecond.value = (document.getElementById("userNewPasswordSecond") as HTMLInputElement).value;
 
-      // 驗證單位代碼與單位名稱
+      // 驗證單位代碼與姓名
       if (!userAccount.value) {
         errors.push("請填寫使用者帳號");
       }
