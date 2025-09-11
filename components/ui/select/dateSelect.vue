@@ -13,7 +13,6 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 
 
 
-
 const props = withDefaults(defineProps<{ dateSelect?: string; minDate?: string; maxDate?: string; }>(), { dateSelect: "", minDate: "", maxDate: "" });
 const emits = defineEmits(["sendbackDate"]);
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 400px">
+  <div style="width: 100%; height: 400px;">
     <canvas id="currencyLatestExRateChart"></canvas>
   </div>
 </template>
@@ -27,7 +27,7 @@ async function searchingCurrencyExRate() {
 
   try {
     const res: IResponse = await fetchCurrencyLatestExRate(props.searchingParamsGot.currencyId);
-    console.log("fetchCurrencyLatestExRate:", res.data.data);
+    // console.log("fetchCurrencyLatestExRate:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyExRate.value = Object.entries(res.data.data.rates).map(([key, value]) => ({
         currencyName: key || "?",

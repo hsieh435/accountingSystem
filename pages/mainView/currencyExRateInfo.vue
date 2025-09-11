@@ -10,7 +10,7 @@
           :dateSelect="searchingParams.startDate"
           :minDate="'2006-01-01'"
           :maxDate="getCurrentYMD()"
-          @sendbackDateRange="settingStartDate" />
+          @sendbackDate="settingStartDate" />
         <span class="mx-1">～ 至今（自 2006 年開始）</span>
       </div>
       <ui-buttonGroup
@@ -88,7 +88,7 @@ async function settingStartDate(startDate: string) {
 }
 
 async function sendingParams() {
-  // console.log("searchingParams:", searchingParams);
+  console.log("searchingParams:", searchingParams);
   currencyExRateParams.value = { ...searchingParams };
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 400px">
+  <div style="width: 100%; height: 400px;">
     <canvas id="currencyExRateRecordChart"></canvas>
   </div>
 </template>
@@ -26,10 +26,11 @@ watch(props, () => {
 
 let chartInstance: Chart | null = null;
 async function searchingCurrencyExRate() {
+  console.log("searchingParams:", props.searchingParamsGot);
 
   try {
     const res: IResponse = await fetchCurrencyHistoryExRate(props.searchingParamsGot);
-    // console.log("fetchCurrencyHistoryExRate:", res.data.data);
+    console.log("fetchCurrencyHistoryExRate:", res.data.data);
     if (res.data.returnCode === 0) {
       if (res.data.data.data.length > 0) {
         dataLabels.value = res.data.data.data.map((exRate: any) => {

@@ -4,9 +4,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 import { fetchStockPerPbr } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IStockPriceRecordList, IResponse } from "@/models/index";
+import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
