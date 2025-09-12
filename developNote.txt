@@ -66,4 +66,19 @@ git config --global user.name "新的名稱"
 git config --global user.email "新的email@example.com"
 
 
+
+
+rm -rf node_modules package-lock.json
+
+npm i
+
+npm tsc -v
+10.9.2
+
+npm install typescript@latest --save-dev
+
 Ctrl+Shift+P，選擇 Developer: Reload Window 重新整理工作區
+
+https://ithelp.ithome.com.tw/users/20107688/ironman/1507
+
+https://publicapis.dev/category/currency-exchange
