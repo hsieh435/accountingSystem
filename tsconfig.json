@@ -3,7 +3,6 @@
     "target": "ESNext",
     "module": "Node16",
     "moduleResolution": "node16",
-    "ignoreDeprecations": "6.0",
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -15,17 +14,10 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
-    "types": [
-      "@nuxt/types"
-    ],
+    "ignoreDeprecations": "5.0",
+    "types": ["@types/node", "@nuxt/types"]
   },
-  "exclude": [
-    "node_modules",
-    ".output",
-    ".nuxt"
-  ],
+  "exclude": ["node_modules", ".output", ".nuxt"]
 }

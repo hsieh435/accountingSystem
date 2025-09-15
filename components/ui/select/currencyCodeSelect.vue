@@ -8,11 +8,6 @@
     :loading="loading"
     loading-icon="i-lucide-loader"
     :disabled="props.isDisable" />
-  <!-- <select :class="tailwindStyles.selectClasses" v-model="currencyId" :disabled="isSelectDisabled">
-    <option v-for="currency in currencyArray" :key="currency.value" :value="currency.value">
-      {{ currency.label }}
-    </option>
-  </select> -->
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -21,9 +16,8 @@ import { ISelectData, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
-const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
+const props = withDefaults(defineProps<{ currencyIdGot?: string;  isDisable?: boolean }>(), {
   currencyIdGot: "",
-  sellectAll: true,
   isDisable: false,
 });
 const emits = defineEmits(["sendbackCurrencyId"]);
@@ -70,7 +64,6 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
     loading.value = true;
     try {
       const res: IResponse = await fetchCurrencyListFromWeb(keyword);
-      // console.log("fetchCurrencyListFromWeb:", res);
       // console.log("fetchCurrencyListFromWeb:", res.data.data);
       if (res.data.returnCode === 0) {
         rawCurrencyList.value = JSON.parse(res.data.data);
@@ -78,12 +71,6 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
           label: item.currencyCode + " - " + item.currencyName,
           value: item.currencyCode,
         }));
-        // if (props.sellectAll) {
-        //   currencyArray.value.unshift({ label: "所有貨幣", value: "" });
-        // } else if (props.sellectAll === false && !props.currencyIdGot) {
-        //   currencyId.value = currencyArray.value[0].value;
-        //   emits("sendbackCurrencyId", currencyId.value);
-        // }
       } else {
         showAxiosErrorMsg({ message: res.data.data.result });
       }

@@ -4,7 +4,7 @@ const tableLastColumn = "min-w-max sticky last:right-0 last:z-10";
 
 
 export const tailwindStyles = {
-  tableClasses: "table   w-full min-w-max border rounded-t-xl overflow-x-auto mb-[30px]",
+  tableClasses: "table w-full min-w-max border rounded-t-xl overflow-x-auto mb-[30px]",
   theadClasses: "w-full table-header-group rounded-xl text-center overflow-hidden",
   theadtrClasses: "table-row rounded rounded-xl",
   thClasses: `table-cell w-auto border-x border-gray-200 bg-black text-white px-1 py-1 first:border-0 first:rounded-tl-xl last:border-l last:rounded-tr-xl last:${tableLastColumn}`,
