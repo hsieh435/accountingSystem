@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { ICreditCardList, IAccountSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { ICreditCardList, IAccountSearchingParams } from "@/models/index.ts";
 
 export async function fetchCreditCardList(data: IAccountSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/creditCard/list", "POST", {

@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { IStoredValueCardList, IAccountSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { IStoredValueCardList, IAccountSearchingParams } from "@/models/index.ts";
 
 export async function fetchStoredValueCardList(data: IAccountSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/storedValueCard/list", "POST", {

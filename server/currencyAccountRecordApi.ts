@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { ICurrencyAccountList, IFinanceRecordSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { ICurrencyAccountList, IFinanceRecordSearchingParams } from "@/models/index.ts";
 
 export async function fetchCurrencyAccountRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/currencyAccountRecord/list", "POST", {
@@ -28,7 +28,6 @@ export async function fetchCurrencyAccountRecordUpdate(data: ICurrencyAccountLis
   });
   return await response.json();
 }
-
 
 export async function fetchCurrencyAccountRecordDelete(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch(`/accounting_system_backend/api/currencyAccountRecord/delete`, "POST", {

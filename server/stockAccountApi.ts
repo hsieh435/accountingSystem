@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { IStockAccountList, IAccountSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { IStockAccountList, IAccountSearchingParams } from "@/models/index.ts";
 
 export async function fetchStockAccountList(data: IAccountSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/stockAccount/list", "POST", {

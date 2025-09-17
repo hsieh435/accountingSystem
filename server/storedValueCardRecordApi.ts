@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { IStoredValueCardList, IFinanceRecordSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { IStoredValueCardList, IFinanceRecordSearchingParams } from "@/models/index.ts";
 
 export async function fetchStoredValueCardRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/storedValueCardRecord/list", "POST", {
@@ -30,6 +30,9 @@ export async function fetchStoredValueCardRecordUpdate(data: IStoredValueCardLis
 }
 
 export async function fetchStoredValueCardRecordDelete(storedValueCardId: string) {
-  const response = await apiFetch(`/accounting_system_backend/api/storedValueCardRecord/delete/${storedValueCardId}`, "GET");
+  const response = await apiFetch(
+    `/accounting_system_backend/api/storedValueCardRecord/delete/${storedValueCardId}`,
+    "GET",
+  );
   return await response.json();
 }

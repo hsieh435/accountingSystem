@@ -49,7 +49,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { IResponse } from "@/models";
+import { IResponse } from "@/models/index.ts";
 import { fetchUserLogin } from "@/server/userDataApi";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import { navigateTo } from "nuxt/app";

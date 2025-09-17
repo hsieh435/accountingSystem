@@ -1,5 +1,5 @@
-import { apiFetch } from "@/server";
-import { ICashFlowList, IAccountSearchingParams } from "@/models";
+import { apiFetch } from "@/server/index.ts";
+import { ICashFlowList, IAccountSearchingParams } from "@/models/index.ts";
 
 export async function fetchCashFlowList(data: IAccountSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlow/list", "POST", {

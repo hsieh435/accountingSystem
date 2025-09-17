@@ -1,16 +1,12 @@
-import { apiFetch } from "@/server/index";
+import { apiFetch } from "@/server/index.ts";
 import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/models/index";
 
-
-
-export async function fetchTestConnection(data: { user_id: string; password: string; }) {
+export async function fetchTestConnection(data: { user_id: string; password: string }) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
-
-
 
 export async function fetchStockList(keyword: string) {
   const response = await apiFetch(`/accounting_system_backend/api/outerWebApi/stockInfo/${keyword}`, "GET");
@@ -38,11 +34,11 @@ export async function fetchStockPerPbr(data: IStockPriceSearchingParams) {
   return await response.json();
 }
 
-
-
 export async function fetchCurrencyListFromWeb(keyword: string) {
-  const response =
-    await apiFetch(`/accounting_system_backend/api/outerWebApi/currencyExRateInfo/currencyListFromOuterApi/${keyword}`, "GET");
+  const response = await apiFetch(
+    `/accounting_system_backend/api/outerWebApi/currencyExRateInfo/currencyListFromOuterApi/${keyword}`,
+    "GET",
+  );
   return await response.json();
 }
 

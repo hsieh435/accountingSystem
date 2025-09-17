@@ -1,7 +1,5 @@
-import { apiFetch } from "@/server/index";
+import { apiFetch } from "@/server/index.ts";
 import { ITradeCategory, ICurrencyList } from "@/models/index";
-
-
 
 // schema
 export async function fetchCreditcardSchemaList() {
@@ -9,32 +7,23 @@ export async function fetchCreditcardSchemaList() {
   return await response.json();
 }
 
-
-
 // currency
 export async function fetchCurrencyList() {
   const response = await apiFetch("/accounting_system_backend/api/parameters/currencyList", "GET");
   return await response.json();
 }
 
-
-
 export async function fetchCurrencyByCurrencyCode(currencyCode: string) {
   const response = await apiFetch(`/accounting_system_backend/api/parameters/currency/${currencyCode}`, "GET");
   return await response.json();
 }
 
-
-
 export async function fetchCurrencyCreate(data: ICurrencyList) {
-  const response =
-    await apiFetch("/accounting_system_backend/api/parameters/currency/create", "POST", {
+  const response = await apiFetch("/accounting_system_backend/api/parameters/currency/create", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
-
-
 
 export async function fetchCurrencyUpdate(data: ICurrencyList) {
   const response = await apiFetch("/accounting_system_backend/api/parameters/currency/update", "PUT", {
@@ -43,14 +32,10 @@ export async function fetchCurrencyUpdate(data: ICurrencyList) {
   return await response.json();
 }
 
-
-
 export async function fetchCurrencyDelete(currencyCode: string) {
   const response = await apiFetch(`/accounting_system_backend/api/parameters/currency/delete/${currencyCode}`, "GET");
   return await response.json();
 }
-
-
 
 // tradeCategory
 export async function fetchTradeCategoryList() {
@@ -58,28 +43,24 @@ export async function fetchTradeCategoryList() {
   return await response.json();
 }
 
-
-
 export async function fetchTradeCategory(code: string) {
   const response = await apiFetch(`/accounting_system_backend/api/parameters/tradeCategory/${code}`, "GET", {});
   return await response.json();
 }
 
-
-
 export async function fetchCreateTradeCategory(data: ITradeCategory) {
-  const response = await apiFetch("/accounting_system_backend/api/parameters/tradeCategory/create", "POST", { body: JSON.stringify(data) });
+  const response = await apiFetch("/accounting_system_backend/api/parameters/tradeCategory/create", "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
-
-
 
 export async function fetchUpdateTradeCategory(data: ITradeCategory) {
-  const response = await apiFetch("/accounting_system_backend/api/parameters/tradeCategory/update", "PUT", { body: JSON.stringify(data) });
+  const response = await apiFetch("/accounting_system_backend/api/parameters/tradeCategory/update", "PUT", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
-
-
 
 export async function fetchDeleteTradeCategory(code: string) {
   const response = await apiFetch(`/accounting_system_backend/api/parameters/tradeCategory/delete/${code}`, "GET");
