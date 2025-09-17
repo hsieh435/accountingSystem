@@ -30,8 +30,8 @@
             </div>
             <div :class="tailwindStyles.tbodyClasses">
               <div :class="tailwindStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
-                <div :class="tailwindStyles.tdClasses">
-                  <ui-switch
+                <div :class="tailwindStyles.tdClasses" class="">
+                  <ui-switch id="cashFlowSwitch"
                     :switchValueGot="cashFlow.enable"
                     @sendBackSwitchValue="
                       (value: boolean) => {

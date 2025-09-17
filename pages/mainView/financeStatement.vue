@@ -8,27 +8,27 @@
     <ul>
       <li title="現金流">
         <label for="tab1" role="button">
-          <font-awesome-icon icon="fa-solid fa-chart-line" /><span>現金流</span>
+          <font-awesome-icon icon="fa-solid fa-wallet" /><span>現金流</span>
         </label>
       </li>
       <li title="儲值票卡">
         <label for="tab2" role="button">
-          <font-awesome-icon icon="fa-solid fa-money-bill-trend-up" /><span>儲值票卡</span>
+          <font-awesome-icon icon="fa-solid fa-window-restore" /><span>儲值票卡</span>
         </label>
       </li>
       <li title="信用卡">
         <label for="tab3" role="button">
-          <font-awesome-icon icon="fa-solid fa-percent" /><span>信用卡</span>
+          <font-awesome-icon icon="fa-solid fa-credit-card" /><span>信用卡</span>
         </label>
       </li>
       <li title="存款帳戶">
         <label for="tab4" role="button">
-          <font-awesome-icon icon="fa-solid fa-percent" /><span>存款帳戶</span>
+          <font-awesome-icon icon="fa-solid fa-money-check-dollar" /><span>存款帳戶</span>
         </label>
       </li>
       <li title="證券帳戶">
         <label for="tab5" role="button">
-          <font-awesome-icon icon="fa-solid fa-percent" /><span>證券帳戶</span>
+          <font-awesome-icon icon="fa-solid fa-arrow-trend-up" /><span>證券帳戶</span>
         </label>
       </li>
     </ul>
