@@ -17,7 +17,7 @@ import {
 } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
-import tailwindStyles from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
@@ -64,31 +64,31 @@ async function currencyDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣代碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="currencyCode" value="${dataParams.currencyCode}" ${props.currencyCodeGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.inputClasses()}" id="currencyCode" value="${dataParams.currencyCode}" ${props.currencyCodeGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="currencyName" value="${dataParams.currencyName}" />
+          <input class="${tailwindStyles.inputClasses()}" id="currencyName" value="${dataParams.currencyName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">貨幣符號：</span>
-          <input class="${tailwindStyles.inputClasses}" id="currencySymbol" value="${dataParams.currencySymbol}" />
+          <input class="${tailwindStyles.inputClasses()}" id="currencySymbol" value="${dataParams.currencySymbol}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">最小面額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="minimumDenomination" value="${dataParams.minimumDenomination}" type="number" />
+          <input class="${tailwindStyles.inputClasses()}" id="minimumDenomination" value="${dataParams.minimumDenomination}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">排序：</span>
-          <input class="${tailwindStyles.inputClasses}" id="sort" value="${dataParams.sort}" type="number" />
+          <input class="${tailwindStyles.inputClasses()}" id="sort" value="${dataParams.sort}" type="number" />
         </div>
 
       </div>

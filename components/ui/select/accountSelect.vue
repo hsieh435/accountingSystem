@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses" v-model="accountId" :disabled="isDisabled">
+  <select :class="tailwindStyles.selectClasses()" v-model="accountId" :disabled="isDisabled">
     <option v-for="account in accountList" :key="account.value" :value="account.value">
       {{ account.label }}
     </option>
@@ -14,7 +14,7 @@ import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
 import { fetchStockAccountList } from "@/server/stockAccountApi";
 import { IAccountSearchingParams } from "@/models/index";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(
   defineProps<{

@@ -14,33 +14,33 @@
         :showFilter="false"
         @tableSliceChange="settingTableSlice" />
       <template v-if="storedValueCardRecordListFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">票卡名稱</div>
-              <div :class="tailwindStyles.thClasses">交易時間</div>
-              <div :class="tailwindStyles.thClasses">收支</div>
-              <div :class="tailwindStyles.thClasses">項目</div>
-              <div :class="tailwindStyles.thClasses">貨幣</div>
-              <div :class="tailwindStyles.thClasses">金額</div>
-              <div :class="tailwindStyles.thClasses">餘額</div>
-              <div :class="tailwindStyles.thClasses">內容</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
+        <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
+          <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">票卡名稱</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易時間</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">收支</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">項目</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">金額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">餘額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">內容</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
             </div>
           </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-              <div :class="tailwindStyles.tdClasses">{{ record.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.storedValueCardName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.transactionName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.tradeName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.currencyName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">0</div>
-              <div :class="tailwindStyles.tdClasses">{{ record.tradeDescription }}</div>
-              <div :class="tailwindStyles.tdClasses">
+          <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.no }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.storedValueCardName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.transactionName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.currencyName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">0</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeDescription }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                 <storedValueCardTradeData
                   :tradeIdGot="record.tradeId"
                   :storedValueCardIdGot="record.storedValueCardId"
@@ -52,7 +52,7 @@
       </template>
     </template>
     <template v-else-if="storedValueCardRecordList.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無交易資料</span>
+      <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無交易資料</span>
     </template>
   </div>
 </template>
@@ -62,7 +62,7 @@ import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordAp
 import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

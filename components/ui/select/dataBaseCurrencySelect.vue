@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses" v-model="currencyId" :disabled="isSelectDisabled">
+  <select :class="tailwindStyles.selectClasses()" v-model="currencyId" :disabled="isSelectDisabled">
     <option v-for="currency in currencyArray" :key="currency.value" :value="currency.value">
       {{ currency.value }} {{ currency.label }}
     </option>
@@ -9,21 +9,19 @@
 import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
-
-
-const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), { currencyIdGot: "", sellectAll: true, isDisable: false });
+const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
+  currencyIdGot: "",
+  sellectAll: true,
+  isDisable: false,
+});
 const emits = defineEmits(["sendbackCurrencyId"]);
-
-
 
 const currencyId = ref<string>("");
 const isSelectDisabled = ref<boolean>(false);
 const currencyArray = ref<ISelectData[]>([]);
-
-
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
@@ -44,8 +42,6 @@ watch(currencyId, () => {
   emits("sendbackCurrencyId", currencyId.value);
 });
 
-
-
 async function searchingCurrencyList() {
   currencyArray.value = [];
 
@@ -55,7 +51,7 @@ async function searchingCurrencyList() {
     if (res.data.returnCode === 0) {
       currencyArray.value = res.data.data.map((item: ICurrencyList) => ({
         label: item.currencyName,
-        value: item.currencyCode
+        value: item.currencyCode,
       }));
 
       if (props.sellectAll) {
@@ -71,8 +67,5 @@ async function searchingCurrencyList() {
     showAxiosErrorMsg({ message: (error as Error).message });
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

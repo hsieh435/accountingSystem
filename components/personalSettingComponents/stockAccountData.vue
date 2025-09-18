@@ -18,7 +18,7 @@ import {
 import { IStockAccountList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
-import tailwindStyles from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
@@ -80,13 +80,13 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶號碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
+          <input class="${tailwindStyles.inputClasses()}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountName" value="${dataParams.accountName}" />
+          <input class="${tailwindStyles.inputClasses()}" id="accountName" value="${dataParams.accountName}" />
         </div>
 
 
@@ -97,7 +97,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="${tailwindStyles.inputClasses}" id="accountBankName" value="${dataParams.accountBankName}" />
+          <input class="${tailwindStyles.inputClasses()}" id="accountBankName" value="${dataParams.accountBankName}" />
         </div>
 
 
@@ -112,24 +112,24 @@ async function stockAccountDataHandling(apiMsg?: string) {
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
+          <input class="${tailwindStyles.inputClasses()}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
         </div>`
             : `<div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+          <input class="${tailwindStyles.inputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
+          <input class="${tailwindStyles.inputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.inputClasses}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <input class="${tailwindStyles.inputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
@@ -143,7 +143,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses}" id="note" rows="6">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.inputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -152,7 +152,7 @@ async function stockAccountDataHandling(apiMsg?: string) {
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          <input class="${tailwindStyles.inputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }

@@ -13,22 +13,22 @@
           :searchingPlaceholder="'搜尋帳戶名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="stockAccountListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">啟用</div>
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">帳戶名稱</div>
-                <div :class="tailwindStyles.thClasses">銀行代號 / 銀行名稱</div>
-                <div :class="tailwindStyles.thClasses">目前金額</div>
-                <div :class="tailwindStyles.thClasses">提醒</div>
-                <div :class="tailwindStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">啟用</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">帳戶名稱</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">銀行代號 / 銀行名稱</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">目前金額</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">提醒</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">建立時間</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
-                <div :class="tailwindStyles.tdClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="account in tableData" :key="account.accountId">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <ui-switch
                     :switchValueGot="account.enable"
                     @sendBackSwitchValue="
@@ -38,17 +38,17 @@
                       }
                     " />
                 </div>
-                <div :class="tailwindStyles.tdClasses">{{ account.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ account.accountName }}</div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ account.no }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ account.accountName }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   {{ account.accountBankCode }} / {{ account.accountBankName }}
                 </div>
-                <div :class="tailwindStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(account.presentAmount) }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="account.openAlert" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <stockAccountData :stockAccountIGot="account.accountId" @dataReseaching="stockAccountSearching" />
                 </div>
               </div>
@@ -57,7 +57,7 @@
         </template>
       </template>
       <template v-else-if="stockAccountList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無帳戶資料</span>
+        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無帳戶資料</span>
       </template>
     </div>
   </div>
@@ -67,7 +67,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountList, fetchEnableStockAccount, fetchDisableStockAccount } from "@/server/stockAccountApi";
 import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;

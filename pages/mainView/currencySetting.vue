@@ -13,23 +13,23 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="currencyListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">貨幣代碼</div>
-                <div :class="tailwindStyles.thClasses">貨幣名稱</div>
-                <div :class="tailwindStyles.thClasses">貨幣符號</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣代碼</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣名稱</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣符號</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="currency in tableData" :key="currency.currencyCode">
-                <div :class="tailwindStyles.tdClasses">{{ currency.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currency.currencyCode }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currency.currencyName }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ currency.currencySymbol }}</div>
-                <div :class="tailwindStyles.tdClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="currency in tableData" :key="currency.currencyCode">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currency.no }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currency.currencyCode }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currency.currencyName }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currency.currencySymbol }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
                 </div>
               </div>
@@ -38,7 +38,7 @@
         </template>
       </template>
       <template v-else-if="currencyList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無貨幣資料</span>
+        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無貨幣資料</span>
       </template>
     </div>
   </div>
@@ -48,7 +48,7 @@ import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;

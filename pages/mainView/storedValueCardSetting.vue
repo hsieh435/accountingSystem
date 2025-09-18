@@ -11,25 +11,25 @@
         :searchingPlaceholder="'搜尋儲值票名稱'"
         @tableSliceChange="settingTableSlice" />
       <template v-if="storedValueCardListFiltered.length > 0">
-        <div :class="tailwindStyles.tableClasses">
-          <div :class="tailwindStyles.theadClasses">
-            <div :class="tailwindStyles.theadtrClasses">
-              <div :class="tailwindStyles.thClasses">啟用</div>
-              <div :class="tailwindStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.thClasses">票卡名稱</div>
-              <div :class="tailwindStyles.thClasses">使用貨幣</div>
-              <div :class="tailwindStyles.thClasses">初始金額</div>
-              <div :class="tailwindStyles.thClasses">目前金額</div>
-              <div :class="tailwindStyles.thClasses">最小儲值金額</div>
-              <div :class="tailwindStyles.thClasses">最大儲值金額</div>
-              <div :class="tailwindStyles.thClasses">提醒</div>
-              <div :class="tailwindStyles.thClasses">建立時間</div>
-              <div :class="tailwindStyles.thClasses">操作</div>
+        <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
+          <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">啟用</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">票卡名稱</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">使用貨幣</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">初始金額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">目前金額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">最小儲值金額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">最大儲值金額</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">提醒</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">建立時間</div>
+              <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
             </div>
           </div>
-          <div :class="tailwindStyles.tbodyClasses">
-            <div :class="tailwindStyles.tbodytrClasses" v-for="card in tableData" :key="card.storedValueCardId">
-              <div :class="tailwindStyles.tdClasses">
+          <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="card in tableData" :key="card.storedValueCardId">
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                 <ui-switch
                   :switchValueGot="card.enable"
                   @sendBackSwitchValue="
@@ -39,18 +39,18 @@
                     }
                   " />
               </div>
-              <div :class="tailwindStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.storedValueCardName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ card.currencyName }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.startingAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.minimumValueAllowed) }}</div>
-              <div :class="tailwindStyles.tdClasses">{{ currencyFormat(card.maximumValueAllowed) }}</div>
-              <div :class="tailwindStyles.tdClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.no }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.storedValueCardName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.currencyName }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.startingAmount) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.minimumValueAllowed) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.maximumValueAllowed) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                 <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
               </div>
-              <div :class="tailwindStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
-              <div :class="tailwindStyles.tdClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                 <storedValueCardData :storedValueCardIdGot="card.storedValueCardId" @dataReseaching="storedValueCardSearching" />
               </div>
             </div>
@@ -59,7 +59,7 @@
       </template>
     </template>
     <template v-else-if="storedValueCardList.length === 0">
-      <span :class="tailwindStyles.noDataClasses">無儲值票卡資料</span>
+      <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無儲值票卡資料</span>
     </template>
   </div>
 </template>
@@ -72,7 +72,7 @@ import {
 } from "@/server/storedValueCardApi";
 import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;

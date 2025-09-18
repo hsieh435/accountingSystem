@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import tailwindStyles from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import Swal from "sweetalert2";
 
 const userAccount = ref<string>("");
@@ -13,7 +13,6 @@ const userNewPassword = ref<string>("");
 const userNewPasswordSecond = ref<string>("");
 
 async function userPasswordChange(apiMsg?: string) {
-
   Swal.fire({
     title: "重設使用者密碼",
     html: `
@@ -22,24 +21,24 @@ async function userPasswordChange(apiMsg?: string) {
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
-          <input class="${tailwindStyles.inputClasses}" id="userAccount" value="${userAccount.value}" />
+          <input class="${tailwindStyles.inputClasses()}" id="userAccount" value="${userAccount.value}" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="userOldPassword" value="${userOldPassword.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses()}" id="userOldPassword" value="${userOldPassword.value}" type="password" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="userNewPassword" value="${userNewPassword.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses()}" id="userNewPassword" value="${userNewPassword.value}" type="password" />
         </div>
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
-          <input class="${tailwindStyles.inputClasses}" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
+          <input class="${tailwindStyles.inputClasses()}" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
         </div>
 
       </div>

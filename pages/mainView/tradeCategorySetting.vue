@@ -13,41 +13,41 @@
           :totalDataQuanity="tradeCategoryList.length"
           :showFilter="false" />
         <template v-if="tradeCategoryListFiltered.length > 0">
-          <div :class="tailwindStyles.tableClasses">
-            <div :class="tailwindStyles.theadClasses">
-              <div :class="tailwindStyles.theadtrClasses">
-                <div :class="tailwindStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.thClasses">交易代碼</div>
-                <div :class="tailwindStyles.thClasses">交易名稱</div>
-                <div :class="tailwindStyles.thClasses">現金流</div>
-                <div :class="tailwindStyles.thClasses">儲值票卡</div>
-                <div :class="tailwindStyles.thClasses">信用卡</div>
-                <div :class="tailwindStyles.thClasses">存款帳戶</div>
-                <div :class="tailwindStyles.thClasses">證券帳戶</div>
-                <div :class="tailwindStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易代碼</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易名稱</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">現金流</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">儲值票卡</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">信用卡</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">存款帳戶</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">證券帳戶</div>
+                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tbodyClasses">
-              <div :class="tailwindStyles.tbodytrClasses" v-for="trade in tableData" :key="trade.tradeCode">
-                <div :class="tailwindStyles.tdClasses">{{ trade.no }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ trade.tradeCode }}</div>
-                <div :class="tailwindStyles.tdClasses">{{ trade.tradeName }}</div>
-                <div :class="tailwindStyles.tdClasses">
+            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
+              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="trade in tableData" :key="trade.tradeCode">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ trade.no }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ trade.tradeCode }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ trade.tradeName }}</div>
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isStoredvaluecardAble" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isCuaccountAble" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <font-awesome-icon icon="check" v-if="trade.isStaccountAble" />
                 </div>
-                <div :class="tailwindStyles.tdClasses">
+                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
                   <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />
                 </div>
               </div>
@@ -56,7 +56,7 @@
         </template>
       </template>
       <template v-else-if="tradeCategoryList.length === 0">
-        <span :class="tailwindStyles.noDataClasses">無交易代碼資料</span>
+        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無交易代碼資料</span>
       </template>
     </div>
   </div>
@@ -66,7 +66,7 @@ import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchTradeCategoryList } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
-import { tailwindStyles } from "@/assets/css/tailwindStyles";
+import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { showAxiosErrorMsg } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
