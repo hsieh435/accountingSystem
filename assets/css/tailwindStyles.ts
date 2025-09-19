@@ -1,4 +1,4 @@
-const tableFirstTd = "w-[60px]"
+const tableFirstTd = "w-[60px]";
 const tableLastColumn = "min-w-max sticky last:right-0 last:z-10";
 
 

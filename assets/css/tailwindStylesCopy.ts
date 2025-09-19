@@ -1,6 +1,8 @@
 const tableFirstTd = "w-[60px]";
 const tableLastColumn = "min-w-max sticky last:right-0 last:z-10";
 
+
+
 export const tailwindTableStyles = {
   tableClasses: "table w-full min-w-max border-1 overflow-x-auto overflow-y-hidden mb-5",
   theadClasses: "w-full border-1 table-header-group text-center overflow-hidden",
@@ -11,6 +13,7 @@ export const tailwindTableStyles = {
   tdClasses: `table-cell text-black border-r border-b border-gray-300 bg-white text-center align-middle px-2 py-[1px] group-hover:border-gray-300 first:${tableFirstTd} last:${tableLastColumn}`,
   noDataClasses: "text-black mx-3",
 };
+
 export default tailwindTableStyles;
 
 export function getNoDataClasses() {
