@@ -15,39 +15,39 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="stockAccountRecordFiltered.length > 0">
-          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易時間</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">收支</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">項目</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">股票</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">金額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">股數</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">手續費</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易稅</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易總額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">帳戶餘額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">內容</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.getTableClasses()">
+            <div :class="tailwindStyles.getTheadClasses()">
+              <div :class="tailwindStyles.getTheadtrClasses()">
+                <div :class="tailwindStyles.getThClasses()">NO.</div>
+                <div :class="tailwindStyles.getThClasses()">交易時間</div>
+                <div :class="tailwindStyles.getThClasses()">收支</div>
+                <div :class="tailwindStyles.getThClasses()">項目</div>
+                <div :class="tailwindStyles.getThClasses()">股票</div>
+                <div :class="tailwindStyles.getThClasses()">金額</div>
+                <div :class="tailwindStyles.getThClasses()">股數</div>
+                <div :class="tailwindStyles.getThClasses()">手續費</div>
+                <div :class="tailwindStyles.getThClasses()">交易稅</div>
+                <div :class="tailwindStyles.getThClasses()">交易總額</div>
+                <div :class="tailwindStyles.getThClasses()">帳戶餘額</div>
+                <div :class="tailwindStyles.getThClasses()">內容</div>
+                <div :class="tailwindStyles.getThClasses()">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.no }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.transactionName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.stockNo + " " + record.stockName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.pricePerShare) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.quantity) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.handlingFee) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.transactionTax) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.tradeTotalPrice) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">0</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeDescription }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+            <div :class="tailwindStyles.getTbodyClasses()">
+              <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
+                <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.stockNo + " " + record.stockName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.pricePerShare) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.quantity) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.handlingFee) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.transactionTax) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeTotalPrice) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">0</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   <stockAccountTradeData
                     :tradeIdGot="record.tradeId"
                     :accountIdGot="record.accountId"
@@ -59,7 +59,7 @@
         </template>
       </template>
       <template v-else-if="stockAccountRecord.length === 0">
-        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無交易資料</span>
+        <span :class="tailwindStyles.getNoDataClasses()">無交易資料</span>
       </template>
     </div>
   </div>

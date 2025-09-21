@@ -100,7 +100,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         ${
           props.tradeIdGot
             ? `
-        <input class="${tailwindStyles.inputClasses()} col-span-4" value="${dataParams.stockNo + dataParams.stockName}" disabled />`
+        <input class="${tailwindStyles.getInputClasses()} col-span-4" value="${dataParams.stockNo + dataParams.stockName}" disabled />`
             : `
         <div class="col-span-4" id="stockSelectComponent"></div>`
         }
@@ -115,25 +115,25 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-3 col-end-5" id="pricePerShare" value="${dataParams.pricePerShare}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="pricePerShare" value="${dataParams.pricePerShare}" type="number" />
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-7 col-end-9" id="quantity" value="${dataParams.quantity}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="quantity" value="${dataParams.quantity}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-3 col-end-5" id="handlingFee" value="${dataParams.handlingFee}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="handlingFee" value="${dataParams.handlingFee}" type="number" />
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-7 col-end-9" id="transactionTax" value="${dataParams.transactionTax}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="transactionTax" value="${dataParams.transactionTax}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>總價：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-3 col-end-5" id="stockTotalPrice" value="${currencyFormat(dataParams.stockTotalPrice)}" disabled />
+          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="stockTotalPrice" value="${currencyFormat(dataParams.stockTotalPrice)}" disabled />
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易成本：</span>
-          <input class="${tailwindStyles.inputClasses()} col-start-7 col-end-9" id="tradeTotalPrice" value="${currencyFormat(dataParams.tradeTotalPrice)}" disabled />
+          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="tradeTotalPrice" value="${currencyFormat(dataParams.tradeTotalPrice)}" disabled />
         </div>
 
 
@@ -145,13 +145,13 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right">說明：</span>
-          <input class="${tailwindStyles.inputClasses()} col-span-5" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <input class="${tailwindStyles.getInputClasses()} col-span-5" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-8 my-2">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses()} col-span-5" id="tradeNote" rows="4">${dataParams.tradeNote}</textarea>
+          <textarea class="${tailwindStyles.getInputClasses()} col-span-5" id="tradeNote" rows="4">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>

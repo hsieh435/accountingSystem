@@ -21,24 +21,24 @@ async function userPasswordChange(apiMsg?: string) {
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userAccount" value="${userAccount.value}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userAccount" value="${userAccount.value}" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userOldPassword" value="${userOldPassword.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userOldPassword" value="${userOldPassword.value}" type="password" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userNewPassword" value="${userNewPassword.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userNewPassword" value="${userNewPassword.value}" type="password" />
         </div>
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userNewPasswordSecond" value="${userNewPasswordSecond.value}" type="password" />
         </div>
 
       </div>

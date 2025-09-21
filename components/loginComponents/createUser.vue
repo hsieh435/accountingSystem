@@ -35,25 +35,25 @@ async function createUserDate(apiMsg?: string) {
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者帳號：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userAccount" value="${userAccount.value}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userAccount" value="${userAccount.value}" />
         </div>
 
 
         <div class="d-flex flex-row grid justify-start items-center grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者名稱：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userName" value="${userName.value}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userName" value="${userName.value}" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userPassword" value="${userPassword.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userPassword" value="${userPassword.value}" type="password" />
         </div>
 
 
         <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userSsecondPassword" value="${userSsecondPassword.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userSsecondPassword" value="${userSsecondPassword.value}" type="password" />
         </div>
 
       </div>

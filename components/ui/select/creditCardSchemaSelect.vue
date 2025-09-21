@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses()" v-model="schemaId" :disabled="props.isAble">
+  <select :class="tailwindStyles.getSelectClasses()" v-model="schemaId" :disabled="props.isAble">
     <option v-for="schema in schemaArray" :key="schema.value" :value="schema.value">{{ schema.label }}</option>
   </select>
 </template>

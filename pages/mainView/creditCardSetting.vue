@@ -13,25 +13,25 @@
           :searchingPlaceholder="'搜尋信用卡名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="creditCardListFiltered.length > 0">
-          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">啟用</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">信用卡名稱</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">發卡銀行代號 / 名稱</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">發卡機構</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">結算貨幣</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">每月額度</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">消費提醒</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">到期</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.getTableClasses()">
+            <div :class="tailwindStyles.getTheadClasses()">
+              <div :class="tailwindStyles.getTheadtrClasses()">
+                <div :class="tailwindStyles.getThClasses()">啟用</div>
+                <div :class="tailwindStyles.getThClasses()">NO.</div>
+                <div :class="tailwindStyles.getThClasses()">信用卡名稱</div>
+                <div :class="tailwindStyles.getThClasses()">發卡銀行代號 / 名稱</div>
+                <div :class="tailwindStyles.getThClasses()">發卡機構</div>
+                <div :class="tailwindStyles.getThClasses()">結算貨幣</div>
+                <div :class="tailwindStyles.getThClasses()">每月額度</div>
+                <div :class="tailwindStyles.getThClasses()">消費提醒</div>
+                <div :class="tailwindStyles.getThClasses()">到期</div>
+                <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                <div :class="tailwindStyles.getThClasses()">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="card in tableData" :key="card.creditcardId">
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+            <div :class="tailwindStyles.getTbodyClasses()">
+              <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.creditcardId">
+                <div :class="tailwindStyles.getTdClasses()">
                   <ui-switch
                     :switchValueGot="card.enable"
                     @sendBackSwitchValue="
@@ -41,20 +41,20 @@
                       }
                     " />
                 </div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.no }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.creditcardName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+                <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
                 </div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.creditcardSchema }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.currencyName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.creditPerMonth) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+                <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
                 </div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.expirationDate.slice(0, 7) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+                <div :class="tailwindStyles.getTdClasses()">{{ card.expirationDate.slice(0, 7) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
                 </div>
               </div>
@@ -63,7 +63,7 @@
         </template>
       </template>
       <template v-else-if="creditCardList.length === 0">
-        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無信用卡資料</span>
+        <span :class="tailwindStyles.getNoDataClasses()">無信用卡資料</span>
       </template>
     </div>
   </div>

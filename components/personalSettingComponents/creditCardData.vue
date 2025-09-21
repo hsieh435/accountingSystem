@@ -82,7 +82,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="creditcardName" value="${dataParams.creditcardName}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="creditcardName" value="${dataParams.creditcardName}" />
         </div>
 
 
@@ -93,7 +93,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
         </div>
 
 
@@ -111,13 +111,13 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 mt-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6 mb-2">
           <span class="col-start-1 col-end-3 text-right"></span>
@@ -143,7 +143,7 @@ async function creditCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -152,7 +152,7 @@ async function creditCardDataHandling(apiMsg?: string) {
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          <input class="${tailwindStyles.getInputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }

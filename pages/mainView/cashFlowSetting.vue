@@ -13,25 +13,26 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="cashFlowListFiltered.length > 0">
-          <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">啟用</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">現金流名稱</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">初始金額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">目前金額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">提醒金額</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">提醒</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">建立時間</div>
-                <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
+          <div :class="tailwindStyles.getTableClasses()">
+            <div :class="tailwindStyles.getTheadClasses()">
+              <div :class="tailwindStyles.getTheadtrClasses()">
+                <div :class="tailwindStyles.getThClasses()">啟用</div>
+                <div :class="tailwindStyles.getThClasses()">NO.</div>
+                <div :class="tailwindStyles.getThClasses()">現金流名稱</div>
+                <div :class="tailwindStyles.getThClasses()">貨幣</div>
+                <div :class="tailwindStyles.getThClasses()">初始金額</div>
+                <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                <div :class="tailwindStyles.getThClasses()">提醒金額</div>
+                <div :class="tailwindStyles.getThClasses()">提醒</div>
+                <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                <div :class="tailwindStyles.getThClasses()">操作</div>
               </div>
             </div>
-            <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses" class="">
-                  <ui-switch id="cashFlowSwitch"
+            <div :class="tailwindStyles.getTbodyClasses()">
+              <div :class="tailwindStyles.getTbodytrClasses()" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
+                <div :class="tailwindStyles.getTdClasses()" class="">
+                  <ui-switch
+                    id="cashFlowSwitch"
                     :switchValueGot="cashFlow.enable"
                     @sendBackSwitchValue="
                       (value: boolean) => {
@@ -40,17 +41,17 @@
                       }
                     " />
                 </div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ cashFlow.no }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ cashFlow.cashflowName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ cashFlow.currencyName }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(cashFlow.startingAmount) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(cashFlow.presentAmount) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(cashFlow.alertValue) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.no }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.cashflowName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
                 </div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
-                <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
                   <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
                 </div>
               </div>
@@ -59,7 +60,7 @@
         </template>
       </template>
       <template v-else-if="cashFlowList.length === 0">
-        <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無現金流資料</span>
+        <span :class="tailwindStyles.getNoDataClasses()">無現金流資料</span>
       </template>
     </div>
   </div>

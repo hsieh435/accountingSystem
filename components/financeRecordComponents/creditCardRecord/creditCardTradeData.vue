@@ -102,7 +102,7 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
         </div>
 
 
@@ -114,12 +114,12 @@ async function creditCardRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">說明：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses()}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
+          <textarea class="${tailwindStyles.getInputClasses()}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>

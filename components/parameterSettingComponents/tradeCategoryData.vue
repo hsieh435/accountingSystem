@@ -70,19 +70,19 @@ async function tradeCategoryDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易代碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="tradeCode" value="${dataParams.tradeCode}" ${props.tradeCodeGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.getInputClasses()}" id="tradeCode" value="${dataParams.tradeCode}" ${props.tradeCodeGot ? "disabled" : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易名稱：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="tradeName" value="${dataParams.tradeName}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="tradeName" value="${dataParams.tradeName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>排序：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="sort" value="${dataParams.sort}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="sort" value="${dataParams.sort}" type="number" />
         </div>
 
 

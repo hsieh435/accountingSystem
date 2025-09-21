@@ -44,31 +44,31 @@ async function submitUserData(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者代碼：</span>
-          <input class="${tailwindStyles.inputClasses()()}" id="userId" value="${dataParams.userId}" disabled />
+          <input class="${tailwindStyles.getInputClasses()()}" id="userId" value="${dataParams.userId}" disabled />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">使用者姓名：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userName" value="${dataParams.userName}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userName" value="${dataParams.userName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">舊密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="secondPassword" value="${secondPassword.value}" type="password" />
+          <input class="${tailwindStyles.getInputClasses()}" id="secondPassword" value="${secondPassword.value}" type="password" />
         </div>
 
       </div>

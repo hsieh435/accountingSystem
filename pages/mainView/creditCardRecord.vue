@@ -14,32 +14,35 @@
         :showFilter="false"
         @tableSliceChange="settingTableSlice" />
       <template v-if="creditCardRecordFiltered.length > 0">
-        <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
-          <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">信用卡</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">交易時間</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">項目</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">貨幣</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">金額</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">剩餘額度</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">內容</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
+        <div :class="tailwindStyles.getTableClasses()">
+          <div :class="tailwindStyles.getTheadClasses()">
+            <div :class="tailwindStyles.getTheadtrClasses()">
+              <div :class="tailwindStyles.getThClasses()">NO.</div>
+              <div :class="tailwindStyles.getThClasses()">信用卡</div>
+              <div :class="tailwindStyles.getThClasses()">交易時間</div>
+              <div :class="tailwindStyles.getThClasses()">項目</div>
+              <div :class="tailwindStyles.getThClasses()">貨幣</div>
+              <div :class="tailwindStyles.getThClasses()">金額</div>
+              <div :class="tailwindStyles.getThClasses()">剩餘額度</div>
+              <div :class="tailwindStyles.getThClasses()">內容</div>
+              <div :class="tailwindStyles.getThClasses()">操作</div>
             </div>
           </div>
-          <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="record in tableData" :key="record.tradeId">
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.no }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.creditcardName }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeName }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.currencyName }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(record.tradeAmount) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">0</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ record.tradeDescription }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
-                <creditCardTradeData :tradeIdGot="record.tradeId" :creditCardIdGot="record.creditCardId" @dataReseaching="searchingFinanceRecord" />
+          <div :class="tailwindStyles.getTbodyClasses()">
+            <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
+              <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ record.creditcardName }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">0</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
+              <div :class="tailwindStyles.getTdClasses()">
+                <creditCardTradeData
+                  :tradeIdGot="record.tradeId"
+                  :creditCardIdGot="record.creditCardId"
+                  @dataReseaching="searchingFinanceRecord" />
               </div>
             </div>
           </div>
@@ -47,7 +50,7 @@
       </template>
     </template>
     <template v-else-if="creditCardRecord.length === 0">
-      <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無交易資料</span>
+      <span :class="tailwindStyles.getNoDataClasses()">無交易資料</span>
     </template>
   </div>
 </template>
@@ -108,7 +111,6 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingFinanceRecord() {
-
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchingParams);
     console.log("res:", res.data.data);

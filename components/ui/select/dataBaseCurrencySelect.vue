@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses()" v-model="currencyId" :disabled="isSelectDisabled">
+  <select :class="tailwindStyles.getSelectClasses()" v-model="currencyId" :disabled="isSelectDisabled">
     <option v-for="currency in currencyArray" :key="currency.value" :value="currency.value">
       {{ currency.value }} {{ currency.label }}
     </option>

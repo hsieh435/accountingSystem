@@ -81,7 +81,7 @@ async function storedValueCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="storedValueCardName" value="${dataParams.storedValueCardName}" />
+          <input class="${tailwindStyles.getInputClasses()}" id="storedValueCardName" value="${dataParams.storedValueCardName}" />
         </div>
 
 
@@ -95,30 +95,30 @@ async function storedValueCardDataHandling(apiMsg?: string) {
           props.storedValueCardIdGot
             ? `<div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
+          <input class="${tailwindStyles.getInputClasses()}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
         </div>`
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.storedValueCardIdGot ? "disabled" : ""} />
+          <input class="${tailwindStyles.getInputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.storedValueCardIdGot ? "disabled" : ""} />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right">提醒金額：</span>
-          <input class="${tailwindStyles.inputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
@@ -132,7 +132,7 @@ async function storedValueCardDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
           <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.inputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
         </div>
 
 
@@ -141,7 +141,7 @@ async function storedValueCardDataHandling(apiMsg?: string) {
             ? `
           <div class="flex justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-            <input class="${tailwindStyles.inputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+            <input class="${tailwindStyles.getInputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
           </div>`
             : ""
         }

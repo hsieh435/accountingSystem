@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses()" v-model="tradeCategoryId">
+  <select :class="tailwindStyles.getSelectClasses()" v-model="tradeCategoryId">
     <option v-for="category in tradeCategoryList" :key="category.value" :value="category.value">{{
       category.label
     }}</option>

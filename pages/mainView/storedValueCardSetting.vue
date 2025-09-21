@@ -11,25 +11,25 @@
         :searchingPlaceholder="'搜尋儲值票名稱'"
         @tableSliceChange="settingTableSlice" />
       <template v-if="storedValueCardListFiltered.length > 0">
-        <div :class="tailwindStyles.tailwindTableStyles.tableClasses">
-          <div :class="tailwindStyles.tailwindTableStyles.theadClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.theadtrClasses">
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">啟用</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">NO.</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">票卡名稱</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">使用貨幣</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">初始金額</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">目前金額</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">最小儲值金額</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">最大儲值金額</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">提醒</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">建立時間</div>
-              <div :class="tailwindStyles.tailwindTableStyles.thClasses">操作</div>
+        <div :class="tailwindStyles.getTableClasses()">
+          <div :class="tailwindStyles.getTheadClasses()">
+            <div :class="tailwindStyles.getTheadtrClasses()">
+              <div :class="tailwindStyles.getThClasses()">啟用</div>
+              <div :class="tailwindStyles.getThClasses()">NO.</div>
+              <div :class="tailwindStyles.getThClasses()">票卡名稱</div>
+              <div :class="tailwindStyles.getThClasses()">使用貨幣</div>
+              <div :class="tailwindStyles.getThClasses()">初始金額</div>
+              <div :class="tailwindStyles.getThClasses()">目前金額</div>
+              <div :class="tailwindStyles.getThClasses()">最小儲值金額</div>
+              <div :class="tailwindStyles.getThClasses()">最大儲值金額</div>
+              <div :class="tailwindStyles.getThClasses()">提醒</div>
+              <div :class="tailwindStyles.getThClasses()">建立時間</div>
+              <div :class="tailwindStyles.getThClasses()">操作</div>
             </div>
           </div>
-          <div :class="tailwindStyles.tailwindTableStyles.tbodyClasses">
-            <div :class="tailwindStyles.tailwindTableStyles.tbodytrClasses" v-for="card in tableData" :key="card.storedValueCardId">
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+          <div :class="tailwindStyles.getTbodyClasses()">
+            <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.storedValueCardId">
+              <div :class="tailwindStyles.getTdClasses()">
                 <ui-switch
                   :switchValueGot="card.enable"
                   @sendBackSwitchValue="
@@ -39,19 +39,21 @@
                     }
                   " />
               </div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.no }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.storedValueCardName }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ card.currencyName }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.startingAmount) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.presentAmount) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.minimumValueAllowed) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ currencyFormat(card.maximumValueAllowed) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
+              <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ card.storedValueCardName }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.startingAmount) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">
                 <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
               </div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
-              <div :class="tailwindStyles.tailwindTableStyles.tdClasses">
-                <storedValueCardData :storedValueCardIdGot="card.storedValueCardId" @dataReseaching="storedValueCardSearching" />
+              <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+              <div :class="tailwindStyles.getTdClasses()">
+                <storedValueCardData
+                  :storedValueCardIdGot="card.storedValueCardId"
+                  @dataReseaching="storedValueCardSearching" />
               </div>
             </div>
           </div>
@@ -59,7 +61,7 @@
       </template>
     </template>
     <template v-else-if="storedValueCardList.length === 0">
-      <span :class="tailwindStyles.tailwindTableStyles.noDataClasses">無儲值票卡資料</span>
+      <span :class="tailwindStyles.getNoDataClasses()">無儲值票卡資料</span>
     </template>
   </div>
 </template>
@@ -85,7 +87,9 @@ definePageMeta({
 const accountSearching = defineAsyncComponent(
   () => import("@/components/personalSettingComponents/accountSearching.vue"),
 );
-const storedValueCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/storedValueCardData.vue"));
+const storedValueCardData = defineAsyncComponent(
+  () => import("@/components/personalSettingComponents/storedValueCardData.vue"),
+);
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

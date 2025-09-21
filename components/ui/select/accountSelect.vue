@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.selectClasses()" v-model="accountId" :disabled="isDisabled">
+  <select :class="tailwindStyles.getSelectClasses()" v-model="accountId" :disabled="isDisabled">
     <option v-for="account in accountList" :key="account.value" :value="account.value">
       {{ account.label }}
     </option>
