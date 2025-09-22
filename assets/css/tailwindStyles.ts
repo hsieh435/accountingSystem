@@ -34,9 +34,9 @@ export function getNoDataClasses() {
 }
 
 export function getSelectClasses(width: string | number = 200) {
-  return `${typeof width === "number" ? `w-[${width}px]` : `w-auto`} block border border-gray-300 rounded-md shadow-sm text-black bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
+  return `${typeof width === "number" ? `w-[${width}px]` : `${width}`} block border border-gray-300 rounded-md shadow-sm text-black bg-white px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
 }
 
 export function getInputClasses(width: string | number = 200) {
-  return `${typeof width === "number" ? `w-[${width}px]` : `w-auto`} border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500`;
+  return `${typeof width === "number" ? `w-[${width}px]` : `${width}`} border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500`;
 }

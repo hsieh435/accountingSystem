@@ -51,16 +51,6 @@ async function searchingCashFlowRecord() {
     });
     console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     if (res.data.returnCode === 0) {
-      // dataParams.tradeId = res.data.data.tradeId;
-      // dataParams.cashflowId = res.data.data.cashflowId;
-      // dataParams.userId = res.data.data.userId;
-      // dataParams.tradeDatetime = res.data.data.tradeDatetime;
-      // dataParams.transactionType = res.data.data.transactionType;
-      // dataParams.tradeCategory = res.data.data.tradeCategory;
-      // dataParams.tradeAmount = res.data.data.tradeAmount;
-      // dataParams.currency = res.data.data.currency;
-      // dataParams.tradeDescription = res.data.data.tradeDescription;
-      // dataParams.tradeNote = res.data.data.tradeNote;
       Object.assign(dataParams, res.data.data);
       await cashFlowRecordDataHandling();
     } else {
@@ -83,50 +73,50 @@ async function cashFlowRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
-          <div class="col-span-4" id="tradeDatetimeComponent"></div>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
+          <div id="tradeDatetimeComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>現金流：</span>
-          <div class="col-span-4" id="accountComponent"></div>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流：</span>
+          <div id="accountComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
           <div class="col-span-4" id="transactionTypeSelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
-          <div id="tradeCategorySelectComponent"></div>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
+          <div class="col-span-4" id="tradeCategorySelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <span class="col-span-2 text-right">說明：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses("col-span-3")}" id="tradeNote">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>

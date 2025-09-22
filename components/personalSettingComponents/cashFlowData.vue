@@ -76,13 +76,13 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="cashflowName" value="${dataParams.cashflowName}" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="cashflowName" value="${dataParams.cashflowName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">現金流貨幣：</span>
+          <span class="col-span-2 text-right">現金流貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
@@ -91,31 +91,31 @@ async function cashflowDataHandling(apiMsg?: string) {
           props.cashflowIdIdGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
+          <span class="col-span-2 text-right">目前金額：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
         </div>`
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <span class="col-span-2 text-right">提醒：</span>
           <div class="flex justify-start items-center">
             <div id="switchComponent"></div>
           </div>
@@ -123,8 +123,8 @@ async function cashflowDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses("col-span-3")}" id="note">${dataParams.note}</textarea>
         </div>
 
 
@@ -132,8 +132,8 @@ async function cashflowDataHandling(apiMsg?: string) {
           props.cashflowIdIdGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立日期：</span>
-          <input class="${tailwindStyles.getInputClasses()}" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          <span class="col-span-2 text-right">建立日期：</span>
+          <input class="${tailwindStyles.getInputClasses("col-span-3")}" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }
