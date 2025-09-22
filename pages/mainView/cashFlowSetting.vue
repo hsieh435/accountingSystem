@@ -13,46 +13,51 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="cashFlowListFiltered.length > 0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">啟用</div>
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">現金流名稱</div>
-                <div :class="tailwindStyles.getThClasses()">貨幣</div>
-                <div :class="tailwindStyles.getThClasses()">初始金額</div>
-                <div :class="tailwindStyles.getThClasses()">目前金額</div>
-                <div :class="tailwindStyles.getThClasses()">提醒金額</div>
-                <div :class="tailwindStyles.getThClasses()">提醒</div>
-                <div :class="tailwindStyles.getThClasses()">建立時間</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">啟用</div>
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">現金流名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣</div>
+                  <div :class="tailwindStyles.getThClasses()">初始金額</div>
+                  <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                  <div :class="tailwindStyles.getThClasses()">提醒金額</div>
+                  <div :class="tailwindStyles.getThClasses()">提醒</div>
+                  <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div :class="tailwindStyles.getTbodytrClasses()" v-for="cashFlow in tableData" :key="cashFlow.cashflowId">
-                <div :class="tailwindStyles.getTdClasses()" class="">
-                  <ui-switch
-                    id="cashFlowSwitch"
-                    :switchValueGot="cashFlow.enable"
-                    @sendBackSwitchValue="
-                      (value: boolean) => {
-                        cashFlow.enable = value;
-                        adjustAbleStatus(cashFlow);
-                      }
-                    " />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.cashflowName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div
+                  :class="tailwindStyles.getTbodytrClasses()"
+                  v-for="cashFlow in tableData"
+                  :key="cashFlow.cashflowId">
+                  <div :class="tailwindStyles.getTdClasses()" class="">
+                    <ui-switch
+                      id="cashFlowSwitch"
+                      :switchValueGot="cashFlow.enable"
+                      @sendBackSwitchValue="
+                        (value: boolean) => {
+                          cashFlow.enable = value;
+                          adjustAbleStatus(cashFlow);
+                        }
+                      " />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.cashflowName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+                  </div>
                 </div>
               </div>
             </div>
