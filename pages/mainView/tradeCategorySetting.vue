@@ -13,42 +13,44 @@
           :totalDataQuanity="tradeCategoryList.length"
           :showFilter="false" />
         <template v-if="tradeCategoryListFiltered.length > 0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">交易代碼</div>
-                <div :class="tailwindStyles.getThClasses()">交易名稱</div>
-                <div :class="tailwindStyles.getThClasses()">現金流</div>
-                <div :class="tailwindStyles.getThClasses()">儲值票卡</div>
-                <div :class="tailwindStyles.getThClasses()">信用卡</div>
-                <div :class="tailwindStyles.getThClasses()">存款帳戶</div>
-                <div :class="tailwindStyles.getThClasses()">證券帳戶</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">交易代碼</div>
+                  <div :class="tailwindStyles.getThClasses()">交易名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">現金流</div>
+                  <div :class="tailwindStyles.getThClasses()">儲值票卡</div>
+                  <div :class="tailwindStyles.getThClasses()">信用卡</div>
+                  <div :class="tailwindStyles.getThClasses()">存款帳戶</div>
+                  <div :class="tailwindStyles.getThClasses()">證券帳戶</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div :class="tailwindStyles.getTbodytrClasses()" v-for="trade in tableData" :key="trade.tradeCode">
-                <div :class="tailwindStyles.getTdClasses()">{{ trade.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeCode }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="trade.isStoredvaluecardAble" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="trade.isCuaccountAble" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="trade.isStaccountAble" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div :class="tailwindStyles.getTbodytrClasses()" v-for="trade in tableData" :key="trade.tradeCode">
+                  <div :class="tailwindStyles.getTdClasses()">{{ trade.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeCode }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="trade.isStoredvaluecardAble" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="trade.isCuaccountAble" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="trade.isStaccountAble" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />
+                  </div>
                 </div>
               </div>
             </div>

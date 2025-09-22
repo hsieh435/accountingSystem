@@ -13,27 +13,29 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="currencyListFiltered.length > 0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">貨幣代碼</div>
-                <div :class="tailwindStyles.getThClasses()">貨幣名稱</div>
-                <div :class="tailwindStyles.getThClasses()">貨幣符號</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣代碼</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣符號</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div
-                :class="tailwindStyles.getTbodytrClasses()"
-                v-for="currency in tableData"
-                :key="currency.currencyCode">
-                <div :class="tailwindStyles.getTdClasses()">{{ currency.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currency.currencyCode }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currency.currencyName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currency.currencySymbol }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div
+                  :class="tailwindStyles.getTbodytrClasses()"
+                  v-for="currency in tableData"
+                  :key="currency.currencyCode">
+                  <div :class="tailwindStyles.getTdClasses()">{{ currency.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currency.currencyCode }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currency.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currency.currencySymbol }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <currencyData :currencyCodeGot="currency.currencyCode" @dataReseaching="searchingCurrencyList" />
+                  </div>
                 </div>
               </div>
             </div>

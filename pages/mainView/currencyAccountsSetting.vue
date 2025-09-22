@@ -12,49 +12,51 @@
           :searchingPlaceholder="'搜尋帳戶名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="currencyAccountListFiltered.length > 0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">啟用</div>
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">帳戶名稱</div>
-                <div :class="tailwindStyles.getThClasses()">銀行代號 / 銀行名稱</div>
-                <div :class="tailwindStyles.getThClasses()">目前金額</div>
-                <div :class="tailwindStyles.getThClasses()">提醒</div>
-                <div :class="tailwindStyles.getThClasses()">薪資帳戶</div>
-                <div :class="tailwindStyles.getThClasses()">建立時間</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">啟用</div>
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">帳戶名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">銀行代號 / 銀行名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                  <div :class="tailwindStyles.getThClasses()">提醒</div>
+                  <div :class="tailwindStyles.getThClasses()">薪資帳戶</div>
+                  <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div :class="tailwindStyles.getTbodytrClasses()" v-for="account in tableData" :key="account.accountId">
-                <div :class="tailwindStyles.getTdClasses()">
-                  <ui-switch
-                    :switchValueGot="account.enable"
-                    @sendBackSwitchValue="
-                      (value: boolean) => {
-                        account.enable = value;
-                        adjustAbleStatus(account);
-                      }
-                    " />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ account.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ account.accountName }}</div>
-                <div :class="tailwindStyles.getTdClasses()"
-                  >{{ account.accountBankCode }} / {{ account.accountBankName }}</div
-                >
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="account.openAlert" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon icon="check" v-if="account.isSalaryAccount" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <currencyAccountsData
-                    :currencyAccountIdGot="account.accountId"
-                    @dataReseaching="currencyAccountSearching()" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div :class="tailwindStyles.getTbodytrClasses()" v-for="account in tableData" :key="account.accountId">
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <ui-switch
+                      :switchValueGot="account.enable"
+                      @sendBackSwitchValue="
+                        (value: boolean) => {
+                          account.enable = value;
+                          adjustAbleStatus(account);
+                        }
+                      " />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ account.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ account.accountName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()"
+                    >{{ account.accountBankCode }} / {{ account.accountBankName }}</div
+                  >
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="account.openAlert" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon icon="check" v-if="account.isSalaryAccount" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <currencyAccountsData
+                      :currencyAccountIdGot="account.accountId"
+                      @dataReseaching="currencyAccountSearching()" />
+                  </div>
                 </div>
               </div>
             </div>

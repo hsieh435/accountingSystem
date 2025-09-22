@@ -13,49 +13,51 @@
           :searchingPlaceholder="'搜尋信用卡名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="creditCardListFiltered.length > 0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">啟用</div>
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">信用卡名稱</div>
-                <div :class="tailwindStyles.getThClasses()">發卡銀行代號 / 名稱</div>
-                <div :class="tailwindStyles.getThClasses()">發卡機構</div>
-                <div :class="tailwindStyles.getThClasses()">結算貨幣</div>
-                <div :class="tailwindStyles.getThClasses()">每月額度</div>
-                <div :class="tailwindStyles.getThClasses()">消費提醒</div>
-                <div :class="tailwindStyles.getThClasses()">到期</div>
-                <div :class="tailwindStyles.getThClasses()">建立時間</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">啟用</div>
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">信用卡名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">發卡銀行代號 / 名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">發卡機構</div>
+                  <div :class="tailwindStyles.getThClasses()">結算貨幣</div>
+                  <div :class="tailwindStyles.getThClasses()">每月額度</div>
+                  <div :class="tailwindStyles.getThClasses()">消費提醒</div>
+                  <div :class="tailwindStyles.getThClasses()">到期</div>
+                  <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.creditcardId">
-                <div :class="tailwindStyles.getTdClasses()">
-                  <ui-switch
-                    :switchValueGot="card.enable"
-                    @sendBackSwitchValue="
-                      (value: boolean) => {
-                        card.enable = value;
-                        adjustAbleStatus(card);
-                      }
-                    " />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
-                </div>
-                <div :class="tailwindStyles.getTdClasses()">{{ card.expirationDate.slice(0, 7) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.creditcardId">
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <ui-switch
+                      :switchValueGot="card.enable"
+                      @sendBackSwitchValue="
+                        (value: boolean) => {
+                          card.enable = value;
+                          adjustAbleStatus(card);
+                        }
+                      " />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.expirationDate.slice(0, 7) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
+                  </div>
                 </div>
               </div>
             </div>

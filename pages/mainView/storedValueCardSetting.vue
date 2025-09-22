@@ -11,49 +11,51 @@
         :searchingPlaceholder="'搜尋儲值票名稱'"
         @tableSliceChange="settingTableSlice" />
       <template v-if="storedValueCardListFiltered.length > 0">
-        <div :class="tailwindStyles.getTableClasses()">
-          <div :class="tailwindStyles.getTheadClasses()">
-            <div :class="tailwindStyles.getTheadtrClasses()">
-              <div :class="tailwindStyles.getThClasses()">啟用</div>
-              <div :class="tailwindStyles.getThClasses()">NO.</div>
-              <div :class="tailwindStyles.getThClasses()">票卡名稱</div>
-              <div :class="tailwindStyles.getThClasses()">使用貨幣</div>
-              <div :class="tailwindStyles.getThClasses()">初始金額</div>
-              <div :class="tailwindStyles.getThClasses()">目前金額</div>
-              <div :class="tailwindStyles.getThClasses()">最小儲值金額</div>
-              <div :class="tailwindStyles.getThClasses()">最大儲值金額</div>
-              <div :class="tailwindStyles.getThClasses()">提醒</div>
-              <div :class="tailwindStyles.getThClasses()">建立時間</div>
-              <div :class="tailwindStyles.getThClasses()">操作</div>
+        <div class="rounded-lg overflow-hidden p-0">
+          <div :class="tailwindStyles.getTableClasses()">
+            <div :class="tailwindStyles.getTheadClasses()">
+              <div :class="tailwindStyles.getTheadtrClasses()">
+                <div :class="tailwindStyles.getThClasses()">啟用</div>
+                <div :class="tailwindStyles.getThClasses()">NO.</div>
+                <div :class="tailwindStyles.getThClasses()">票卡名稱</div>
+                <div :class="tailwindStyles.getThClasses()">使用貨幣</div>
+                <div :class="tailwindStyles.getThClasses()">初始金額</div>
+                <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                <div :class="tailwindStyles.getThClasses()">最小儲值金額</div>
+                <div :class="tailwindStyles.getThClasses()">最大儲值金額</div>
+                <div :class="tailwindStyles.getThClasses()">提醒</div>
+                <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                <div :class="tailwindStyles.getThClasses()">操作</div>
+              </div>
             </div>
-          </div>
-          <div :class="tailwindStyles.getTbodyClasses()">
-            <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.storedValueCardId">
-              <div :class="tailwindStyles.getTdClasses()">
-                <ui-switch
-                  :switchValueGot="card.enable"
-                  @sendBackSwitchValue="
-                    (value: boolean) => {
-                      card.enable = value;
-                      adjustAbleStatus(card);
-                    }
-                  " />
-              </div>
-              <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ card.storedValueCardName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.startingAmount) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">
-                <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
-              </div>
-              <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">
-                <storedValueCardData
-                  :storedValueCardIdGot="card.storedValueCardId"
-                  @dataReseaching="storedValueCardSearching" />
+            <div :class="tailwindStyles.getTbodyClasses()">
+              <div :class="tailwindStyles.getTbodytrClasses()" v-for="card in tableData" :key="card.storedValueCardId">
+                <div :class="tailwindStyles.getTdClasses()">
+                  <ui-switch
+                    :switchValueGot="card.enable"
+                    @sendBackSwitchValue="
+                      (value: boolean) => {
+                        card.enable = value;
+                        adjustAbleStatus(card);
+                      }
+                    " />
+                </div>
+                <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ card.storedValueCardName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.startingAmount) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
+                  <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="card.openAlert" />
+                </div>
+                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
+                  <storedValueCardData
+                    :storedValueCardIdGot="card.storedValueCardId"
+                    @dataReseaching="storedValueCardSearching" />
+                </div>
               </div>
             </div>
           </div>

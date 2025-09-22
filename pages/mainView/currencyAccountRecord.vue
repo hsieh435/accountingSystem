@@ -14,37 +14,39 @@
         :showFilter="false"
         @tableSliceChange="settingTableSlice" />
       <template v-if="currencyAccountRecordFiltered.length > 0">
-        <div :class="tailwindStyles.getTableClasses()">
-          <div :class="tailwindStyles.getTheadClasses()">
-            <div :class="tailwindStyles.getTheadtrClasses()">
-              <div :class="tailwindStyles.getThClasses()">NO.</div>
-              <div :class="tailwindStyles.getThClasses()">帳戶</div>
-              <div :class="tailwindStyles.getThClasses()">交易時間</div>
-              <div :class="tailwindStyles.getThClasses()">收支</div>
-              <div :class="tailwindStyles.getThClasses()">項目</div>
-              <div :class="tailwindStyles.getThClasses()">貨幣</div>
-              <div :class="tailwindStyles.getThClasses()">金額</div>
-              <div :class="tailwindStyles.getThClasses()">餘額</div>
-              <div :class="tailwindStyles.getThClasses()">內容</div>
-              <div :class="tailwindStyles.getThClasses()">操作</div>
+        <div class="rounded-lg overflow-hidden p-0">
+          <div :class="tailwindStyles.getTableClasses()">
+            <div :class="tailwindStyles.getTheadClasses()">
+              <div :class="tailwindStyles.getTheadtrClasses()">
+                <div :class="tailwindStyles.getThClasses()">NO.</div>
+                <div :class="tailwindStyles.getThClasses()">帳戶</div>
+                <div :class="tailwindStyles.getThClasses()">交易時間</div>
+                <div :class="tailwindStyles.getThClasses()">收支</div>
+                <div :class="tailwindStyles.getThClasses()">項目</div>
+                <div :class="tailwindStyles.getThClasses()">貨幣</div>
+                <div :class="tailwindStyles.getThClasses()">金額</div>
+                <div :class="tailwindStyles.getThClasses()">餘額</div>
+                <div :class="tailwindStyles.getThClasses()">內容</div>
+                <div :class="tailwindStyles.getThClasses()">操作</div>
+              </div>
             </div>
-          </div>
-          <div :class="tailwindStyles.getTbodyClasses()">
-            <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
-              <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ record.accountName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
-              <div :class="tailwindStyles.getTdClasses()">0</div>
-              <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
-              <div :class="tailwindStyles.getTdClasses()">
-                <currencyAccountTradeData
-                  :tradeIdGot="record.tradeId"
-                  :accountIdGot="record.accountId"
-                  @dataReseaching="searchingFinanceRecord" />
+            <div :class="tailwindStyles.getTbodyClasses()">
+              <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
+                <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.accountName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
+                <div :class="tailwindStyles.getTdClasses()">0</div>
+                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
+                <div :class="tailwindStyles.getTdClasses()">
+                  <currencyAccountTradeData
+                    :tradeIdGot="record.tradeId"
+                    :accountIdGot="record.accountId"
+                    @dataReseaching="searchingFinanceRecord" />
+                </div>
               </div>
             </div>
           </div>
