@@ -71,49 +71,49 @@ async function storedValueCardRecordDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡：</span>
           <div id="accountSelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div id="tradeDatetimeComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
           <div class="col-span-4" id="transactionTypeSelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
           <div id="tradeCategorySelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <span class="col-span-2 text-right">說明：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="tradeNote" rows="6">${dataParams.tradeNote}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeNote">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>

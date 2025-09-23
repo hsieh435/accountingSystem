@@ -100,7 +100,7 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
         ${
           props.tradeIdGot
             ? `
-        <input class="${tailwindStyles.getInputClasses()} col-span-4" value="${dataParams.stockNo + dataParams.stockName}" disabled />`
+        <input class="${tailwindStyles.getInputClasses('col-span-3')} col-span-4" value="${dataParams.stockNo + dataParams.stockName}" disabled />`
             : `
         <div class="col-span-4" id="stockSelectComponent"></div>`
         }
@@ -145,13 +145,13 @@ async function stockAccountRecordDataHandling(apiMsg?: string) {
 
         <div class="flex justify-start items-center grid grid-cols-8 my-2">
           <span class="col-span-2 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-span-5" id="tradeDescription" value="${dataParams.tradeDescription}" />
+          <input class="${tailwindStyles.getInputClasses('col-span-5')}" id="tradeDescription" value="${dataParams.tradeDescription}" />
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-8 my-2">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()} col-span-5" id="tradeNote" rows="4">${dataParams.tradeNote}</textarea>
+          <textarea class="${tailwindStyles.getInputClasses('col-span-5')}" id="tradeNote">${dataParams.tradeNote}</textarea>
         </div>
 
       </div>

@@ -48,17 +48,17 @@ async function searchingStockAccountData() {
   try {
     const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
     if (res.data.returnCode === 0) {
-      dataParams.accountId = res.data.data.accountId;
-      dataParams.userId = res.data.data.userId;
-      dataParams.accountName = res.data.data.accountName;
-      dataParams.accountBankCode = res.data.data.accountBankCode;
-      dataParams.accountBankName = res.data.data.accountBankName;
-      dataParams.currency = res.data.data.currency;
-      dataParams.alertValue = res.data.data.alertValue;
-      dataParams.openAlert = res.data.data.openAlert;
-      dataParams.createdDate = res.data.data.createdDate;
-      dataParams.note = res.data.data.note;
-
+      // dataParams.accountId = res.data.data.accountId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.accountName = res.data.data.accountName;
+      // dataParams.accountBankCode = res.data.data.accountBankCode;
+      // dataParams.accountBankName = res.data.data.accountBankName;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.alertValue = res.data.data.alertValue;
+      // dataParams.openAlert = res.data.data.openAlert;
+      // dataParams.createdDate = res.data.data.createdDate;
+      // dataParams.note = res.data.data.note;
+      Object.assign(dataParams, res.data.data);
       await stockAccountDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
@@ -79,30 +79,30 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶號碼：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶號碼：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="accountId" value="${dataParams.accountId}" ${props.stockAccountIGot ? `disabled` : ""} />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶名稱：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="accountName" value="${dataParams.accountName}" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶名稱：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="accountName" value="${dataParams.accountName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">銀行代碼：</span>
+          <span class="col-span-2 text-right">銀行代碼：</span>
           <input class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="accountBankCode" maxlength="3" value="${dataParams.accountBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">銀行名稱：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="accountBankName" value="${dataParams.accountBankName}" />
+          <span class="col-span-2 text-right">銀行名稱：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="accountBankName" value="${dataParams.accountBankName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
@@ -111,30 +111,30 @@ async function stockAccountDataHandling(apiMsg?: string) {
           props.stockAccountIGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
+          <span class="col-span-2 text-right">目前金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="presentAmount" value="${currencyFormat(dataParams.presentAmount)}" disabled />
         </div>`
             : `<div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 w-full my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <span class="col-span-2 text-right">提醒：</span>
           <div class="flex justify-start items-center">
             <div id="switchComponent"></div>
           </div>
@@ -142,8 +142,8 @@ async function stockAccountDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="note">${dataParams.note}</textarea>
         </div>
 
 
@@ -151,8 +151,8 @@ async function stockAccountDataHandling(apiMsg?: string) {
           props.stockAccountIGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          <span class="col-span-2 text-right">建立時間：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }

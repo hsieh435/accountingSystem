@@ -48,18 +48,19 @@ async function searchingStoredValueCardData() {
     const res: IResponse = await fetchStoredValueCardById(props.storedValueCardIdGot);
     console.log("fetchStoredValueCardById:", res.data.data);
     if (res.data.returnCode === 0) {
-      dataParams.storedValueCardId = res.data.data.storedValueCardId;
-      dataParams.userId = res.data.data.userId;
-      dataParams.storedValueCardName = res.data.data.storedValueCardName;
-      dataParams.currency = res.data.data.currency;
-      dataParams.startingAmount = res.data.data.startingAmount;
-      dataParams.presentAmount = res.data.data.presentAmount;
-      dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
-      dataParams.maximumValueAllowed = res.data.data.maximumValueAllowed;
-      dataParams.alertValue = res.data.data.alertValue;
-      dataParams.openAlert = res.data.data.openAlert;
-      dataParams.createdDate = res.data.data.createdDate;
-      dataParams.note = res.data.data.note;
+      // dataParams.storedValueCardId = res.data.data.storedValueCardId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.storedValueCardName = res.data.data.storedValueCardName;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.startingAmount = res.data.data.startingAmount;
+      // dataParams.presentAmount = res.data.data.presentAmount;
+      // dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
+      // dataParams.maximumValueAllowed = res.data.data.maximumValueAllowed;
+      // dataParams.alertValue = res.data.data.alertValue;
+      // dataParams.openAlert = res.data.data.openAlert;
+      // dataParams.createdDate = res.data.data.createdDate;
+      // dataParams.note = res.data.data.note;
+      Object.assign(dataParams, res.data.data);
       await storedValueCardDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
@@ -80,13 +81,13 @@ async function storedValueCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="storedValueCardName" value="${dataParams.storedValueCardName}" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="storedValueCardName" value="${dataParams.storedValueCardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
@@ -94,36 +95,36 @@ async function storedValueCardDataHandling(apiMsg?: string) {
         ${
           props.storedValueCardIdGot
             ? `<div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">目前金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
+          <span class="col-span-2 text-right">目前金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
         </div>`
             : `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.storedValueCardIdGot ? "disabled" : ""} />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="startingAmount" value="${dataParams.startingAmount}" type="number" ${props.storedValueCardIdGot ? "disabled" : ""} />
         </div>`
         }
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="maximumValueAllowed" value="${dataParams.maximumValueAllowed}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <span class="col-span-2 text-right">提醒金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+        </div>
+
+
+        <div class="flex justify-start items-center grid grid-cols-6 my-2">
+          <span class="col-span-2 text-right">提醒：</span>
           <div class="flex justify-start items-center">
             <div id="switchComponent"></div>
           </div>
@@ -131,8 +132,8 @@ async function storedValueCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="note">${dataParams.note}</textarea>
         </div>
 
 
@@ -140,8 +141,8 @@ async function storedValueCardDataHandling(apiMsg?: string) {
           props.storedValueCardIdGot
             ? `
           <div class="flex justify-start items-center grid grid-cols-6 my-2">
-            <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-            <input class="${tailwindStyles.getInputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+            <span class="col-span-2 text-right">建立時間：</span>
+            <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
           </div>`
             : ""
         }

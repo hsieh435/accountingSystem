@@ -47,20 +47,20 @@ async function searchingCreditCardData() {
   try {
     const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
     if (res.data.returnCode === 0) {
-      dataParams.creditcardId = res.data.data.creditcardId;
-      dataParams.userId = res.data.data.userId;
-      dataParams.creditcardName = res.data.data.creditcardName;
-      dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
-      dataParams.creditcardBankName = res.data.data.creditcardBankName;
-      dataParams.creditcardSchema = res.data.data.creditcardSchema;
-      dataParams.currency = res.data.data.currency;
-      dataParams.creditPerMonth = res.data.data.creditPerMonth;
-      dataParams.expirationDate = res.data.data.expirationDate;
-      dataParams.alertValue = res.data.data.alertValue;
-      dataParams.openAlert = res.data.data.openAlert;
-      dataParams.createdDate = res.data.data.createdDate;
-      dataParams.note = res.data.data.note;
-
+      // dataParams.creditcardId = res.data.data.creditcardId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.creditcardName = res.data.data.creditcardName;
+      // dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
+      // dataParams.creditcardBankName = res.data.data.creditcardBankName;
+      // dataParams.creditcardSchema = res.data.data.creditcardSchema;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.creditPerMonth = res.data.data.creditPerMonth;
+      // dataParams.expirationDate = res.data.data.expirationDate;
+      // dataParams.alertValue = res.data.data.alertValue;
+      // dataParams.openAlert = res.data.data.openAlert;
+      // dataParams.createdDate = res.data.data.createdDate;
+      // dataParams.note = res.data.data.note;
+      Object.assign(dataParams, res.data.data);
       await creditCardDataHandling();
     } else {
       showAxiosToast({ message: res.data.message });
@@ -81,52 +81,52 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="creditcardName" value="${dataParams.creditcardName}" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="creditcardName" value="${dataParams.creditcardName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡銀行代碼：</span>
+          <span class="col-span-2 text-right">發卡銀行代碼：</span>
           <input class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1" id="creditcardBankCode" value="${dataParams.creditcardBankCode}" />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">發卡銀行：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
+          <span class="col-span-2 text-right">發卡銀行：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="creditcardBankName" value="${dataParams.creditcardBankName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>發卡機構：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>發卡機構：</span>
           <div id="creditcardSchemaSelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
           <div id="dataBaseCurrencySelectComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="creditPerMonth" value="${dataParams.creditPerMonth}" type="number" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 mt-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="alertValue" value="${dataParams.alertValue}" type="number" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="alertValue" value="${dataParams.alertValue}" type="number" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6 mb-2">
-          <span class="col-start-1 col-end-3 text-right"></span>
+          <span class="col-span-2 text-right"></span>
           <span class="col-start-3 col-end-6 text-left text-red-600">（ 每月消費額度累積提醒 ）</span>
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">提醒：</span>
+          <span class="col-span-2 text-right">提醒：</span>
           <div class="flex justify-start items-center">
             <div id="switchComponent"></div>
           </div>
@@ -134,16 +134,14 @@ async function creditCardDataHandling(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
-          <div class="flex justify-start items-center">
-            <div class="mx-2" id="yearMonthComponent"></div>
-          </div>
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
+          <div id="yearMonthComponent"></div>
         </div>
 
 
         <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses()}" id="note" rows="6">${dataParams.note}</textarea>
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="note">${dataParams.note}</textarea>
         </div>
 
 
@@ -151,8 +149,8 @@ async function creditCardDataHandling(apiMsg?: string) {
           props.creditCardIdGot
             ? `
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">建立時間：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
+          <span class="col-span-2 text-right">建立時間：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="createdDate" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
         </div>`
             : ""
         }

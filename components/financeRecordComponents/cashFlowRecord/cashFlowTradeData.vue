@@ -49,7 +49,7 @@ async function searchingCashFlowRecord() {
       cashflowId: props.cashflowIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchCashFlowRecordByTradeId:", res.data.data);
+    // console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       await cashFlowRecordDataHandling();
