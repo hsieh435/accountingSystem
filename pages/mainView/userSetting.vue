@@ -1,4 +1,5 @@
-<template></template>
+<template>
+</template>
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { IUserData, IResponse } from "@/models/index";
@@ -43,32 +44,32 @@ async function submitUserData(apiMsg?: string) {
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">使用者代碼：</span>
-          <input class="${tailwindStyles.getInputClasses()()}" id="userId" value="${dataParams.userId}" disabled />
+          <span class="col-span-2 text-right">使用者代碼：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userId" value="${dataParams.userId}" disabled />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">使用者姓名：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="userName" value="${dataParams.userName}" />
+          <span class="col-span-2 text-right">使用者姓名：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userName" value="${dataParams.userName}" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">舊密碼：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
+          <span class="col-span-2 text-right">舊密碼：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
+          <span class="col-span-2 text-right">新密碼：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
         </div>
 
 
         <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-start-1 col-end-3 text-right">確認密碼：</span>
-          <input class="${tailwindStyles.getInputClasses()}" id="secondPassword" value="${secondPassword.value}" type="password" />
+          <span class="col-span-2 text-right">確認密碼：</span>
+          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="secondPassword" value="${secondPassword.value}" type="password" />
         </div>
 
       </div>

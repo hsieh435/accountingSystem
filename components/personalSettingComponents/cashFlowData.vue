@@ -43,19 +43,20 @@ async function searchingCashflowData() {
   // console.log("props:", props);
   try {
     const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
+    // console.log("fetchCashFlowById:", res.data.datares);
     if (res.data.returnCode === 0) {
-      dataParams.cashflowId = res.data.data.cashflowId;
-      dataParams.userId = res.data.data.userId;
-      dataParams.cashflowName = res.data.data.cashflowName;
-      dataParams.currency = res.data.data.currency;
-      dataParams.startingAmount = res.data.data.startingAmount;
-      dataParams.presentAmount = res.data.data.presentAmount;
-      dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
-      dataParams.alertValue = res.data.data.alertValue;
-      dataParams.openAlert = res.data.data.openAlert;
-      dataParams.createdDate = res.data.data.createdDate;
-      dataParams.note = res.data.data.note;
-
+      // dataParams.cashflowId = res.data.data.cashflowId;
+      // dataParams.userId = res.data.data.userId;
+      // dataParams.cashflowName = res.data.data.cashflowName;
+      // dataParams.currency = res.data.data.currency;
+      // dataParams.startingAmount = res.data.data.startingAmount;
+      // dataParams.presentAmount = res.data.data.presentAmount;
+      // dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
+      // dataParams.alertValue = res.data.data.alertValue;
+      // dataParams.openAlert = res.data.data.openAlert;
+      // dataParams.createdDate = res.data.data.createdDate;
+      // dataParams.note = res.data.data.note;
+      Object.assign(dataParams, res.data.data);
       await cashflowDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
