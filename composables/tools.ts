@@ -1,4 +1,4 @@
-import { encryptString, decryptString } from "@/composables/crypto";
+import { encryptString, decryptString } from "@/composables/crypto.ts";
 
 
 
