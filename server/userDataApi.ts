@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { IResponse } from "@/models/index";
+import { IResponse } from "@/models/index.ts";
 
 export async function fetchUserList() {
   const response = await apiFetch("/accounting_system_backend/public/api/userList", "GET");
