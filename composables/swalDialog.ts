@@ -1,4 +1,4 @@
-import { IResponse } from "@/models/index";
+import { IResponse } from "@/models/index.ts";
 import Swal from "sweetalert2";
 
 
@@ -46,7 +46,7 @@ export function showAxiosErrorMsg({ message, icon = "error", hasConfirmButton = 
     showConfirmButton: hasConfirmButton,
     confirmButtonText: `確定`,
     width: "auto",
-    color: "#000",
+    color: "rgb(0, 0, 0)",
   });
 }
 

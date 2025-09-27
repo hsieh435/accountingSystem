@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { IResponse } from "@/models/index.ts";
+import { IResponse, IUserData } from "@/models/index.ts";
 
 export async function fetchUserList() {
   const response = await apiFetch("/accounting_system_backend/public/api/userList", "GET");
@@ -14,7 +14,7 @@ export async function fetchUserLogin(data: { userId: string; password: string })
   return await response.json();
 }
 
-export async function fetchUserDataChange(data: string) {
+export async function fetchUserDataChange(data: IUserData) {
   // console.log("data:", data);
   const response = await apiFetch("/accounting_system_backend/api/user/dataUpdate", "POST", {
     body: JSON.stringify(data),

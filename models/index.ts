@@ -17,6 +17,7 @@ export interface IUserData {
   userName: string;
   userOldPassword: string;
   userNewPassword: string;
+  secondPassword: string;
 }
 
 // 資料排序方式 interface

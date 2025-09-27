@@ -1,13 +1,11 @@
-import type { AxiosResponse } from "axios";
-import { AxiosError } from "axios";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { showAxiosErrorMsg } from "@/composables/swalDialog.ts";
 
 
 
 export async function downloadFunction({ downloadApi, functionParams = {} }: { downloadApi: Function, functionParams?: any; }) {
 
   try {
-    const res: AxiosResponse = await downloadApi(functionParams);
+    const res = await downloadApi(functionParams);
     if (res.status === 200 && res.headers.hasOwnProperty("content-disposition")) {
 
       const disposition = res.headers["content-disposition"];
@@ -31,19 +29,6 @@ export async function downloadFunction({ downloadApi, functionParams = {} }: { d
   }
 }
 
-
-
-export async function dataApiCatch(err: AxiosError, checkingId: string = "") {
-
-  if (err.code === "-1") {
-    showAxiosErrorMsg({ message: err.message });
-    await resetOutline();
-  } else if (err.code === "-2") {
-    mustValidatedColumnChecking(JSON.parse(JSON.stringify(err.response)), checkingId);
-  } else {
-    showAxiosErrorMsg({ message: err.message || "發生錯誤" });
-  }
-}
 
 
 

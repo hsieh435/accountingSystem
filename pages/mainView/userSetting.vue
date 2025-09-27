@@ -1,16 +1,114 @@
 <template>
+  <UModal
+    title="使用者資料設定"
+    description="修改資料"
+    v-model:open="open"
+    :dismissible="false"
+    :close="{
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full',
+    }">
+    <UButton class="hidden" />
+    <template #body>
+      <div class="flex flex-col justify-center items-center gap-2">
+        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+
+        <div class="flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">使用者代碼：</span>
+          <input
+            :class="tailwindStyles.getInputClasses('col-span-3')"
+            id="userId"
+            v-model="dataParams.userId"
+            disabled />
+        </div>
+
+        <div>
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">使用者姓名：</span>
+            <input
+              :class="[tailwindStyles.getInputClasses('col-span-3'), dataValidate.userName ? '' : 'outline-red-500']"
+              id="userName"
+              v-model="dataParams.userName"
+              type="search" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userName">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請輸入使用者姓名</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">舊密碼：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.userOldPassword ? '' : 'outline-1 outline-red-500',
+              ]"
+              id="userOldPassword"
+              v-model="dataParams.userOldPassword"
+              type="password" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userOldPassword">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請輸入舊密碼</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">新密碼：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.userNewPassword ? '' : 'outline-1 outline-red-500',
+              ]"
+              id="userNewPassword"
+              v-model="dataParams.userNewPassword"
+              type="password" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userNewPassword">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請輸入新密碼</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">確認密碼：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.secondPassword ? '' : 'outline-1 outline-red-500',
+              ]"
+              id="secondPassword"
+              v-model="dataParams.secondPassword"
+              type="password" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.secondPassword">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">{{ secondPasswordValidateText }}</span>
+          </div>
+        </div>
+
+        <div class="my-2">
+          <ui-buttonGroup showSave @dataSave="submitUserData" />
+          <ui-buttonGroup showClose @dataClose="open = false" />
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, watch, reactive, ref } from "vue";
 import { IUserData, IResponse } from "@/models/index";
 import { navigateTo } from "nuxt/app";
 import { jwtTokenEncoded } from "@/server/index.ts";
 import { fetchUserDataChange } from "@/server/userDataApi";
 import { setLocalStorageItem } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
 import { encryptString } from "@/composables/crypto";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import Swal from "sweetalert2";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -19,125 +117,80 @@ definePageMeta({
   subTitle: "使用者資料設定",
 });
 
+const open = ref<boolean>(true);
 const dataParams = reactive<IUserData>({
   userId: "",
   userName: "",
   userOldPassword: "",
   userNewPassword: "",
+  secondPassword: "",
 });
-const secondPassword = ref<string>("");
+const dataValidate = reactive<any>({
+  userId: true,
+  userName: true,
+  userOldPassword: true,
+  userNewPassword: true,
+  secondPassword: true,
+});
+const secondPasswordValidateText = ref<string>("");
 
 onMounted(() => {
   dataParams.userId = jwtTokenEncoded()?.payload?.userId ?? "";
   dataParams.userName = jwtTokenEncoded()?.payload?.userName ?? "";
-  submitUserData();
 });
 
-async function submitUserData(apiMsg?: string) {
-  // console.log(dataParams);
+watch(open, () => {
+  if (open.value === false) {
+    navigateTo("/mainView");
+  }
+});
 
-  Swal.fire({
-    title: "編輯使用者資料",
-    html: `
-      <div class="items-center rounded-md">
-        <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
+function validateUserData() {
+  dataValidate.userName = !!dataParams.userName;
+  dataValidate.userOldPassword = !!dataParams.userOldPassword;
+  dataValidate.userNewPassword = !!dataParams.userNewPassword;
+  dataValidate.secondPassword = !!dataParams.secondPassword;
+  secondPasswordValidateText.value = "";
 
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">使用者代碼：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userId" value="${dataParams.userId}" disabled />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">使用者姓名：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userName" value="${dataParams.userName}" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">舊密碼：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userOldPassword" value="${dataParams.userOldPassword}" type="password" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">新密碼：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="userNewPassword" value="${dataParams.userNewPassword}" type="password" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">確認密碼：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="secondPassword" value="${secondPassword.value}" type="password" />
-        </div>
-
-      </div>
-    `,
-    confirmButtonText: "修改",
-    showCancelButton: true,
-    cancelButtonText: "取消",
-    allowOutsideClick: false,
-    didOpen: () => {
-      if (apiMsg) {
-        Swal.showValidationMessage(apiMsg);
-        return false;
-      }
-    },
-    preConfirm: () => {
-      const errors: string[] = [];
-
-      dataParams.userId = (document.getElementById("userId") as HTMLInputElement).value;
-      dataParams.userName = (document.getElementById("userName") as HTMLInputElement).value;
-      dataParams.userOldPassword = (document.getElementById("userOldPassword") as HTMLInputElement).value;
-      dataParams.userNewPassword = (document.getElementById("userNewPassword") as HTMLInputElement).value;
-      secondPassword.value = (document.getElementById("secondPassword") as HTMLInputElement).value;
-
-      if (!dataParams.userName) {
-        errors.push("請填寫使用者姓名");
-      }
-      if (!dataParams.userOldPassword) {
-        errors.push("請填寫舊密碼");
-      }
-      if (!dataParams.userNewPassword || !secondPassword.value) {
-        errors.push("請填寫新密碼");
-      }
-      if (
-        (!dataParams.userNewPassword || !secondPassword.value) &&
-        dataParams.userNewPassword !== secondPassword.value
-      ) {
-        errors.push("兩次密碼輸入不一致");
-      }
-      if (errors.length > 0) {
-        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
-        return false;
-      }
-
-      return dataParams;
-    },
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      result.value.userOldPassword = encryptString(result.value.userOldPassword);
-      result.value.userNewPassword = encryptString(result.value.userNewPassword);
-
-      try {
-        const res: IResponse = await fetchUserDataChange(result.value);
-        if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
-          setLocalStorageItem("userToken", res.data.data.jwt);
-          navigateTo("/mainView");
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
-      } finally {
-        navigateTo("/mainView");
-      }
-    } else {
-      navigateTo("/mainView");
+  if (
+    !dataValidate.userName ||
+    !dataValidate.userOldPassword ||
+    !dataValidate.userNewPassword ||
+    !dataValidate.secondPassword
+  ) {
+    if (!dataValidate.secondPassword) {
+      secondPasswordValidateText.value = "請再次輸入新密碼";
     }
-  });
+    return false;
+  }
+
+  if (dataParams.userNewPassword !== dataParams.secondPassword) {
+    dataValidate.secondPassword = false;
+    secondPasswordValidateText.value = "兩次密碼輸入不相同，請重新輸入";
+    return false;
+  }
+
+  return true;
+}
+
+async function submitUserData() {
+  if (!validateUserData()) return;
+
+  dataParams.userOldPassword = encryptString(dataParams.userOldPassword);
+  dataParams.userNewPassword = encryptString(dataParams.userNewPassword);
+
+  try {
+    const res: IResponse = await fetchUserDataChange(dataParams);
+    if (res.data.returnCode === 0) {
+      alert(res.data.message);
+      setLocalStorageItem("userToken", res.data.data.jwt);
+      open.value = false;
+    } else {
+      alert(res.data.message);
+    }
+  } catch (error) {
+    alert((error as Error).message);
+  }
 }
 </script>
 <style lang="scss" scoped></style>

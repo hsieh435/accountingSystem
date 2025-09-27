@@ -7,44 +7,62 @@
 
 
     <template v-if="props.showCreate">
-      <button class="btn-aomidori" @click="clickCreateButton()" :disabled="props.createDisable">
+      <!-- <button class="btn-aomidori" @click="clickCreateButton()" :disabled="props.createDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span class="mx-1">{{ props.createText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-aomidori" @click="clickCreateButton()" :disabled="props.createDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'plus']" /><span class="mx-1">{{ props.createText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showSave">
-      <button class="btn-aomidori" @click="clickSaveButton()" :disabled="props.saveDisable">
+      <!-- <button class="btn-aomidori" @click="clickSaveButton()" :disabled="props.saveDisable">
         <font-awesome-icon class="mx-1" :icon="['far', 'save']" /><span class="mx-1">{{ props.saveText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-aomidori" @click="clickSaveButton()" :disabled="props.saveDisable">
+        <font-awesome-icon class="mx-1" :icon="['far', 'save']" /><span class="mx-1">{{ props.saveText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showView">
-      <button class="btn-shinbashi" @click="clickViewButton()" :disabled="props.viewDisable">
+      <!-- <button class="btn-shinbashi" @click="clickViewButton()" :disabled="props.viewDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'binoculars']" /><span class="mx-1">{{ props.viewText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-shinbashi" @click="clickViewButton()" :disabled="props.viewDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'binoculars']" /><span class="mx-1">{{ props.viewText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showSearch">
-      <button class="btn-nibi" @click="clickSearchButton()" :disabled="props.searchDisable" type="button">
+      <!-- <button class="btn-nibi" @click="clickSearchButton()" :disabled="props.searchDisable" type="button">
         <font-awesome-icon class="mx-1" :icon="['fas', 'magnifying-glass']" /><span class="mx-1">{{ props.searchText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-nibi" @click="clickSearchButton()" :disabled="props.searchDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'magnifying-glass']" /><span class="mx-1">{{ props.searchText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showClose">
-      <button class="btn-keshizumi" @click="clickCloseButton()" :disabled="props.closeDisable">
+      <!-- <button class="btn-keshizumi" @click="clickCloseButton()" :disabled="props.closeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'x']" /><span class="mx-1">{{ props.closeText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-keshizumi" @click="clickCloseButton()" :disabled="props.closeDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'x']" /><span class="mx-1">{{ props.closeText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showRemove">
-      <button class="btn-kurenainoyashio" @click="clickRemoveButton()" :disabled="props.removeDisable">
+      <!-- <button class="btn-kurenainoyashio" @click="clickRemoveButton()" :disabled="props.removeDisable">
         <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" /><span class="mx-1">{{ props.removeText }}</span>
-      </button>
+      </button> -->
+      <UButton class="btn-kurenainoyashio" @click="clickRemoveButton()" :disabled="props.removeDisable">
+        <font-awesome-icon class="mx-1" :icon="['fas', 'trash-can']" /><span class="mx-1">{{ props.removeText }}</span>
+      </UButton>
     </template>
 
 

@@ -1,20 +1,148 @@
 <template>
-  <template v-if="props.cashflowIdIdGot">
-    <ui-buttonGroup showView :viewText="'檢視現金流'" @dataView="searchingCashflowData()" />
-    <ui-buttonGroup showRemove :removeText="'刪除現金流'" @dataRemove="removeCashFlowData()" />
-  </template>
-  <template v-if="!props.cashflowIdIdGot">
-    <ui-buttonGroup showCreate :createText="'新增現金流'" @dataCreate="cashflowDataHandling()" />
-  </template>
+  <UModal
+    title="現金流資料設定"
+    description="資料內容"
+    v-model:open="open"
+    :dismissible="false"
+    :close="{
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full',
+    }">
+    <template v-if="props.cashflowIdIdGot">
+      <ui-buttonGroup showView :viewText="'檢視現金流資料'" />
+      <ui-buttonGroup showRemove :removeText="'刪除現金流資料'" @dataRemove="removeCashFlowData()" />
+    </template>
+    <template v-if="!props.cashflowIdIdGot">
+      <ui-buttonGroup showCreate :createText="'新增現金流資料'" />
+    </template>
+    <template #body>
+      <div class="flex flex-col justify-center items-center gap-2">
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.cashflowName ? 'outline-red-50' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.cashflowName" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowName">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請輸入現金流名稱</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流貨幣：</span>
+            <div :class="['w-auto', dataValidate.currency ? 'outline-red-50' : 'outline-1 outline-red-500']">
+              <dataBaseCurrencySelect
+                :currencyIdGot="dataParams.currency"
+                :isDisable="props.cashflowIdIdGot ? true : false"
+                @sendbackCurrencyId="settingCurrency" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇貨幣</span>
+          </div>
+        </div>
+
+        <template v-if="props.cashflowIdIdGot">
+          <div class="w-full flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">目前金額：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="dataParams.presentAmount"
+              type="number"
+              disabled />
+          </div>
+        </template>
+        <template v-else>
+          <div class="w-full">
+            <div class="flex justify-start items-center grid grid-cols-6">
+              <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
+              <input
+                :class="[
+                  tailwindStyles.getInputClasses('col-span-3'),
+                  dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500',
+                ]"
+                v-model="dataParams.startingAmount"
+                type="number" />
+            </div>
+            <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
+              <span class="col-span-2 text-right"></span>
+              <span class="col-span-4 text-red-500 mx-2">請填寫初始金額</span>
+            </div>
+          </div>
+        </template>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.minimumValueAllowed"
+              type="number" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumValueAllowed">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請填寫最小持有金額</span>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+          <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.alertValue" type="number" />
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">提醒：</span>
+          <div class="col-span-4 flex justify-start items-center">
+            <switchComponent :switchValueGot="dataParams.openAlert" @switchValueChanged="settingOpenAlert" />
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-start grid grid-cols-6">
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.note"></textarea>
+        </div>
+
+        <template v-if="props.cashflowIdIdGot">
+          <div class="w-full flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">建立日期：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="yearMonthDayTimeFormat(dataParams.createdDate)"
+              disabled />
+          </div>
+        </template>
+
+        <div class="my-2">
+          <ui-buttonGroup showSave @dataSave="cashflowDataHandling" />
+          <ui-buttonGroup showClose @dataClose="open = false" />
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp } from "vue";
+import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import Swal from "sweetalert2";
+
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
+const switchComponent = defineAsyncComponent(() => import("@/components/ui/switch.vue"));
 
 const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: boolean }>(), {
   cashflowIdIdGot: "",
@@ -22,6 +150,7 @@ const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: b
 });
 const emits = defineEmits(["dataReseaching"]);
 
+const open = ref<boolean>(false);
 const getDefaultDataParams = (): ICashFlowList => ({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
@@ -38,6 +167,27 @@ const getDefaultDataParams = (): ICashFlowList => ({
   note: "",
 });
 const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
+const getDefaultDataValidate = (): any => ({
+  cashflowName: true,
+  currency: true,
+  startingAmount: true,
+  presentAmount: true,
+  minimumValueAllowed: true,
+});
+const dataValidate = reactive<any>(getDefaultDataValidate());
+
+watch(open, () => {
+  if (open.value === true) {
+    if (props.cashflowIdIdGot) {
+      searchingCashflowData();
+    } else {
+      Object.assign(dataParams, getDefaultDataParams());
+    }
+  } else if (open.value === false) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
+  }
+});
 
 async function searchingCashflowData() {
   // console.log("props:", props);
@@ -45,19 +195,7 @@ async function searchingCashflowData() {
     const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
     // console.log("fetchCashFlowById:", res.data.datares);
     if (res.data.returnCode === 0) {
-      // dataParams.cashflowId = res.data.data.cashflowId;
-      // dataParams.userId = res.data.data.userId;
-      // dataParams.cashflowName = res.data.data.cashflowName;
-      // dataParams.currency = res.data.data.currency;
-      // dataParams.startingAmount = res.data.data.startingAmount;
-      // dataParams.presentAmount = res.data.data.presentAmount;
-      // dataParams.minimumValueAllowed = res.data.data.minimumValueAllowed;
-      // dataParams.alertValue = res.data.data.alertValue;
-      // dataParams.openAlert = res.data.data.openAlert;
-      // dataParams.createdDate = res.data.data.createdDate;
-      // dataParams.note = res.data.data.note;
       Object.assign(dataParams, res.data.data);
-      await cashflowDataHandling();
     } else {
       showAxiosErrorMsg({ message: res.data.message });
     }
@@ -66,192 +204,67 @@ async function searchingCashflowData() {
   }
 }
 
-async function cashflowDataHandling(apiMsg?: string) {
+async function settingCurrency(currencyId: string) {
+  dataParams.currency = currencyId;
+}
+
+async function settingOpenAlert(switchValue: boolean) {
+  dataParams.openAlert = switchValue;
+}
+
+async function validateData() {
+  dataValidate.cashflowName = true;
+  dataValidate.currency = true;
+  dataValidate.startingAmount = true;
+  dataValidate.presentAmount = true;
+  dataValidate.minimumValueAllowed = true;
+
+  if (!dataParams.cashflowName) {
+    dataValidate.cashflowName = false;
+  }
+  if (!dataParams.currency) {
+    dataValidate.currency = false;
+  }
+  if (dataParams.startingAmount === null || dataParams.startingAmount <= 0) {
+    dataValidate.startingAmount = false;
+  }
+  if (dataParams.presentAmount === null || dataParams.presentAmount <= 0) {
+    dataValidate.presentAmount = false;
+  }
+  if (dataParams.minimumValueAllowed === null || dataParams.minimumValueAllowed <= 0) {
+    dataValidate.minimumValueAllowed = false;
+  }
+
+  if (
+    !dataValidate.cashflowName ||
+    !dataValidate.currency ||
+    !dataValidate.startingAmount ||
+    !dataValidate.presentAmount ||
+    !dataValidate.minimumValueAllowed
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+async function cashflowDataHandling() {
+  if (!(await validateData())) return;
   // console.log("dataParams:", dataParams);
 
-  Swal.fire({
-    title: props.cashflowIdIdGot ? "修改現金流資料" : "新增現金流資料",
-    html: `
-      <div class="d-flex flex-row items-center rounded-md">
-        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="cashflowName" value="${dataParams.cashflowName}" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">現金流貨幣：</span>
-          <div id="dataBaseCurrencySelectComponent"></div>
-        </div>
-
-
-        ${
-          props.cashflowIdIdGot
-            ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">目前金額：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="presentAmount" value="${dataParams.presentAmount}" type="number" disabled />
-        </div>`
-            : `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="startingAmount" value="${dataParams.startingAmount}" type="number" />
-        </div>`
-        }
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="minimumValueAllowed" value="${dataParams.minimumValueAllowed}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" id="alertValue" value="${dataParams.alertValue}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">提醒：</span>
-          <div class="flex justify-start items-center">
-            <div id="switchComponent"></div>
-          </div>
-        </div>
-
-
-        <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses("col-span-3")}" id="note">${dataParams.note}</textarea>
-        </div>
-
-
-        ${
-          props.cashflowIdIdGot
-            ? `
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">建立日期：</span>
-          <input class="${tailwindStyles.getInputClasses("col-span-3")}" value="${yearMonthDayTimeFormat(dataParams.createdDate)}" disabled />
-        </div>`
-            : ""
-        }
-
-      </div>
-    `,
-    confirmButtonText: props.cashflowIdIdGot ? "修改" : "新增",
-    showCancelButton: true,
-    cancelButtonText: "取消",
-    allowOutsideClick: false,
-    didOpen: () => {
-      let dataBaseCurrencySelect = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue")),
-        {
-          currencyIdGot: dataParams.currency,
-          isDisable: props.cashflowIdIdGot ? true : false,
-          onSendbackCurrencyId: (currencyId: string) => {
-            dataParams.currency = currencyId;
-          },
-        },
-      );
-      dataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
-
-      const minimumValueAllowed = document.getElementById("minimumValueAllowed") as HTMLInputElement;
-      const alertValue = document.getElementById("alertValue") as HTMLInputElement;
-      minimumValueAllowed.addEventListener("change", () => {
-        validateAlertValue();
-      });
-      alertValue.addEventListener("change", () => {
-        validateAlertValue();
-      });
-
-      function validateAlertValue() {
-        // console.log("minimumValueAllowed:", minimumValueAllowed.value);
-        // console.log("alertValue:", alertValue.value);
-        alertValue.min = minimumValueAllowed.value;
-
-        if (Number(alertValue.value) < Number(minimumValueAllowed.value)) {
-          alertValue.value = minimumValueAllowed.value;
-        }
-      }
-
-      let switchComponent = createApp(
-        defineAsyncComponent(() => import("@/components/ui/switch.vue")),
-        {
-          switchValueGot: dataParams.openAlert,
-          onSendBackSwitchValue: (switchValue: boolean) => {
-            dataParams.openAlert = switchValue;
-          },
-        },
-      );
-      switchComponent.mount("#switchComponent");
-
-      if (apiMsg) {
-        Swal.showValidationMessage(apiMsg);
-        return false;
-      }
-    },
-    preConfirm: () => {
-      const errors: string[] = [];
-
-      if (!props.cashflowIdIdGot) {
-        dataParams.startingAmount = Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      }
-      dataParams.cashflowName = (document.getElementById("cashflowName") as HTMLInputElement).value;
-      dataParams.presentAmount = props.cashflowIdIdGot
-        ? Number((document.getElementById("presentAmount") as HTMLInputElement).value)
-        : Number((document.getElementById("startingAmount") as HTMLInputElement).value);
-      dataParams.minimumValueAllowed = Number(
-        (document.getElementById("minimumValueAllowed") as HTMLInputElement).value,
-      );
-      dataParams.alertValue = Number((document.getElementById("alertValue") as HTMLInputElement).value);
-      dataParams.note = (document.getElementById("note") as HTMLTextAreaElement).value;
-
-      if (!dataParams.cashflowName) {
-        errors.push("請填寫現金流名稱");
-      }
-      if (!dataParams.currency) {
-        errors.push("請填寫貨幣");
-      }
-      if (isNaN(dataParams.startingAmount) || dataParams.startingAmount < 0) {
-        errors.push("請填寫初始金額");
-      }
-      if (isNaN(dataParams.minimumValueAllowed) || dataParams.minimumValueAllowed < 0) {
-        errors.push("請填寫最小持有金額");
-      }
-      if (isNaN(dataParams.alertValue) || dataParams.alertValue < 0) {
-        errors.push("請填寫提醒金額");
-      }
-      if (dataParams.alertValue < dataParams.minimumValueAllowed) {
-        errors.push("提醒金額不得低於最小持有金額");
-      }
-      if (errors.length > 0) {
-        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
-        return false;
-      }
-
-      return dataParams;
-    },
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      console.log("result:", result.value);
-      try {
-        const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(result.value);
-        // console.log("RES:", res);
-        if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
-          emits("dataReseaching");
-          Object.assign(dataParams, getDefaultDataParams());
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
-      }
+  try {
+    const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(dataParams);
+    // console.log("RES:", res);
+    if (res.data.returnCode === 0) {
+      showAxiosToast({ message: res.data.message });
+      emits("dataReseaching");
+      Object.assign(dataParams, getDefaultDataParams());
+    } else {
+      showAxiosErrorMsg({ message: res.data.message });
     }
-  });
+  } catch (error) {
+    showAxiosErrorMsg({ message: (error as Error).message });
+  }
 }
 
 async function removeCashFlowData() {
@@ -263,6 +276,7 @@ async function removeCashFlowData() {
   });
 
   if (confirmResult) {
+    open.value = false;
     emits("dataReseaching");
   }
 }
