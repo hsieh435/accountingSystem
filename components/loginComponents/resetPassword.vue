@@ -9,11 +9,9 @@
       variant: 'outline',
       class: 'rounded-full',
     }">
-    <!-- <UButton class="btn-aomidori" label="更改密碼" icon="save" @click="open = true" /> -->
     <UButton class="btn-aomidori px-1" @click="open = true">
       <font-awesome-icon :icon="['far', 'save']" /><span class="mx-1">更改密碼</span>
     </UButton>
-    <!-- <ui-buttonGroup showSave :saveText="'更改密碼'" @dataSave="open = true" /> -->
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
         <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>

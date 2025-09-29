@@ -7,7 +7,7 @@ import { fetchUserList, fetchUserCreate } from "@/server/userDataApi";
 import { IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { encryptString } from "@/composables/crypto";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 const userAccount = ref<string>("");
@@ -110,12 +110,12 @@ async function createUserDate(apiMsg?: string) {
       try {
         const res: IResponse = await fetchUserCreate(result.value);
         if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
+          messageToast({ message: res.data.message });
         } else {
-          showAxiosErrorMsg({ message: res.data.message });
+          errorMessageDialog({ message: res.data.message });
         }
       } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
+        errorMessageDialog({ message: (error as Error).message });
       }
     }
   });

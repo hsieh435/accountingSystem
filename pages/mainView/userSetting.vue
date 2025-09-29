@@ -107,6 +107,7 @@ import { navigateTo } from "nuxt/app";
 import { jwtTokenEncoded } from "@/server/index.ts";
 import { fetchUserDataChange } from "@/server/userDataApi";
 import { setLocalStorageItem } from "@/composables/tools";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { encryptString } from "@/composables/crypto";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
@@ -182,14 +183,14 @@ async function submitUserData() {
   try {
     const res: IResponse = await fetchUserDataChange(dataParams);
     if (res.data.returnCode === 0) {
-      alert(res.data.message);
+      messageToast(res.data.message);
       setLocalStorageItem("userToken", res.data.data.jwt);
       open.value = false;
     } else {
-      alert(res.data.message);
+      errorMessageDialog(res.data.message);
     }
   } catch (error) {
-    alert((error as Error).message);
+    errorMessageDialog((error as Error).message);
   }
 }
 </script>

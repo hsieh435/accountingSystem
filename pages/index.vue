@@ -51,7 +51,7 @@
 import { ref } from "vue";
 import { IResponse } from "@/models/index.ts";
 import { fetchUserLogin } from "@/server/userDataApi";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { navigateTo } from "nuxt/app";
 import { setLocalStorageItem } from "@/composables/tools";
 import { encryptString } from "@/composables/crypto";
@@ -76,14 +76,14 @@ async function handleLogin() {
     });
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
       setLocalStorageItem("userToken", res.data.data.jwt);
       navigateTo("/mainView");
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

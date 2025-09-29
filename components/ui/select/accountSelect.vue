@@ -13,7 +13,7 @@ import { fetchCreditCardList } from "@/server/creditCardApi";
 import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
 import { fetchStockAccountList } from "@/server/stockAccountApi";
 import { IAccountSearchingParams } from "@/models/index";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(
@@ -56,7 +56,7 @@ async function loadAccountList() {
     // console.log("list:", list);
     // console.log("oriAccountList:", oriAccountList.value);
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

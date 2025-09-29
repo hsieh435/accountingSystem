@@ -69,7 +69,7 @@ import { fetchTradeCategoryList } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -98,10 +98,10 @@ async function searchingTradeCategoryList() {
       tradeCategoryList.value = res.data.data;
       await tradeCategoryListFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

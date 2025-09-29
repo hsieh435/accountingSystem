@@ -10,7 +10,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
   currencyIdGot: "",
@@ -61,10 +61,10 @@ async function searchingCurrencyList() {
         emits("sendbackCurrencyId", currencyId.value);
       }
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

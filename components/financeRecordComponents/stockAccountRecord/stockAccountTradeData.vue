@@ -1,23 +1,235 @@
 <template>
-  <template v-if="props.tradeIdGot">
-    <ui-buttonGroup showView :viewText="'檢視證券帳戶收支'" @dataView="searchingStockAccountRecord()" />
-  </template>
-  <template v-if="!props.tradeIdGot">
-    <ui-buttonGroup showCreate :createText="'新增證券帳戶收支'" @dataCreate="stockAccountRecordDataHandling()" />
-  </template>
+  <UModal
+    title="證券帳戶收支紀錄"
+    description="資料內容"
+    v-model:open="open"
+    :dismissible="false"
+    :close="{
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full',
+    }">
+    <template v-if="props.tradeIdGot">
+      <ui-buttonGroup showView :viewText="'檢視證券帳戶收支'" />
+    </template>
+    <template v-if="!props.tradeIdGot">
+      <ui-buttonGroup showCreate :createText="'新增證券帳戶收支'" />
+    </template>
+    <template #body>
+      <div class="flex flex-col justify-center items-center gap-2">
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶：</span>
+            <div :class="['w-fit', dataValidate.accountId ? '' : 'outline-1 outline-red-500']">
+              <accountSelect
+                selectTargetId="isStaccountAble"
+                :accountIdGot="dataParams.accountId"
+                :isDisable="props.tradeIdGot ? true : false"
+                @sendbackAccountId="settingAccount" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.accountId">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請選擇證券帳戶</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
+            <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
+              <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeDatetime">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請填寫交易時間</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
+            <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
+              <transactionTypeSelect
+                :transactionType="dataParams.transactionType"
+                @sendbackTransactionType="settingTransactionType" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.transactionType">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請選擇買 / 賣</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
+            <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
+              <tradeCategorySelect
+                accountType="isStaccountAble"
+                :tradeCategoryGot="dataParams.tradeCategory"
+                @sendbackTradeCategory="settingTradeCategory" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeCategory">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請選擇交易項目</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="w-full flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
+            <template v-if="props.tradeIdGot">
+              <input
+                :class="tailwindStyles.getInputClasses('col-span-4')"
+                :value="dataParams.stockNo + dataParams.stockName"
+                disabled />
+            </template>
+            <template v-else>
+              <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
+                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" />
+              </div>
+            </template>
+          </div>
+          <div
+            class="flex justify-start items-center grid grid-cols-8"
+            v-if="!dataValidate.stockNo && !props.tradeIdGot">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請選擇股票</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
+            <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
+              <tradeCategorySelect
+                accountType="isStaccountAble"
+                :tradeCategoryGot="dataParams.tradeCategory"
+                @sendbackTradeCategory="settingTradeCategory" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeCategory">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">請選擇交易項目</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
+            <input
+              :class="[tailwindStyles.getInputClasses(), dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.pricePerShare"
+              type="number"
+              class="col-start-3 col-end-5" />
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
+            <input
+              :class="[tailwindStyles.getInputClasses(), dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.quantity"
+              type="number"
+              class="col-start-7 col-end-9" />
+          </div>
+          <div
+            class="flex justify-start items-center grid grid-cols-8"
+            v-if="!dataValidate.pricePerShare || !dataValidate.quantity">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">每股價格與股數需為正數</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
+            <input
+              :class="[tailwindStyles.getInputClasses(), dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.handlingFee"
+              type="number"
+              class="col-start-3 col-end-5" />
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses(),
+                dataValidate.transactionTax ? '' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.transactionTax"
+              type="number"
+              class="col-start-7 col-end-9" />
+          </div>
+          <div
+            class="flex justify-start items-center grid grid-cols-8"
+            v-if="!dataValidate.handlingFee || !dataValidate.transactionTax">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-6 text-red-500 mx-2">手續費與交易稅不得為負</span>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-8">
+          <span class="col-span-2 text-right">總價：</span>
+          <input
+            :class="tailwindStyles.getInputClasses()"
+            :value="currencyFormat(dataParams.pricePerShare * dataParams.quantity)"
+            disabled
+            class="col-start-3 col-end-5" />
+          <span class="col-span-2 text-right">交易成本：</span>
+          <input
+            :class="tailwindStyles.getInputClasses()"
+            :value="
+              currencyFormat(
+                dataParams.pricePerShare * dataParams.quantity + dataParams.handlingFee + dataParams.transactionTax,
+              )
+            "
+            disabled
+            class="col-start-7 col-end-9" />
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-8">
+          <span class="col-span-2 text-right">貨幣：</span>
+          <div class="w-fit">
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-8">
+          <span class="col-span-2 text-right">說明：</span>
+          <input :class="tailwindStyles.getInputClasses('col-span-5')" v-model="dataParams.tradeDescription" />
+        </div>
+
+        <div class="w-full flex justify-start items-start grid grid-cols-8">
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea :class="tailwindStyles.getInputClasses('col-span-5')" v-model="dataParams.tradeNote"></textarea>
+        </div>
+
+        <div class="my-2">
+          <ui-buttonGroup showSave @dataSave="stockAccountRecordDataHandling" />
+          <ui-buttonGroup showClose @dataClose="open = false" />
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp, h } from "vue";
+import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import {
   fetchStockAccountRecordById,
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
 } from "@/server/stockAccountRecordApi";
 import { IStockAccountRecordList, IStockList, IResponse } from "@/models/index";
-import { currencyFormat, getCurrentTimestamp } from "@/composables/tools";
+import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
-import Swal from "sweetalert2";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
+const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
+const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue"));
+const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
+const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string }>(), {
   tradeIdGot: "",
@@ -25,10 +237,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
-
+const open = ref<boolean>(false);
 const getDefaultDataParams = (): IStockAccountRecordList => ({
   tradeId: props.tradeIdGot || "",
   accountId: props.accountIdGot,
@@ -49,6 +258,31 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
   tradeNote: "",
 });
 const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
+const getDefaultDataValidate = (): any => ({
+  accountId: true,
+  tradeDatetime: true,
+  transactionType: true,
+  stockNo: true,
+  tradeCategory: true,
+  pricePerShare: true,
+  quantity: true,
+  handlingFee: true,
+  transactionTax: true,
+});
+const dataValidate = reactive<any>(getDefaultDataValidate());
+
+watch(open, () => {
+  if (open.value === true) {
+    if (props.tradeIdGot) {
+      searchingStockAccountRecord();
+    } else {
+      Object.assign(dataParams, getDefaultDataParams());
+    }
+  } else if (open.value === false) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
+  }
+});
 
 async function searchingStockAccountRecord() {
   try {
@@ -56,282 +290,128 @@ async function searchingStockAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchStockAccountRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      await stockAccountRecordDataHandling();
+      open.value = true;
     } else {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
-async function stockAccountRecordDataHandling(apiMsg?: string) {
-  // console.log(dataParams);
-  Swal.fire({
-    title: props.tradeIdGot ? "編輯證券帳戶收支紀錄" : "新增證券帳戶收支紀錄",
-    html: `
-      <div class="d-flex flex-row items-center rounded-md">
-        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+function settingAccount(account: string, currency: string) {
+  dataParams.accountId = account;
+  dataParams.currency = account ? currency : "";
+}
 
+function settingTradeDatetime(dateTime: string) {
+  dataParams.tradeDatetime = dateTime;
+}
 
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶：</span>
-          <div id="accountSelectComponent"></div>
-        </div>
+function settingTransactionType(type: string) {
+  dataParams.transactionType = type;
+}
 
+function settingStockNo(stockItem: IStockList) {
+  dataParams.stockNo = stockItem.stock_id;
+  dataParams.stockName = stockItem.stock_name;
+}
 
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
-          <div id="tradeDatetimeComponent"></div>
-        </div>
+function settingTradeCategory(tradeCategoryId: string) {
+  dataParams.tradeCategory = tradeCategoryId;
+}
 
+async function validateData() {
+  dataValidate.accountId = true;
+  dataValidate.tradeDatetime = true;
+  dataValidate.transactionType = true;
+  dataValidate.stockNo = true;
+  dataValidate.tradeCategory = true;
+  dataValidate.pricePerShare = true;
+  dataValidate.quantity = true;
+  dataValidate.handlingFee = true;
+  dataValidate.transactionTax = true;
 
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
-          <div class="col-span-4" id="transactionTypeSelectComponent"></div>
-        </div>
+  if (!dataParams.accountId) {
+    dataValidate.accountId = false;
+  }
+  if (!dataParams.tradeDatetime) {
+    dataValidate.tradeDatetime = false;
+  }
+  if (!dataParams.transactionType) {
+    dataValidate.transactionType = false;
+  }
+  if (!dataParams.stockNo) {
+    dataValidate.stockNo = false;
+  }
+  if (!dataParams.tradeCategory) {
+    dataValidate.tradeCategory = false;
+  }
+  if (
+    typeof dataParams.pricePerShare !== "number" ||
+    !isFinite(dataParams.pricePerShare) ||
+    dataParams.pricePerShare < 0
+  ) {
+    dataValidate.pricePerShare = false;
+  }
+  if (
+    typeof dataParams.quantity !== "number" ||
+    !isFinite(dataParams.quantity) ||
+    dataParams.quantity < 0 ||
+    dataParams.quantity % 1 !== 0
+  ) {
+    dataValidate.quantity = false;
+  }
+  if (typeof dataParams.handlingFee !== "number" || !isFinite(dataParams.handlingFee) || dataParams.handlingFee < 0) {
+    dataValidate.handlingFee = false;
+  }
+  if (
+    typeof dataParams.transactionTax !== "number" ||
+    !isFinite(dataParams.transactionTax) ||
+    dataParams.transactionTax < 0
+  ) {
+    dataValidate.transactionTax = false;
+  }
 
+  if (
+    !dataValidate.accountId ||
+    !dataValidate.tradeDatetime ||
+    !dataValidate.transactionType ||
+    !dataValidate.stockNo ||
+    !dataValidate.tradeCategory ||
+    !dataValidate.pricePerShare ||
+    !dataValidate.quantity ||
+    !dataValidate.handlingFee ||
+    !dataValidate.transactionTax
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
-        ${
-          props.tradeIdGot
-            ? `
-        <input class="${tailwindStyles.getInputClasses('col-span-3')} col-span-4" value="${dataParams.stockNo + dataParams.stockName}" disabled />`
-            : `
-        <div class="col-span-4" id="stockSelectComponent"></div>`
-        }
-        </div>
+async function stockAccountRecordDataHandling() {
+  if (!(await validateData())) return;
 
+  dataParams.stockTotalPrice = dataParams.pricePerShare * dataParams.quantity;
+  dataParams.tradeTotalPrice = dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
 
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
-          <div class="col-span-6" id="tradeCategorySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="pricePerShare" value="${dataParams.pricePerShare}" type="number" />
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="quantity" value="${dataParams.quantity}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="handlingFee" value="${dataParams.handlingFee}" type="number" />
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="transactionTax" value="${dataParams.transactionTax}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>總價：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-3 col-end-5" id="stockTotalPrice" value="${currencyFormat(dataParams.stockTotalPrice)}" disabled />
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易成本：</span>
-          <input class="${tailwindStyles.getInputClasses()} col-start-7 col-end-9" id="tradeTotalPrice" value="${currencyFormat(dataParams.tradeTotalPrice)}" disabled />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="dataBaseCurrencySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-5')}" id="tradeDescription" value="${dataParams.tradeDescription}" />
-        </div>
-
-
-        <div class="flex justify-start items-start grid grid-cols-8 my-2">
-          <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses('col-span-5')}" id="tradeNote">${dataParams.tradeNote}</textarea>
-        </div>
-
-      </div>
-    `,
-    confirmButtonText: props.tradeIdGot ? "修改" : "新增",
-    showCancelButton: true,
-    cancelButtonText: "取消",
-    allowOutsideClick: false,
-    // background: "#e1e1e11a",
-    // width: "800px",
-    didOpen: () => {
-      let stockAccountSelect = createApp({
-        render() {
-          return h(accountSelect, {
-            selectTargetId: "isStaccountAble",
-            accountIdGot: dataParams.accountId,
-            isDisable: props.tradeIdGot ? true : false,
-            onSendbackAccountId: (account: string, currency: string) => {
-              dataParams.accountId = account;
-              dataParams.currency = account ? currency : "";
-            },
-          });
-        },
-      });
-      stockAccountSelect.mount("#accountSelectComponent");
-
-      let stockAccountTradeDatetime = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
-        {
-          dateTimeGot: dataParams.tradeDatetime,
-          isDisabled: props.tradeIdGot ? true : false,
-          onSendbackDateTime: (dateTime: string) => {
-            dataParams.tradeDatetime = dateTime;
-          },
-        },
-      );
-      stockAccountTradeDatetime.mount("#tradeDatetimeComponent");
-
-      let stockAccountTransactionType = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
-        {
-          transactionType: dataParams.transactionType,
-          isDisabled: props.tradeIdGot ? true : false,
-          onSendbackTransactionType: (type: string) => {
-            dataParams.transactionType = type;
-          },
-        },
-      );
-      stockAccountTransactionType.mount("#transactionTypeSelectComponent");
-
-      if (!props.tradeIdGot) {
-        let stockSelect = createApp({
-          render() {
-            return h(stockListSelect, {
-              stockNoGot: dataParams.stockNo,
-              onSendbackStockNo: (stockItem: IStockList) => {
-                dataParams.stockNo = stockItem.stock_id;
-                dataParams.stockName = stockItem.stock_name;
-                console.log("dataParams:", dataParams);
-              },
-            });
-          },
-        });
-        stockSelect.mount("#stockSelectComponent");
-      }
-
-      let stockAccountCategory = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
-        {
-          accountType: "isStaccountAble",
-          tradeCategoryGot: dataParams.tradeCategory,
-          onSendbackTradeCategory: (tradeCategoryId: string) => {
-            dataParams.tradeCategory = tradeCategoryId;
-          },
-        },
-      );
-      stockAccountCategory.mount("#tradeCategorySelectComponent");
-
-      const pricePerShare = document.getElementById("pricePerShare") as HTMLInputElement;
-      const quantity = document.getElementById("quantity") as HTMLInputElement;
-      const handlingFee = document.getElementById("handlingFee") as HTMLInputElement;
-      const transactionTax = document.getElementById("transactionTax") as HTMLInputElement;
-      const stockTotalPrice = document.getElementById("stockTotalPrice") as HTMLInputElement;
-      const tradeTotalPrice = document.getElementById("tradeTotalPrice") as HTMLInputElement;
-      const calculateAmount = () => {
-        stockTotalPrice.value = (Number(pricePerShare.value) * Number(quantity.value)).toString();
-        dataParams.stockTotalPrice = Number(pricePerShare.value) * Number(quantity.value);
-        const total =
-          Number(pricePerShare.value) * Number(quantity.value) +
-          (Number(handlingFee.value) + Number(transactionTax.value));
-        tradeTotalPrice.value = total.toString();
-        dataParams.tradeTotalPrice = total;
-      };
-
-      pricePerShare.addEventListener("input", calculateAmount);
-      quantity.addEventListener("input", calculateAmount);
-      handlingFee.addEventListener("input", calculateAmount);
-      transactionTax.addEventListener("input", calculateAmount);
-
-      let stockAccountdataBaseCurrencySelect = createApp({
-        render() {
-          return h(dataBaseCurrencySelect, {
-            currencyIdGot: dataParams.currency,
-            isDisable: true,
-          });
-        },
-      });
-      stockAccountdataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
-
-      if (apiMsg) {
-        Swal.showValidationMessage(apiMsg);
-        return false;
-      }
-    },
-    preConfirm: () => {
-      const errors: string[] = [];
-
-      if (!props.tradeIdGot) {
-        dataParams.tradeId = getCurrentTimestamp() + "";
-      }
-
-      dataParams.pricePerShare = Number((document.getElementById("pricePerShare") as HTMLInputElement).value);
-      dataParams.quantity = Number((document.getElementById("quantity") as HTMLInputElement).value);
-      dataParams.handlingFee = Number((document.getElementById("handlingFee") as HTMLInputElement).value);
-      dataParams.transactionTax = Number((document.getElementById("transactionTax") as HTMLInputElement).value);
-      dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
-      dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
-      if (!dataParams.accountId) {
-        errors.push("請選擇證券帳戶");
-      }
-      if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易時間");
-      }
-      if (!dataParams.transactionType) {
-        errors.push("請選擇收支");
-      }
-      if (!dataParams.tradeCategory) {
-        errors.push("請選擇交易項目");
-      }
-      if (dataParams.pricePerShare < 0) {
-        errors.push("每股金額不得為負");
-      }
-      if (dataParams.quantity < 0 || dataParams.quantity % 1 !== 0) {
-        errors.push("購買股數需為正整數或 0");
-      }
-      if (dataParams.handlingFee < 0) {
-        errors.push("手續費不得為負");
-      }
-      if (dataParams.transactionTax < 0) {
-        errors.push("交易稅不得為負");
-      }
-      if (errors.length > 0) {
-        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
-        return false;
-      }
-
-      return dataParams;
-    },
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // console.log("result:", result.value);
-      try {
-        const res: IResponse = await (props.tradeIdGot ? fetchStockAccountRecordUpdate : fetchStockAccountRecordCreate)(
-          result.value,
-        );
-        console.log("RES:", res.data.data);
-        if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
-          emits("dataReseaching");
-          Object.assign(dataParams, getDefaultDataParams());
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
-      }
+  try {
+    const res: IResponse = await (props.tradeIdGot ? fetchStockAccountRecordUpdate : fetchStockAccountRecordCreate)(
+      dataParams,
+    );
+    if (res.data.returnCode === 0) {
+      messageToast({ message: res.data.message });
+      emits("dataReseaching");
+      open.value = false;
+    } else {
+      errorMessageDialog({ message: res.data.message });
     }
-    Object.assign(dataParams, getDefaultDataParams());
-  });
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

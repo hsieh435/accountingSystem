@@ -76,7 +76,7 @@ import { fetchCashFlowList, fetchEnableCashFlow, fetchDisableCashFlow } from "@/
 import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -123,10 +123,10 @@ async function cashFlowSearching() {
       cashFlowList.value = res.data.data;
       await cashFlowListFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -139,12 +139,12 @@ async function adjustAbleStatus(card: ICashFlowList) {
   try {
     const res: IResponse = await (card.enable === true ? fetchEnableCashFlow : fetchDisableCashFlow)(card.cashflowId);
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

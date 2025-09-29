@@ -8,7 +8,7 @@ import { ref, watch } from "vue";
 import { fetchStockPerPbr } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -48,7 +48,6 @@ async function searchingStockPerPbr() {
         stockDividendYield.value = res.data.data.data.map((stock: any) => {
           return stock.dividend_yield;
         });
-
       } else {
         dataLabels.value = ["無資料"];
         stockPer.value = [0];
@@ -57,10 +56,10 @@ async function searchingStockPerPbr() {
       }
       renderingChart();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -101,10 +100,10 @@ async function renderingChart() {
           max: Math.ceil(scalesMax * 1.1),
         },
       },
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
       plugins: {
         tooltip: {
           callbacks: {

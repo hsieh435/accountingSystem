@@ -22,18 +22,12 @@ import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index";
 import { useRoute } from "vue-router";
 import { BreadcrumbItem, NavigationMenuItem } from "@nuxt/ui";
 import { clearLocalStorageKey } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
-
-
+import { errorMessageDialog } from "@/composables/swalDialog";
 
 const route = useRoute();
 
-
-
 const navbarMenuList = ref<NavigationMenuItem[]>([]);
 const breadcrumbItemList = ref<BreadcrumbItem[]>([]);
-
-
 
 onMounted(() => {
   // console.log("Current route:", route.name);
@@ -50,16 +44,14 @@ watch(route, () => {
   getbreadcrumbItemList();
 });
 
-
-
 async function searchingFunctionList() {
-
   try {
     const res: IResponse = await fetchFunctionList();
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       navbarMenuList.value = res.data.data.map((group: IFunctionGroupList) => {
-        const functions = group.functionList.filter((func: IFunctionList) => func.functionGroupId === group.functionGroupId)
+        const functions = group.functionList
+          .filter((func: IFunctionList) => func.functionGroupId === group.functionGroupId)
           .map((func: IFunctionList) => ({
             label: func.functionName,
             to: func.url,
@@ -72,16 +64,13 @@ async function searchingFunctionList() {
           children: functions,
         };
       });
-
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
-
-
 
 function getbreadcrumbItemList() {
   breadcrumbItemList.value = [{ label: "首頁", to: "/mainView" }];
@@ -95,8 +84,5 @@ function getbreadcrumbItemList() {
     }
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

@@ -14,9 +14,9 @@ import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyListFromWeb } from "@/server/outerWebApi";
 import { ISelectData, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 
-const props = withDefaults(defineProps<{ currencyIdGot?: string;  isDisable?: boolean }>(), {
+const props = withDefaults(defineProps<{ currencyIdGot?: string; isDisable?: boolean }>(), {
   currencyIdGot: "",
   isDisable: false,
 });
@@ -72,10 +72,10 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
           value: item.currencyCode,
         }));
       } else {
-        showAxiosErrorMsg({ message: res.data.data.result });
+        errorMessageDialog({ message: res.data.data.result });
       }
     } catch (error) {
-      showAxiosErrorMsg({ message: (error as Error).message });
+      errorMessageDialog({ message: (error as Error).message });
     } finally {
       loading.value = false;
     }

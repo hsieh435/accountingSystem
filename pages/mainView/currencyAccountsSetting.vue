@@ -79,7 +79,7 @@ import {
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -130,10 +130,10 @@ async function currencyAccountSearching() {
       currencyAccountList.value = res.data.data;
       await currencyAccountListFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -157,12 +157,12 @@ async function adjustAbleStatus(account: ICurrencyAccountList) {
       account.accountId,
     );
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

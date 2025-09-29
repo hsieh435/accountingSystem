@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { ICurrencyAccountList, IFinanceRecordSearchingParams } from "@/models/index.ts";
+import { IcurrencyAccountRecordList, IFinanceRecordSearchingParams } from "@/models/index.ts";
 
 export async function fetchCurrencyAccountRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/currencyAccountRecord/list", "POST", {
@@ -15,14 +15,14 @@ export async function fetchCurrencyAccountRecordById(data: { tradeId: string; ac
   return await response.json();
 }
 
-export async function fetchCurrencyAccountRecordCreate(data: ICurrencyAccountList) {
+export async function fetchCurrencyAccountRecordCreate(data: IcurrencyAccountRecordList) {
   const response = await apiFetch("/accounting_system_backend/api/currencyAccountRecord/create", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
 
-export async function fetchCurrencyAccountRecordUpdate(data: ICurrencyAccountList) {
+export async function fetchCurrencyAccountRecordUpdate(data: IcurrencyAccountRecordList) {
   const response = await apiFetch("/accounting_system_backend/api/currencyAccountRecord/update", "POST", {
     body: JSON.stringify(data),
   });

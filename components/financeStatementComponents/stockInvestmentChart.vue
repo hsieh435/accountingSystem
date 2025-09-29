@@ -7,7 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const stockInvestmentChart = ref<Chart | null>(null);
@@ -17,6 +17,5 @@ watch(stockInvestmentChart, (newChart) => {
     newChart.update();
   }
 });
-
 </script>
 <style lang="scss" scoped></style>

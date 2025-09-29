@@ -10,9 +10,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { fetchTestConnection } from "@/server/outerWebApi";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
-
-
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -21,12 +19,8 @@ definePageMeta({
   subTitle: "連線測試",
 });
 
-
-
 const finMindAccount = ref<string>("");
 const finMindPassword = ref<string>("");
-
-
 
 async function handleSearch() {
   try {
@@ -36,12 +30,12 @@ async function handleSearch() {
     });
     console.log("result:", result);
     if (result.data.data.status === 200) {
-      showAxiosToast({ message: "連線成功" });
+      messageToast({ message: "連線成功" });
     } else {
-      showAxiosErrorMsg({ message: result.data.message });
+      errorMessageDialog({ message: result.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
   // console.log("Request Body:", JSON.stringify(payload));
 
@@ -60,8 +54,6 @@ async function handleSearch() {
   // } catch (err) {
   //   res.status(500).json(error({ message: "查詢失敗", req, res }));
   // }
-
 }
-
 </script>
 <style lang="scss" scoped></style>

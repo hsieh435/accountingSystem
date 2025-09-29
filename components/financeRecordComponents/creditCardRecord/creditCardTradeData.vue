@@ -1,13 +1,114 @@
 <template>
-  <template v-if="props.tradeIdGot">
-    <ui-buttonGroup showView :viewText="'檢視信用卡花費'" @dataView="searchingCreditCardRecord()" />
-  </template>
-  <template v-if="!props.tradeIdGot">
-    <ui-buttonGroup showCreate :createText="'新增信用卡花費'" @dataCreate="creditCardRecordDataHandling()" />
-  </template>
+  <UModal
+    title="信用卡花費紀錄"
+    description="資料內容"
+    v-model:open="open"
+    :dismissible="false"
+    :close="{
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full',
+    }">
+    <template v-if="props.tradeIdGot">
+      <ui-buttonGroup showView :viewText="'檢視信用卡花費'" />
+    </template>
+    <template v-if="!props.tradeIdGot">
+      <ui-buttonGroup showCreate :createText="'新增信用卡花費'" />
+    </template>
+    <template #body>
+      <div class="flex flex-col justify-center items-center gap-2">
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用卡：</span>
+            <div :class="['w-fit', dataValidate.creditCardId ? '' : 'outline-1 outline-red-500']">
+              <accountSelect
+                selectTargetId="isCreditcardAble"
+                :accountIdGot="dataParams.creditCardId"
+                :isDisable="props.tradeIdGot ? true : false"
+                @sendbackAccountId="settingCreditCardAccount" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditCardId">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇信用卡</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
+            <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
+              <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請填寫交易時間</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
+            <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
+              <tradeCategorySelect
+                accountType="isCreditcardAble"
+                :tradeCategoryGot="dataParams.tradeCategory"
+                @sendbackTradeCategory="settingTradeCategory" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCategory">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇收支項目</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.tradeAmount"
+              type="number" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">貨幣：</span>
+          <div class="w-fit">
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">說明：</span>
+          <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.tradeDescription" />
+        </div>
+
+        <div class="w-full flex justify-start items-start grid grid-cols-6">
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.tradeNote"></textarea>
+        </div>
+
+        <div class="my-2">
+          <ui-buttonGroup showSave @dataSave="creditCardRecordDataHandling" />
+          <ui-buttonGroup showClose @dataClose="open = false" />
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp, h } from "vue";
+import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import {
   fetchCreditCardRecordById,
   fetchCreditCardRecordCreate,
@@ -15,8 +116,12 @@ import {
 } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
-import Swal from "sweetalert2";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
+const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue"));
+const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: string }>(), {
   tradeIdGot: "",
@@ -24,9 +129,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: 
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-
+const open = ref<boolean>(false);
 const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeId: props.tradeIdGot || "",
   creditCardId: props.creditCardIdGot,
@@ -41,6 +144,26 @@ const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeNote: "",
 });
 const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
+const getDefaultDataValidate = (): any => ({
+  creditCardId: true,
+  tradeDatetime: true,
+  tradeCategory: true,
+  tradeAmount: true,
+});
+const dataValidate = reactive<any>(getDefaultDataValidate());
+
+watch(open, () => {
+  if (open.value === true) {
+    if (props.tradeIdGot) {
+      searchingCreditCardRecord();
+    } else {
+      Object.assign(dataParams, getDefaultDataParams());
+    }
+  } else if (open.value === false) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
+  }
+});
 
 async function searchingCreditCardRecord() {
   try {
@@ -49,189 +172,78 @@ async function searchingCreditCardRecord() {
       tradeId: props.tradeIdGot,
     });
     if (res.data.returnCode === 0) {
-      // dataParams.creditcardId = res.data.data.creditcardId;
-      // dataParams.userId = res.data.data.userId;
-      // dataParams.creditcardName = res.data.data.creditcardName;
-      // dataParams.creditcardBankCode = res.data.data.creditcardBankCode;
-      // dataParams.creditcardBankName = res.data.data.creditcardBankName;
-      // dataParams.creditcardSchema = res.data.data.creditcardSchema;
-      // dataParams.currency = res.data.data.currency;
-      // dataParams.creditPerMonth = res.data.data.creditPerMonth;
-      // dataParams.expirationDate = res.data.data.expirationDate;
-      // dataParams.alertValue = res.data.data.alertValue;
-      // dataParams.openAlert = res.data.data.openAlert;
-      // dataParams.createdDate = res.data.data.createdDate;
-      // dataParams.note = res.data.data.note;
       Object.assign(dataParams, res.data.data);
-      await creditCardRecordDataHandling();
+      open.value = true;
     } else {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
-async function creditCardRecordDataHandling(apiMsg?: string) {
-  // console.log(dataParams);
+function settingCreditCardAccount(account: string, currency: string) {
+  dataParams.creditCardId = account;
+  dataParams.currency = account ? currency : "";
+}
 
-  Swal.fire({
-    title: props.tradeIdGot ? "編輯信用卡收支紀錄" : "新增信用卡收支紀錄",
-    html: `
-      <div class="d-flex flex-row items-center rounded-md">
-        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+function settingTradeDatetime(dateTime: string) {
+  dataParams.tradeDatetime = dateTime;
+  dataParams.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
+}
 
+function settingTradeCategory(tradeCategoryId: string) {
+  dataParams.tradeCategory = tradeCategoryId;
+}
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用卡：</span>
-          <div id="accountSelectComponent"></div>
-        </div>
+async function validateData() {
+  dataValidate.creditCardId = true;
+  dataValidate.tradeDatetime = true;
+  dataValidate.tradeCategory = true;
+  dataValidate.tradeAmount = true;
 
+  if (!dataParams.creditCardId) {
+    dataValidate.creditCardId = false;
+  }
+  if (!dataParams.tradeDatetime) {
+    dataValidate.tradeDatetime = false;
+  }
+  if (!dataParams.tradeCategory) {
+    dataValidate.tradeCategory = false;
+  }
+  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
+    dataValidate.tradeAmount = false;
+  }
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
-          <div id="tradeDatetimeComponent"></div>
-        </div>
+  if (
+    !dataValidate.creditCardId ||
+    !dataValidate.tradeDatetime ||
+    !dataValidate.tradeCategory ||
+    !dataValidate.tradeAmount
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
+async function creditCardRecordDataHandling() {
+  if (!(await validateData())) return;
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
-          <div id="tradeCategorySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="dataBaseCurrencySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeDescription" value="${dataParams.tradeDescription}" />
-        </div>
-
-        <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeNote">${dataParams.tradeNote}</textarea>
-        </div>
-
-      </div>
-    `,
-    confirmButtonText: props.tradeIdGot ? "修改" : "新增",
-    showCancelButton: true,
-    cancelButtonText: "取消",
-    allowOutsideClick: false,
-    didOpen: () => {
-      let creditCardAccountSelect = createApp({
-        render() {
-          return h(accountSelect, {
-            selectTargetId: "isCreditcardAble",
-            accountIdGot: dataParams.creditCardId,
-            isDisable: props.tradeIdGot ? true : false,
-            onSendbackAccountId: (account: string, currency: string) => {
-              dataParams.creditCardId = account;
-              dataParams.currency = dataParams.creditCardId ? currency : "";
-            },
-          });
-        },
-      });
-      creditCardAccountSelect.mount("#accountSelectComponent");
-
-      let creditCardTradeDatetime = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
-        {
-          dateTimeGot: dataParams.tradeDatetime,
-          onSendbackDateTime: (dateTime: string) => {
-            dataParams.tradeDatetime = dateTime;
-            dataParams.billMonth = dataParams.tradeDatetime
-              ? new Date(dataParams.tradeDatetime).toISOString().slice(0, 7) + "-01"
-              : "";
-            console.log("dataParams:", dataParams);
-          },
-        },
-      );
-      creditCardTradeDatetime.mount("#tradeDatetimeComponent");
-
-      let creditCardTradeCategory = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
-        {
-          accountType: "isCreditcardAble",
-          tradeCategoryGot: dataParams.tradeCategory,
-          onSendbackTradeCategory: (tradeCategoryId: string) => {
-            dataParams.tradeCategory = tradeCategoryId;
-          },
-        },
-      );
-      creditCardTradeCategory.mount("#tradeCategorySelectComponent");
-
-      let creditCarddataBaseCurrencySelect = createApp({
-        render() {
-          return h(dataBaseCurrencySelect, {
-            currencyIdGot: dataParams.currency,
-            isDisable: true,
-          });
-        },
-      });
-      creditCarddataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
-
-      if (apiMsg) {
-        Swal.showValidationMessage(apiMsg);
-        return false;
-      }
-    },
-    preConfirm: () => {
-      const errors: string[] = [];
-
-      dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
-      dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
-      dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
-      if (!dataParams.creditCardId) {
-        errors.push("請選擇信用卡");
-      }
-      if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易時間");
-      }
-      if (!dataParams.tradeCategory) {
-        errors.push("請選擇收支項目");
-      }
-      if (dataParams.tradeAmount < 0) {
-        errors.push("交易金額不得為負");
-      }
-      if (errors.length > 0) {
-        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
-        return false;
-      }
-
-      return dataParams;
-    },
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // console.log("result:", result.value);
-      try {
-        const res: IResponse = await (props.tradeIdGot ? fetchCreditCardRecordUpdate : fetchCreditCardRecordCreate)(
-          result.value,
-        );
-        console.log("RES:", res);
-        if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
-          emits("dataReseaching");
-          Object.assign(dataParams, getDefaultDataParams());
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
-      }
+  try {
+    const res: IResponse = await (props.tradeIdGot ? fetchCreditCardRecordUpdate : fetchCreditCardRecordCreate)(
+      dataParams,
+    );
+    if (res.data.returnCode === 0) {
+      messageToast({ message: res.data.message });
+      emits("dataReseaching");
+      open.value = false;
+    } else {
+      errorMessageDialog({ message: res.data.message });
     }
-  });
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

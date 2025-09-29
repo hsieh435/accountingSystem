@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 400px;">
+  <div style="width: 100%; height: 400px">
     <canvas id="currencyExRateRecordChart"></canvas>
   </div>
 </template>
@@ -7,7 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
@@ -20,9 +20,13 @@ const currencyCashSellExRate = ref<number[]>([]);
 const currencySpotBuyExRate = ref<number[]>([]);
 const currencySpotSellExRate = ref<number[]>([]);
 
-watch(props, () => {
-  searchingCurrencyExRate();
-}, { deep: true });
+watch(
+  props,
+  () => {
+    searchingCurrencyExRate();
+  },
+  { deep: true },
+);
 
 let chartInstance: Chart | null = null;
 async function searchingCurrencyExRate() {
@@ -57,10 +61,10 @@ async function searchingCurrencyExRate() {
         }
       }
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -72,10 +76,22 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax =
-    Math.max(...[...currencyCashBuyExRate.value, ...currencyCashSellExRate.value, ...currencySpotBuyExRate.value, ...currencySpotSellExRate.value]);
-  const scalesMin =
-    Math.min(...[...currencyCashBuyExRate.value, ...currencyCashSellExRate.value, ...currencySpotBuyExRate.value, ...currencySpotSellExRate.value]);
+  const scalesMax = Math.max(
+    ...[
+      ...currencyCashBuyExRate.value,
+      ...currencyCashSellExRate.value,
+      ...currencySpotBuyExRate.value,
+      ...currencySpotSellExRate.value,
+    ],
+  );
+  const scalesMin = Math.min(
+    ...[
+      ...currencyCashBuyExRate.value,
+      ...currencyCashSellExRate.value,
+      ...currencySpotBuyExRate.value,
+      ...currencySpotSellExRate.value,
+    ],
+  );
   //
   chartInstance = new Chart(currencyExRateRecordChart, {
     data: {
@@ -110,10 +126,10 @@ async function renderingChart() {
           max: Math.ceil(scalesMax * 1.1),
         },
       },
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
       plugins: {
         tooltip: {
           callbacks: {

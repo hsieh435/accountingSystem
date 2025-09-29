@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 400px;">
+  <div style="width: 100%; height: 400px">
     <canvas id="currencyLatestExRateChart"></canvas>
   </div>
 </template>
@@ -8,36 +8,38 @@ import { ref, watch } from "vue";
 import { fetchCurrencyLatestExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
   searchingParamsGot: () => ({ currencyId: "", startDate: "", endDate: "" }),
 });
 
-
 const currencyExRate = ref<{ currencyName: string; exchangeRate: number }[]>([]);
 
-watch(props, () => {
-  searchingCurrencyExRate();
-}, { deep: true });
+watch(
+  props,
+  () => {
+    searchingCurrencyExRate();
+  },
+  { deep: true },
+);
 
 let chartInstance: Chart | null = null;
 async function searchingCurrencyExRate() {
-
   try {
     const res: IResponse = await fetchCurrencyLatestExRate(props.searchingParamsGot.currencyId);
     // console.log("fetchCurrencyLatestExRate:", res.data.data);
     if (res.data.returnCode === 0) {
       currencyExRate.value = Object.entries(res.data.data.rates).map(([key, value]) => ({
         currencyName: key || "?",
-        exchangeRate: Number(value) || 0
+        exchangeRate: Number(value) || 0,
       }));
       console.log("currencyExRate.value:", currencyExRate.value);
       renderingChart();
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

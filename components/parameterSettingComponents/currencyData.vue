@@ -123,7 +123,7 @@ import {
   fetchCurrencyDelete,
 } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
-import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
@@ -174,10 +174,10 @@ async function searchingCurrencyData() {
       // dataParams.minimumDenomination = res.data.data.minimumDenomination;
       // dataParams.sort = res.data.data.sort;
     } else {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -224,14 +224,14 @@ async function currencyDataHandling() {
     const res: IResponse = await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(dataParams);
     console.log("res:", res);
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
       open.value = false;
       emits("dataReseaching");
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

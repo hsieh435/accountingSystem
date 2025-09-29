@@ -120,7 +120,7 @@ import {
   fetchDeleteTradeCategory,
 } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
-import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ tradeCodeGot?: string }>(), { tradeCodeGot: "" });
@@ -175,10 +175,10 @@ async function searchingTradeCategory() {
       // dataParams.isStaccountAble = res.data.data.isStaccountAble;
       // dataParams.sort = res.data.data.sort;
     } else {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -212,14 +212,14 @@ async function tradeCategoryDataHandling() {
     const res: IResponse = await (props.tradeCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(dataParams);
     console.log("res:", res);
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
       open.value = false;
       emits("dataReseaching");
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

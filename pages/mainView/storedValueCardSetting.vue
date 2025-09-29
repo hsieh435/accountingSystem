@@ -77,7 +77,7 @@ import {
 import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -128,10 +128,10 @@ async function storedValueCardSearching() {
       storedValueCardList.value = res.data.data;
       await storedValueCardListFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -152,12 +152,12 @@ async function adjustAbleStatus(card: IStoredValueCardList) {
       card.storedValueCardId,
     );
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

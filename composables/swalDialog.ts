@@ -18,7 +18,7 @@ function getSwalIcon(icon: string) {
 
 
 
-export function showAxiosToast({ message, icon = "success", existTime = 1500 }: { message: string, icon?: string, existTime?: number; }) {
+export function messageToast({ message, icon = "success", existTime = 1500 }: { message: string, icon?: string, existTime?: number; }) {
   const Toast = Swal.mixin({
     toast: true,
     position: "top",
@@ -39,7 +39,7 @@ export function showAxiosToast({ message, icon = "success", existTime = 1500 }: 
 
 
 
-export function showAxiosErrorMsg({ message, icon = "error", hasConfirmButton = false }: { message: string; icon?: string; hasConfirmButton?: boolean; }) {
+export function errorMessageDialog({ message, icon = "error", hasConfirmButton = false }: { message: string; icon?: string; hasConfirmButton?: boolean; }) {
   Swal.fire({
     icon: getSwalIcon(icon),
     title: message,
@@ -69,10 +69,10 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
       // console.log("res:", res);
 
       if (res.data.returnCode === 0) {
-        showAxiosToast({ message: res.data.message });
+        messageToast({ message: res.data.message });
         return true;
       } else {
-        showAxiosErrorMsg({ message: res.data.message });
+        errorMessageDialog({ message: res.data.message });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {
@@ -88,10 +88,10 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
 export function showDataLengthMsg({ dataLength, dataName = "資料", hasData = false, hasDataMsg = "" }: { dataLength: number; dataName?: string; hasData?: boolean; hasDataMsg?: string; }): void {
 
   if (dataLength === 0) {
-    showAxiosToast({ message: `查無${dataName}，請重新搜尋`, icon: "warning", existTime: 2000 });
+    messageToast({ message: `查無${dataName}，請重新搜尋`, icon: "warning", existTime: 2000 });
 
   } else if (dataLength > 0 && hasData) {
-    showAxiosToast({ message: hasDataMsg, icon: "success", existTime: 2000 });
+    messageToast({ message: hasDataMsg, icon: "success", existTime: 2000 });
 
   }
 }

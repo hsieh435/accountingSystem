@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 400px;">
+  <div style="width: 100%; height: 400px">
     <canvas id="stockPriceChart"></canvas>
   </div>
 </template>
@@ -8,25 +8,23 @@ import { watch, ref } from "vue";
 // import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from "vue-chartjs";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
-
-
-const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), { searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }) });
-
-
+const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
+  searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }),
+});
 
 const lineChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 
-
-
-watch(props, () => {
-  searchingStockPrice();
-}, { deep: true });
-
-
+watch(
+  props,
+  () => {
+    searchingStockPrice();
+  },
+  { deep: true },
+);
 
 let chartInstance: Chart | null = null;
 async function searchingStockPrice() {
@@ -36,9 +34,12 @@ async function searchingStockPrice() {
     // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
       lineChartTitle.value =
-      props.searchingParamsGot.stockName + " " +
-      props.searchingParamsGot.startDate.replace(/-/g, "/") + " ~ " +
-      props.searchingParamsGot.endDate.replace(/-/g, "/") + "股價走勢";
+        props.searchingParamsGot.stockName +
+        " " +
+        props.searchingParamsGot.startDate.replace(/-/g, "/") +
+        " ~ " +
+        props.searchingParamsGot.endDate.replace(/-/g, "/") +
+        "股價走勢";
       if (res.data.data.data.length > 0) {
         stockDataLineChart.value = res.data.data.data.map((record: any) => {
           return {
@@ -51,14 +52,12 @@ async function searchingStockPrice() {
       }
       renderingChart();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
-
-
 
 const getLabels = (chartData: any[]) => {
   const labels = chartData.map((v) => v.label);
@@ -70,7 +69,6 @@ const getData = (chartData: any[]) => {
   return data;
 };
 
-
 // CanvasRenderingContext2D
 async function renderingChart() {
   // console.log(props.chartType);
@@ -81,10 +79,13 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax = getData(stockDataLineChart.value) ? Math.ceil(Math.max(...getData(stockDataLineChart.value).map((data) => data))) : 10;
-  const scalesMin = getData(stockDataLineChart.value) ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data))) : 0;
+  const scalesMax = getData(stockDataLineChart.value)
+    ? Math.ceil(Math.max(...getData(stockDataLineChart.value).map((data) => data)))
+    : 10;
+  const scalesMin = getData(stockDataLineChart.value)
+    ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data)))
+    : 0;
   let variation = 0;
-
 
   chartInstance = new Chart(stockPriceChart, {
     type: "line",
@@ -156,5 +157,4 @@ async function renderingChart() {
     },
   });
 }
-
 </script>

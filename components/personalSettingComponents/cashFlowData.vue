@@ -39,7 +39,7 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流貨幣：</span>
-            <div :class="['w-auto', dataValidate.currency ? 'outline-red-50' : 'outline-1 outline-red-500']">
+            <div :class="['w-fit', dataValidate.currency ? '' : 'outline-1 outline-red-500']">
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
                 :isDisable="props.cashflowIdIdGot ? true : false"
@@ -57,8 +57,7 @@
             <span class="col-span-2 text-right">目前金額：</span>
             <input
               :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="dataParams.presentAmount"
-              type="number"
+              :value="currencyFormat(dataParams.presentAmount)"
               disabled />
           </div>
         </template>
@@ -69,14 +68,14 @@
               <input
                 :class="[
                   tailwindStyles.getInputClasses('col-span-3'),
-                  dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500',
+                  dataValidate.startingAmount ? '' : 'outline-1 outline-red-500',
                 ]"
                 v-model="dataParams.startingAmount"
                 type="number" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
               <span class="col-span-2 text-right"></span>
-              <span class="col-span-4 text-red-500 mx-2">請填寫初始金額</span>
+              <span class="col-span-4 text-red-500 mx-2">{{ startingAmountValidateText }}</span>
             </div>
           </div>
         </template>
@@ -87,20 +86,32 @@
             <input
               :class="[
                 tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500',
+                dataValidate.minimumValueAllowed ? '' : 'outline-1 outline-red-500',
               ]"
               v-model="dataParams.minimumValueAllowed"
               type="number" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumValueAllowed">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請填寫最小持有金額</span>
+            <span class="col-span-4 text-red-500 mx-2">{{ minimumValueAllowedValidateText }}</span>
           </div>
         </div>
 
-        <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-          <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.alertValue" type="number" />
+        <div class="w-full">
+          <div class="w-full flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.alertValue ? '' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.alertValue"
+              type="number" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">{{ alertValueValidateText }}</span>
+          </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
@@ -137,8 +148,8 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, IResponse } from "@/models/index";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg, showConfirmDialog } from "@/composables/swalDialog";
+import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
+import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -171,10 +182,13 @@ const getDefaultDataValidate = (): any => ({
   cashflowName: true,
   currency: true,
   startingAmount: true,
-  presentAmount: true,
   minimumValueAllowed: true,
+  alertValue: true,
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
+const startingAmountValidateText = ref<string>("");
+const minimumValueAllowedValidateText = ref<string>("");
+const alertValueValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
@@ -197,10 +211,10 @@ async function searchingCashflowData() {
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -216,8 +230,8 @@ async function validateData() {
   dataValidate.cashflowName = true;
   dataValidate.currency = true;
   dataValidate.startingAmount = true;
-  dataValidate.presentAmount = true;
   dataValidate.minimumValueAllowed = true;
+  dataValidate.alertValue = true;
 
   if (!dataParams.cashflowName) {
     dataValidate.cashflowName = false;
@@ -225,22 +239,41 @@ async function validateData() {
   if (!dataParams.currency) {
     dataValidate.currency = false;
   }
-  if (dataParams.startingAmount === null || dataParams.startingAmount <= 0) {
+  if (
+    typeof dataParams.startingAmount !== "number" ||
+    !isFinite(dataParams.startingAmount) ||
+    dataParams.startingAmount < 0
+  ) {
     dataValidate.startingAmount = false;
+    startingAmountValidateText.value = "請填寫初始金額";
   }
-  if (dataParams.presentAmount === null || dataParams.presentAmount <= 0) {
-    dataValidate.presentAmount = false;
-  }
-  if (dataParams.minimumValueAllowed === null || dataParams.minimumValueAllowed <= 0) {
+  if (
+    typeof dataParams.minimumValueAllowed !== "number" ||
+    !isFinite(dataParams.minimumValueAllowed) ||
+    dataParams.minimumValueAllowed < 0
+  ) {
     dataValidate.minimumValueAllowed = false;
+    minimumValueAllowedValidateText.value = "請填寫最小持有金額";
+  }
+  if (dataParams.minimumValueAllowed < dataParams.startingAmount) {
+    dataValidate.minimumValueAllowed = false;
+    minimumValueAllowedValidateText.value = "最小持有金額大於初始金額";
+  }
+  if (typeof dataParams.alertValue !== "number" || !isFinite(dataParams.alertValue) || dataParams.alertValue < 0) {
+    dataValidate.alertValue = false;
+    alertValueValidateText.value = "請填寫提醒金額";
+  }
+  if (dataParams.alertValue < dataParams.startingAmount || dataParams.alertValue < dataParams.minimumValueAllowed) {
+    dataValidate.alertValue = false;
+    alertValueValidateText.value = "提醒金額不可小於初始金額與最小持有金額";
   }
 
   if (
     !dataValidate.cashflowName ||
     !dataValidate.currency ||
     !dataValidate.startingAmount ||
-    !dataValidate.presentAmount ||
-    !dataValidate.minimumValueAllowed
+    !dataValidate.minimumValueAllowed ||
+    !dataValidate.alertValue
   ) {
     return false;
   } else {
@@ -249,21 +282,21 @@ async function validateData() {
 }
 
 async function cashflowDataHandling() {
-  if (!(await validateData())) return;
   // console.log("dataParams:", dataParams);
+  if (!(await validateData())) return;
 
   try {
     const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(dataParams);
     // console.log("RES:", res);
     if (res.data.returnCode === 0) {
-      showAxiosToast({ message: res.data.message });
+      messageToast({ message: res.data.message });
       emits("dataReseaching");
-      Object.assign(dataParams, getDefaultDataParams());
+      open.value = false;
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
@@ -276,8 +309,8 @@ async function removeCashFlowData() {
   });
 
   if (confirmResult) {
-    open.value = false;
     emits("dataReseaching");
+    open.value = false;
   }
 }
 </script>

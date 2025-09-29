@@ -1,7 +1,7 @@
 import { defineNuxtRouteMiddleware, navigateTo, abortNavigation } from "nuxt/app";
 // import { useRoute } from "vue-router";
 import { fetchJwtVerification } from "@/server/generalApi";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import { decryptString } from "@/composables/crypto";
 import { clearLocalStorageKey } from "@/composables/tools";
 
@@ -24,12 +24,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         if (res.data.returnCode === 0) {
           navigateTo(to.fullPath);
         } else {
-          showAxiosErrorMsg({ message: res.data.message || "" });
+          errorMessageDialog({ message: res.data.message || "" });
           clearLocalStorageKey(true);
           // return abortNavigation();
         }
       } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
+        errorMessageDialog({ message: (error as Error).message });
         clearLocalStorageKey(true);
         // return abortNavigation();
       }

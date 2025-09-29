@@ -17,7 +17,10 @@
         :maxDate="getCurrentYMD()"
         @sendbackDate="settingEnd" />
     </div>
-    <ui-buttonGroup showSearch :searchDisable="!searchingParams.stockNo || searchingParams.startDate === searchingParams.endDate" @dataSearch="searchingStockPrice()" />
+    <ui-buttonGroup
+      showSearch
+      :searchDisable="!searchingParams.stockNo || searchingParams.startDate === searchingParams.endDate"
+      @dataSearch="searchingStockPrice()" />
   </div>
 </template>
 <script setup lang="ts">
@@ -25,7 +28,7 @@ import { defineAsyncComponent, reactive, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IStockList, IStockPriceRecordList, IResponse } from "@/models/index";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 
@@ -62,20 +65,25 @@ async function searchingStockPrice() {
     if (res.data.returnCode === 0) {
       stockPriceRecord.value = res.data.data.data;
       const plotlyTitle =
-        stockName.value + " " + searchingParams.startDate.replace(/-/g, "/") + " ~ " + searchingParams.endDate.replace(/-/g, "/") + "股價走勢";
+        stockName.value +
+        " " +
+        searchingParams.startDate.replace(/-/g, "/") +
+        " ~ " +
+        searchingParams.endDate.replace(/-/g, "/") +
+        "股價走勢";
 
       if (stockPriceRecord.value.length > 0) {
-        showAxiosToast({ message: res.data.message, icon: "success" });
+        messageToast({ message: res.data.message, icon: "success" });
         emits("sendbackSearchingData", plotlyTitle, stockPriceRecord.value);
       } else {
-        showAxiosToast({ message: "查無資料", icon: "warning" });
+        messageToast({ message: "查無資料", icon: "warning" });
         emits("sendbackSearchingData", "", []);
       }
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>

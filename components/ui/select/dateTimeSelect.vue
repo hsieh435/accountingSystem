@@ -21,7 +21,13 @@ import { getCurrentTimestamp } from "@/composables/tools";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 const props = withDefaults(
-  defineProps<{ dateTimeGot?: string; hasRange?: boolean; minDateTime?: string; maxDateTime?: string; isDisabled?: boolean }>(),
+  defineProps<{
+    dateTimeGot?: string;
+    hasRange?: boolean;
+    minDateTime?: string;
+    maxDateTime?: string;
+    isDisabled?: boolean;
+  }>(),
   { dateTimeGot: "", hasRange: false, minDateTime: "", maxDateTime: "", isDisabled: false },
 );
 const emits = defineEmits(["sendbackDateTime"]);
@@ -33,15 +39,13 @@ onMounted(async () => {
   dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
 });
 
-watch(
-  () => dateTimeString.value,
-  () => {
+watch(dateTimeString, () => {
+  if (dateTimeString.value) {
     const newDateTime = new Date(dateTimeString.value);
-    // const newDateTimeString = `${newDateTime.getFullYear()}-${(newDateTime.getMonth() + 1).toString().padStart(2, "0")}-${newDateTime.getDate().toString().padStart(2, "0")} ${newDateTime.getHours().toString().padStart(2, "0")}:${newDateTime.getMinutes().toString().padStart(2, "0")}:00`;
-    // console.log("newDateTime.toISOString():", newDateTime.toISOString());
-    // console.log("new Date(newDateTimeString):", new Date(newDateTimeString));
     emits("sendbackDateTime", newDateTime.toISOString());
-  },
-);
+  } else {
+    emits("sendbackDateTime", "");
+  }
+});
 </script>
 <style lang="scss" scoped></style>

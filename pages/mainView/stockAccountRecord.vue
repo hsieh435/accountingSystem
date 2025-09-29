@@ -71,7 +71,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
 import { IStockAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
@@ -129,10 +129,10 @@ async function searchingFinanceRecord() {
       stockAccountRecord.value = res.data.data;
       await stockAccountRecordFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

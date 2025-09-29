@@ -1,13 +1,129 @@
 <template>
-  <template v-if="props.tradeIdGot">
-    <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" @dataView="searchingStoredValueCardRecord()" />
-  </template>
-  <template v-if="!props.tradeIdGot">
-    <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" @dataCreate="storedValueCardRecordDataHandling()" />
-  </template>
+  <UModal
+    title="儲值票卡收支紀錄"
+    description="資料內容"
+    v-model:open="open"
+    :dismissible="false"
+    :close="{
+      color: 'primary',
+      variant: 'outline',
+      class: 'rounded-full',
+    }">
+    <template v-if="props.tradeIdGot">
+      <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" />
+    </template>
+    <template v-if="!props.tradeIdGot">
+      <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" />
+    </template>
+    <template #body>
+      <div class="flex flex-col justify-center items-center gap-2">
+        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡：</span>
+            <div :class="['w-fit', dataValidate.storedValueCardId ? '' : 'outline-1 outline-red-500']">
+              <accountSelect
+                selectTargetId="isStoredvaluecardAble"
+                :accountIdGot="dataParams.storedValueCardId"
+                :isDisable="props.tradeIdGot ? true : false"
+                @sendbackAccountId="settingStoredValueCardAccount" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardId">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇儲值票卡</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
+            <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
+              <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇交易時間</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
+            <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
+              <transactionTypeSelect
+                :transactionType="dataParams.transactionType"
+                @sendbackTransactionType="settingTransactionType" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇收支</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="w-full flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
+            <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
+              <tradeCategorySelect
+                accountType="isStoredvaluecardAble"
+                :tradeCategoryGot="dataParams.tradeCategory"
+                @sendbackTradeCategory="settingTradeCategory" />
+            </div>
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCategory">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇收支項目</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
+            <input
+              :class="[
+                tailwindStyles.getInputClasses('col-span-3'),
+                dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
+              ]"
+              v-model="dataParams.tradeAmount"
+              type="number" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">貨幣：</span>
+          <div class="w-fit">
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">說明：</span>
+          <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.tradeDescription" />
+        </div>
+
+        <div class="w-full flex justify-start items-start grid grid-cols-6">
+          <span class="col-span-2 text-right my-1">附註：</span>
+          <textarea :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.tradeNote"></textarea>
+        </div>
+
+        <div class="my-2">
+          <ui-buttonGroup showSave @dataSave="storedValueCardRecordDataHandling" />
+          <ui-buttonGroup showClose @dataClose="open = false" />
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive, createApp, h } from "vue";
+import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import {
   fetchStoredValueCardRecordById,
   fetchStoredValueCardRecordCreate,
@@ -15,8 +131,13 @@ import {
 } from "@/server/storedValueCardRecordApi";
 import { IStoredValueCardRecordList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { showAxiosToast, showAxiosErrorMsg } from "@/composables/swalDialog";
-import Swal from "sweetalert2";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
+const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue"));
+const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
+const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdGot?: string }>(), {
   tradeIdGot: "",
@@ -24,9 +145,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdG
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-
+const open = ref<boolean>(false);
 const getDefaultDataParams = (): IStoredValueCardRecordList => ({
   tradeId: props.tradeIdGot || "",
   storedValueCardId: props.storedValueCardIdGot || "",
@@ -40,202 +159,115 @@ const getDefaultDataParams = (): IStoredValueCardRecordList => ({
   tradeNote: "",
 });
 const dataParams = reactive<IStoredValueCardRecordList>(getDefaultDataParams());
+const getDefaultDataValidate = (): any => ({
+  storedValueCardId: true,
+  tradeDatetime: true,
+  transactionType: true,
+  tradeCategory: true,
+  tradeAmount: true,
+});
+const dataValidate = reactive<any>(getDefaultDataValidate());
+
+watch(open, () => {
+  if (open.value === true) {
+    if (props.tradeIdGot) {
+      searchingStoredValueCardRecord();
+    } else {
+      Object.assign(dataParams, getDefaultDataParams());
+    }
+  } else if (open.value === false) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
+  }
+});
 
 async function searchingStoredValueCardRecord() {
-  console.log("props:", props);
   try {
     const res: IResponse = await fetchStoredValueCardRecordById({
       storedValueCardId: props.storedValueCardIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchStoredValueCardRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      await storedValueCardRecordDataHandling();
+      open.value = true;
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 
-async function storedValueCardRecordDataHandling(apiMsg?: string) {
-  // console.log(dataParams);
+function settingStoredValueCardAccount(account: string, currency: string) {
+  dataParams.storedValueCardId = account;
+  dataParams.currency = account ? currency : "";
+}
 
-  Swal.fire({
-    title: props.tradeIdGot ? "編輯儲值票卡收支紀錄" : "新增儲值票卡收支紀錄",
-    html: `
-      <div class="d-flex flex-row items-center rounded-md">
-        <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
+function settingTradeDatetime(dateTime: string) {
+  dataParams.tradeDatetime = dateTime;
+}
 
+function settingTransactionType(type: string) {
+  dataParams.transactionType = type;
+}
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡：</span>
-          <div id="accountSelectComponent"></div>
-        </div>
+function settingTradeCategory(tradeCategoryId: string) {
+  dataParams.tradeCategory = tradeCategoryId;
+}
 
+async function validateData() {
+  dataValidate.storedValueCardId = true;
+  dataValidate.tradeDatetime = true;
+  dataValidate.transactionType = true;
+  dataValidate.tradeCategory = true;
+  dataValidate.tradeAmount = true;
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
-          <div id="tradeDatetimeComponent"></div>
-        </div>
+  if (!dataParams.storedValueCardId) {
+    dataValidate.storedValueCardId = false;
+  }
+  if (!dataParams.tradeDatetime) {
+    dataValidate.tradeDatetime = false;
+  }
+  if (!dataParams.transactionType) {
+    dataValidate.transactionType = false;
+  }
+  if (!dataParams.tradeCategory) {
+    dataValidate.tradeCategory = false;
+  }
+  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
+    dataValidate.tradeAmount = false;
+  }
 
+  if (
+    !dataValidate.storedValueCardId ||
+    !dataValidate.tradeDatetime ||
+    !dataValidate.transactionType ||
+    !dataValidate.tradeCategory ||
+    !dataValidate.tradeAmount
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
-          <div class="col-span-4" id="transactionTypeSelectComponent"></div>
-        </div>
+async function storedValueCardRecordDataHandling() {
+  if (!(await validateData())) return;
 
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
-          <div id="tradeCategorySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeAmount" value="${dataParams.tradeAmount}" type="number" />
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>貨幣：</span>
-          <div id="dataBaseCurrencySelectComponent"></div>
-        </div>
-
-
-        <div class="flex justify-start items-center grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right">說明：</span>
-          <input class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeDescription" value="${dataParams.tradeDescription}" />
-        </div>
-
-        <div class="flex justify-start items-start grid grid-cols-6 my-2">
-          <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea class="${tailwindStyles.getInputClasses('col-span-3')}" id="tradeNote">${dataParams.tradeNote}</textarea>
-        </div>
-
-      </div>
-    `,
-    confirmButtonText: props.storedValueCardIdGot ? "修改" : "新增",
-    showCancelButton: true,
-    cancelButtonText: "取消",
-    allowOutsideClick: false,
-    didOpen: () => {
-      let storedValueCardAccountSelect = createApp({
-        render() {
-          return h(accountSelect, {
-            selectTargetId: "isStoredvaluecardAble",
-            accountIdGot: dataParams.storedValueCardId,
-            isDisable: props.tradeIdGot ? true : false,
-            onSendbackAccountId: (account: string, currency: string) => {
-              dataParams.storedValueCardId = account;
-              dataParams.currency = dataParams.storedValueCardId ? currency : "";
-            },
-          });
-        },
-      });
-      storedValueCardAccountSelect.mount("#accountSelectComponent");
-
-      let storedValueCardTradeDatetime = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue")),
-        {
-          dateTimeGot: dataParams.tradeDatetime,
-          onSendbackDateTime: (dateTime: string) => {
-            dataParams.tradeDatetime = dateTime;
-          },
-        },
-      );
-      storedValueCardTradeDatetime.mount("#tradeDatetimeComponent");
-
-      let storedValueCardTransactionType = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue")),
-        {
-          transactionType: dataParams.transactionType,
-          onSendbackTransactionType: (type: string) => {
-            dataParams.transactionType = type;
-          },
-        },
-      );
-      storedValueCardTransactionType.mount("#transactionTypeSelectComponent");
-
-      let storedValueCardTradeCategory = createApp(
-        defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue")),
-        {
-          accountType: "isStoredvaluecardAble",
-          tradeCategoryGot: dataParams.tradeCategory,
-          onSendbackTradeCategory: (tradeCategoryId: string) => {
-            dataParams.tradeCategory = tradeCategoryId;
-          },
-        },
-      );
-      storedValueCardTradeCategory.mount("#tradeCategorySelectComponent");
-
-      let storedValueCarddataBaseCurrencySelect = createApp({
-        render() {
-          return h(dataBaseCurrencySelect, {
-            currencyIdGot: dataParams.currency,
-            isDisable: true,
-          });
-        },
-      });
-      storedValueCarddataBaseCurrencySelect.mount("#dataBaseCurrencySelectComponent");
-
-      if (apiMsg) {
-        Swal.showValidationMessage(apiMsg);
-        return false;
-      }
-    },
-    preConfirm: () => {
-      const errors: string[] = [];
-
-      dataParams.tradeAmount = Number((document.getElementById("tradeAmount") as HTMLInputElement).value);
-      dataParams.tradeDescription = (document.getElementById("tradeDescription") as HTMLInputElement).value;
-      dataParams.tradeNote = (document.getElementById("tradeNote") as HTMLInputElement).value;
-
-      if (!dataParams.storedValueCardId) {
-        errors.push("請選擇儲值票卡");
-      }
-      if (!dataParams.tradeDatetime) {
-        errors.push("請填寫交易時間");
-      }
-      if (!dataParams.transactionType) {
-        errors.push("請選擇收支");
-      }
-      if (!dataParams.tradeCategory) {
-        errors.push("請選擇收支項目");
-      }
-      if (dataParams.tradeAmount < 0) {
-        errors.push("交易金額不得為負");
-      }
-      if (errors.length > 0) {
-        Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
-        return false;
-      }
-
-      return dataParams;
-    },
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // console.log("result:", result.value);
-      try {
-        const res: IResponse = await (
-          props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate
-        )(result.value);
-        console.log("RES:", res);
-        if (res.data.returnCode === 0) {
-          showAxiosToast({ message: res.data.message });
-          emits("dataReseaching");
-          Object.assign(dataParams, getDefaultDataParams());
-        } else {
-          showAxiosErrorMsg({ message: res.data.message });
-        }
-      } catch (error) {
-        showAxiosErrorMsg({ message: (error as Error).message });
-      }
+  try {
+    const res: IResponse = await (
+      props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate
+    )(dataParams);
+    if (res.data.returnCode === 0) {
+      messageToast({ message: res.data.message });
+      emits("dataReseaching");
+      open.value = false;
+    } else {
+      errorMessageDialog({ message: res.data.message });
     }
-  });
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

@@ -63,7 +63,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi";
 import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
@@ -120,10 +120,10 @@ async function searchingFinanceRecord() {
       storedValueCardRecordList.value = res.data.data;
       await storedValueCardRecordListFilterEvent();
     } else {
-      showAxiosErrorMsg({ message: res.data.message });
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 

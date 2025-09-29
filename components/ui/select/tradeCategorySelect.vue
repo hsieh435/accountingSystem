@@ -9,7 +9,7 @@
 import { ref, onMounted, watch } from "vue";
 import { ISelectData, ITradeCategory, IResponse } from "@/models/index";
 import { fetchTradeCategoryList } from "@/server/parameterApi";
-import { showAxiosErrorMsg } from "@/composables/swalDialog";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?: string; sellectAll?: boolean }>(), {
@@ -49,10 +49,10 @@ async function searchingTradeType() {
         tradeCategoryList.value.unshift({ label: "所有項目", value: "" });
       }
     } else {
-      showAxiosErrorMsg({ message: res.data.data.message });
+      errorMessageDialog({ message: res.data.data.message });
     }
   } catch (error) {
-    showAxiosErrorMsg({ message: (error as Error).message });
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>
