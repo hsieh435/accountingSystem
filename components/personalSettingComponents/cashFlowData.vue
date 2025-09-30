@@ -255,9 +255,9 @@ async function validateData() {
     dataValidate.minimumValueAllowed = false;
     minimumValueAllowedValidateText.value = "請填寫最小持有金額";
   }
-  if (dataParams.minimumValueAllowed < dataParams.startingAmount) {
+  if (dataParams.minimumValueAllowed > dataParams.startingAmount) {
     dataValidate.minimumValueAllowed = false;
-    minimumValueAllowedValidateText.value = "最小持有金額大於初始金額";
+    minimumValueAllowedValidateText.value = "初始金額必須大於最小持有金額";
   }
   if (typeof dataParams.alertValue !== "number" || !isFinite(dataParams.alertValue) || dataParams.alertValue < 0) {
     dataValidate.alertValue = false;
