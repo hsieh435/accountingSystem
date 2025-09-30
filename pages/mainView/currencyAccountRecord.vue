@@ -1,14 +1,9 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div>
-      <accountRecordSearching
-        :accountTypeId="'isCuaccountAble'"
-        :accountTypeName="'存款帳戶'"
-        @sendbackSearchingParams="settingSearchingParams" />
-      <div class="my-1"></div>
+    <accountRecordSearching :accountTypeId="'isCuaccountAble'" :accountTypeName="'存款帳戶'" @sendbackSearchingParams="settingSearchingParams" />
+
+    <div class="my-1 px-3">
       <currencyAccountTradeData @dataReseaching="searchingFinanceRecord" />
-    </div>
-    <div class="px-3">
       <template v-if="currencyAccountRecord.length > 0">
         <ui-pagination
           :totalDataQuanity="currencyAccountRecordFiltered.length"

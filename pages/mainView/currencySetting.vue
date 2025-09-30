@@ -1,10 +1,7 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="flex flex-wrap justify-start items-center px-3 py-1">
+    <div class="py-1 px-3">
       <currencyData @dataReseaching="searchingCurrencyList" />
-    </div>
-
-    <div class="px-3">
       <template v-if="currencyList.length > 0">
         <ui-pagination
           :currentPage="currentPage"

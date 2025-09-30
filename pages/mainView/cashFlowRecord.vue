@@ -4,58 +4,58 @@
       :accountTypeId="'isCashflowAble'"
       :accountTypeName="'現金流'"
       @sendbackSearchingParams="settingSearchingParams" />
-    <div class="my-1"></div>
-    <cashFlowTradeData @dataReseaching="searchingFinanceRecord" />
-  </div>
-  <div class="px-3">
-    <template v-if="cashFlowRecord.length > 0">
-      <ui-pagination
-        :totalDataQuanity="cashFlowRecordFiltered.length"
-        :showFilter="false"
-        @tableSliceChange="settingTableSlice" />
-      <template v-if="cashFlowRecordFiltered.length > 0">
-        <div class="rounded-lg overflow-hidden p-0">
-          <div :class="tailwindStyles.getTableClasses()">
-            <div :class="tailwindStyles.getTheadClasses()">
-              <div :class="tailwindStyles.getTheadtrClasses()">
-                <div :class="tailwindStyles.getThClasses()">NO.</div>
-                <div :class="tailwindStyles.getThClasses()">現金流</div>
-                <div :class="tailwindStyles.getThClasses()">交易時間</div>
-                <div :class="tailwindStyles.getThClasses()">收支</div>
-                <div :class="tailwindStyles.getThClasses()">項目</div>
-                <div :class="tailwindStyles.getThClasses()">貨幣</div>
-                <div :class="tailwindStyles.getThClasses()">金額</div>
-                <div :class="tailwindStyles.getThClasses()">餘額</div>
-                <div :class="tailwindStyles.getThClasses()">內容</div>
-                <div :class="tailwindStyles.getThClasses()">操作</div>
+
+    <div class="my-1 px-3">
+      <cashFlowTradeData @dataReseaching="searchingFinanceRecord" />
+      <template v-if="cashFlowRecord.length > 0">
+        <ui-pagination
+          :totalDataQuanity="cashFlowRecordFiltered.length"
+          :showFilter="false"
+          @tableSliceChange="settingTableSlice" />
+        <template v-if="cashFlowRecordFiltered.length > 0">
+          <div class="rounded-lg overflow-hidden p-0">
+            <div :class="tailwindStyles.getTableClasses()">
+              <div :class="tailwindStyles.getTheadClasses()">
+                <div :class="tailwindStyles.getTheadtrClasses()">
+                  <div :class="tailwindStyles.getThClasses()">NO.</div>
+                  <div :class="tailwindStyles.getThClasses()">現金流</div>
+                  <div :class="tailwindStyles.getThClasses()">交易時間</div>
+                  <div :class="tailwindStyles.getThClasses()">收支</div>
+                  <div :class="tailwindStyles.getThClasses()">項目</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣</div>
+                  <div :class="tailwindStyles.getThClasses()">金額</div>
+                  <div :class="tailwindStyles.getThClasses()">餘額</div>
+                  <div :class="tailwindStyles.getThClasses()">內容</div>
+                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                </div>
               </div>
-            </div>
-            <div :class="tailwindStyles.getTbodyClasses()">
-              <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
-                <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ record.cashflowName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
-                <div :class="tailwindStyles.getTdClasses()">0</div>
-                <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
-                <div :class="tailwindStyles.getTdClasses()">
-                  <cashFlowTradeData
-                    :cashflowIdGot="record.cashflowId"
-                    :tradeIdGot="record.tradeId"
-                    @dataReseaching="searchingFinanceRecord" />
+              <div :class="tailwindStyles.getTbodyClasses()">
+                <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.cashflowName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">0</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <cashFlowTradeData
+                      :cashflowIdGot="record.cashflowId"
+                      :tradeIdGot="record.tradeId"
+                      @dataReseaching="searchingFinanceRecord" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </template>
-    </template>
-    <template v-else-if="cashFlowRecord.length === 0">
-      <span :class="tailwindStyles.getNoDataClasses()">無交易資料</span>
-    </template>
+      <template v-else-if="cashFlowRecord.length === 0">
+        <span :class="tailwindStyles.getNoDataClasses()">無交易資料</span>
+      </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

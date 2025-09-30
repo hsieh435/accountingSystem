@@ -1,11 +1,9 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div>
-      <accountSearching @sendbackSearchingParams="settingSearchingParams" />
-      <div class="my-1"></div>
+    <accountSearching @sendbackSearchingParams="settingSearchingParams" />
+
+    <div class="my-1 px-3">
       <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
-    </div>
-    <div class="px-3">
       <template v-if="currencyAccountList.length > 0">
         <ui-pagination
           :totalDataQuanity="currencyAccountList.length"

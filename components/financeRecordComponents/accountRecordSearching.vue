@@ -21,18 +21,10 @@
       ><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeCategory="settingTradeCategory" />
     </div>
 
-    <div class="flex items-center me-3 my-1">
-      <span>時間區間：</span>
-      <dateSelect
-        :dateSelect="searchParams.startingDate"
-        :maxDate="searchParams.endDate"
-        @sendbackDate="settingSettingDate" />
-      <span class="mx-1">～</span>
-      <dateSelect
-        :dateSelect="searchParams.endDate"
-        :minDate="searchParams.startingDate"
-        @sendbackDate="settingEndDate" />
-    </div>
+    <span>時間區間：</span>
+    <dateSelect :dateSelect="searchParams.startingDate" :maxDate="searchParams.endDate" @sendbackDate="settingSettingDate" />
+    <span class="mx-1">～</span>
+    <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>

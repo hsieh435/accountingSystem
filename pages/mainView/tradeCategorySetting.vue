@@ -1,10 +1,7 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="flex flex-wrap justify-start items-center w-full px-3 py-1">
+    <div class="my-1 px-3">
       <tradeCategoryData @dataReseaching="searchingTradeCategoryList" />
-    </div>
-
-    <div class="px-3">
       <template v-if="tradeCategoryList.length > 0">
         <ui-pagination
           :currentPage="1"

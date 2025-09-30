@@ -1,14 +1,12 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div>
-      <accountRecordSearching
-        :accountTypeId="'isStaccountAble'"
-        :accountTypeName="'證券帳戶'"
-        @sendbackSearchingParams="settingSearchingParams" />
-      <div class="my-1"></div>
+    <accountRecordSearching
+      :accountTypeId="'isStaccountAble'"
+      :accountTypeName="'證券帳戶'"
+      @sendbackSearchingParams="settingSearchingParams" />
+
+    <div class="my-1 px-3">
       <stockAccountTradeData @dataReseaching="searchingFinanceRecord" />
-    </div>
-    <div class="px-3">
       <template v-if="stockAccountRecord.length > 0">
         <ui-pagination
           :totalDataQuanity="stockAccountRecordFiltered.length"
