@@ -187,10 +187,10 @@ async function submitUserData() {
       setLocalStorageItem("userToken", res.data.data.jwt);
       open.value = false;
     } else {
-      errorMessageDialog(res.data.message);
+      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog((error as Error).message);
+    errorMessageDialog({ message: (error as Error).message });
   }
 }
 </script>
