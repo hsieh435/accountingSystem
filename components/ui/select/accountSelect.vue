@@ -46,7 +46,7 @@ onMounted(async () => {
 
 watch(accountId, () => {
   const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
-  emits("sendbackAccountId", accountId.value, selectedItem ? selectedItem.currency : "");
+  emits("sendbackAccountId", selectedItem ? selectedItem : null);
 });
 
 async function loadAccountList() {

@@ -89,11 +89,12 @@
                 dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
               ]"
               v-model="dataParams.tradeAmount"
-              type="number" />
+              type="number"
+              @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+            <span class="col-span-4 text-red-500 mx-2">{{ tradeAmountValidateText }}</span>
           </div>
         </div>
 
@@ -129,7 +130,7 @@ import {
   fetchCashFlowRecordCreate,
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi";
-import { ICashFlowRecordList, IResponse } from "@/models/index";
+import { ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -152,9 +153,10 @@ const getDefaultDataParams = (): ICashFlowRecordList => ({
   userId: "",
   tradeDatetime: "",
   accountType: "cashFlow",
-  transactionType: "",
+  transactionType: "income",
   tradeCategory: "",
   tradeAmount: 0,
+  remainingAmount: 0,
   currency: "",
   tradeDescription: "",
   tradeNote: "",
@@ -168,6 +170,8 @@ const getDefaultDataValidate = (): any => ({
   tradeAmount: true,
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
+const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
+const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
@@ -179,6 +183,8 @@ watch(open, () => {
   } else if (open.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(cashFlowChosen, {} as ICashFlowList);
+    tradeAmountValidateText.value = "";
   }
 });
 
@@ -203,40 +209,54 @@ function settingTradeDatetime(dateTime: string) {
   dataParams.tradeDatetime = dateTime;
 }
 
-function settingCashflowAccount(account: string, currency: string) {
-  dataParams.cashflowId = account;
-  dataParams.currency = account ? currency : "";
+function settingCashflowAccount(account: ICashFlowList) {
+  dataParams.cashflowId = account.cashflowId;
+  dataParams.currency = account.currency;
+  dataParams.remainingAmount = account.presentAmount;
+  cashFlowChosen.value = account;
+  settingRemainingAmount();
 }
 
 function settingTransactionType(type: string) {
   dataParams.transactionType = type;
+  settingRemainingAmount();
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
 }
 
-async function validateData() {
-  dataValidate.cashflowId = true;
-  dataValidate.tradeDatetime = true;
-  dataValidate.transactionType = true;
-  dataValidate.tradeCategory = true;
-  dataValidate.tradeAmount = true;
+function settingRemainingAmount() {
+  if (dataParams.transactionType === "income") {
+    dataParams.remainingAmount += dataParams.tradeAmount;
+  } else if (dataParams.transactionType === "expense") {
+    dataParams.remainingAmount -= dataParams.tradeAmount;
+  }
 
-  if (!dataParams.cashflowId) {
-    dataValidate.cashflowId = false;
+  if (cashFlowChosen.value && dataParams.remainingAmount < cashFlowChosen.value.alertValue) {
+    messageToast({ message: `現金流餘額低於警示值 ${cashFlowChosen.value.alertValue}`, icon: "warning" });
   }
-  if (!dataParams.tradeDatetime) {
-    dataValidate.tradeDatetime = false;
+  if (cashFlowChosen.value && dataParams.remainingAmount < cashFlowChosen.value.minimumValueAllowed) {
+    dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
   }
-  if (!dataParams.transactionType) {
-    dataValidate.transactionType = false;
-  }
-  if (!dataParams.tradeCategory) {
-    dataValidate.tradeCategory = false;
-  }
+}
+
+async function validateData() {
+  // dataValidate.cashflowId = true;
+  // dataValidate.tradeDatetime = true;
+  // dataValidate.transactionType = true;
+  // dataValidate.tradeCategory = true;
+  // dataValidate.tradeAmount = true;
+
+  dataValidate.cashflowId = !dataParams.cashflowId ? false : true;
+  dataValidate.tradeDatetime = !dataParams.tradeDatetime ? false : true;
+  dataValidate.transactionType = !dataParams.transactionType ? false : true;
+  dataValidate.tradeCategory = !dataParams.tradeCategory ? false : true;
+
   if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = "交易金額不得為負";
   }
 
   if (

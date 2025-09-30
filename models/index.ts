@@ -116,6 +116,7 @@ export interface ICashFlowRecordList {
   tradeCategory: string;
   tradeName?: string;
   tradeAmount: number;
+  remainingAmount: number;
   currency: string;
   currencyName?: string;
   tradeDescription: string;
@@ -155,6 +156,7 @@ export interface IStoredValueCardRecordList {
   tradeCategory: string;
   tradeName?: string;
   tradeAmount: number;
+  remainingAmount: number;
   currency: string;
   currencyName?: string;
   tradeDescription: string;
@@ -237,6 +239,7 @@ export interface IcurrencyAccountRecordList {
   tradeCategory: string;
   tradeName?: string;
   tradeAmount: number;
+  remainingAmount: number;
   currency: string;
   currencyName?: string;
   tradeDescription: string;
@@ -283,6 +286,7 @@ export interface IStockAccountRecordList {
   transactionTax: number;
   stockTotalPrice: number;
   tradeTotalPrice: number;
+  remainingAmount: number;
   currency: string;
   currencyName?: string;
   tradeDescription: string;
