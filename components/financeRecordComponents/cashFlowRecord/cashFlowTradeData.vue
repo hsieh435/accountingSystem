@@ -98,6 +98,16 @@
           </div>
         </div>
 
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>餘額：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="currencyFormat(dataParams.remainingAmount)"
+              disabled />
+          </div>
+        </div>
+
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
@@ -131,6 +141,7 @@ import {
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
+import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -190,6 +201,7 @@ watch(open, () => {
     originalTradeAmount.value = 0;
     originalTradeDatetime.value = "";
   }
+  // console.log("originalTradeAmount:", originalTradeAmount.value);
 });
 
 async function searchingCashFlowRecord() {
@@ -246,9 +258,9 @@ function settingRemainingAmount() {
     dataParams.remainingAmount -= dataParams.tradeAmount;
   }
   originalTradeAmount.value = dataParams.tradeAmount;
-  // console.log("originalTradeAmount:", originalTradeAmount.value);
-  // console.log("remainingAmount:", dataParams.remainingAmount);
-  // console.log("dataParams:", dataParams);
+  console.log("originalTradeAmount:", originalTradeAmount.value);
+  console.log("remainingAmount:", dataParams.remainingAmount);
+  console.log("dataParams:", dataParams);
 
   if (
     cashFlowChosen.value &&

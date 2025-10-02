@@ -28,6 +28,12 @@ onMounted(async () => {
   await searchingTradeType();
 });
 
+watch(props, async () => {
+  // console.log("watch props:", props);
+  tradeCategoryId.value = props.tradeCategoryGot || "";
+  await searchingTradeType();
+});
+
 watch(tradeCategoryId, () => {
   emits("sendbackTradeCategory", tradeCategoryId.value);
 });

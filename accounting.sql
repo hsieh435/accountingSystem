@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-09-30 23:50:13
+-- Started on 2025-10-02 23:59:32
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -499,7 +499,7 @@ stockAccount	證券帳戶
 --
 
 COPY public.cashflow_list (cashflow_id, user_id, account_type, cashflow_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, enable, created_date, note) FROM stdin;
-CF-1759236429957	mike	cashFlow	新臺幣現金	TWD	1000.000	3000.000	0.000	5000.000	f	t	2025-09-30 20:47:09+08	
+CF-1759236429957	mike	cashFlow	新臺幣現金	TWD	1000.000	331.000	0.000	5000.000	f	t	2025-09-30 20:47:09+08	
 \.
 
 
@@ -510,7 +510,14 @@ CF-1759236429957	mike	cashFlow	新臺幣現金	TWD	1000.000	3000.000	0.000	5000.
 --
 
 COPY public.cashflow_trade (trade_id, cashflow_id, user_id, trade_datetime, trade_category, transaction_type, trade_amount, remaining_amount, currency, trade_description, trade_note) FROM stdin;
-CF-TWD-1759243677950	CF-1759236429957	mike	2025-09-30 22:47:47.425+08	currency	income	2000.000	3000.000	TWD		
+CF-TWD-1759418399220	CF-1759236429957	mike	2025-10-01 07:30:00+08	food	expense	75.000	2925.000	TWD	早餐	
+CF-TWD-1759243677950	CF-1759236429957	mike	2025-09-30 22:47:47.425+08	atmWithdraw	income	2000.000	3000.000	TWD		
+CF-TWD-1759418445568	CF-1759236429957	mike	2025-10-01 08:00:00+08	food	expense	55.000	2830.000	TWD	咖啡	
+CF-TWD-1759418476283	CF-1759236429957	mike	2025-10-01 12:30:00+08	food	expense	100.000	2730.000	TWD	午餐	
+CF-TWD-1759418508439	CF-1759236429957	mike	2025-10-01 18:00:00+08	transportation	expense	1200.000	1530.000	TWD	悠遊卡儲值	
+CF-TWD-1759418594420	CF-1759236429957	mike	2025-10-01 18:30:00+08	fuelBills	expense	500.000	1030.000	TWD	加油	95 無鉛汽油每公升 27.7 元，共 18.18 公升
+CF-TWD-1759418851030	CF-1759236429957	mike	2025-10-01 19:00:00+08	phoneBill	expense	599.000	431.000	TWD	9月通話費	
+CF-TWD-1759418902656	CF-1759236429957	mike	2025-10-01 19:30:00+08	food	expense	100.000	331.000	TWD	晚餐	
 \.
 
 
@@ -964,7 +971,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-09-30 23:50:13
+-- Completed on 2025-10-02 23:59:32
 
 --
 -- PostgreSQL database dump complete
