@@ -173,6 +173,7 @@ const getDefaultDataParams = (): ICashFlowRecordList => ({
   tradeNote: "",
 });
 const dataParams = reactive<ICashFlowRecordList>(getDefaultDataParams());
+const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");
 const getDefaultDataValidate = (): any => ({
@@ -198,6 +199,7 @@ watch(open, () => {
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
     tradeAmountValidateText.value = "";
+    originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     originalTradeDatetime.value = "";
   }
@@ -213,6 +215,7 @@ async function searchingCashFlowRecord() {
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       originalTradeAmount.value = res.data.data.tradeAmount;
+      originalRemainingAmount.value = res.data.data.remainingAmount;
       originalTradeDatetime.value = res.data.data.tradeDatetime;
       open.value = true;
     } else {
@@ -231,6 +234,7 @@ function settingCashflowAccount(account: ICashFlowList) {
   dataParams.cashflowId = account.cashflowId;
   dataParams.currency = account.currency;
   dataParams.remainingAmount = account.presentAmount;
+  originalRemainingAmount.value = account.presentAmount;
   cashFlowChosen.value = account;
   console.log("cashFlowChosen:", cashFlowChosen.value);
   settingRemainingAmount();
@@ -238,7 +242,6 @@ function settingCashflowAccount(account: ICashFlowList) {
 
 function settingTransactionType(type: string) {
   dataParams.transactionType = type;
-  originalTradeAmount.value = originalTradeAmount.value * 2;
   settingRemainingAmount();
 }
 
@@ -247,20 +250,20 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
-  // 編輯模式，先把原本的交易金額加回去，再扣掉新的交易金額
-  // income 變 expense，先把原本的交易金額加回去，再扣掉新的交易金額
-  // expense 變 income，先把原本的交易金額扣掉，再加上新的交易金額
+  //
   if (dataParams.transactionType === "income") {
-    dataParams.remainingAmount -= originalTradeAmount.value;
-    dataParams.remainingAmount += dataParams.tradeAmount;
+    dataParams.remainingAmount = props.cashflowIdGot
+      ? originalRemainingAmount.value + dataParams.tradeAmount
+      : dataParams.remainingAmount + dataParams.tradeAmount;
   } else if (dataParams.transactionType === "expense") {
-    dataParams.remainingAmount += originalTradeAmount.value;
-    dataParams.remainingAmount -= dataParams.tradeAmount;
+    dataParams.remainingAmount = props.cashflowIdGot
+      ? originalRemainingAmount.value - dataParams.tradeAmount
+      : dataParams.remainingAmount - dataParams.tradeAmount;
   }
-  originalTradeAmount.value = dataParams.tradeAmount;
+  console.log("originalRemainingAmount:", originalRemainingAmount.value);
   console.log("originalTradeAmount:", originalTradeAmount.value);
-  console.log("remainingAmount:", dataParams.remainingAmount);
-  console.log("dataParams:", dataParams);
+  // console.log("remainingAmount:", dataParams.remainingAmount);
+  // console.log("dataParams:", dataParams);
 
   if (
     cashFlowChosen.value &&
