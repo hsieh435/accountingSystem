@@ -203,7 +203,6 @@ watch(open, () => {
     originalTradeAmount.value = 0;
     originalTradeDatetime.value = "";
   }
-  // console.log("originalTradeAmount:", originalTradeAmount.value);
 });
 
 async function searchingCashFlowRecord() {
@@ -214,10 +213,14 @@ async function searchingCashFlowRecord() {
     });
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      originalTradeAmount.value = res.data.data.tradeAmount;
-      originalRemainingAmount.value = res.data.data.remainingAmount;
       originalTradeDatetime.value = res.data.data.tradeDatetime;
-      open.value = true;
+      originalTradeAmount.value = res.data.data.tradeAmount;
+
+      if (res.data.data.transactionType === "income") {
+        originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
+      } else if (res.data.data.transactionType === "expense") {
+        originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
+      }
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -234,7 +237,6 @@ function settingCashflowAccount(account: ICashFlowList) {
   dataParams.cashflowId = account.cashflowId;
   dataParams.currency = account.currency;
   dataParams.remainingAmount = account.presentAmount;
-  originalRemainingAmount.value = account.presentAmount;
   cashFlowChosen.value = account;
   console.log("cashFlowChosen:", cashFlowChosen.value);
   settingRemainingAmount();
@@ -260,8 +262,8 @@ function settingRemainingAmount() {
       ? originalRemainingAmount.value - dataParams.tradeAmount
       : dataParams.remainingAmount - dataParams.tradeAmount;
   }
-  console.log("originalRemainingAmount:", originalRemainingAmount.value);
-  console.log("originalTradeAmount:", originalTradeAmount.value);
+  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
+  // console.log("originalTradeAmount:", originalTradeAmount.value);
   // console.log("remainingAmount:", dataParams.remainingAmount);
   // console.log("dataParams:", dataParams);
 
