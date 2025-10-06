@@ -89,11 +89,22 @@
                 dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
               ]"
               v-model="dataParams.tradeAmount"
-              type="number" />
+              type="number"
+              @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-span-2 text-right"></span>
             <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>餘額：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="currencyFormat(dataParams.remainingAmount)"
+              disabled />
           </div>
         </div>
 
@@ -129,7 +140,8 @@ import {
   fetchStoredValueCardRecordCreate,
   fetchStoredValueCardRecordUpdate,
 } from "@/server/storedValueCardRecordApi";
-import { IStoredValueCardRecordList, IResponse } from "@/models/index";
+import { IStoredValueCardRecordList, IStoredValueCardList, IResponse } from "@/models/index";
+import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -160,6 +172,9 @@ const getDefaultDataParams = (): IStoredValueCardRecordList => ({
   tradeNote: "",
 });
 const dataParams = reactive<IStoredValueCardRecordList>(getDefaultDataParams());
+const originalRemainingAmount = ref<number>(0);
+const originalTradeAmount = ref<number>(0);
+const originalTradeDatetime = ref<string>("");
 const getDefaultDataValidate = (): any => ({
   storedValueCardId: true,
   tradeDatetime: true,
@@ -168,6 +183,8 @@ const getDefaultDataValidate = (): any => ({
   tradeAmount: true,
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
+const storedValueCardChosen = ref<IStoredValueCardList>({} as IStoredValueCardList);
+const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
@@ -179,6 +196,10 @@ watch(open, () => {
   } else if (open.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    originalRemainingAmount.value = 0;
+    originalTradeAmount.value = 0;
+    originalTradeDatetime.value = "";
   }
 });
 
@@ -188,9 +209,17 @@ async function searchingStoredValueCardRecord() {
       storedValueCardId: props.storedValueCardIdGot,
       tradeId: props.tradeIdGot,
     });
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      open.value = true;
+      originalTradeDatetime.value = res.data.data.tradeDatetime;
+
+      originalTradeAmount.value = res.data.data.tradeAmount;
+      if (res.data.data.transactionType === "income") {
+        originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
+      } else if (res.data.data.transactionType === "expense") {
+        originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
+      }
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -199,9 +228,20 @@ async function searchingStoredValueCardRecord() {
   }
 }
 
-function settingStoredValueCardAccount(account: string, currency: string) {
-  dataParams.storedValueCardId = account;
-  dataParams.currency = account ? currency : "";
+function settingStoredValueCardAccount(account: IStoredValueCardList) {
+  // console.log("account:", account);
+  if (account) {
+    dataParams.storedValueCardId = account.storedValueCardId;
+    dataParams.currency = account.currency;
+    dataParams.remainingAmount = account.presentAmount;
+    storedValueCardChosen.value = account;
+    settingRemainingAmount();
+  } else {
+    dataParams.storedValueCardId = "";
+    dataParams.currency = "";
+    dataParams.remainingAmount = 0;
+    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -210,10 +250,46 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTransactionType(type: string) {
   dataParams.transactionType = type;
+  if (dataParams.storedValueCardId) {
+    settingRemainingAmount();
+  }
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
+}
+
+function settingRemainingAmount() {
+  //
+  if (dataParams.transactionType === "income") {
+    dataParams.remainingAmount = props.storedValueCardIdGot
+      ? originalRemainingAmount.value + Number(dataParams.tradeAmount)
+      : dataParams.remainingAmount + Number(dataParams.tradeAmount);
+  } else if (dataParams.transactionType === "expense") {
+    dataParams.remainingAmount = props.storedValueCardIdGot
+      ? originalRemainingAmount.value - Number(dataParams.tradeAmount)
+      : dataParams.remainingAmount - Number(dataParams.tradeAmount);
+  }
+  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
+  // console.log("tradeAmount:", dataParams.tradeAmount, Number(dataParams.tradeAmount));
+  // console.log("remainingAmount:", dataParams.remainingAmount, Number(dataParams.remainingAmount));
+  console.log("storedValueCardChosen:", storedValueCardChosen.value);
+
+  if (
+    storedValueCardChosen.value &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.remainingAmount < storedValueCardChosen.value.alertValue
+  ) {
+    messageToast({ message: `現金流餘額低於警示值 ${storedValueCardChosen.value.alertValue}`, icon: "warning" });
+  }
+  if (
+    storedValueCardChosen.value &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
+  ) {
+    dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
+  }
 }
 
 async function validateData() {

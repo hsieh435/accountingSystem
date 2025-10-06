@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchin
 
 const lineChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
+let chartInstance: Chart | null = null;
 
 watch(
   props,
@@ -26,7 +27,6 @@ watch(
   { deep: true },
 );
 
-let chartInstance: Chart | null = null;
 async function searchingStockPrice() {
   // console.log("searchingParams:", props.searchingParamsGot);
   try {

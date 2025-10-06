@@ -150,7 +150,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">提醒：</span>
           <div class="col-span-1 flex justify-start items-center">
-            <switchComponent :switchValueGot="dataParams.openAlert" @switchValueChanged="settingOpenAlert" />
+            <switchComponent :switchValueGot="dataParams.openAlert" @sendBackSwitchValue="settingOpenAlert" />
           </div>
           <div class="flex justify-start items-center col-span-3">
             <input

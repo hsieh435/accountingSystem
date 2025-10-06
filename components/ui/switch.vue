@@ -25,6 +25,10 @@ onMounted(() => {
   switchValue.value = props.switchValueGot;
 });
 
+watch(props, () => {
+  switchValue.value = props.switchValueGot;
+});
+
 watch(switchValue, () => {
   emits("sendBackSwitchValue", switchValue.value);
 });

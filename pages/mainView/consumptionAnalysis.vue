@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs">
+  <div class="py-[20px] tabs">
     <input type="radio" id="tab1" name="tab-control" checked />
     <input type="radio" id="tab2" name="tab-control" />
     <input type="radio" id="tab3" name="tab-control" />
@@ -39,7 +39,7 @@
     <div class="content">
       <section>
         <div class="icon-activity"></div>
-        <!-- <stockPriceLineChart :searchingParamsGot="stockPriceParams" /> -->
+        <cashFlowConsumptionChart :accountTypeId="'isCashflowAble'" :accountTypeName="'現金流'" />
       </section>
       <section>
         <!-- <stockInterest :searchingParamsGot="stockPriceParams" /> -->
@@ -57,7 +57,10 @@
   </div>
 </template>
 <script setup lang="ts">
-// import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent } from "vue";
+
+
+const cashFlowConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/cashFlowConsumptionChart.vue"));
 
 
 
@@ -73,9 +76,6 @@ definePageMeta({
 </script>
 <style lang="scss" scoped>
 
-.tabs {
-  padding: 20px;
-}
 .tabs input[name="tab-control"] {
   display: none;
 }
@@ -145,7 +145,6 @@ definePageMeta({
 }
 .tabs .content {
   width: 100%;
-  margin-top: 30px;
 }
 .tabs .content section {
   display: none;

@@ -8,25 +8,21 @@
         @sendbackAccountId="settingAccountId" />
     </div>
 
-    <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span
-      ><dataBaseCurrencySelect
-        :currencyIdGot="searchParams.currencyId"
-        :isDisable="searchParams.accountId.length > 0"
-        @sendbackCurrencyId="settingCurrency" />
-    </div>
-
-    <div class="flex items-center me-3 my-1">
-      <span>收支類型：</span
-      ><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeCategory="settingTradeCategory" />
-    </div>
-
     <span>時間區間：</span>
-    <dateSelect :dateSelect="searchParams.startingDate" :maxDate="searchParams.endDate" @sendbackDate="settingSettingDate" />
+    <dateSelect
+      :dateSelect="searchParams.startingDate"
+      :maxDate="searchParams.endDate"
+      @sendbackDate="settingSettingDate" />
     <span class="mx-1">～</span>
-    <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
+    <dateSelect
+      :dateSelect="searchParams.endDate"
+      :minDate="searchParams.startingDate"
+      @sendbackDate="settingEndDate" />
 
-    <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
+    <ui-buttonGroup
+      showSearch
+      :searchDisable="!searchParams.accountId || !searchParams.startingDate || !searchParams.endDate"
+      @dataSearch="searchingRecord()" />
   </div>
 </template>
 <script setup lang="ts">
@@ -41,8 +37,6 @@ const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName
 const emits = defineEmits(["sendbackSearchingParams"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
@@ -56,14 +50,6 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
 async function settingAccountId(accountItem?: ICashFlowList) {
   searchParams.accountId = accountItem?.cashflowId || "";
   searchParams.currencyId = accountItem?.currency || "";
-}
-
-async function settingCurrency(currencyIdSendback: string) {
-  searchParams.currencyId = currencyIdSendback;
-}
-
-async function settingTradeCategory(tradeCategorySendback: string) {
-  searchParams.tradeCategory = tradeCategorySendback;
 }
 
 async function settingSettingDate(dateSendback: string) {

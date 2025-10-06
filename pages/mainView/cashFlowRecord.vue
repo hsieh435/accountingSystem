@@ -106,11 +106,11 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   Object.assign(searchingParams, params);
-  console.log("searchingParams:", searchingParams);
   await searchingFinanceRecord();
 }
 
 async function searchingFinanceRecord() {
+  console.log("searchingParams:", searchingParams);
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
     console.log("res:", res.data.data);
