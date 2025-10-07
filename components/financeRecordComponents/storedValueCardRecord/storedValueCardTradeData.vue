@@ -27,7 +27,7 @@
                 selectTargetId="isStoredvaluecardAble"
                 :accountIdGot="dataParams.storedValueCardId"
                 :isDisable="props.tradeIdGot ? true : false"
-                @sendbackAccountId="settingStoredValueCardAccount" />
+                @sendbackAccount="settingStoredValueCardAccount" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardId">
@@ -83,18 +83,15 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
+              orientation="vertical"
               v-model="dataParams.tradeAmount"
-              type="number"
               @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+            <span class="col-span-4 text-red-500 mx-2">{{ tradeAmountValidateText }}</span>
           </div>
         </div>
 
@@ -197,9 +194,10 @@ watch(open, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    originalTradeDatetime.value = "";
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
-    originalTradeDatetime.value = "";
+    tradeAmountValidateText.value = "";
   }
 });
 
@@ -209,7 +207,7 @@ async function searchingStoredValueCardRecord() {
       storedValueCardId: props.storedValueCardIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("res:", res.data.data);
+    // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       originalTradeDatetime.value = res.data.data.tradeDatetime;
@@ -228,13 +226,13 @@ async function searchingStoredValueCardRecord() {
   }
 }
 
-function settingStoredValueCardAccount(account: IStoredValueCardList) {
+function settingStoredValueCardAccount(account: IStoredValueCardList[]) {
   // console.log("account:", account);
-  if (account) {
-    dataParams.storedValueCardId = account.storedValueCardId;
-    dataParams.currency = account.currency;
-    dataParams.remainingAmount = account.presentAmount;
-    storedValueCardChosen.value = account;
+  if (account && account.length > 0) {
+    dataParams.storedValueCardId = account[0].storedValueCardId;
+    dataParams.currency = account[0].currency;
+    dataParams.remainingAmount = account[0].presentAmount;
+    storedValueCardChosen.value = account[0] || ({} as IStoredValueCardList);
     settingRemainingAmount();
   } else {
     dataParams.storedValueCardId = "";
@@ -260,15 +258,12 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
+  dataParams.tradeAmount = typeof dataParams.tradeAmount === "number" ? Number(dataParams.tradeAmount) : 0;
   //
   if (dataParams.transactionType === "income") {
-    dataParams.remainingAmount = props.storedValueCardIdGot
-      ? originalRemainingAmount.value + Number(dataParams.tradeAmount)
-      : dataParams.remainingAmount + Number(dataParams.tradeAmount);
+    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.tradeAmount;
   } else if (dataParams.transactionType === "expense") {
-    dataParams.remainingAmount = props.storedValueCardIdGot
-      ? originalRemainingAmount.value - Number(dataParams.tradeAmount)
-      : dataParams.remainingAmount - Number(dataParams.tradeAmount);
+    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.tradeAmount;
   }
   // console.log("originalRemainingAmount:", originalRemainingAmount.value);
   // console.log("tradeAmount:", dataParams.tradeAmount, Number(dataParams.tradeAmount));
@@ -293,26 +288,13 @@ function settingRemainingAmount() {
 }
 
 async function validateData() {
-  dataValidate.storedValueCardId = true;
-  dataValidate.tradeDatetime = true;
-  dataValidate.transactionType = true;
-  dataValidate.tradeCategory = true;
-  dataValidate.tradeAmount = true;
-
-  if (!dataParams.storedValueCardId) {
-    dataValidate.storedValueCardId = false;
-  }
-  if (!dataParams.tradeDatetime) {
-    dataValidate.tradeDatetime = false;
-  }
-  if (!dataParams.transactionType) {
-    dataValidate.transactionType = false;
-  }
-  if (!dataParams.tradeCategory) {
-    dataValidate.tradeCategory = false;
-  }
+  dataValidate.storedValueCardId = !dataParams.storedValueCardId ? false : true;
+  dataValidate.tradeDatetime = !dataParams.tradeDatetime ? false : true;
+  dataValidate.transactionType = !dataParams.transactionType ? false : true;
+  dataValidate.tradeCategory = !dataParams.tradeCategory ? false : true;
   if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = "交易金額不得為負";
   }
 
   if (

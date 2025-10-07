@@ -27,7 +27,7 @@ const props = withDefaults(
   { selectTargetId: "", selectTitle: "", accountIdGot: "", sellectAll: true, isDisable: false },
 );
 
-const emits = defineEmits(["sendbackAccountId"]);
+const emits = defineEmits(["sendbackAccount"]);
 
 const accountId = ref<string>("");
 const accountList = ref<{ label: string; value: string }[]>([]);
@@ -46,7 +46,7 @@ onMounted(async () => {
 
 watch(accountId, () => {
   const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
-  emits("sendbackAccountId", selectedItem ? selectedItem : null);
+  emits("sendbackAccount", selectedItem ? [selectedItem] : []);
 });
 
 async function loadAccountList() {

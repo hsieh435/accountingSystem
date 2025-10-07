@@ -301,6 +301,7 @@ export interface IStockPriceSearchingParams {
   endDate: string;
 }
 
+// 存股列表 interface
 export interface IStockList {
   date: string;
   industry_category: string;

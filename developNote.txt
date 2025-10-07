@@ -77,6 +77,9 @@ npm i
 npm tsc -v
 10.9.2
 
+node -v
+v22.16.0
+
 npm install typescript@latest --save-dev
 
 Ctrl+Shift+P，選擇 Developer: Reload Window 重新整理工作區

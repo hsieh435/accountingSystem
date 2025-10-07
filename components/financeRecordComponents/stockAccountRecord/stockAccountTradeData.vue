@@ -27,7 +27,7 @@
                 selectTargetId="isStaccountAble"
                 :accountIdGot="dataParams.accountId"
                 :isDisable="props.tradeIdGot ? true : false"
-                @sendbackAccountId="settingAccount" />
+                @sendbackAccount="settingAccount" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.accountId">
@@ -219,7 +219,7 @@ import {
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
 } from "@/server/stockAccountRecordApi";
-import { IStockAccountRecordList, IStockList, IResponse } from "@/models/index";
+import { IStockAccountRecordList, IStockAccountList, IStockList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
@@ -302,9 +302,9 @@ async function searchingStockAccountRecord() {
   }
 }
 
-function settingAccount(account: string, currency: string) {
-  dataParams.accountId = account;
-  dataParams.currency = account ? currency : "";
+function settingAccount(account: IStockAccountList[]) {
+  dataParams.accountId = account[0].accountId || "";
+  dataParams.currency = account[0].currency || "";
 }
 
 function settingTradeDatetime(dateTime: string) {

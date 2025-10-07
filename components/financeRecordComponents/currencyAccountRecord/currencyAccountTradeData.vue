@@ -26,7 +26,7 @@
               selectTargetId="isCuaccountAble"
               :accountIdGot="dataParams.accountId"
               :isDisable="props.tradeIdGot ? true : false"
-              @sendbackAccountId="settingAccount" />
+              @sendbackAccount="settingAccount" />
           </div>
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountId">
@@ -119,7 +119,7 @@ import {
   fetchCurrencyAccountRecordCreate,
   fetchCurrencyAccountRecordUpdate,
 } from "@/server/currencyAccountRecordApi";
-import { IcurrencyAccountRecordList, IResponse } from "@/models/index";
+import { IcurrencyAccountRecordList, ICurrencyAccountList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -190,9 +190,9 @@ async function searchingCurrencyAccountRecord() {
   }
 }
 
-function settingAccount(account: string, currency: string) {
-  dataParams.accountId = account;
-  dataParams.currency = account ? currency : "";
+function settingAccount(account: ICurrencyAccountList[]) {
+  dataParams.accountId = account[0].accountId || "";
+  dataParams.currency = account[0].currency || "";
 }
 
 function settingTradeDatetime(dateTime: string) {

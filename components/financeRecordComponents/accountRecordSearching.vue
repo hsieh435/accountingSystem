@@ -5,7 +5,7 @@
       <accountSelect
         :selectTargetId="props.accountTypeId"
         :selectTitle="props.accountTypeName"
-        @sendbackAccountId="settingAccountId" />
+        @sendbackAccount="settingAccountId" />
     </div>
 
     <div class="flex items-center me-3 my-1">
@@ -22,9 +22,15 @@
     </div>
 
     <span>時間區間：</span>
-    <dateSelect :dateSelect="searchParams.startingDate" :maxDate="searchParams.endDate" @sendbackDate="settingSettingDate" />
+    <dateSelect
+      :dateSelect="searchParams.startingDate"
+      :maxDate="searchParams.endDate"
+      @sendbackDate="settingSettingDate" />
     <span class="mx-1">～</span>
-    <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
+    <dateSelect
+      :dateSelect="searchParams.endDate"
+      :minDate="searchParams.startingDate"
+      @sendbackDate="settingEndDate" />
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>
@@ -53,9 +59,9 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(accountItem?: ICashFlowList) {
-  searchParams.accountId = accountItem?.cashflowId || "";
-  searchParams.currencyId = accountItem?.currency || "";
+async function settingAccountId(accountItem: ICashFlowList[]) {
+  searchParams.accountId = accountItem[0].cashflowId || "";
+  searchParams.currencyId = accountItem[0].currency || "";
 }
 
 async function settingCurrency(currencyIdSendback: string) {

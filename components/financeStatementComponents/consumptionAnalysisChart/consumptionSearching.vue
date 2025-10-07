@@ -5,7 +5,7 @@
       <accountSelect
         :selectTargetId="props.accountTypeId"
         :selectTitle="props.accountTypeName"
-        @sendbackAccountId="settingAccountId" />
+        @sendbackAccount="settingAccountId" />
     </div>
 
     <span>時間區間：</span>
@@ -47,9 +47,9 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(accountItem?: ICashFlowList) {
-  searchParams.accountId = accountItem?.cashflowId || "";
-  searchParams.currencyId = accountItem?.currency || "";
+async function settingAccountId(accountItem: ICashFlowList[]) {
+  searchParams.accountId = accountItem[0]?.cashflowId || "";
+  searchParams.currencyId = accountItem[0]?.currency || "";
 }
 
 async function settingSettingDate(dateSendback: string) {

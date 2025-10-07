@@ -27,7 +27,7 @@
                 selectTargetId="isCreditcardAble"
                 :accountIdGot="dataParams.creditCardId"
                 :isDisable="props.tradeIdGot ? true : false"
-                @sendbackAccountId="settingCreditCardAccount" />
+                @sendbackAccount="settingCreditCardAccount" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditCardId">
@@ -114,7 +114,7 @@ import {
   fetchCreditCardRecordCreate,
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi";
-import { ICreditCardRecordList, IResponse } from "@/models/index";
+import { ICreditCardRecordList, ICreditCardList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -182,9 +182,9 @@ async function searchingCreditCardRecord() {
   }
 }
 
-function settingCreditCardAccount(account: string, currency: string) {
-  dataParams.creditCardId = account;
-  dataParams.currency = account ? currency : "";
+function settingCreditCardAccount(account: ICreditCardList[]) {
+  dataParams.creditCardId = account[0].creditcardId || "";
+  dataParams.currency = account[0].currency || "";
 }
 
 function settingTradeDatetime(dateTime: string) {

@@ -5,13 +5,19 @@
       <accountSelect
         :selectTargetId="props.accountTypeId"
         :selectTitle="props.accountTypeName"
-        @sendbackAccountId="settingAccountId" />
+        @sendbackAccount="settingAccountId" />
     </div>
 
     <span>時間區間：</span>
-    <dateSelect :dateSelect="searchParams.startingDate" :maxDate="searchParams.endDate" @sendbackDate="settingSettingDate" />
+    <dateSelect
+      :dateSelect="searchParams.startingDate"
+      :maxDate="searchParams.endDate"
+      @sendbackDate="settingSettingDate" />
     <span class="mx-1">～</span>
-    <dateSelect :dateSelect="searchParams.endDate" :minDate="searchParams.startingDate" @sendbackDate="settingEndDate" />
+    <dateSelect
+      :dateSelect="searchParams.endDate"
+      :minDate="searchParams.startingDate"
+      @sendbackDate="settingEndDate" />
 
     <ui-buttonGroup showSearch @dataSearch="searchingRecord()" />
   </div>
@@ -38,9 +44,9 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(selectedItem: string, currencyIdSendback: string) {
-  searchParams.accountId = selectedItem;
-  searchParams.currencyId = searchParams.accountId ? currencyIdSendback : "";
+async function settingAccountId(account: any[]) {
+  searchParams.accountId = account[0].accountId || "";
+  searchParams.currencyId = account[0].currencyId || "";
 }
 
 async function settingSettingDate(dateSendback: string) {
