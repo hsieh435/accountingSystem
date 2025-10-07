@@ -271,6 +271,9 @@ const getDefaultDataValidate = (): any => ({
   transactionTax: true,
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
+const originalRemainingAmount = ref<number>(0);
+const originalTradeAmount = ref<number>(0);
+const originalTradeDatetime = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {

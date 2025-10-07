@@ -85,8 +85,8 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
-              orientation="vertical"
               v-model="dataParams.tradeAmount"
+              orientation="vertical"
               @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
