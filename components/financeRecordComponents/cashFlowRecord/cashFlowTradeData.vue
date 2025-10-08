@@ -97,7 +97,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>餘額：</span>
+            <span class="col-span-2 text-right">餘額：</span>
             <input
               :class="tailwindStyles.getInputClasses('col-span-3')"
               :value="currencyFormat(dataParams.remainingAmount)"
@@ -228,19 +228,19 @@ async function searchingCashFlowRecord() {
 }
 
 function settingCashflowAccount(account: ICashFlowList[]) {
-  dataParams.cashflowId = account[0].cashflowId || "";
-  dataParams.currency = account[0].currency || "";
+  cashFlowChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICashFlowList);
+  dataParams.cashflowId = cashFlowChosen.value.cashflowId || "";
+  dataParams.currency = cashFlowChosen.value.currency || "";
   // dataParams.remainingAmount = account.presentAmount;
   if (props.tradeIdGot.length > 0 && account.length === 1) {
     if (dataParams.transactionType === "income") {
-      originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
+      originalRemainingAmount.value = cashFlowChosen.value.presentAmount - originalTradeAmount.value;
     } else if (dataParams.transactionType === "expense") {
-      originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
+      originalRemainingAmount.value = cashFlowChosen.value.presentAmount + originalTradeAmount.value;
     }
   } else {
-    originalRemainingAmount.value = account[0].presentAmount || 0;
+    originalRemainingAmount.value = cashFlowChosen.value.presentAmount || 0;
   }
-  cashFlowChosen.value = account[0] || ({} as ICashFlowList);
   console.log("cashFlowChosen:", cashFlowChosen.value);
   settingRemainingAmount();
 }

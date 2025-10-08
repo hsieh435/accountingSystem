@@ -82,7 +82,17 @@
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
           <span class="col-span-2 text-right"></span>
-          <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+          <span class="col-span-4 text-red-500 mx-2">{{ tradeAmountValidateText }}</span>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">餘額：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="currencyFormat(dataParams.remainingAmount)"
+              disabled />
+          </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
@@ -118,6 +128,7 @@ import {
   fetchCurrencyAccountRecordUpdate,
 } from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordList, ICurrencyAccountList, IResponse } from "@/models/index";
+import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -161,6 +172,7 @@ const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");
 const storedValueCardChosen = ref<ICurrencyAccountList>({} as ICurrencyAccountList);
+const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
@@ -176,6 +188,7 @@ watch(open, () => {
     originalTradeDatetime.value = "";
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
+    tradeAmountValidateText.value = "";
   }
 });
 
@@ -204,18 +217,21 @@ async function searchingCurrencyAccountRecord() {
 }
 
 function settingAccount(account: ICurrencyAccountList[]) {
-  if (account && account.length > 0) {
-    dataParams.accountId = account[0].accountId || "";
-    dataParams.currency = account[0].currency || "";
-    dataParams.remainingAmount = account[0].presentAmount;
-    storedValueCardChosen.value = account[0];
-    settingRemainingAmount();
+  storedValueCardChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICurrencyAccountList);
+  dataParams.accountId = storedValueCardChosen.value.accountId || "";
+  dataParams.currency = storedValueCardChosen.value.currency || "";
+
+  if (props.tradeIdGot.length > 0 && account.length === 1) {
+    if (dataParams.transactionType === "income") {
+      originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
+    } else if (dataParams.transactionType === "expense") {
+      originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
+    }
   } else {
-    dataParams.accountId = "";
-    dataParams.currency = "";
-    dataParams.remainingAmount = 0;
-    storedValueCardChosen.value = {} as ICurrencyAccountList;
+    originalRemainingAmount.value = account[0].presentAmount || 0;
   }
+  // console.log("storedValueCardChosen:", storedValueCardChosen.value);
+  settingRemainingAmount();
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -240,7 +256,7 @@ async function settingRemainingAmount() {
   // console.log("originalRemainingAmount:", originalRemainingAmount.value);
   // console.log("tradeAmount:", dataParams.tradeAmount, Number(dataParams.tradeAmount));
   // console.log("remainingAmount:", dataParams.remainingAmount, Number(dataParams.remainingAmount));
-  console.log("storedValueCardChosen:", storedValueCardChosen.value);
+  // console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   if (
     storedValueCardChosen.value &&
@@ -255,7 +271,7 @@ async function settingRemainingAmount() {
     dataParams.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
-    // tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
+    tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
   }
 }
 

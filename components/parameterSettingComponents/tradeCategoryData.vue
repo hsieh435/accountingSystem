@@ -63,13 +63,10 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>排序：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.sort ? 'outline-red-50' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.sort ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.sort"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
             <span class="col-span-2 text-right"></span>

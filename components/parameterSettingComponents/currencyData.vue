@@ -75,13 +75,10 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">最小面額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.minimumDenomination ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.minimumDenomination ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.minimumDenomination"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumDenomination">
             <span class="col-span-2 text-right"></span>
@@ -92,13 +89,10 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">排序：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.sort ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.sort ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.sort"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
             <span class="col-span-2 text-right"></span>

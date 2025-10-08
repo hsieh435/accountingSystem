@@ -97,7 +97,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>餘額：</span>
+            <span class="col-span-2 text-right">餘額：</span>
             <input
               :class="tailwindStyles.getInputClasses('col-span-3')"
               :value="currencyFormat(dataParams.remainingAmount)"

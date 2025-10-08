@@ -198,6 +198,7 @@ export interface ICreditCardRecordList {
   tradeAmount: number;
   currency: string;
   currencyName?: string;
+  remainingAmount: number;
   billMonth: string;
   tradeDescription: string;
   tradeNote: string;

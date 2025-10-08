@@ -68,13 +68,10 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.tradeAmount"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-span-2 text-right"></span>
@@ -140,6 +137,7 @@ const getDefaultDataParams = (): ICreditCardRecordList => ({
   tradeAmount: 0,
   currency: "",
   billMonth: "",
+  remainingAmount: 0,
   tradeDescription: "",
   tradeNote: "",
 });

@@ -122,17 +122,15 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
-            <input
-              :class="[tailwindStyles.getInputClasses(), dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
+            <UInputNumber
+              :class="['col-start-3 col-end-5', dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.pricePerShare"
-              type="number"
-              class="col-start-3 col-end-5" />
+              orientation="vertical" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
-            <input
-              :class="[tailwindStyles.getInputClasses(), dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
+            <UInputNumber
+              :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.quantity"
-              type="number"
-              class="col-start-7 col-end-9" />
+              orientation="vertical" />
           </div>
           <div
             class="flex justify-start items-center grid grid-cols-8"
@@ -145,20 +143,15 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
-            <input
-              :class="[tailwindStyles.getInputClasses(), dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
+            <UInputNumber
+              :class="['col-start-3 col-end-5', dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.handlingFee"
-              type="number"
-              class="col-start-3 col-end-5" />
+              orientation="vertical" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses(),
-                dataValidate.transactionTax ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-start-7 col-end-9', dataValidate.transactionTax ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.transactionTax"
-              type="number"
-              class="col-start-7 col-end-9" />
+              orientation="vertical" />
           </div>
           <div
             class="flex justify-start items-center grid grid-cols-8"
@@ -177,14 +170,24 @@
             class="col-start-3 col-end-5" />
           <span class="col-span-2 text-right">交易成本：</span>
           <input
-            :class="tailwindStyles.getInputClasses()"
+            :class="[tailwindStyles.getInputClasses(), 'col-start-7 col-end-9']"
             :value="
               currencyFormat(
                 dataParams.pricePerShare * dataParams.quantity + dataParams.handlingFee + dataParams.transactionTax,
               )
             "
             disabled
-            class="col-start-7 col-end-9" />
+            @change="settingRemainingAmount()" />
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right">餘額：</span>
+            <input
+              :class="tailwindStyles.getInputClasses('col-span-3')"
+              :value="currencyFormat(dataParams.remainingAmount)"
+              disabled />
+          </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
@@ -274,6 +277,8 @@ const dataValidate = reactive<any>(getDefaultDataValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");
+const stockAccountChosen = ref<IStockAccountList>({} as IStockAccountList);
+const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
@@ -285,6 +290,11 @@ watch(open, () => {
   } else if (open.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(stockAccountChosen, {} as IStockAccountRecordList);
+    originalTradeDatetime.value = "";
+    originalRemainingAmount.value = 0;
+    originalTradeAmount.value = 0;
+    tradeAmountValidateText.value = "";
   }
 });
 
@@ -306,8 +316,21 @@ async function searchingStockAccountRecord() {
 }
 
 function settingAccount(account: IStockAccountList[]) {
-  dataParams.accountId = account[0].accountId || "";
-  dataParams.currency = account[0].currency || "";
+  stockAccountChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as IStockAccountRecordList);
+  dataParams.accountId = stockAccountChosen.value.accountId || "";
+  dataParams.currency = stockAccountChosen.value.currency || "";
+
+  if (props.tradeIdGot.length > 0 && account.length === 1) {
+    if (dataParams.transactionType === "income") {
+      originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
+    } else if (dataParams.transactionType === "expense") {
+      originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
+    }
+  } else {
+    originalRemainingAmount.value = account[0].presentAmount || 0;
+  }
+  // console.log("stockAccountChosen:", stockAccountChosen.value);
+  settingRemainingAmount();
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -316,6 +339,9 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTransactionType(type: string) {
   dataParams.transactionType = type;
+  if (dataParams.accountId) {
+    settingRemainingAmount();
+  }
 }
 
 function settingStockNo(stockItem: IStockList) {
@@ -325,6 +351,30 @@ function settingStockNo(stockItem: IStockList) {
 
 function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
+}
+
+function settingRemainingAmount() {
+  if (dataParams.transactionType === "income") {
+    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.pricePerShare * dataParams.quantity;
+  } else if (dataParams.transactionType === "expense") {
+    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.pricePerShare * dataParams.quantity;
+  }
+
+  if (
+    stockAccountChosen.value &&
+    stockAccountChosen.value.openAlert === true &&
+    dataParams.remainingAmount < stockAccountChosen.value.alertValue
+  ) {
+    messageToast({ message: `現金流餘額低於警示值 ${stockAccountChosen.value.alertValue}`, icon: "warning" });
+  }
+  if (
+    stockAccountChosen.value &&
+    stockAccountChosen.value.openAlert === true &&
+    dataParams.remainingAmount < stockAccountChosen.value.minimumValueAllowed
+  ) {
+    dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
+  }
 }
 
 async function validateData() {

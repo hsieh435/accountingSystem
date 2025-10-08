@@ -88,13 +88,10 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.creditPerMonth ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.creditPerMonth ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.creditPerMonth"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditPerMonth">
             <span class="col-span-2 text-right"></span>
@@ -105,13 +102,10 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6 mt-2">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.alertValue ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.alertValue ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.alertValue"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
             <span class="col-span-2 text-right"></span>

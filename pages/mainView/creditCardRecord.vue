@@ -35,7 +35,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">X</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.remainingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <creditCardTradeData

@@ -65,13 +65,10 @@
           <div class="w-full">
             <div class="flex justify-start items-center grid grid-cols-6">
               <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>初始金額：</span>
-              <input
-                :class="[
-                  tailwindStyles.getInputClasses('col-span-3'),
-                  dataValidate.startingAmount ? '' : 'outline-1 outline-red-500',
-                ]"
+              <UInputNumber
+                :class="['col-span-3', dataValidate.startingAmount ? '' : 'outline-1 outline-red-500']"
                 v-model="dataParams.startingAmount"
-                type="number" />
+                orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
               <span class="col-span-2 text-right"></span>
@@ -83,13 +80,10 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.minimumValueAllowed ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.minimumValueAllowed ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.minimumValueAllowed"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumValueAllowed">
             <span class="col-span-2 text-right"></span>
@@ -100,13 +94,10 @@
         <div class="w-full">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.alertValue ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInputNumber
+              :class="['col-span-3', dataValidate.alertValue ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.alertValue"
-              type="number" />
+              orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
             <span class="col-span-2 text-right"></span>
