@@ -2,8 +2,11 @@
   <div>
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
-        <span>現金流：</span>
-        <accountSelect :selectTargetId="'isCashflowAble'" :selectTitle="'現金流'" @sendbackAccount="settingAccountId" />
+        <span>證券帳戶：</span>
+        <accountSelect
+          :selectTargetId="'isStaccountAble'"
+          :selectTitle="'證券帳戶'"
+          @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>
@@ -23,14 +26,19 @@
         @dataSearch="settingSearchingParams()" />
     </div>
     <div style="width: 90%; height: 400px">
-      <canvas id="cashFlowcashFlowConsumptionChart"></canvas>
+      <canvas id="stockAccountConsumptionChart"></canvas>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
-import { IFinanceRecordSearchingParams, ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
+import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
+import {
+  IFinanceRecordSearchingParams,
+  IStockAccountRecordList,
+  IStockAccountList,
+  IResponse,
+} from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
@@ -39,8 +47,8 @@ const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
 const pieChartTitle = ref<string>("");
-const stockDataLineChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const cashFlowcashFlowConsumptionChart = ref<Chart | null>(null);
+const stockDataLineChart = ref<{ tradeName: string; tradeTotalPrice: number }[]>([]);
+const stockAccountConsumptionChart = ref<Chart | null>(null);
 let chartInstance: Chart | null = null;
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
@@ -51,14 +59,14 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-watch(cashFlowcashFlowConsumptionChart, (newChart) => {
+watch(stockAccountConsumptionChart, (newChart) => {
   if (newChart) {
     newChart.update();
   }
 });
 
-async function settingAccountId(accountItem: ICashFlowList[]) {
-  searchParams.accountId = accountItem[0]?.cashflowId || "";
+async function settingAccountId(accountItem: IStockAccountList[]) {
+  searchParams.accountId = accountItem[0]?.accountId || "";
   searchParams.currencyId = accountItem[0]?.currency || "";
 }
 
@@ -72,7 +80,7 @@ async function settingEndDate(dateSendback: string) {
 
 async function settingSearchingParams() {
   try {
-    const res: IResponse = await fetchCashFlowRecordList(searchParams);
+    const res: IResponse = await fetchStockAccountRecordList(searchParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       pieChartTitle.value =
@@ -97,7 +105,7 @@ async function settingSearchingParams() {
 }
 
 function renderingChart() {
-  const cashFlowcashFlowConsumptionChart = document.getElementById("cashFlowcashFlowConsumptionChart") as HTMLCanvasElement;
+  const stockAccountConsumptionChart = document.getElementById("stockAccountConsumptionChart") as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -107,9 +115,9 @@ function renderingChart() {
   // console.log("getLabels:", getLabels(stockDataLineChart.value));
   // console.log("getData:", getData(stockDataLineChart.value));
   const labels = stockDataLineChart.value.map((item) => item.tradeName);
-  const values = stockDataLineChart.value.map((item) => item.tradeAmount);
+  const values = stockDataLineChart.value.map((item) => item.tradeTotalPrice);
 
-  chartInstance = new Chart(cashFlowcashFlowConsumptionChart, {
+  chartInstance = new Chart(stockAccountConsumptionChart, {
     type: "pie",
     data: {
       labels: labels,
@@ -137,19 +145,19 @@ function renderingChart() {
   });
 }
 
-function aggregateData(data: ICashFlowRecordList[]) {
+function aggregateData(data: IStockAccountRecordList[]) {
   const resultMap: Record<string, number> = {};
 
   data.forEach((item) => {
-    const { tradeName, tradeAmount } = item;
+    const { tradeName, tradeTotalPrice } = item;
     if (typeof tradeName === "string") {
-      resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;
+      resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeTotalPrice;
     }
   });
 
-  return Object.entries(resultMap).map(([tradeName, tradeAmount]) => ({
+  return Object.entries(resultMap).map(([tradeName, tradeTotalPrice]) => ({
     tradeName,
-    tradeAmount,
+    tradeTotalPrice,
   }));
 }
 </script>

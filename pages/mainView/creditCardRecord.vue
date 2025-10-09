@@ -102,7 +102,6 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  // console.log("params:", params);
   searchingParams.accountId = params.accountId;
   searchingParams.currencyId = params.currencyId;
   searchingParams.tradeCategory = params.tradeCategory;

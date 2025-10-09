@@ -39,19 +39,19 @@
     <div class="content">
       <section>
         <div class="icon-activity"></div>
-        <cashFlowConsumptionChart :accountTypeId="'isCashflowAble'" :accountTypeName="'現金流'" />
+        <cashFlowConsumptionChart />
       </section>
       <section>
-        <!-- <stockInterest :searchingParamsGot="stockPriceParams" /> -->
+        <storedValueCardConsumptionChart />
       </section>
       <section>
-        <!-- <stockPerPbr :searchingParamsGot="stockPriceParams" /> -->
+        <creditCardConsumptionChart />
       </section>
       <section>
-        <!-- <stockPerPbr :searchingParamsGot="stockPriceParams" /> -->
+        <currencyAccountConsumptionChart />
       </section>
       <section>
-        <!-- <stockPerPbr :searchingParamsGot="stockPriceParams" /> -->
+        <stockAccountConsumptionChart />
       </section>
     </div>
   </div>
@@ -62,7 +62,13 @@ import { defineAsyncComponent } from "vue";
 
 const cashFlowConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/cashFlowConsumptionChart.vue"));
 
+const storedValueCardConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/storedValueCardConsumptionChart.vue"));
 
+const creditCardConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/creditCardConsumptionChart.vue"));
+
+const currencyAccountConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/currencyAccountConsumptionChart.vue"));
+
+const stockAccountConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/stockAccountConsumptionChart.vue"));
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

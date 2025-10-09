@@ -2,8 +2,11 @@
   <div>
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
-        <span>現金流：</span>
-        <accountSelect :selectTargetId="'isCashflowAble'" :selectTitle="'現金流'" @sendbackAccount="settingAccountId" />
+        <span>存款帳戶：</span>
+        <accountSelect
+          :selectTargetId="'isCuaccountAble'"
+          :selectTitle="'存款帳戶'"
+          @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>
@@ -23,14 +26,19 @@
         @dataSearch="settingSearchingParams()" />
     </div>
     <div style="width: 90%; height: 400px">
-      <canvas id="cashFlowcashFlowConsumptionChart"></canvas>
+      <canvas id="currencyAccountConsumptionChart"></canvas>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
-import { IFinanceRecordSearchingParams, ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
+import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi";
+import {
+  IFinanceRecordSearchingParams,
+  IcurrencyAccountRecordList,
+  ICurrencyAccountList,
+  IResponse,
+} from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
@@ -40,7 +48,7 @@ const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dat
 
 const pieChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const cashFlowcashFlowConsumptionChart = ref<Chart | null>(null);
+const currencyAccountConsumptionChart = ref<Chart | null>(null);
 let chartInstance: Chart | null = null;
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
@@ -51,14 +59,14 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-watch(cashFlowcashFlowConsumptionChart, (newChart) => {
+watch(currencyAccountConsumptionChart, (newChart) => {
   if (newChart) {
     newChart.update();
   }
 });
 
-async function settingAccountId(accountItem: ICashFlowList[]) {
-  searchParams.accountId = accountItem[0]?.cashflowId || "";
+async function settingAccountId(accountItem: ICurrencyAccountList[]) {
+  searchParams.accountId = accountItem[0]?.accountId || "";
   searchParams.currencyId = accountItem[0]?.currency || "";
 }
 
@@ -72,7 +80,7 @@ async function settingEndDate(dateSendback: string) {
 
 async function settingSearchingParams() {
   try {
-    const res: IResponse = await fetchCashFlowRecordList(searchParams);
+    const res: IResponse = await fetchCurrencyAccountRecordList(searchParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       pieChartTitle.value =
@@ -97,7 +105,7 @@ async function settingSearchingParams() {
 }
 
 function renderingChart() {
-  const cashFlowcashFlowConsumptionChart = document.getElementById("cashFlowcashFlowConsumptionChart") as HTMLCanvasElement;
+  const currencyAccountConsumptionChart = document.getElementById("currencyAccountConsumptionChart") as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -109,7 +117,7 @@ function renderingChart() {
   const labels = stockDataLineChart.value.map((item) => item.tradeName);
   const values = stockDataLineChart.value.map((item) => item.tradeAmount);
 
-  chartInstance = new Chart(cashFlowcashFlowConsumptionChart, {
+  chartInstance = new Chart(currencyAccountConsumptionChart, {
     type: "pie",
     data: {
       labels: labels,
@@ -137,7 +145,7 @@ function renderingChart() {
   });
 }
 
-function aggregateData(data: ICashFlowRecordList[]) {
+function aggregateData(data: IcurrencyAccountRecordList[]) {
   const resultMap: Record<string, number> = {};
 
   data.forEach((item) => {
