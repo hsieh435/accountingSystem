@@ -22,8 +22,13 @@
         :searchDisable="!searchParams.accountId || !searchParams.startingDate || !searchParams.endDate"
         @dataSearch="settingSearchingParams()" />
     </div>
-    <div style="width: 90%; height: 400px">
-      <canvas id="cashFlowcashFlowConsumptionChart"></canvas>
+    <div class="flex justify-between items-center my-3">
+      <div style="width: 40%; height: 400px">
+        <canvas id="cashFlowIncomeChart"></canvas>
+      </div>
+      <div style="width: 40%; height: 400px">
+        <canvas id="cashFlowExpenseChart"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -38,10 +43,14 @@ import { Chart } from "chart.js/auto";
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
-const pieChartTitle = ref<string>("");
-const stockDataLineChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const cashFlowcashFlowConsumptionChart = ref<Chart | null>(null);
-let chartInstance: Chart | null = null;
+const incomePieChartTitle = ref<string>("");
+const expensePieChartTitle = ref<string>("");
+const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
+const expenseDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
+const cashFlowIncomeChart = ref<Chart | null>(null);
+const cashFlowExpenseChart = ref<Chart | null>(null);
+let incomeChartInstance: Chart | null = null;
+let expenseChartInstance: Chart | null = null;
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -51,7 +60,12 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-watch(cashFlowcashFlowConsumptionChart, (newChart) => {
+watch(cashFlowIncomeChart, (newChart) => {
+  if (newChart) {
+    newChart.update();
+  }
+});
+watch(cashFlowExpenseChart, (newChart) => {
   if (newChart) {
     newChart.update();
   }
@@ -75,16 +89,35 @@ async function settingSearchingParams() {
     const res: IResponse = await fetchCashFlowRecordList(searchParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
-      pieChartTitle.value =
+      incomePieChartTitle.value =
         yearMonthDayTimeFormat(searchParams.startingDate, false) +
         " ~ " +
         yearMonthDayTimeFormat(searchParams.endDate, false) +
         " 消費分析";
+      expensePieChartTitle.value =
+        yearMonthDayTimeFormat(searchParams.startingDate, false) +
+        " ~ " +
+        yearMonthDayTimeFormat(searchParams.endDate, false) +
+        "收入分析";
 
       if (res.data.data.length > 0) {
-        stockDataLineChart.value = aggregateData(res.data.data);
-        // console.log("stockDataLineChart:", stockDataLineChart.value);
-        renderingChart();
+        incomeDataPieChart.value = await aggregateData(res.data.data, "income");
+        expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
+
+        const cashFlowIncomeChart = document.getElementById("cashFlowIncomeChart") as HTMLCanvasElement;
+        const cashFlowExpenseChart = document.getElementById("cashFlowExpenseChart") as HTMLCanvasElement;
+        await renderingChart(
+          cashFlowIncomeChart,
+          incomeDataPieChart.value,
+          incomePieChartTitle.value,
+          incomeChartInstance,
+        );
+        await renderingChart(
+          cashFlowExpenseChart,
+          expenseDataPieChart.value,
+          expensePieChartTitle.value,
+          expenseChartInstance,
+        );
       } else {
         return;
       }
@@ -96,20 +129,25 @@ async function settingSearchingParams() {
   }
 }
 
-function renderingChart() {
-  const cashFlowcashFlowConsumptionChart = document.getElementById("cashFlowcashFlowConsumptionChart") as HTMLCanvasElement;
+async function renderingChart(
+  chartId: HTMLCanvasElement,
+  usingData: { tradeName: string; tradeAmount: number }[],
+  chartTitle: string,
+  instance: Chart | null,
+) {
+  console.log("chartId:", chartId);
+  console.log("usingData:", usingData);
+  console.log("chartTitle:", chartTitle);
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (instance) {
+    instance.destroy();
+    instance = null;
   }
 
-  // console.log("getLabels:", getLabels(stockDataLineChart.value));
-  // console.log("getData:", getData(stockDataLineChart.value));
-  const labels = stockDataLineChart.value.map((item) => item.tradeName);
-  const values = stockDataLineChart.value.map((item) => item.tradeAmount);
+  const labels = usingData.map((item) => item.tradeName);
+  const values = usingData.map((item) => item.tradeAmount);
 
-  chartInstance = new Chart(cashFlowcashFlowConsumptionChart, {
+  instance = new Chart(chartId, {
     type: "pie",
     data: {
       labels: labels,
@@ -129,7 +167,7 @@ function renderingChart() {
         },
         title: {
           display: true,
-          text: pieChartTitle.value,
+          text: chartTitle,
         },
       },
       maintainAspectRatio: false,
@@ -137,10 +175,16 @@ function renderingChart() {
   });
 }
 
-function aggregateData(data: ICashFlowRecordList[]) {
+async function aggregateData(data: ICashFlowRecordList[], filterType: string) {
   const resultMap: Record<string, number> = {};
+  let recordList = JSON.parse(JSON.stringify(data));
+  if (filterType === "income") {
+    recordList = recordList.filter((item: ICashFlowRecordList) => item.transactionType === "income");
+  } else if (filterType === "expense") {
+    recordList = recordList.filter((item: ICashFlowRecordList) => item.transactionType === "expense");
+  }
 
-  data.forEach((item) => {
+  recordList.forEach((item: ICashFlowRecordList) => {
     const { tradeName, tradeAmount } = item;
     if (typeof tradeName === "string") {
       resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;
