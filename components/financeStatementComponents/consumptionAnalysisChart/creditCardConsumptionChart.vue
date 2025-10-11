@@ -31,7 +31,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, watch } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi";
 import { IFinanceRecordSearchingParams, ICreditCardRecordList, ICreditCardList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
@@ -41,10 +41,9 @@ import { Chart } from "chart.js/auto";
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
-const pieChartTitle = ref<string>("");
-const stockDataLineChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const creditCardConsumptionChart = ref<Chart | null>(null);
-let chartInstance: Chart | null = null;
+const incomePieChartTitle = ref<string>("");
+const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
+const chartInstanceRef = ref<Chart | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -52,12 +51,6 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   tradeCategory: "",
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",
-});
-
-watch(creditCardConsumptionChart, (newChart) => {
-  if (newChart) {
-    newChart.update();
-  }
 });
 
 async function settingAccountId(accountItem: ICreditCardList[]) {
@@ -78,19 +71,21 @@ async function settingSearchingParams() {
     const res: IResponse = await fetchCreditCardRecordList(searchParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
-      pieChartTitle.value =
+      incomePieChartTitle.value =
         yearMonthDayTimeFormat(searchParams.startingDate, false) +
         " ~ " +
         yearMonthDayTimeFormat(searchParams.endDate, false) +
         " 消費分析";
 
-      if (res.data.data.length > 0) {
-        stockDataLineChart.value = aggregateData(res.data.data);
-        // console.log("stockDataLineChart:", stockDataLineChart.value);
-        renderingChart();
-      } else {
-        return;
-      }
+      incomeDataPieChart.value = await aggregateData(res.data.data);
+      const creditCardConsumptionChart = document.getElementById("creditCardConsumptionChart") as HTMLCanvasElement;
+
+      await renderingChart(
+        creditCardConsumptionChart,
+        incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+        incomePieChartTitle.value,
+        chartInstanceRef,
+      );
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -99,20 +94,26 @@ async function settingSearchingParams() {
   }
 }
 
-function renderingChart() {
-  const creditCardConsumptionChart = document.getElementById("creditCardConsumptionChart") as HTMLCanvasElement;
+// Accept chartInstance as a ref and update it after destroying/creating
+async function renderingChart(
+  chartId: HTMLCanvasElement,
+  usingData: { tradeName: string; tradeAmount: number }[],
+  chartTitle: string,
+  chartInstanceRef: { value: Chart | null },
+) {
+  // console.log("chartId:", chartId);
+  // console.log("usingData:", usingData);
+  // console.log("chartTitle:", chartTitle);
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (chartInstanceRef.value) {
+    chartInstanceRef.value.destroy();
+    chartInstanceRef.value = null;
   }
 
-  // console.log("getLabels:", getLabels(stockDataLineChart.value));
-  // console.log("getData:", getData(stockDataLineChart.value));
-  const labels = stockDataLineChart.value.map((item) => item.tradeName);
-  const values = stockDataLineChart.value.map((item) => item.tradeAmount);
+  const labels = usingData.map((item) => item.tradeName);
+  const values = usingData.map((item) => item.tradeAmount);
 
-  chartInstance = new Chart(creditCardConsumptionChart, {
+  chartInstanceRef.value = new Chart(chartId, {
     type: "pie",
     data: {
       labels: labels,
@@ -132,7 +133,7 @@ function renderingChart() {
         },
         title: {
           display: true,
-          text: pieChartTitle.value,
+          text: chartTitle,
         },
       },
       maintainAspectRatio: false,
@@ -140,10 +141,11 @@ function renderingChart() {
   });
 }
 
-function aggregateData(data: ICreditCardRecordList[]) {
+async function aggregateData(data: ICreditCardRecordList[]) {
   const resultMap: Record<string, number> = {};
+  let recordList = JSON.parse(JSON.stringify(data));
 
-  data.forEach((item) => {
+  recordList.forEach((item: ICreditCardRecordList) => {
     const { tradeName, tradeAmount } = item;
     if (typeof tradeName === "string") {
       resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;

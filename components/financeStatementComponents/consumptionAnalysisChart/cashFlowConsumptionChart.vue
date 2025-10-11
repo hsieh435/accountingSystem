@@ -22,7 +22,7 @@
         :searchDisable="!searchParams.accountId || !searchParams.startingDate || !searchParams.endDate"
         @dataSearch="settingSearchingParams()" />
     </div>
-    <div class="flex justify-between items-center my-3">
+    <div class="flex justify-center items-center gap-3">
       <div style="width: 40%; height: 400px">
         <canvas id="cashFlowIncomeChart"></canvas>
       </div>
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, watch } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
 import { IFinanceRecordSearchingParams, ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
@@ -47,10 +47,8 @@ const incomePieChartTitle = ref<string>("");
 const expensePieChartTitle = ref<string>("");
 const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
 const expenseDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const cashFlowIncomeChart = ref<Chart | null>(null);
-const cashFlowExpenseChart = ref<Chart | null>(null);
-let incomeChartInstance: Chart | null = null;
-let expenseChartInstance: Chart | null = null;
+const incomeChartInstance = ref<Chart | null>(null);
+const expenseChartInstance = ref<Chart | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -58,17 +56,6 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   tradeCategory: "",
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",
-});
-
-watch(cashFlowIncomeChart, (newChart) => {
-  if (newChart) {
-    newChart.update();
-  }
-});
-watch(cashFlowExpenseChart, (newChart) => {
-  if (newChart) {
-    newChart.update();
-  }
 });
 
 async function settingAccountId(accountItem: ICashFlowList[]) {
@@ -93,34 +80,30 @@ async function settingSearchingParams() {
         yearMonthDayTimeFormat(searchParams.startingDate, false) +
         " ~ " +
         yearMonthDayTimeFormat(searchParams.endDate, false) +
-        " 消費分析";
+        " 收入分析";
       expensePieChartTitle.value =
         yearMonthDayTimeFormat(searchParams.startingDate, false) +
         " ~ " +
         yearMonthDayTimeFormat(searchParams.endDate, false) +
-        "收入分析";
+        " 消費分析";
 
-      if (res.data.data.length > 0) {
-        incomeDataPieChart.value = await aggregateData(res.data.data, "income");
-        expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
+      incomeDataPieChart.value = await aggregateData(res.data.data, "income");
+      expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
 
-        const cashFlowIncomeChart = document.getElementById("cashFlowIncomeChart") as HTMLCanvasElement;
-        const cashFlowExpenseChart = document.getElementById("cashFlowExpenseChart") as HTMLCanvasElement;
-        await renderingChart(
-          cashFlowIncomeChart,
-          incomeDataPieChart.value,
-          incomePieChartTitle.value,
-          incomeChartInstance,
-        );
-        await renderingChart(
-          cashFlowExpenseChart,
-          expenseDataPieChart.value,
-          expensePieChartTitle.value,
-          expenseChartInstance,
-        );
-      } else {
-        return;
-      }
+      const cashFlowIncomeChart = document.getElementById("cashFlowIncomeChart") as HTMLCanvasElement;
+      const cashFlowExpenseChart = document.getElementById("cashFlowExpenseChart") as HTMLCanvasElement;
+      await renderingChart(
+        cashFlowIncomeChart,
+        incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+        incomePieChartTitle.value,
+        incomeChartInstance,
+      );
+      await renderingChart(
+        cashFlowExpenseChart,
+        expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+        expensePieChartTitle.value,
+        expenseChartInstance,
+      );
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -129,25 +112,26 @@ async function settingSearchingParams() {
   }
 }
 
+// Accept chartInstance as a ref and update it after destroying/creating
 async function renderingChart(
   chartId: HTMLCanvasElement,
   usingData: { tradeName: string; tradeAmount: number }[],
   chartTitle: string,
-  instance: Chart | null,
+  chartInstanceRef: { value: Chart | null },
 ) {
-  console.log("chartId:", chartId);
-  console.log("usingData:", usingData);
-  console.log("chartTitle:", chartTitle);
+  // console.log("chartId:", chartId);
+  // console.log("usingData:", usingData);
+  // console.log("chartTitle:", chartTitle);
 
-  if (instance) {
-    instance.destroy();
-    instance = null;
+  if (chartInstanceRef.value) {
+    chartInstanceRef.value.destroy();
+    chartInstanceRef.value = null;
   }
 
   const labels = usingData.map((item) => item.tradeName);
   const values = usingData.map((item) => item.tradeAmount);
 
-  instance = new Chart(chartId, {
+  chartInstanceRef.value = new Chart(chartId, {
     type: "pie",
     data: {
       labels: labels,

@@ -25,20 +25,20 @@
         :searchDisable="!searchParams.accountId || !searchParams.startingDate || !searchParams.endDate"
         @dataSearch="settingSearchingParams()" />
     </div>
-    <div style="width: 90%; height: 400px">
-      <canvas id="stockAccountConsumptionChart"></canvas>
+    <div class="flex justify-center items-center gap-3">
+      <div style="width: 40%; height: 400px">
+        <canvas id="stockAccountIncomeChart"></canvas>
+      </div>
+      <div style="width: 40%; height: 400px">
+        <canvas id="stockAccountExpenseChart"></canvas>
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
-import {
-  IFinanceRecordSearchingParams,
-  IStockAccountRecordList,
-  IStockAccountList,
-  IResponse,
-} from "@/models/index";
+import { IFinanceRecordSearchingParams, IStockAccountRecordList, IStockAccountList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
@@ -46,10 +46,12 @@ import { Chart } from "chart.js/auto";
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
-const pieChartTitle = ref<string>("");
-const stockDataLineChart = ref<{ tradeName: string; tradeTotalPrice: number }[]>([]);
-const stockAccountConsumptionChart = ref<Chart | null>(null);
-let chartInstance: Chart | null = null;
+const incomePieChartTitle = ref<string>("");
+const expensePieChartTitle = ref<string>("");
+const incomeDataPieChart = ref<{ tradeName: string; tradeTotalPrice: number }[]>([]);
+const expenseDataPieChart = ref<{ tradeName: string; tradeTotalPrice: number }[]>([]);
+const incomeChartInstance = ref<Chart | null>(null);
+const expenseChartInstance = ref<Chart | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -57,12 +59,6 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   tradeCategory: "",
   startingDate: getCurrentYear() + "-01-01",
   endDate: getCurrentYear() + "-12-31",
-});
-
-watch(stockAccountConsumptionChart, (newChart) => {
-  if (newChart) {
-    newChart.update();
-  }
 });
 
 async function settingAccountId(accountItem: IStockAccountList[]) {
@@ -83,19 +79,35 @@ async function settingSearchingParams() {
     const res: IResponse = await fetchStockAccountRecordList(searchParams);
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
-      pieChartTitle.value =
+      incomePieChartTitle.value =
+        yearMonthDayTimeFormat(searchParams.startingDate, false) +
+        " ~ " +
+        yearMonthDayTimeFormat(searchParams.endDate, false) +
+        " 收入分析";
+      expensePieChartTitle.value =
         yearMonthDayTimeFormat(searchParams.startingDate, false) +
         " ~ " +
         yearMonthDayTimeFormat(searchParams.endDate, false) +
         " 消費分析";
 
-      if (res.data.data.length > 0) {
-        stockDataLineChart.value = aggregateData(res.data.data);
-        // console.log("stockDataLineChart:", stockDataLineChart.value);
-        renderingChart();
-      } else {
-        return;
-      }
+      incomeDataPieChart.value = await aggregateData(res.data.data, "income");
+      expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
+
+      const stockAccountIncomeChart = document.getElementById("stockAccountIncomeChart") as HTMLCanvasElement;
+      const stockAccountExpenseChart = document.getElementById("stockAccountExpenseChart") as HTMLCanvasElement;
+
+      await renderingChart(
+        stockAccountIncomeChart,
+        incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeTotalPrice: 0 }],
+        incomePieChartTitle.value,
+        incomeChartInstance,
+      );
+      await renderingChart(
+        stockAccountExpenseChart,
+        expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeTotalPrice: 0 }],
+        expensePieChartTitle.value,
+        expenseChartInstance,
+      );
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -104,20 +116,25 @@ async function settingSearchingParams() {
   }
 }
 
-function renderingChart() {
-  const stockAccountConsumptionChart = document.getElementById("stockAccountConsumptionChart") as HTMLCanvasElement;
+async function renderingChart(
+  chartId: HTMLCanvasElement,
+  usingData: { tradeName: string; tradeTotalPrice: number }[],
+  chartTitle: string,
+  chartInstanceRef: { value: Chart | null },
+) {
+  // console.log("chartId:", chartId);
+  // console.log("usingData:", usingData);
+  // console.log("chartTitle:", chartTitle);
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (chartInstanceRef.value) {
+    chartInstanceRef.value.destroy();
+    chartInstanceRef.value = null;
   }
 
-  // console.log("getLabels:", getLabels(stockDataLineChart.value));
-  // console.log("getData:", getData(stockDataLineChart.value));
-  const labels = stockDataLineChart.value.map((item) => item.tradeName);
-  const values = stockDataLineChart.value.map((item) => item.tradeTotalPrice);
+  const labels = usingData.map((item) => item.tradeName);
+  const values = usingData.map((item) => item.tradeTotalPrice);
 
-  chartInstance = new Chart(stockAccountConsumptionChart, {
+  chartInstanceRef.value = new Chart(chartId, {
     type: "pie",
     data: {
       labels: labels,
@@ -137,7 +154,7 @@ function renderingChart() {
         },
         title: {
           display: true,
-          text: pieChartTitle.value,
+          text: chartTitle,
         },
       },
       maintainAspectRatio: false,
@@ -145,10 +162,16 @@ function renderingChart() {
   });
 }
 
-function aggregateData(data: IStockAccountRecordList[]) {
+async function aggregateData(data: IStockAccountRecordList[], filterType: string) {
   const resultMap: Record<string, number> = {};
+  let recordList = JSON.parse(JSON.stringify(data));
+  if (filterType === "income") {
+    recordList = recordList.filter((item: IStockAccountRecordList) => item.transactionType === "income");
+  } else if (filterType === "expense") {
+    recordList = recordList.filter((item: IStockAccountRecordList) => item.transactionType === "expense");
+  }
 
-  data.forEach((item) => {
+  recordList.forEach((item: IStockAccountRecordList) => {
     const { tradeName, tradeTotalPrice } = item;
     if (typeof tradeName === "string") {
       resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeTotalPrice;
