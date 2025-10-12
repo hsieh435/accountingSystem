@@ -6,15 +6,15 @@
       <USelect v-model="itemsPerPage" :items="perPageArray" class="w-auto mx-2" :disabled="props.totalDataQuanity <= props.pageArrayGot[0]" />
 
       <template v-if="props.totalDataQuanity > props.pageArrayGot[0]">
-        <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" color="neutral" variant="outline" />
+        <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" variant="outline" />
 
         <div class="flex flex-row justify-start items-center my-1">
           <span class="mx-1">前往第</span>
-          <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" color="neutral" highlight />
+          <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" highlight />
           <span class="mx-1">頁</span>
         </div>
       </template>
-      
+
     </div>
 
 
@@ -32,8 +32,8 @@
     <template v-if="props.showFilter">
       <div class="flex flex-row justify-start items-center me-2 my-1">
         <font-awesome-icon class="mx-1" :icon="['fas', 'sliders']" />
-        <UInput class="mx-1" v-model="keyWord" :type="'search'" color="neutral" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
-      </div>      
+        <UInput class="mx-1" v-model="keyWord" :type="'search'" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
+      </div>
     </template>
 
 
@@ -126,7 +126,7 @@ const isCheckBoxPicked = ref<boolean>(false);
 
 onMounted(() => {
   // 初始化頁數
-  
+
   // console.log("onMounted props:", props);
   perPageArray.value = props.pageArrayGot.map((item) => {
     return { label: `${item} 筆 / 頁`, value: item };
@@ -146,7 +146,7 @@ onMounted(() => {
 
   keyWordPlaceholder.value = props.searchingPlaceholder ? props.searchingPlaceholder : "";
 
-  
+
   sortMethodGot.value = JSON.parse(JSON.stringify(props.sortMethod));
   for (let i = 0; i < sortMethodGot.value.length; i++) {
     sortMethodGot.value[i]["value"] = i;

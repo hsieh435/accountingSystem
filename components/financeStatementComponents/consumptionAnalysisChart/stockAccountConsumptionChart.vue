@@ -36,7 +36,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, watch } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
 import { IFinanceRecordSearchingParams, IStockAccountRecordList, IStockAccountList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";

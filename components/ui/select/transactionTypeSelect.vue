@@ -1,5 +1,5 @@
 <template>
-  <URadioGroup orientation="horizontal" color="neutral" variant="list" :items="items" v-model="transactionTypeValue" :disabled="isDisabled" />
+  <URadioGroup orientation="horizontal" variant="list" :items="items" v-model="transactionTypeValue" :disabled="isDisabled" />
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";

@@ -36,7 +36,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, watch } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi";
 import {
   IFinanceRecordSearchingParams,
@@ -159,7 +159,7 @@ async function renderingChart(
         },
         title: {
           display: true,
-          text: incomePieChartTitle.value,
+          text: chartTitle,
         },
       },
       maintainAspectRatio: false,

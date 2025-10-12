@@ -105,32 +105,19 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-8">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
-            <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
-              <tradeCategorySelect
-                accountType="isStaccountAble"
-                :tradeCategoryGot="dataParams.tradeCategory"
-                @sendbackTradeCategory="settingTradeCategory" />
-            </div>
-          </div>
-          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeCategory">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請選擇交易項目</span>
-          </div>
-        </div>
-
-        <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
             <UInputNumber
               :class="['col-start-3 col-end-5', dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.pricePerShare"
-              orientation="vertical" />
+              orientation="vertical"
+              :step="0.01"
+              @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.quantity"
-              orientation="vertical" />
+              orientation="vertical"
+              @change="settingTotalPrice()" />
           </div>
           <div
             class="flex justify-start items-center grid grid-cols-8"
@@ -146,12 +133,14 @@
             <UInputNumber
               :class="['col-start-3 col-end-5', dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.handlingFee"
-              orientation="vertical" />
+              orientation="vertical"
+              @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.transactionTax ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.transactionTax"
-              orientation="vertical" />
+              orientation="vertical"
+              @change="settingTotalPrice()" />
           </div>
           <div
             class="flex justify-start items-center grid grid-cols-8"
@@ -165,19 +154,14 @@
           <span class="col-span-2 text-right">總價：</span>
           <input
             :class="tailwindStyles.getInputClasses()"
-            :value="currencyFormat(dataParams.pricePerShare * dataParams.quantity)"
+            class="col-start-3 col-end-5"
             disabled
-            class="col-start-3 col-end-5" />
+            :value="currencyFormat(dataParams.stockTotalPrice)" />
           <span class="col-span-2 text-right">交易成本：</span>
           <input
             :class="[tailwindStyles.getInputClasses(), 'col-start-7 col-end-9']"
-            :value="
-              currencyFormat(
-                dataParams.pricePerShare * dataParams.quantity + dataParams.handlingFee + dataParams.transactionTax,
-              )
-            "
-            disabled
-            @change="settingRemainingAmount()" />
+            :value="currencyFormat(dataParams.tradeTotalPrice)"
+            disabled />
         </div>
 
         <div class="w-full">
@@ -353,11 +337,17 @@ function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
 }
 
+function settingTotalPrice() {
+  dataParams.stockTotalPrice = dataParams.pricePerShare * dataParams.quantity;
+  dataParams.tradeTotalPrice = dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
+  settingRemainingAmount();
+}
+
 function settingRemainingAmount() {
   if (dataParams.transactionType === "income") {
-    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.pricePerShare * dataParams.quantity;
+    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.tradeTotalPrice;
   } else if (dataParams.transactionType === "expense") {
-    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.pricePerShare * dataParams.quantity;
+    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.tradeTotalPrice;
   }
 
   if (
@@ -448,9 +438,6 @@ async function validateData() {
 
 async function stockAccountRecordDataHandling() {
   if (!(await validateData())) return;
-
-  dataParams.stockTotalPrice = dataParams.pricePerShare * dataParams.quantity;
-  dataParams.tradeTotalPrice = dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchStockAccountRecordUpdate : fetchStockAccountRecordCreate)(
