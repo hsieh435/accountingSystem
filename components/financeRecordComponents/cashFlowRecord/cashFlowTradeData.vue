@@ -26,6 +26,7 @@
               <accountSelect
                 selectTargetId="isCashflowAble"
                 :accountIdGot="dataParams.cashflowId"
+                :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingCashflowAccount" />
             </div>

@@ -25,6 +25,7 @@
             <accountSelect
               selectTargetId="isCuaccountAble"
               :accountIdGot="dataParams.accountId"
+              :sellectAll="false"
               :isDisable="props.tradeIdGot ? true : false"
               @sendbackAccount="settingAccount" />
           </div>

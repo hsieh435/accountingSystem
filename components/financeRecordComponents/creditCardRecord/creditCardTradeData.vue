@@ -26,6 +26,7 @@
               <accountSelect
                 selectTargetId="isCreditcardAble"
                 :accountIdGot="dataParams.creditCardId"
+                :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingCreditCardAccount" />
             </div>

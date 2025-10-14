@@ -40,7 +40,6 @@ onMounted(async () => {
   // console.log("onMounted props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
-    accountId.value = props.accountIdGot;
   }
 });
 
@@ -53,6 +52,12 @@ async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchParams);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
+    if (props.sellectAll === false) {
+      accountId.value = accountList.value[0].value || "";
+    } else {
+      accountId.value = props.accountIdGot || "";
+    }
+
     // console.log("list:", list);
     // console.log("oriAccountList:", oriAccountList.value);
   } catch (error) {

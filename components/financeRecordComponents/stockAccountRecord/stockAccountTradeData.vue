@@ -26,6 +26,7 @@
               <accountSelect
                 selectTargetId="isStaccountAble"
                 :accountIdGot="dataParams.accountId"
+                :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingAccount" />
             </div>
@@ -324,7 +325,7 @@ function settingTradeDatetime(dateTime: string) {
 function settingTransactionType(type: string) {
   dataParams.transactionType = type;
   if (dataParams.accountId) {
-    settingRemainingAmount();
+    settingTotalPrice();
   }
 }
 
@@ -339,7 +340,13 @@ function settingTradeCategory(tradeCategoryId: string) {
 
 function settingTotalPrice() {
   dataParams.stockTotalPrice = dataParams.pricePerShare * dataParams.quantity;
-  dataParams.tradeTotalPrice = dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
+  if (dataParams.transactionType === "income") {
+    dataParams.tradeTotalPrice =
+      dataParams.stockTotalPrice - dataParams.handlingFee - dataParams.transactionTax;
+  } else if (dataParams.transactionType === "expense") {
+    dataParams.tradeTotalPrice =
+      dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
+  }
   settingRemainingAmount();
 }
 

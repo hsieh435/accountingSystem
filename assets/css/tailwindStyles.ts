@@ -12,7 +12,7 @@ export function getTheadtrClasses() {
   return "table-row border-1";
 }
 
-const tableLastColumn = "min-w-max sticky last:right-0 last:z-10";
+const tableLastColumn = "min-w-max sticky last:right-0";
 export function getThClasses() {
   return `table-cell w-auto text-white bg-black border-r border-white px-1 py-1 first:w-[60px] last:border-r-0 last:${tableLastColumn}`;
 }
@@ -22,11 +22,14 @@ export function getTbodyClasses() {
 }
 
 export function getTbodytrClasses() {
-  return "text-sm table-row hover:bg-gray-200 hover:border-gray-300 group";
+  return `text-sm table-row
+  odd:bg-white even:bg-gray-200
+  hover:bg-slate-300 hover:border-gray-300 group`;
 }
 
 export function getTdClasses() {
-  return `table-cell text-black border-r border-b border-gray-300 bg-white text-center align-middle px-2 py-[1px] group-hover:border-gray-300 first:w-[60px] last:${tableLastColumn}`;
+  return `table-cell text-black border-r border-b border-gray-200 text-center align-middle px-2 py-[1px]
+  first:w-[60px] last:${tableLastColumn}`;
 }
 
 export function getNoDataClasses() {

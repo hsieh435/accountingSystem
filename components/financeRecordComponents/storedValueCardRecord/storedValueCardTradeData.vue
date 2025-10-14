@@ -26,6 +26,7 @@
               <accountSelect
                 selectTargetId="isStoredvaluecardAble"
                 :accountIdGot="dataParams.storedValueCardId"
+                :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingStoredValueCardAccount" />
             </div>
