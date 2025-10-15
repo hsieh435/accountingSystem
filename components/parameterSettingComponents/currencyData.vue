@@ -92,7 +92,8 @@
             <UInputNumber
               :class="['col-span-3', dataValidate.sort ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.sort"
-              orientation="vertical" />
+              orientation="vertical"
+              :step="0.01" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
             <span class="col-span-2 text-right"></span>
@@ -159,7 +160,7 @@ async function searchingCurrencyData() {
 
   try {
     const res: IResponse = await fetchCurrencyByCurrencyCode(props.currencyCodeGot);
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       // dataParams.currencyCode = res.data.data.currencyCode;
@@ -191,7 +192,7 @@ async function validateData() {
   if (!dataParams.currencySymbol) {
     dataValidate.currencySymbol = false;
   }
-  if (dataParams.minimumDenomination === null || dataParams.minimumDenomination <= 0) {
+  if (dataParams.minimumDenomination === null || dataParams.minimumDenomination < 0) {
     dataValidate.minimumDenomination = false;
   }
   if (dataParams.sort === null || dataParams.sort <= 0 || !Number.isInteger(dataParams.sort)) {

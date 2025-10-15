@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-14 20:53:52
+-- Started on 2025-10-15 22:36:13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -568,12 +568,21 @@ CHF	瑞士法郎	Fr	0.050	9
 CLP	智利披索	$	1.000	55
 NZD	紐西蘭元	$	0.100	8
 VND	越南盾	₫	200.000	40
-THB	泰銖	฿	1.000	11
-TRY	土耳其里拉	₺	0.500	10
 KWD	科威特第納爾	KD	5.000	15
-ZAR	南非蘭特	R	1.000	11
 TWD	新臺幣	$	1.000	1
 GBP	英鎊	£	0.010	4
+SAR	Saudi Riyal	ريال	0.010	99
+PYG	Paraguayan Guaraní	₲	50.000	97
+PLN	Polish Złoty	zł	1.000	96
+ARS	Argentine Peso	ARS$	0.050	95
+BRL	Brazilian Real	R$	0.010	94
+COP	Colombian Peso	$	50.000	93
+CRC	Costa Rican Colon	₡	5.000	92
+THB	泰銖	฿	1.000	50
+TRY	土耳其里拉	₺	0.500	20
+ZAR	南非蘭特	R	1.000	22
+CZK	Czech Koruna	Kč	1.000	10
+DKK	Danish Krone	KR	0.500	11
 \.
 
 
@@ -935,7 +944,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-14 20:53:53
+-- Completed on 2025-10-15 22:36:13
 
 --
 -- PostgreSQL database dump complete
