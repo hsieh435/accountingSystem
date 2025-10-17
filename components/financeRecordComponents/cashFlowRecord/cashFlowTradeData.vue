@@ -88,6 +88,8 @@
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.tradeAmount"
               orientation="vertical"
+              :min="0"
+              :step="setStep"
               @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
@@ -109,7 +111,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
@@ -138,7 +140,7 @@ import {
   fetchCashFlowRecordCreate,
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi";
-import { ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
+import { ICashFlowRecordList, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
@@ -183,6 +185,7 @@ const getDefaultDataValidate = (): any => ({
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
 const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
+const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
@@ -287,6 +290,10 @@ function settingRemainingAmount() {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
   }
+}
+
+function settingCurrency(currencyData: ICurrencyList) {
+  setStep.value = currencyData.minimumDenomination;
 }
 
 async function validateData() {

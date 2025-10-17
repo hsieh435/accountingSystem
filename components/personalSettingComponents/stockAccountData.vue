@@ -77,7 +77,7 @@
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
                 :isDisable="props.stockAccountIGot ? true : false"
-                @sendbackCurrencyId="settingCurrency" />
+                @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
@@ -177,7 +177,7 @@ import {
   fetchStockAccountUpdate,
   fetchStockAccountDelete,
 } from "@/server/stockAccountApi";
-import { IStockAccountList, IResponse } from "@/models/index";
+import { IStockAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
@@ -247,8 +247,8 @@ async function searchingStockAccountData() {
   }
 }
 
-async function settingCurrency(currencyId: string) {
-  dataParams.currency = currencyId;
+function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currency = currencyData.currencyCode;
 }
 
 async function settingOpenAlert(switchValue: boolean) {

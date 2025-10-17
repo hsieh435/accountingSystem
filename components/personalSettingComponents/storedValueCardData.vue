@@ -43,7 +43,7 @@
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
                 :isDisable="props.storedValueCardIdGot ? true : false"
-                @sendbackCurrencyId="settingCurrency" />
+                @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
@@ -155,7 +155,7 @@ import {
   fetchStoredValueCardUpdate,
   fetchStoredValueCardDelete,
 } from "@/server/storedValueCardApi";
-import { IStoredValueCardList, IResponse } from "@/models/index";
+import { IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
@@ -225,8 +225,8 @@ async function searchingStoredValueCardData() {
   }
 }
 
-async function settingCurrency(currencyId: string) {
-  dataParams.currency = currencyId;
+function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currency = currencyData.currencyCode;
 }
 
 async function settingOpenAlert(switchValue: boolean) {

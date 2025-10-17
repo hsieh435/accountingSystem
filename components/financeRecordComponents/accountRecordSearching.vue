@@ -13,7 +13,7 @@
       ><dataBaseCurrencySelect
         :currencyIdGot="searchParams.currencyId"
         :isDisable="searchParams.accountId.length > 0"
-        @sendbackCurrencyId="settingCurrency" />
+        @sendbackCurrencyData="settingCurrency" />
     </div>
 
     <div class="flex items-center me-3 my-1">
@@ -37,7 +37,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { IFinanceRecordSearchingParams, ICashFlowList } from "@/models/index";
+import { IFinanceRecordSearchingParams, ICashFlowList, ICurrencyList } from "@/models/index";
 import { getCurrentYear } from "@/composables/tools";
 
 const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName?: string }>(), {
@@ -64,8 +64,8 @@ async function settingAccountId(accountItem: ICashFlowList[]) {
   searchParams.currencyId = accountItem[0].currency || "";
 }
 
-async function settingCurrency(currencyIdSendback: string) {
-  searchParams.currencyId = currencyIdSendback;
+async function settingCurrency(currencyData: ICurrencyList) {
+  searchParams.currencyId = currencyData.currencyCode;
 }
 
 async function settingTradeCategory(tradeCategorySendback: string) {

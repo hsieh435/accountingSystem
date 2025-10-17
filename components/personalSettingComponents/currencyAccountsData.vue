@@ -76,7 +76,7 @@
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
                 :isDisable="props.currencyAccountIdGot ? true : false"
-                @sendbackCurrencyId="settingCurrency" />
+                @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
@@ -178,13 +178,13 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { ICurrencyAccountList, IResponse } from "@/models/index";
 import {
   fetchCurrencyAccountById,
   fetchCurrencyAccountCreate,
   fetchCurrencyAccountUpdate,
   fetchCurrencyAccountDelete,
 } from "@/server/currencyAccountApi";
+import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
@@ -255,8 +255,8 @@ async function searchingCurrencyAccountData() {
   }
 }
 
-async function settingCurrency(currencyId: string) {
-  dataParams.currency = currencyId;
+function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currency = currencyData.currencyCode;
 }
 
 async function settingOpenAlert(switchValue: boolean) {

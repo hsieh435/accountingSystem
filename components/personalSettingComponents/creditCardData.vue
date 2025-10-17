@@ -76,7 +76,7 @@
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
                 :isDisable="props.creditCardIdGot ? true : false"
-                @sendbackCurrencyId="settingCurrency" />
+                @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
@@ -160,7 +160,7 @@ import {
   fetchCreditCardUpdate,
   fetchCreditCardDelete,
 } from "@/server/creditCardApi";
-import { ICreditCardList, IResponse } from "@/models/index";
+import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
@@ -234,8 +234,8 @@ async function settingCreditcardSchema(schemaId: string) {
   dataParams.creditcardSchema = schemaId;
 }
 
-async function settingCurrency(currencyId: string) {
-  dataParams.currency = currencyId;
+function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currency = currencyData.currencyCode;
 }
 
 async function settingOpenAlert(switchValue: boolean) {

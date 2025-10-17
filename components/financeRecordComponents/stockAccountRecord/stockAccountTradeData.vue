@@ -111,7 +111,7 @@
               :class="['col-start-3 col-end-5', dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.pricePerShare"
               orientation="vertical"
-              :step="0.01"
+              :min="0"
               @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
             <UInputNumber
@@ -135,12 +135,16 @@
               :class="['col-start-3 col-end-5', dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.handlingFee"
               orientation="vertical"
+              :min="0"
+              :step="setStep"
               @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.transactionTax ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.transactionTax"
               orientation="vertical"
+              :min="0"
+              :step="setStep"
               @change="settingTotalPrice()" />
           </div>
           <div
@@ -178,7 +182,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
@@ -207,7 +211,7 @@ import {
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
 } from "@/server/stockAccountRecordApi";
-import { IStockAccountRecordList, IStockAccountList, IStockList, IResponse } from "@/models/index";
+import { IStockAccountRecordList, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
@@ -263,6 +267,7 @@ const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");
 const stockAccountChosen = ref<IStockAccountList>({} as IStockAccountList);
+const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
@@ -372,6 +377,10 @@ function settingRemainingAmount() {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
   }
+}
+
+function settingCurrency(currencyData: ICurrencyList) {
+  setStep.value = currencyData.minimumDenomination;
 }
 
 async function validateData() {

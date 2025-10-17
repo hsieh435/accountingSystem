@@ -72,7 +72,9 @@
             <UInputNumber
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.tradeAmount"
-              orientation="vertical" />
+              orientation="vertical"
+              :min="0"
+              :step="setStep" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-span-2 text-right"></span>
@@ -83,7 +85,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" :isDisable="true" />
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency"  />
           </div>
         </div>
 
@@ -112,7 +114,7 @@ import {
   fetchCreditCardRecordCreate,
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi";
-import { ICreditCardRecordList, ICreditCardList, IResponse } from "@/models/index";
+import { ICreditCardRecordList, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -149,6 +151,7 @@ const getDefaultDataValidate = (): any => ({
   tradeCategory: true,
   tradeAmount: true,
 });
+const setStep = ref<number>(1);
 const dataValidate = reactive<any>(getDefaultDataValidate());
 
 watch(open, () => {
@@ -193,6 +196,10 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
+}
+
+function settingCurrency(currencyData: ICurrencyList) {
+  setStep.value = currencyData.minimumDenomination;
 }
 
 async function validateData() {

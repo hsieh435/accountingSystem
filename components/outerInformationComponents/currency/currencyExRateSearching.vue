@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span><dataBaseCurrencySelect @sendbackCurrencyId="settingCurrencyId" />
+      <span>貨幣：</span><dataBaseCurrencySelect @sendbackCurrencyData="settingCurrency" />
     </div>
     <div class="flex items-center me-3 my-1">
       <span>查詢區間：</span
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
 import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
-import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
+import { ICurrencyExRateSearchingParams, ICurrencyList, IResponse } from "@/models/index";
 import { getCurrentYMD, getCurrentYear } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 
@@ -42,8 +42,8 @@ const searchingParams = reactive<ICurrencyExRateSearchingParams>({
   endDate: getCurrentYMD(),
 });
 
-async function settingCurrencyId(currencyId: string) {
-  searchingParams.currencyId = currencyId;
+function settingCurrency(currencyData: ICurrencyList) {
+  searchingParams.currencyId = currencyData.currencyCode;
 }
 
 async function settingStartDate(startDate: string) {
