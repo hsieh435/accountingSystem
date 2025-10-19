@@ -1,13 +1,17 @@
 <template>
-  <div class="flex justify-center items-center w-full">
-    <h1>404 - Page Not Found</h1>
+  <div class="w-full flex justify-center items-center">
+    <div class="container flex flex-col items-center justify-center px-5 mx-auto my-20">
+      <div class="max-w-md text-center">
+        <h2 class="mb-8 font-extrabold text-9xl dark:text-gray-400">404</h2>
+        <p class="text-2xl font-semibold md:text-3xl">頁面不存在</p>
+        <NuxtLink to="/mainView">
+          <UButton class="cursor-pointer my-5" label="返回首頁" size="xl" />
+        </NuxtLink>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted } from "vue";
-// import { navigateTo } from "nuxt/app";
-import { useRoute } from "vue-router"
-import { createError } from "h3"
 
 
 
@@ -16,26 +20,6 @@ definePageMeta({
   middleware: "auth",
   functionTitle: "404 Not Found",
   subTitle: "",
-})
-
-
-
-// Handle unknown routes including DevTools requests
-const route = useRoute();
-// Silently handle DevTools requests
-if (route.path.includes(".well-known")) {
-  
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Not Found",
-    fatal: false
-  })
-}
-
-
-
-onMounted(() => {
-  // navigateTo("/mainView");
 });
 
 

@@ -6,7 +6,7 @@
   </select>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
