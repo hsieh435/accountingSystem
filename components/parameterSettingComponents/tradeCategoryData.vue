@@ -163,14 +163,6 @@ async function searchingTradeCategory() {
     // console.log("res:", res);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      // dataParams.tradeCode = res.data.data.tradeCode;
-      // dataParams.tradeName = res.data.data.tradeName;
-      // dataParams.isCashflowAble = res.data.data.isCashflowAble;
-      // dataParams.isStoredvaluecardAble = res.data.data.isStoredvaluecardAble;
-      // dataParams.isCreditcardAble = res.data.data.isCreditcardAble;
-      // dataParams.isCuaccountAble = res.data.data.isCuaccountAble;
-      // dataParams.isStaccountAble = res.data.data.isStaccountAble;
-      // dataParams.sort = res.data.data.sort;
     } else {
       messageToast({ message: res.data.message });
     }

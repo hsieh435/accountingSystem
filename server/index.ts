@@ -1,12 +1,30 @@
+import { ref, watch } from "vue";
+import { isLoading } from "@/components/ui/spinnerState.ts";
 import { decryptString } from "@/composables/crypto.ts";
 
 
 
 const baseURL = "http://localhost:3600";
+const requestCount = ref<number>(0);
+
+
+
+watch(requestCount, () => {
+  // console.log("requestCount:", requestCount.value);
+  if (requestCount.value >= 1) {
+    isLoading.value = true;
+  } else {
+    isLoading.value = false;
+  }
+  if (requestCount.value < 0) {
+    requestCount.value = 0;
+  }
+});
 
 
 
 export async function apiFetch(url: string, method: string, options?: RequestInit) {
+  requestCount.value++;
   // console.log("userTimezone:", Intl.DateTimeFormat().resolvedOptions().timeZone);
   const userToken = localStorage.getItem("userToken");
 
@@ -24,8 +42,10 @@ export async function apiFetch(url: string, method: string, options?: RequestIni
   // console.log(response.ok);
 
   if (response.ok) {
+    requestCount.value--;
     return response;
   } else {
+    requestCount.value--;
     throw {
       status: response.status,
       message: response.statusText,

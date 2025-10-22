@@ -5,7 +5,7 @@
         <h2 class="mb-8 font-extrabold text-9xl dark:text-gray-400">404</h2>
         <p class="text-2xl font-semibold md:text-3xl">頁面不存在</p>
         <NuxtLink to="/mainView">
-          <UButton class="cursor-pointer my-5" label="返回首頁" size="xl" />
+          <UButton class="cursor-pointer my-5" label="返回首頁" icon="i-lucide-rotate-cw" size="xl" />
         </NuxtLink>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import { defineNuxtRouteMiddleware, navigateTo, abortNavigation } from "nuxt/app";
 // import { useRoute } from "vue-router";
-import { fetchJwtVerification } from "@/server/generalApi";
-import { errorMessageDialog } from "@/composables/swalDialog";
-import { decryptString } from "@/composables/crypto";
-import { clearLocalStorageKey } from "@/composables/tools";
+import { fetchJwtVerification } from "@/server/generalApi.ts";
+import { errorMessageDialog } from "@/composables/swalDialog.ts";
+import { decryptString } from "@/composables/crypto.ts";
+import { clearLocalStorageKey } from "@/composables/tools.ts";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   // console.log("Navigating from:", from.path);

@@ -1,9 +1,10 @@
 <template>
-  <div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
-    <div class="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-8 h-64 w-64"></div>
+  <div class="h-full w-full bg-zinc-200/50 flex justify-center items-center fixed inset-0 z-[5000]">
+    <div class="h-40 w-40 border-t-transparent animate-spin rounded-full border-8 border-green-500 border-solid"></div>
   </div>
 </template>
 <script setup lang="ts">
+
 
 
 </script>
