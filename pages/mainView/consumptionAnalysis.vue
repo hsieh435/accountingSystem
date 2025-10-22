@@ -1,10 +1,10 @@
 <template>
   <div class="py-[20px] tabs">
-    <input type="radio" id="tab1" name="tab-control" checked />
-    <input type="radio" id="tab2" name="tab-control" />
-    <input type="radio" id="tab3" name="tab-control" />
-    <input type="radio" id="tab4" name="tab-control" />
-    <input type="radio" id="tab5" name="tab-control" />
+    <input id="tab1" name="tab-control" type="radio" checked />
+    <input id="tab2" name="tab-control" type="radio" />
+    <input id="tab3" name="tab-control" type="radio" />
+    <input id="tab4" name="tab-control" type="radio" />
+    <input id="tab5" name="tab-control" type="radio" />
     <ul>
       <li title="現金流">
         <label for="tab1" role="button">

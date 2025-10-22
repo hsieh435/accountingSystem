@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-19 22:17:46
+-- Started on 2025-10-22 16:44:31
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -316,29 +316,32 @@ CREATE TABLE public.stock_account_trade (
 ALTER TABLE public.stock_account_trade OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 38115)
+-- TOC entry 237 (class 1259 OID 38238)
 -- Name: stock_storage_detail; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.stock_storage_detail (
+    trade_id character varying NOT NULL,
+    account_id character varying NOT NULL,
+    user_id character varying NOT NULL,
+    trade_datetime timestamp with time zone NOT NULL,
     stock_no character varying NOT NULL,
-    sno integer NOT NULL,
     stock_name character varying NOT NULL,
-    purchase_date timestamp with time zone NOT NULL,
+    price_per_share numeric(15,3) NOT NULL,
     quantity integer NOT NULL,
-    stock_per_share numeric(15,3) NOT NULL,
-    cost integer NOT NULL,
-    market_price_per_share numeric(15,3) NOT NULL,
-    present_value integer NOT NULL,
-    pal_value numeric(15,3) NOT NULL,
-    pal_percentage numeric(15,3) NOT NULL
+    stock_total_price numeric(15,3) NOT NULL,
+    handling_fee numeric(15,3) NOT NULL,
+    transaction_tax numeric(15,3) NOT NULL,
+    trade_total_price numeric(15,3) NOT NULL,
+    remaining_amount numeric(15,3) NOT NULL,
+    currency character varying
 );
 
 
 ALTER TABLE public.stock_storage_detail OWNER TO postgres;
 
 --
--- TOC entry 237 (class 1259 OID 38208)
+-- TOC entry 236 (class 1259 OID 38208)
 -- Name: stock_storage_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -346,14 +349,17 @@ CREATE TABLE public.stock_storage_list (
     stock_account_id character varying NOT NULL,
     user_id character varying NOT NULL,
     stock_no character varying NOT NULL,
-    stock_name character varying NOT NULL
+    stock_name character varying NOT NULL,
+    storage_quantity integer NOT NULL,
+    cost_per_stock numeric NOT NULL,
+    storage_cost numeric NOT NULL
 );
 
 
 ALTER TABLE public.stock_storage_list OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 38125)
+-- TOC entry 231 (class 1259 OID 38125)
 -- Name: stored_value_card_list; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -378,7 +384,7 @@ CREATE TABLE public.stored_value_card_list (
 ALTER TABLE public.stored_value_card_list OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 38137)
+-- TOC entry 232 (class 1259 OID 38137)
 -- Name: stored_value_card_trade; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -401,7 +407,7 @@ CREATE TABLE public.stored_value_card_trade (
 ALTER TABLE public.stored_value_card_trade OWNER TO postgres;
 
 --
--- TOC entry 234 (class 1259 OID 38145)
+-- TOC entry 233 (class 1259 OID 38145)
 -- Name: trade_category; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -420,7 +426,7 @@ CREATE TABLE public.trade_category (
 ALTER TABLE public.trade_category OWNER TO postgres;
 
 --
--- TOC entry 235 (class 1259 OID 38155)
+-- TOC entry 234 (class 1259 OID 38155)
 -- Name: transaction_category; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -433,7 +439,7 @@ CREATE TABLE public.transaction_category (
 ALTER TABLE public.transaction_category OWNER TO postgres;
 
 --
--- TOC entry 236 (class 1259 OID 38160)
+-- TOC entry 235 (class 1259 OID 38160)
 -- Name: user_data; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -657,28 +663,33 @@ ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	stockBuy	expense
 
 
 --
--- TOC entry 4985 (class 0 OID 38115)
--- Dependencies: 231
+-- TOC entry 4991 (class 0 OID 38238)
+-- Dependencies: 237
 -- Data for Name: stock_storage_detail; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.stock_storage_detail (stock_no, sno, stock_name, purchase_date, quantity, stock_per_share, cost, market_price_per_share, present_value, pal_value, pal_percentage) FROM stdin;
+COPY public.stock_storage_detail (trade_id, account_id, user_id, trade_datetime, stock_no, stock_name, price_per_share, quantity, stock_total_price, handling_fee, transaction_tax, trade_total_price, remaining_amount, currency) FROM stdin;
+ST-TWD-1756880410709	20152730138617	mike	2025-09-03 10:30:00+08	2330	台積電	1160.000	100	116000.000	580.000	0.000	116580.000	383420.000	TWD
+ST-TWD-1760264386524	20152730138617	mike	2025-09-05 10:00:00+08	2618	長榮航	39.550	1000	39550.000	20.000	0.000	39570.000	343850.000	TWD
+ST-TWD-1760265152858	20152730138617	mike	2025-09-12 18:31:00+08	2330	台積電	4.000	100	400.000	5.000	0.000	405.000	344255.000	TWD
+ST-TWD-1760269079624	20152730138617	mike	2025-09-15 11:00:00+08	2892	第一金	29.600	1000	29600.000	20.000	0.000	29620.000	314635.000	TWD
+ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	1303	南亞	36.750	1000	36750.000	20.000	0.000	36770.000	277865.000	TWD
 \.
 
 
 --
--- TOC entry 4991 (class 0 OID 38208)
--- Dependencies: 237
+-- TOC entry 4990 (class 0 OID 38208)
+-- Dependencies: 236
 -- Data for Name: stock_storage_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name) FROM stdin;
+COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name, storage_quantity, cost_per_stock, storage_cost) FROM stdin;
 \.
 
 
 --
--- TOC entry 4986 (class 0 OID 38125)
--- Dependencies: 232
+-- TOC entry 4985 (class 0 OID 38125)
+-- Dependencies: 231
 -- Data for Name: stored_value_card_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -688,8 +699,8 @@ SVC-1756477469930	mike	cashCard	行政院月票	TWD	0.000	2000.000	-100.000	9999
 
 
 --
--- TOC entry 4987 (class 0 OID 38137)
--- Dependencies: 233
+-- TOC entry 4986 (class 0 OID 38137)
+-- Dependencies: 232
 -- Data for Name: stored_value_card_trade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -699,8 +710,8 @@ SVC-TWD-1756711025814	SVC-1756477469930	mike	2025-09-01 15:16:00+08	addValue	inc
 
 
 --
--- TOC entry 4988 (class 0 OID 38145)
--- Dependencies: 234
+-- TOC entry 4987 (class 0 OID 38145)
+-- Dependencies: 233
 -- Data for Name: trade_category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -743,8 +754,8 @@ creditcardBill	信用卡帳單	t	f	f	t	f	13
 
 
 --
--- TOC entry 4989 (class 0 OID 38155)
--- Dependencies: 235
+-- TOC entry 4988 (class 0 OID 38155)
+-- Dependencies: 234
 -- Data for Name: transaction_category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -755,8 +766,8 @@ income	收入
 
 
 --
--- TOC entry 4990 (class 0 OID 38160)
--- Dependencies: 236
+-- TOC entry 4989 (class 0 OID 38160)
+-- Dependencies: 235
 -- Data for Name: user_data; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -775,7 +786,7 @@ ALTER TABLE ONLY public.account_type
 
 
 --
--- TOC entry 4816 (class 2606 OID 38168)
+-- TOC entry 4814 (class 2606 OID 38168)
 -- Name: stored_value_card_list cashcard_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -784,7 +795,7 @@ ALTER TABLE ONLY public.stored_value_card_list
 
 
 --
--- TOC entry 4818 (class 2606 OID 38170)
+-- TOC entry 4816 (class 2606 OID 38170)
 -- Name: stored_value_card_trade cashcard_trade_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -901,25 +912,25 @@ ALTER TABLE ONLY public.stock_account_trade
 
 
 --
--- TOC entry 4814 (class 2606 OID 38196)
+-- TOC entry 4826 (class 2606 OID 38244)
 -- Name: stock_storage_detail stock_storage_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.stock_storage_detail
-    ADD CONSTRAINT stock_storage_detail_pkey PRIMARY KEY (sno, stock_no);
+    ADD CONSTRAINT stock_storage_detail_pkey PRIMARY KEY (trade_id, account_id, user_id);
 
 
 --
--- TOC entry 4826 (class 2606 OID 38214)
+-- TOC entry 4824 (class 2606 OID 38223)
 -- Name: stock_storage_list stock_storage_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.stock_storage_list
-    ADD CONSTRAINT stock_storage_list_pkey PRIMARY KEY (stock_account_id, user_id);
+    ADD CONSTRAINT stock_storage_list_pkey PRIMARY KEY (stock_account_id, user_id, stock_no);
 
 
 --
--- TOC entry 4820 (class 2606 OID 38200)
+-- TOC entry 4818 (class 2606 OID 38200)
 -- Name: trade_category trade_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -928,7 +939,7 @@ ALTER TABLE ONLY public.trade_category
 
 
 --
--- TOC entry 4822 (class 2606 OID 38202)
+-- TOC entry 4820 (class 2606 OID 38202)
 -- Name: transaction_category transaction_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -937,7 +948,7 @@ ALTER TABLE ONLY public.transaction_category
 
 
 --
--- TOC entry 4824 (class 2606 OID 38204)
+-- TOC entry 4822 (class 2606 OID 38204)
 -- Name: user_data user_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -945,7 +956,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-19 22:17:47
+-- Completed on 2025-10-22 16:44:31
 
 --
 -- PostgreSQL database dump complete
