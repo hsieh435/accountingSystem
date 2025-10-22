@@ -87,3 +87,6 @@ Ctrl+Shift+P，選擇 Developer: Reload Window 重新整理工作區
 https://ithelp.ithome.com.tw/users/20107688/ironman/1507
 
 https://publicapis.dev/category/currency-exchange
+
+
+Dashboard at homepage
