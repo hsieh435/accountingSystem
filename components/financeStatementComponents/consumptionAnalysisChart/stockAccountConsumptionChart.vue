@@ -3,10 +3,7 @@
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>證券帳戶：</span>
-        <accountSelect
-          :selectTargetId="'isStaccountAble'"
-          :selectTitle="'證券帳戶'"
-          @sendbackAccount="settingAccountId" />
+        <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>

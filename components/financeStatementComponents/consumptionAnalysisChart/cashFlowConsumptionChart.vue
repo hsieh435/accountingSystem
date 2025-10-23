@@ -3,7 +3,7 @@
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>現金流：</span>
-        <accountSelect :selectTargetId="'isCashflowAble'" :selectTitle="'現金流'" @sendbackAccount="settingAccountId" />
+        <accountSelect :selectTargetId="'isCashflowAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>

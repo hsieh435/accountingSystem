@@ -9,9 +9,7 @@
 
     <div class="flex justify-between items-center w-full bg-stone-200 px-5 py-1">
       <UBreadcrumb :items="breadcrumbItemList" />
-      <button class="btn-noshimehana" @click="clearLocalStorageKey(false)" type="button">
-        <span class="mx-2">登出</span><font-awesome-icon class="mx-1" :icon="['fas', 'sign-out-alt']" />
-      </button>
+      <UButton class="btn-noshimehana" label="登出" icon="i-mdi:exit-to-app" @click="clearLocalStorageKey(false)" />
     </div>
   </div>
 </template>

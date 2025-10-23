@@ -2,23 +2,17 @@
   <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
     <div class="flex items-center me-3 my-1">
       <span>{{ props.accountTypeName ? props.accountTypeName + "：" : "" }}</span>
-      <accountSelect
-        :selectTargetId="props.accountTypeId"
-        :selectTitle="props.accountTypeName"
-        @sendbackAccount="settingAccountId" />
+      <accountSelect :selectTargetId="props.accountTypeId" :sellectAll="false" @sendbackAccount="settingAccountId" />
     </div>
 
     <div class="flex items-center me-3 my-1">
-      <span>貨幣：</span
-      ><dataBaseCurrencySelect
-        :currencyIdGot="searchParams.currencyId"
-        :isDisable="searchParams.accountId.length > 0"
-        @sendbackCurrencyData="settingCurrency" />
+      <span>貨幣：</span>
+      <dataBaseCurrencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId.length > 0" @sendbackCurrencyData="settingCurrency" />
     </div>
 
     <div class="flex items-center me-3 my-1">
-      <span>收支類型：</span
-      ><tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeCategory="settingTradeCategory" />
+      <span>收支類型：</span>
+      <tradeCategorySelect :accountType="props.accountTypeId" @sendbackTradeCategory="settingTradeCategory" />
     </div>
 
     <span>時間區間：</span>

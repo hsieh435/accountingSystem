@@ -19,12 +19,11 @@ import * as tailwindStyles from "@/assets/css/tailwindStyles";
 const props = withDefaults(
   defineProps<{
     selectTargetId: string;
-    selectTitle?: string;
     accountIdGot?: string;
     sellectAll?: boolean;
     isDisable?: boolean;
   }>(),
-  { selectTargetId: "", selectTitle: "", accountIdGot: "", sellectAll: true, isDisable: false },
+  { selectTargetId: "", accountIdGot: "", sellectAll: true, isDisable: false },
 );
 
 const emits = defineEmits(["sendbackAccount"]);

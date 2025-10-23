@@ -1,11 +1,4 @@
 <template>
-  <!-- <template v-if="props.tradeCodeGot">
-    <ui-buttonGroup showView :viewText="'檢視交易代碼'" @dataView="searchingTradeCategory()" />
-    <ui-buttonGroup showRemove :createText="'刪除交易代碼'" @dataRemove="removeTradeCategory()" />
-  </template>
-  <template v-if="!props.tradeCodeGot">
-    <ui-buttonGroup showCreate :createText="'新增交易代碼'" @dataCreate="tradeCategoryDataHandling()" />
-  </template> -->
   <UModal
     title="收支資料設定"
     description="資料內容"

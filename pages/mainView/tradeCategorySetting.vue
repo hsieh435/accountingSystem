@@ -31,19 +31,19 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeCode }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ trade.tradeName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon icon="check" v-if="trade.isCashflowAble" />
+                    <UIcon name="i-fa7-solid:check" v-if="trade.isCashflowAble" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon icon="check" v-if="trade.isStoredvaluecardAble" />
+                    <UIcon name="i-fa7-solid:check" v-if="trade.isStoredvaluecardAble" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon icon="check" v-if="trade.isCreditcardAble" />
+                    <UIcon name="i-fa7-solid:check" v-if="trade.isCreditcardAble" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon icon="check" v-if="trade.isCuaccountAble" />
+                    <UIcon name="i-fa7-solid:check" v-if="trade.isCuaccountAble" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon icon="check" v-if="trade.isStaccountAble" />
+                    <UIcon name="i-fa7-solid:check" v-if="trade.isStaccountAble" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />

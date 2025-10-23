@@ -49,7 +49,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon class="mx-1" :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
+                    <UIcon name="i-fa7-solid:check" v-if="cashFlow.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">

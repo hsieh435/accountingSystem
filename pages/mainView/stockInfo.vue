@@ -31,17 +31,17 @@
       <ul>
         <li title="股價走勢">
           <label for="tab1" role="button">
-            <font-awesome-icon icon="fa-solid fa-chart-line" /><span>股價走勢</span>
+            <UIcon class="mx-1" name="i-streamline-plump:stock" /><span>股價走勢</span>
           </label>
         </li>
         <li title="除權息">
           <label for="tab2" role="button">
-            <font-awesome-icon icon="fa-solid fa-money-bill-trend-up" /><span>除權息</span>
+            <UIcon class="mx-1" name="i-fa7-solid:money-bill-trend-up" /><span>除權息</span>
           </label>
         </li>
         <li title="本益比 / 股價淨值比">
           <label for="tab3" role="button">
-            <font-awesome-icon icon="fa-solid fa-percent" /><span>本益比 / 股價淨值比</span>
+            <UIcon class="mx-1" name="i-fa7-solid:percent" /><span>本益比 / 股價淨值比</span>
           </label>
         </li>
       </ul>

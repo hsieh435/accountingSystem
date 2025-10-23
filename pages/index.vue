@@ -34,9 +34,7 @@
                 <label :class="labelClasses" for="password">密碼：</label>
               </div>
               <div class="flex justify-center items-center">
-                <UButton class="btn-ruri" @click="handleLogin()" type="button">
-                  <font-awesome-icon class="mx-1" :icon="['fas', 'right-to-bracket']" /><span class="mx-1">登入</span>
-                </UButton>
+                <UButton class="btn-ruri" label="登入" icon="i-material-symbols:login" @click="handleLogin()" />
                 <loginComponents-resetPassword />
                 <loginComponents-createUser />
               </div>
