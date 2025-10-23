@@ -32,8 +32,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇收支</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇收支</span>
           </div>
         </div>
 
@@ -45,8 +44,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇交易時間</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇交易時間</span>
           </div>
         </div>
 
@@ -60,8 +58,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇收支</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇收支</span>
           </div>
         </div>
 
@@ -76,8 +73,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCategory">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇收支項目</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇收支項目</span>
           </div>
         </div>
 
@@ -93,8 +89,7 @@
               @change="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ tradeAmountValidateText }}</span>
+            <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
           </div>
         </div>
 
@@ -280,7 +275,10 @@ function settingRemainingAmount() {
     cashFlowChosen.value.openAlert === true &&
     dataParams.remainingAmount < cashFlowChosen.value.alertValue
   ) {
-    messageToast({ message: `現金流餘額低於警示值 ${cashFlowChosen.value.alertValue}`, icon: "warning" });
+    messageToast({
+      message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      icon: "warning"
+    });
   }
   if (
     cashFlowChosen.value &&

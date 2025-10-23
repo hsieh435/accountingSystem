@@ -16,8 +16,8 @@ import { createError } from "h3"
 declare function definePageMeta(meta: any): void;
 definePageMeta({
   middleware: "auth",
-  functionTitle: "資訊查詢",
-  subTitle: "股票比較",
+  functionTitle: "財務報表",
+  subTitle: "獲利紀錄",
 });
 
 

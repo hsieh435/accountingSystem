@@ -32,8 +32,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditCardId">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇信用卡</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇信用卡</span>
           </div>
         </div>
 
@@ -45,8 +44,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請填寫交易時間</span>
+            <span class="col-start-3 col-span-4 text-red-500">請填寫交易時間</span>
           </div>
         </div>
 
@@ -61,8 +59,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCategory">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇收支項目</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇收支項目</span>
           </div>
         </div>
 
@@ -77,8 +74,7 @@
               :step="setStep" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">交易金額不得為負</span>
+            <span class="col-start-3 col-span-4 text-red-500">交易金額不得為負</span>
           </div>
         </div>
 

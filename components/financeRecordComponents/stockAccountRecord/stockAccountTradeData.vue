@@ -32,8 +32,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.accountId">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請選擇證券帳戶</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇證券帳戶</span>
           </div>
         </div>
 
@@ -45,8 +44,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeDatetime">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請填寫交易時間</span>
+            <span class="col-start-3 col-span-4 text-red-500">請填寫交易時間</span>
           </div>
         </div>
 
@@ -76,8 +74,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeCategory">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請選擇交易項目</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇交易項目</span>
           </div>
         </div>
 
@@ -99,8 +96,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.stockNo && !props.tradeIdGot">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請選擇股票</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇股票</span>
           </div>
         </div>
 
@@ -123,8 +119,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.pricePerShare || !dataValidate.quantity">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">每股價格與股數需為正數</span>
+            <span class="col-start-3 col-span-6 text-red-500">每股價格與股數需為正數</span>
           </div>
         </div>
 
@@ -150,8 +145,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.handlingFee || !dataValidate.transactionTax">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">手續費與交易稅不得為負</span>
+            <span class="col-start-3 col-span-4 text-red-500">手續費與交易稅不得為負</span>
           </div>
         </div>
 
@@ -367,7 +361,10 @@ function settingRemainingAmount() {
     stockAccountChosen.value.openAlert === true &&
     dataParams.remainingAmount < stockAccountChosen.value.alertValue
   ) {
-    messageToast({ message: `現金流餘額低於警示值 ${stockAccountChosen.value.alertValue}`, icon: "warning" });
+    messageToast({
+      message: `帳戶餘額已低於 ${currencyFormat(stockAccountChosen.value.alertValue)} 元`,
+      icon: "warning"
+    });
   }
   if (
     stockAccountChosen.value &&
