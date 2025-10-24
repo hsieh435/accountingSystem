@@ -108,6 +108,7 @@
               v-model="dataParams.pricePerShare"
               orientation="vertical"
               :min="0"
+              :step="0.01"
               @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
             <UInputNumber
@@ -288,9 +289,9 @@ async function searchingStockAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
+    console.log("fetchStockAccountRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      open.value = true;
     } else {
       messageToast({ message: res.data.message });
     }

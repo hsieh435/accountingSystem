@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-22 16:44:31
+-- Started on 2025-10-24 23:44:04
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -611,13 +611,14 @@ financeRecord	creditCardRecord	信用卡收支	creditCardRecord	banknote-arrow-u
 financeRecord	currencyAccountRecord	存款帳戶收支	currencyAccountRecord	banknote-arrow-up	4
 financeRecord	stockAccountRecord	證券帳戶收支	stockAccountRecord	banknote-arrow-up	5
 outerInformation	currencyExRateInfo	貨幣匯率查詢	currencyExRateInfo	chart-candlestick	2
-outerInformation	stockInfo	股市查詢	stockInfo	chart-candlestick	3
 outerInformation	outerSystemConnect	連線測試	outerSystemConnect	radio	1
 personalSetting	storedValueCardSetting	儲值票卡資料設定	storedValueCardSetting	wallet-cards	3
 financeRecord	storedValueCardRecord	儲值票卡收支	storedValueCardRecord	banknote-arrow-up	2
 financeStatement	consumptionAnalysis	收支分析	consumptionAnalysis	clipboard-pen-line	1
 financeStatement	stockInvestmentStatement	證券投資報表	stockInvestmentStatement	clipboard-pen-line	2
-outerInformation	stockCompair	股票比較	stockCompair	grid-2x2-plus	4
+outerInformation	stockInfo	股市查詢	stockInfo	search	3
+financeStatement	stockProfitRecord	獲利紀錄	stockProfitRecord	dollar-sign	4
+financeStatement	storageProfit	庫存損益	storageProfit	dollar-sign	3
 \.
 
 
@@ -656,9 +657,9 @@ COPY public.stock_account_list (account_id, user_id, account_type, account_name,
 COPY public.stock_account_trade (trade_id, account_id, user_id, trade_datetime, trade_category, transaction_type, stock_no, stock_name, price_per_share, quantity, stock_total_price, handling_fee, transaction_tax, trade_total_price, remaining_amount, currency, trade_description, trade_note) FROM stdin;
 ST-TWD-1756880410709	20152730138617	mike	2025-09-03 10:30:00+08	stockBuy	expense	2330	台積電	1160.000	100	116000.000	580.000	0.000	116580.000	383420.000	TWD		
 ST-TWD-1760264386524	20152730138617	mike	2025-09-05 10:00:00+08	stockBuy	expense	2618	長榮航	39.550	1000	39550.000	20.000	0.000	39570.000	343850.000	TWD		
-ST-TWD-1760265152858	20152730138617	mike	2025-09-12 18:31:00+08	cashDividend	income	2330	台積電	4.000	100	400.000	5.000	0.000	405.000	344255.000	TWD		
-ST-TWD-1760269079624	20152730138617	mike	2025-09-15 11:00:00+08	stockBuy	expense	2892	第一金	29.600	1000	29600.000	20.000	0.000	29620.000	314635.000	TWD		
-ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	stockBuy	expense	1303	南亞	36.750	1000	36750.000	20.000	0.000	36770.000	277865.000	TWD		
+ST-TWD-1760265152858	20152730138617	mike	2025-09-12 18:31:00+08	cashDividend	income	2330	台積電	4.000	100	400.000	5.000	0.000	395.000	344245.000	TWD		
+ST-TWD-1760269079624	20152730138617	mike	2025-09-15 11:00:00+08	stockBuy	expense	2892	第一金	29.600	1000	29600.000	20.000	0.000	29620.000	314625.000	TWD		
+ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	stockBuy	expense	1303	南亞	36.750	1000	36750.000	20.000	0.000	36770.000	277855.000	TWD		
 \.
 
 
@@ -684,6 +685,10 @@ ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	1303	南亞	36.7
 --
 
 COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name, storage_quantity, cost_per_stock, storage_cost) FROM stdin;
+20152730138617	mike	1303	南亞	1000	36.75	36770.000
+20152730138617	mike	2892	第一金	1000	29.6	29620.000
+20152730138617	mike	2618	長榮航	1000	39.55	39570.000
+20152730138617	mike	2330	台積電	100	1160	116580.000
 \.
 
 
@@ -956,7 +961,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-22 16:44:31
+-- Completed on 2025-10-24 23:44:05
 
 --
 -- PostgreSQL database dump complete

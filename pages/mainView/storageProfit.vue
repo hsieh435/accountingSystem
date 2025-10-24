@@ -1,12 +1,12 @@
 <template>
   <div class="flex-col justify-start items-center px-10 py-5">
-    <!-- <UAccordion
+    <UAccordion
       :items="items"
       type="multiple"
       :unmount-on-hide="false"
       trailing-icon="i-lucide-arrow-down">
       <template #body="{ item }"> This is the {{ item.label }} panel. </template>
-    </UAccordion> -->
+    </UAccordion>
   </div>
 </template>
 <script setup lang="ts">
@@ -17,7 +17,7 @@ declare function definePageMeta(meta: any): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "財務報表",
-  subTitle: "獲利紀錄",
+  subTitle: "庫存損益",
 });
 
 const items = ref<AccordionItem[]>([
