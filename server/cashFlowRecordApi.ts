@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { ICashFlowRecordList, IFinanceRecordSearchingParams } from "@/models/index.ts";
+import { ICashFlowData, IFinanceRecordSearchingParams } from "@/models/index.ts";
 
 export async function fetchCashFlowRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/list", "POST", {
@@ -15,14 +15,14 @@ export async function fetchCashFlowRecordByTradeId(data: { cashflowId: string; t
   return await response.json();
 }
 
-export async function fetchCashFlowRecordCreate(data: ICashFlowRecordList) {
+export async function fetchCashFlowRecordCreate(data: ICashFlowData) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/create", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
 
-export async function fetchCashFlowRecordUpdate(data: ICashFlowRecordList) {
+export async function fetchCashFlowRecordUpdate(data: ICashFlowData) {
   const response = await apiFetch("/accounting_system_backend/api/cashFlowRecord/update", "POST", {
     body: JSON.stringify(data),
   });

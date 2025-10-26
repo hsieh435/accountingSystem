@@ -123,6 +123,12 @@ export interface ICashFlowRecordList {
   tradeNote: string;
 }
 
+// 現金流資料新增、編輯 interface
+export interface ICashFlowData {
+  updateData: ICashFlowRecordList;
+  oriData: any;
+}
+
 // 儲值票卡列表 interface
 export interface IStoredValueCardList {
   no?: number;

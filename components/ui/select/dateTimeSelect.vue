@@ -35,8 +35,15 @@ const emits = defineEmits(["sendbackDateTime"]);
 const dateTimeString = ref<number>(getCurrentTimestamp());
 
 onMounted(async () => {
-  // console.log("props:", props);
+  // console.log("onMounted props:", props);
   dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
+});
+
+watch(() => props, () => {
+  // console.log("watch props:", props);
+  dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
+},{
+  deep: true,
 });
 
 watch(dateTimeString, () => {
