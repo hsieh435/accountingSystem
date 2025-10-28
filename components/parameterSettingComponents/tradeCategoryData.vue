@@ -43,7 +43,7 @@
             <input
               :class="[
                 tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.tradeName ? 'outline-red-50' : 'outline-1 outline-red-500',
+                dataValidate.tradeName ? 'outline-red-50' : 'outline-1 outline-red-500'
               ]"
               v-model="dataParams.tradeName" />
           </div>
@@ -67,14 +67,14 @@
           </div>
         </div>
 
-        <div class="flex justify-start items-start grid grid-cols-6 border-1">
-          <span class="col-span-2 text-right border-1">適用：</span>
-          <div class="flex flex-wrap justify-start items-center col-span-4 border-1">
-            <UCheckbox v-model="dataParams.isCashflowAble" label="現金" />
-            <UCheckbox v-model="dataParams.isStoredvaluecardAble" label="儲值票卡" />
-            <UCheckbox v-model="dataParams.isCreditcardAble" label="信用卡" />
-            <UCheckbox v-model="dataParams.isCuaccountAble" label="存款帳戶" />
-            <UCheckbox v-model="dataParams.isStaccountAble" label="證券帳戶" />
+        <div class="flex justify-start items-start grid grid-cols-6">
+          <span class="col-span-2 text-right">適用：</span>
+          <div class="flex flex-wrap justify-start items-center col-span-3">
+            <UCheckbox class="mx-2" v-model="dataParams.isCashflowAble" label="現金" />
+            <UCheckbox class="mx-2" v-model="dataParams.isStoredvaluecardAble" label="儲值票卡" />
+            <UCheckbox class="mx-2" v-model="dataParams.isCreditcardAble" label="信用卡" />
+            <UCheckbox class="mx-2" v-model="dataParams.isCuaccountAble" label="存款帳戶" />
+            <UCheckbox class="mx-2" v-model="dataParams.isStaccountAble" label="證券帳戶" />
           </div>
         </div>
 
