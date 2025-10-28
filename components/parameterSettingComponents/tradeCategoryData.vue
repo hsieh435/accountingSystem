@@ -67,29 +67,14 @@
           </div>
         </div>
 
-        <div class="flex justify-start items-start grid grid-cols-6">
-          <span class="col-span-2 text-right">適用：</span>
-          <div class="flex flex-wrap justify-start items-center col-span-4">
-            <div class="me-2">
-              <input class="border border-gray-300 mx-1" v-model="dataParams.isCashflowAble" type="checkbox" />
-              <label for="isCashflowAble">現金</label>
-            </div>
-            <div class="me-2">
-              <input class="border border-gray-300 mx-1" v-model="dataParams.isStoredvaluecardAble" type="checkbox" />
-              <label for="isStoredvaluecardAble">儲值票卡</label>
-            </div>
-            <div class="me-2">
-              <input class="border border-gray-300 mx-1" v-model="dataParams.isCreditcardAble" type="checkbox" />
-              <label for="isCreditcardAble">信用卡</label>
-            </div>
-            <div class="me-2">
-              <input class="border border-gray-300 mx-1" v-model="dataParams.isCuaccountAble" type="checkbox" />
-              <label for="isCuaccountAble">存款帳戶</label>
-            </div>
-            <div class="me-2">
-              <input class="border border-gray-300 mx-1" v-model="dataParams.isStaccountAble" type="checkbox" />
-              <label for="isStaccountAble">證券帳戶</label>
-            </div>
+        <div class="flex justify-start items-start grid grid-cols-6 border-1">
+          <span class="col-span-2 text-right border-1">適用：</span>
+          <div class="flex flex-wrap justify-start items-center col-span-4 border-1">
+            <UCheckbox v-model="dataParams.isCashflowAble" label="現金" />
+            <UCheckbox v-model="dataParams.isStoredvaluecardAble" label="儲值票卡" />
+            <UCheckbox v-model="dataParams.isCreditcardAble" label="信用卡" />
+            <UCheckbox v-model="dataParams.isCuaccountAble" label="存款帳戶" />
+            <UCheckbox v-model="dataParams.isStaccountAble" label="證券帳戶" />
           </div>
         </div>
 

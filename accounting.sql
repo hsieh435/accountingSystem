@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-24 23:44:04
+-- Started on 2025-10-28 23:57:49
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -493,7 +493,7 @@ CF-TWD-1759418476283	CF-1759236429957	mike	2025-10-01 12:30:00+08	food	expense	1
 CF-TWD-1759418508439	CF-1759236429957	mike	2025-10-01 18:00:00+08	transportation	expense	1200.000	1570.000	TWD	悠遊卡儲值	
 CF-TWD-1759418594420	CF-1759236429957	mike	2025-10-01 18:30:00+08	fuelBills	expense	500.000	1070.000	TWD	加油	95 無鉛汽油每公升 27.7 元，共 18.18 公升
 CF-TWD-1759418851030	CF-1759236429957	mike	2025-10-01 19:00:00+08	phoneBill	expense	599.000	471.000	TWD	9月通話費	
-CF-TWD-1759418902656	CF-1759236429957	mike	2025-10-01 19:30:00+08	food	expense	100.000	371.000	TWD	晚餐	
+CF-TWD-1759418902656	CF-1759236429957	mike	2025-10-01 19:30:00+08	food	expense	100.000	271.000	TWD	晚餐	
 \.
 
 
@@ -730,7 +730,6 @@ insurance	保險費	t	f	t	t	f	14
 education	教育費	t	t	t	t	f	10
 fuelBills	燃油費	t	t	t	t	f	9
 atmDeposit	ATM 存入	t	f	f	t	t	50
-salary	薪資	t	f	f	t	f	1
 food	伙食費	t	t	t	t	f	2
 clothing	治裝費	t	t	t	t	f	3
 transportation	交通費	t	t	t	t	f	4
@@ -755,6 +754,8 @@ addValue	票卡儲值	t	t	f	f	f	12
 default	初始設置	f	f	f	f	f	99
 investments	投資	t	f	f	t	f	11
 creditcardBill	信用卡帳單	t	f	f	t	f	13
+donation	捐款	t	t	t	t	f	16
+salary	薪資	t	f	f	t	f	1
 \.
 
 
@@ -961,7 +962,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-24 23:44:05
+-- Completed on 2025-10-28 23:57:49
 
 --
 -- PostgreSQL database dump complete
