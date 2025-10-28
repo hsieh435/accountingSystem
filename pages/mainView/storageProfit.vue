@@ -11,6 +11,9 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
+import { IResponse } from "@/models/index";
+import { errorMessageDialog } from "@/composables/swalDialog";
 import type { AccordionItem } from "@nuxt/ui";
 
 declare function definePageMeta(meta: any): void;
@@ -40,6 +43,23 @@ const items = ref<AccordionItem[]>([
 
 onMounted(() => {
   // navigateTo("/mainView");
+  aaaaaaaaaaaaaa();
 });
+
+
+async function aaaaaaaaaaaaaa() {
+
+  try {
+    const res: IResponse = await fetchStockStorageProfitList("20152730138617");
+    console.log("res:", res.data.data);
+    if (res.data.returnCode === 0) {
+      //
+    } else {
+      errorMessageDialog({ message: res.data.message });
+    }
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message });
+  }
+}
 </script>
 <style lang="scss" scoped></style>
