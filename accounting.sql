@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-28 23:57:49
+-- Started on 2025-10-30 00:10:21
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -350,9 +350,7 @@ CREATE TABLE public.stock_storage_list (
     user_id character varying NOT NULL,
     stock_no character varying NOT NULL,
     stock_name character varying NOT NULL,
-    storage_quantity integer NOT NULL,
-    cost_per_stock numeric NOT NULL,
-    storage_cost numeric NOT NULL
+    storage_quantity integer NOT NULL
 );
 
 
@@ -684,11 +682,11 @@ ST-TWD-1760270811283	20152730138617	mike	2025-09-16 11:00:00+08	1303	南亞	36.7
 -- Data for Name: stock_storage_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name, storage_quantity, cost_per_stock, storage_cost) FROM stdin;
-20152730138617	mike	1303	南亞	1000	36.75	36770.000
-20152730138617	mike	2892	第一金	1000	29.6	29620.000
-20152730138617	mike	2618	長榮航	1000	39.55	39570.000
-20152730138617	mike	2330	台積電	100	1160	116580.000
+COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name, storage_quantity) FROM stdin;
+20152730138617	mike	1303	南亞	1000
+20152730138617	mike	2892	第一金	1000
+20152730138617	mike	2618	長榮航	1000
+20152730138617	mike	2330	台積電	100
 \.
 
 
@@ -918,21 +916,21 @@ ALTER TABLE ONLY public.stock_account_trade
 
 
 --
--- TOC entry 4826 (class 2606 OID 38244)
+-- TOC entry 4826 (class 2606 OID 38248)
 -- Name: stock_storage_detail stock_storage_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.stock_storage_detail
-    ADD CONSTRAINT stock_storage_detail_pkey PRIMARY KEY (trade_id, account_id, user_id);
+    ADD CONSTRAINT stock_storage_detail_pkey PRIMARY KEY (account_id, trade_id);
 
 
 --
--- TOC entry 4824 (class 2606 OID 38223)
+-- TOC entry 4824 (class 2606 OID 38246)
 -- Name: stock_storage_list stock_storage_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.stock_storage_list
-    ADD CONSTRAINT stock_storage_list_pkey PRIMARY KEY (stock_account_id, user_id, stock_no);
+    ADD CONSTRAINT stock_storage_list_pkey PRIMARY KEY (stock_account_id, stock_no);
 
 
 --
@@ -962,7 +960,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-28 23:57:49
+-- Completed on 2025-10-30 00:10:21
 
 --
 -- PostgreSQL database dump complete
