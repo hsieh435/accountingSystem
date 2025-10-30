@@ -1,18 +1,21 @@
 <template>
-  <div class="flex-col justify-start items-center px-10 py-5">
+  <div class="flex-col justify-start items-center">
     <UAccordion
-      :items="items"
+      :ui="{ label: 'mx-5', trailingIcon: 'mx-5', body: 'mx-5' }"
+      :items="accordionItems"
       type="multiple"
       :unmount-on-hide="false"
       trailing-icon="i-lucide-arrow-down">
-      <template #body="{ item }"> This is the {{ item.label }} panel. </template>
+      <template #body="{ item }">
+        <span>明細</span>
+      </template>
     </UAccordion>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
-import { IResponse } from "@/models/index";
+import { IStockStorageList, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import type { AccordionItem } from "@nuxt/ui";
 
@@ -23,37 +26,23 @@ definePageMeta({
   subTitle: "庫存損益",
 });
 
-const items = ref<AccordionItem[]>([
-  {
-    label: "Icons",
-    icon: "i-lucide-smile",
-    content: "You have nothing to do, @nuxt/icon will handle it automatically.",
-  },
-  {
-    label: "Colors",
-    icon: "i-lucide-swatch-book",
-    content: "Choose a primary and a neutral color from your Tailwind CSS theme.",
-  },
-  {
-    label: "Components",
-    icon: "i-lucide-box",
-    content: "You can customize components by using the `class` / `ui` props or in your app.config.ts.",
-  },
-]);
+const accordionItems = ref<AccordionItem[]>([]);
 
 onMounted(() => {
-  // navigateTo("/mainView");
-  aaaaaaaaaaaaaa();
+  searchingStockStorage();
 });
 
 
-async function aaaaaaaaaaaaaa() {
+async function searchingStockStorage() {
 
   try {
     const res: IResponse = await fetchStockStorageProfitList("20152730138617");
     console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
-      //
+      accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
+        label: `${item.stockNo} / ${item.stockName}`,
+        // content: item.content,
+      }));
     } else {
       errorMessageDialog({ message: res.data.message });
     }

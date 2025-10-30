@@ -300,6 +300,27 @@ export interface IStockAccountRecordList {
   tradeNote: string;
 }
 
+// 存股列表 interface
+export interface IStockStorageList {
+  stockAccountId: string;
+  stockName: string;
+  stockNo: string;
+  storageQuantity: number;
+  userId: string;
+  stockStorageDetail: {
+    currency: string;
+    handlingFee: number;
+    pricePerShare: number;
+    quantity: number;
+    stockName: string;
+    stockNo: string;
+    stockTotalPrice: number;
+    tradeDatetime: string;
+    tradeTotalPrice: number;
+    transactionTax: number;
+  }[];
+}
+
 // 股票歷史價位查詢參數 interface
 export interface IStockPriceSearchingParams {
   stockNo: string;
