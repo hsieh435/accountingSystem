@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
+    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>股票：</span><stockListSelect @sendbackStockNo="settingStockNo" />
       </div>
@@ -78,13 +78,9 @@ definePageMeta({
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
-const stockPriceLineChart = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/stock/stockInfo/stockPriceLineChart.vue"),
-);
+const stockPriceLineChart = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInfo/stockPriceLineChart.vue"));
 const stockPerPbr = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInfo/stockPerPbr.vue"));
-const stockInterest = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/stock/stockInfo/stockInterest.vue"),
-);
+const stockInterest = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInfo/stockInterest.vue"));
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",

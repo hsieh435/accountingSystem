@@ -10,7 +10,6 @@
       type="multiple"
       trailing-icon="i-lucide-arrow-down">
       <template #body="{ item }">
-        <span>明細</span>
         <stockInvestmentChart :stockAccountIdGot="searchingParams.accountId" :stockNoGot="item.content">
         </stockInvestmentChart>
       </template>
@@ -18,7 +17,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
 import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
@@ -39,11 +38,6 @@ const stockInvestmentChart = defineAsyncComponent(
 const accordionItems = ref<AccordionItem[]>([]);
 const searchingParams = reactive<{ accountId: string }>({
   accountId: "",
-});
-
-
-onMounted(() => {
-  // searchingStockStorage();
 });
 
 async function searchingStockStorage(accountItem: IStockAccountList[]) {

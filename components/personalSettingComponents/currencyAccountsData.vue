@@ -140,16 +140,9 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">提醒：</span>
-          <div class="col-span-1 flex justify-start items-center">
-            <switchComponent :switchValueGot="dataParams.openAlert" @sendBackSwitchValue="settingOpenAlert" />
-          </div>
+          <USwitch v-model="dataParams.openAlert" />
           <div class="flex justify-start items-center col-span-3">
-            <input
-              class="border border-gray-300 mx-1"
-              id="isSalaryAccount"
-              type="checkbox"
-              v-model="dataParams.isSalaryAccount" />
-            <span><label for="isSalaryAccount">薪資帳戶</label></span>
+            <UCheckbox label="薪資帳戶" v-model="dataParams.isSalaryAccount" size="xl" />
           </div>
         </div>
 
@@ -190,7 +183,6 @@ import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composabl
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const switchComponent = defineAsyncComponent(() => import("@/components/ui/switch.vue"));
 
 const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
@@ -257,10 +249,6 @@ async function searchingCurrencyAccountData() {
 
 function settingCurrency(currencyData: ICurrencyList) {
   dataParams.currency = currencyData.currencyCode;
-}
-
-async function settingOpenAlert(switchValue: boolean) {
-  dataParams.openAlert = switchValue;
 }
 
 async function validateData() {

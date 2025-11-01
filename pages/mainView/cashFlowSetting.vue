@@ -31,16 +31,8 @@
                   :class="tailwindStyles.getTbodytrClasses()"
                   v-for="cashFlow in tableData"
                   :key="cashFlow.cashflowId">
-                  <div :class="tailwindStyles.getTdClasses()" class="">
-                    <ui-switch
-                      id="cashFlowSwitch"
-                      :switchValueGot="cashFlow.enable"
-                      @sendBackSwitchValue="
-                        (value: boolean) => {
-                          cashFlow.enable = value;
-                          adjustAbleStatus(cashFlow);
-                        }
-                      " />
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <USwitch v-model="cashFlow.enable" @change="adjustAbleStatus(cashFlow)" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.cashflowName }}</div>

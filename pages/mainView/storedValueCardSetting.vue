@@ -33,14 +33,7 @@
                   v-for="card in tableData"
                   :key="card.storedValueCardId">
                   <div :class="tailwindStyles.getTdClasses()">
-                    <ui-switch
-                      :switchValueGot="card.enable"
-                      @sendBackSwitchValue="
-                        (value: boolean) => {
-                          card.enable = value;
-                          adjustAbleStatus(card);
-                        }
-                      " />
+                    <USwitch v-model="card.enable" @change="adjustAbleStatus(card)" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.storedValueCardName }}</div>

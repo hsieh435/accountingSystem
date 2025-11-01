@@ -28,14 +28,7 @@
               <div :class="tailwindStyles.getTbodyClasses()">
                 <div :class="tailwindStyles.getTbodytrClasses()" v-for="account in tableData" :key="account.accountId">
                   <div :class="tailwindStyles.getTdClasses()">
-                    <ui-switch
-                      :switchValueGot="account.enable"
-                      @sendBackSwitchValue="
-                        (value: boolean) => {
-                          account.enable = value;
-                          adjustAbleStatus(account);
-                        }
-                      " />
+                    <USwitch v-model="account.enable" @change="adjustAbleStatus(account)" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ account.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ account.accountName }}</div>

@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/models/index";
+import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/models/index.ts";
 
 export async function fetchTestConnection(data: { user_id: string; password: string }) {
   const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {

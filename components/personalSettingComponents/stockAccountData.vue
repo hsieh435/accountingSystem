@@ -141,9 +141,7 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">提醒：</span>
-          <div class="col-span-4 flex justify-start items-center">
-            <switchComponent :switchValueGot="dataParams.openAlert" @sendBackSwitchValue="settingOpenAlert" />
-          </div>
+          <USwitch v-model="dataParams.openAlert" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
@@ -183,7 +181,6 @@ import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composabl
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const switchComponent = defineAsyncComponent(() => import("@/components/ui/switch.vue"));
 
 const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
 const emits = defineEmits(["dataReseaching"]);
@@ -249,10 +246,6 @@ async function searchingStockAccountData() {
 
 function settingCurrency(currencyData: ICurrencyList) {
   dataParams.currency = currencyData.currencyCode;
-}
-
-async function settingOpenAlert(switchValue: boolean) {
-  dataParams.openAlert = switchValue;
 }
 
 async function validateData() {

@@ -124,11 +124,9 @@ export function yearMonthFormat(dateString: string) {
 
 
 // 日期前後推移
-export function dateMove(dateStr: string  , days: number = 0): string {
+export function dateMove(dateStr: string , days: number = 0): string {
   const date = new Date(dateStr);
-  date.setDate(date.getDate() + days + 1);
-  // console.log("dateMove:", date.toISOString().split('T')[0]);
-  // console.log("dateMove:", date.toString());
+  date.setDate(date.getDate() + days);
   return date.toISOString().split('T')[0];
 }
 
