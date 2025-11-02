@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-10-30 22:18:08
+-- Started on 2025-11-03 00:07:30
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -540,7 +540,7 @@ CC-TWD-1756719288930	CC-1756477841311	2025-09-01 17:00:00+08	mike	food	1000.000	
 --
 
 COPY public.currency_account_list (account_id, user_id, account_type, account_name, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, is_salary_account, open_alert, enable, created_date, note) FROM stdin;
-CA-111007722765	mike	currencyAccount	LINE BANK 帳戶	824	LINE BANK	TWD	0.000	5000.000	0.000	5000.000	f	t	t	2025-09-07 16:46:52+08	
+CA-666223322165	mike	currencyAccount	LINE BANK 帳戶	824	LINE BANK	TWD	0.000	5000.000	0.000	5000.000	f	t	t	2025-09-07 16:46:52+08	
 \.
 
 
@@ -551,7 +551,7 @@ CA-111007722765	mike	currencyAccount	LINE BANK 帳戶	824	LINE BANK	TWD	0.000	50
 --
 
 COPY public.currency_account_trade (trade_id, account_id, trade_datetime, user_id, trade_category, transaction_type, trade_amount, remaining_amount, currency, trade_description, trade_note) FROM stdin;
-CA-TWD-1757234942642	CA-111007722765	2025-09-07 16:48:43.893+08	mike	transferIn	income	5000.000	5000.000	TWD		
+CA-TWD-1757234942642	CA-666223322165	2025-09-07 16:48:43.893+08	mike	transferIn	income	5000.000	5000.000	TWD		
 \.
 
 
@@ -612,10 +612,9 @@ outerInformation	outerSystemConnect	連線測試	outerSystemConnect	radio	1
 personalSetting	storedValueCardSetting	儲值票卡資料設定	storedValueCardSetting	wallet-cards	3
 financeRecord	storedValueCardRecord	儲值票卡收支	storedValueCardRecord	banknote-arrow-up	2
 financeStatement	consumptionAnalysis	收支分析	consumptionAnalysis	clipboard-pen-line	1
-financeStatement	stockInvestmentStatement	證券投資報表	stockInvestmentStatement	clipboard-pen-line	2
 outerInformation	stockInfo	股市查詢	stockInfo	search	3
-financeStatement	stockProfitRecord	獲利紀錄	stockProfitRecord	dollar-sign	4
-financeStatement	storageProfit	庫存損益	storageProfit	dollar-sign	3
+financeStatement	stockProfitRecord	獲利紀錄	stockProfitRecord	dollar-sign	3
+financeStatement	storageProfit	庫存損益	storageProfit	dollar-sign	2
 \.
 
 
@@ -641,7 +640,7 @@ outerInformation	資訊查詢	book-open	4
 --
 
 COPY public.stock_account_list (account_id, user_id, account_type, account_name, account_bank_code, account_bank_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, enable, created_date, note) FROM stdin;
-20152730138617	mike	stockAccount	元大證券帳戶	806	元大銀行	TWD	500000.000	39090.000	0.000	50000.000	t	t	2025-08-29 22:51:35+08	
+202508292251	mike	stockAccount	元大證券帳戶	806	元大銀行	TWD	500000.000	39090.000	0.000	50000.000	t	t	2025-08-29 22:51:35+08	
 \.
 
 
@@ -652,12 +651,12 @@ COPY public.stock_account_list (account_id, user_id, account_type, account_name,
 --
 
 COPY public.stock_account_trade (trade_id, account_id, user_id, trade_datetime, trade_category, transaction_type, stock_no, stock_name, price_per_share, quantity, stock_total_price, handling_fee, transaction_tax, trade_total_price, remaining_amount, currency, trade_description, trade_note) FROM stdin;
-ST-TWD-1761832037346	20152730138617	mike	2025-07-03 13:00:00+08	stockBuy	expense	2330	台積電	1090.000	100	109000.000	20.000	0.000	109020.000	390980.000	TWD		
-ST-TWD-1761832219474	20152730138617	mike	2025-07-07 10:00:00+08	stockBuy	expense	2891	中信金	44.950	1000	44950.000	20.000	0.000	44970.000	346010.000	TWD		
-ST-TWD-1761832388618	20152730138617	mike	2025-07-11 11:30:00+08	stockBuy	expense	1301	台塑	34.000	1000	34000.000	20.000	0.000	34020.000	311990.000	TWD		
-ST-TWD-1761832866519	20152730138617	mike	2025-07-15 12:00:00+08	stockBuy	expense	6505	台塑化	36.350	1000	36350.000	20.000	0.000	36370.000	275620.000	TWD		
-ST-TWD-1761833029560	20152730138617	mike	2025-08-27 12:00:00+08	stockBuy	expense	2330	台積電	1190.000	200	238000.000	20.000	0.000	238020.000	37600.000	TWD		
-ST-TWD-1761833127654	20152730138617	mike	2025-10-09 00:01:00+08	cashDividend	income	2330	台積電	5.000	300	1500.000	10.000	0.000	1490.000	39090.000	TWD		
+ST-TWD-1761832037346	202508292251	mike	2025-07-03 13:00:00+08	stockBuy	expense	2330	台積電	1090.000	100	109000.000	20.000	0.000	109020.000	390980.000	TWD		
+ST-TWD-1761832219474	202508292251	mike	2025-07-07 10:00:00+08	stockBuy	expense	2891	中信金	44.950	1000	44950.000	20.000	0.000	44970.000	346010.000	TWD		
+ST-TWD-1761832388618	202508292251	mike	2025-07-11 11:30:00+08	stockBuy	expense	1301	台塑	34.000	1000	34000.000	20.000	0.000	34020.000	311990.000	TWD		
+ST-TWD-1761832866519	202508292251	mike	2025-07-15 12:00:00+08	stockBuy	expense	6505	台塑化	36.350	1000	36350.000	20.000	0.000	36370.000	275620.000	TWD		
+ST-TWD-1761833029560	202508292251	mike	2025-08-27 12:00:00+08	stockBuy	expense	2330	台積電	1190.000	200	238000.000	20.000	0.000	238020.000	37600.000	TWD		
+ST-TWD-1761833127654	202508292251	mike	2025-10-09 00:01:00+08	cashDividend	income	2330	台積電	5.000	300	1500.000	10.000	0.000	1490.000	39090.000	TWD		
 \.
 
 
@@ -668,11 +667,11 @@ ST-TWD-1761833127654	20152730138617	mike	2025-10-09 00:01:00+08	cashDividend	inc
 --
 
 COPY public.stock_storage_detail (trade_id, account_id, user_id, trade_datetime, stock_no, stock_name, price_per_share, quantity, stock_total_price, handling_fee, transaction_tax, trade_total_price, currency) FROM stdin;
-ST-TWD-1761833029560	20152730138617	mike	2025-08-27 12:00:00+08	2330	台積電	1190.000	200	238000.000	20.000	0.000	238020.000	TWD
-ST-TWD-1761832866519	20152730138617	mike	2025-07-15 12:00:00+08	6505	台塑化	36.350	1000	36350.000	20.000	0.000	36370.000	TWD
-ST-TWD-1761832388618	20152730138617	mike	2025-07-11 11:30:00+08	1301	台塑	34.000	1000	34000.000	20.000	0.000	34020.000	TWD
-ST-TWD-1761832219474	20152730138617	mike	2025-07-07 10:00:00+08	2891	中信金	44.950	1000	44950.000	20.000	0.000	44970.000	TWD
-ST-TWD-1761832037346	20152730138617	mike	2025-07-03 13:00:00+08	2330	台積電	1090.000	100	109000.000	20.000	0.000	109020.000	TWD
+ST-TWD-1761832037346	202508292251	mike	2025-07-03 13:00:00+08	2330	台積電	1090.000	100	109000.000	20.000	0.000	109020.000	TWD
+ST-TWD-1761832219474	202508292251	mike	2025-07-07 10:00:00+08	2891	中信金	44.950	1000	44950.000	20.000	0.000	44970.000	TWD
+ST-TWD-1761832388618	202508292251	mike	2025-07-11 11:30:00+08	1301	台塑	34.000	1000	34000.000	20.000	0.000	34020.000	TWD
+ST-TWD-1761833029560	202508292251	mike	2025-08-27 12:00:00+08	2330	台積電	1190.000	200	238000.000	20.000	0.000	238020.000	TWD
+ST-TWD-1761832866519	202508292251	mike	2025-07-15 12:00:00+08	3505	台塑化	36.350	1000	36350.000	20.000	0.000	36370.000	TWD
 \.
 
 
@@ -683,10 +682,10 @@ ST-TWD-1761832037346	20152730138617	mike	2025-07-03 13:00:00+08	2330	台積電	1
 --
 
 COPY public.stock_storage_list (stock_account_id, user_id, stock_no, stock_name, storage_quantity) FROM stdin;
-20152730138617	mike	3505	台塑化	1000
-20152730138617	mike	1301	台塑	1000
-20152730138617	mike	2891	中信金	1000
-20152730138617	mike	2330	台積電	300
+202508292251	mike	3505	台塑化	1000
+202508292251	mike	1301	台塑	1000
+202508292251	mike	2891	中信金	1000
+202508292251	mike	2330	台積電	300
 \.
 
 
@@ -960,7 +959,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-10-30 22:18:08
+-- Completed on 2025-11-03 00:07:30
 
 --
 -- PostgreSQL database dump complete
