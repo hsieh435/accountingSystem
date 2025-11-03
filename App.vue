@@ -1,9 +1,9 @@
 <template>
   <UApp>
     <NuxtLayout>
+      <spinner v-if="isLoading" />
       <NuxtPage/>
     </NuxtLayout>
-    <spinner v-if="isLoading" />
   </UApp>
 </template>
 <script setup lang="ts">

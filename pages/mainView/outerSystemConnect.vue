@@ -1,15 +1,17 @@
 <template>
-  <div class="flex-col justify-start items-center">
-    <div class="flex justify-start items-center my-1 px-3">
+  <div class="flex-col justify-start items-center px-3 py-1">
+    <div class="flex justify-start items-center">
       <UInput class="mx-1" v-model="finMindAccount" placeholder="請輸入帳號" type="search" v-on:keyup.enter="handleSearch" />
       <UInput class="mx-1" v-model="finMindPassword" placeholder="請輸入密碼" type="password" v-on:keyup.enter="handleSearch" />
       <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="handleSearch"></ui-buttonGroup>
+      <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkTokenStatus"></ui-buttonGroup>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { fetchTestConnection } from "@/server/outerWebApi";
+import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerWebApi";
+import { IResponse } from "@/models/index";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
@@ -24,9 +26,9 @@ const finMindPassword = ref<string>("");
 
 async function handleSearch() {
   try {
-    const result = await fetchTestConnection({
-      user_id: finMindAccount.value,
-      password: finMindPassword.value,
+    const result: IResponse = await fetchFinMindTestConnection({
+      user_id: finMindAccount.value.trim(),
+      password: finMindPassword.value.trim(),
     });
     console.log("result:", result);
     if (result.data.data.status === 200) {
@@ -54,6 +56,23 @@ async function handleSearch() {
   // } catch (err) {
   //   res.status(500).json(error({ message: "查詢失敗", req, res }));
   // }
+}
+
+
+
+async function checkTokenStatus() {
+
+  try {
+    const res: IResponse = await fetchFinMindAccountInfo();
+    console.log("fetchFinMindAccountInfo:", res);
+    if (res.data.returnCode === 0) {
+      messageToast({ message: "Token 有效" });
+    } else {
+      errorMessageDialog({ message: res.data.message });
+    }
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

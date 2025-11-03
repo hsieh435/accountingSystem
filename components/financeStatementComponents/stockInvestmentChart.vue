@@ -1,14 +1,20 @@
 <template>
-  <div class="w-full flex justify-between" style="height: 200px">
-    <div>
-      <div>
-        <div>
-          <!--  -->
-        </div>
+  <div class="w-full flex px-20" style="height: 200px">
+    <div class="w-full text-base leading-8 flex flex-col justify-start items-start border-1">
+      <div class="w-full grid grid-cols-5">
+        <span class="col-span-2 text-right">市價：</span>
+        <span class="col-span-3">市價：</span>
+      </div>
+      <div class="w-full grid grid-cols-5">
+        <span class="col-span-2 text-right">均價：</span>
+        <span class="col-span-3">均價：</span>
+      </div>
+      <div class="w-full grid grid-cols-5">
+        <span class="col-span-2 text-right">持有股數：</span>
+        <span class="col-span-3">持有股數：</span>
       </div>
     </div>
-
-    <div class="flex justify-center" style="width: 50%; height: 200px">
+    <div class="flex justify-center items-center ms-auto">
       <canvas :id="`stockInvestmentChart${props.stockNoGot}`"></canvas>
     </div>
   </div>
@@ -86,7 +92,7 @@ async function searchingEachStockStorageData() {
       stockAccountId: props.stockAccountIdGot,
       stockNo: props.stockNoGot,
     });
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       doughnutChartTitle.value = `${res.data.data[0].stockNo} / ${res.data.data[0].stockName} 投資損益`;
       for (let i = 0; i < res.data.data.length; i++) {

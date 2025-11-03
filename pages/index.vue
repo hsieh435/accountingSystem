@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-green-100 flex justify-center items-center overflow-hidden py-6 py-12">
+  <div class="h-screen bg-green-100 flex justify-center items-center py-6 py-12">
     <div class="relative py-3">
       <div class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 transform -rotate-6 rounded-3xl"></div>
       <div class="relative bg-white rounded-3xl p-20">

@@ -1,10 +1,15 @@
 import { apiFetch } from "@/server/index.ts";
 import { IStockPriceSearchingParams, ICurrencyExRateSearchingParams } from "@/models/index.ts";
 
-export async function fetchTestConnection(data: { user_id: string; password: string }) {
-  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/testConnection", "POST", {
+export async function fetchFinMindTestConnection(data: { user_id: string; password: string }) {
+  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/findMind/testConnection", "POST", {
     body: JSON.stringify(data),
   });
+  return await response.json();
+}
+
+export async function fetchFinMindAccountInfo() {
+  const response = await apiFetch("/accounting_system_backend/api/outerWebApi/findMind/accountInfo", "GET");
   return await response.json();
 }
 
