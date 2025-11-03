@@ -17,7 +17,7 @@
         <div>
           <div class="d-flex flex-row justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">使用者帳號：</span>
-            <input :class="tailwindStyles.getInputClasses('col-span-3')" id="userAccount" v-model="userAccount" />
+            <UInput class="col-span-3" id="userAccount" v-model="userAccount" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userAccount">
             <span class="col-span-2 text-right"></span>
@@ -28,11 +28,7 @@
         <div>
           <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              id="userOldPassword"
-              v-model="userOldPassword"
-              type="password" />
+            <UInput class="col-span-3" id="userOldPassword" v-model="userOldPassword" type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userOldPassword">
             <span class="col-span-2 text-right"></span>
@@ -43,11 +39,7 @@
         <div>
           <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">新密碼：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              id="userNewPassword"
-              v-model="userNewPassword"
-              type="password" />
+            <UInput class="col-span-3" id="userNewPassword" v-model="userNewPassword" type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userNewPassword">
             <span class="col-span-2 text-right"></span>
@@ -56,11 +48,7 @@
 
           <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
             <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              id="userNewPasswordSecond"
-              v-model="userNewPasswordSecond"
-              type="password" />
+            <UInput class="col-span-3" id="userNewPasswordSecond" v-model="userNewPasswordSecond" type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userNewPasswordSecond">
             <span class="col-span-2 text-right"></span>

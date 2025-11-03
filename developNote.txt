@@ -90,3 +90,5 @@ https://publicapis.dev/category/currency-exchange
 
 
 Dashboard at homepage
+
+npm run cleanup

@@ -96,10 +96,7 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">餘額：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="currencyFormat(dataParams.updateData.remainingAmount)"
-              disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
           </div>
         </div>
 
@@ -115,12 +112,12 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.updateData.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.updateData.tradeNote"></textarea>
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
         </div>
 
         <div class="my-2">

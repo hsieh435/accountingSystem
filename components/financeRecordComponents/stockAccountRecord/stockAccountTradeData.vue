@@ -82,10 +82,7 @@
           <div class="w-full flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
             <template v-if="props.tradeIdGot">
-              <input
-                :class="tailwindStyles.getInputClasses('col-span-4')"
-                :value="dataParams.stockNo + dataParams.stockName"
-                disabled />
+              <UInput class="col-span-4" :value="dataParams.stockNo + dataParams.stockName" disabled />
             </template>
             <template v-else>
               <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
@@ -152,29 +149,17 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">總價：</span>
-          <input
-            :class="tailwindStyles.getInputClasses()"
-            class="col-start-3 col-end-5"
-            disabled
-            :value="currencyFormat(dataParams.stockTotalPrice)" />
+          <UInput class="col-span-2" :value="currencyFormat(dataParams.stockTotalPrice)" disabled />
           <span class="col-span-2 text-right">交易成本：</span>
-          <input
-            :class="[tailwindStyles.getInputClasses(), 'col-start-7 col-end-9']"
-            :value="currencyFormat(dataParams.tradeTotalPrice)"
-            disabled />
+          <UInput class="col-span-2" :value="currencyFormat(dataParams.tradeTotalPrice)" disabled />
         </div>
 
-        <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-8">
-            <span class="col-span-2 text-right">餘額：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="currencyFormat(dataParams.remainingAmount)"
-              disabled />
-          </div>
+        <div class="flex justify-start items-center grid grid-cols-8">
+          <span class="col-span-2 text-right">餘額：</span>
+          <UInput class="col-span-3" :value="currencyFormat(dataParams.remainingAmount)" disabled />
         </div>
 
-        <div class="w-full flex justify-start items-center grid grid-cols-8">
+        <div class="flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
             <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
@@ -183,12 +168,12 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">說明：</span>
-          <input :class="tailwindStyles.getInputClasses('col-span-5')" v-model="dataParams.tradeDescription" />
+          <UInput class="col-span-5" v-model="dataParams.tradeDescription" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-8">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea :class="tailwindStyles.getInputClasses('col-span-5')" v-model="dataParams.tradeNote"></textarea>
+          <UTextarea class="col-span-5" v-model="dataParams.tradeNote" />
         </div>
 
         <div class="my-2">

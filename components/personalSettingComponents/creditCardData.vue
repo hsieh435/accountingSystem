@@ -129,7 +129,7 @@
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <textarea :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.note"></textarea>
+          <UTextarea class="col-span-3" v-model="dataParams.note" />
         </div>
 
         <template v-if="props.creditCardIdGot">
