@@ -111,7 +111,6 @@ import {
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));

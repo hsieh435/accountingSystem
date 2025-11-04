@@ -300,6 +300,13 @@ export interface IStockAccountRecordList {
   tradeNote: string;
 }
 
+// 證券帳戶收支資料新增、編輯 interface
+export interface IStockAccountRecordData {
+  updateData: IStockAccountRecordList;
+  oriData: any;
+}
+
+
 // 存股列表 interface
 export interface IStockStorageList {
   stockAccountId: string;

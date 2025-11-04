@@ -122,7 +122,6 @@ import {
 } from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordList, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));

@@ -153,7 +153,6 @@ import {
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));

@@ -65,7 +65,6 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const open = ref<boolean>(false);
 const userAccount = ref<string>("");

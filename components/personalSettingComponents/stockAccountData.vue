@@ -163,7 +163,6 @@ import {
 import { IStockAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 

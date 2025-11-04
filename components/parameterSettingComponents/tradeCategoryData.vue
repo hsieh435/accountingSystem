@@ -90,7 +90,6 @@ import {
 } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ tradeCodeGot?: string }>(), { tradeCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
