@@ -23,12 +23,8 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.storedValueCardName ? '' : 'outline-1 outline-red-500',
-              ]"
-              v-model="dataParams.storedValueCardName" />
+            <UInput :class="['col-span-3', dataValidate.storedValueCardName ? '' : 'outline-1 outline-red-500',
+              ]" v-model="dataParams.storedValueCardName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardName">
             <span class="col-span-2 text-right"></span>
@@ -130,10 +126,7 @@
         <template v-if="props.storedValueCardIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">建立時間：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="yearMonthDayTimeFormat(dataParams.createdDate)"
-              disabled />
+            <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 

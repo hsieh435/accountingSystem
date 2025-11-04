@@ -20,14 +20,11 @@
       <div class="flex flex-col justify-center items-center gap-2">
         <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易代碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.tradeCode ? 'outline-red-50' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.tradeCode ? 'outline-red-50' : 'outline-1 outline-red-500']"
               v-model="dataParams.tradeCode"
               :disabled="props.tradeCodeGot.length > 0" />
           </div>
@@ -37,14 +34,11 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.tradeName ? 'outline-red-50' : 'outline-1 outline-red-500'
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.tradeName ? 'outline-red-50' : 'outline-1 outline-red-500']"
               v-model="dataParams.tradeName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeName">
@@ -53,7 +47,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>排序：</span>
             <UInputNumber

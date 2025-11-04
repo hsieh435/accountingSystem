@@ -23,11 +23,8 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用卡名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.creditcardName ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.creditcardName ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.creditcardName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditcardName">
@@ -39,16 +36,14 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">發卡銀行代碼：</span>
-            <input
-              class="col-span-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1"
-              v-model="dataParams.creditcardBankCode" />
-          </div>
+            <UInput class="col-span-2" v-model="dataParams.creditcardBankCode" />
+            </div>
         </div>
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">發卡銀行：</span>
-            <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.creditcardBankName" />
+            <UInput class="col-span-3" v-model="dataParams.creditcardBankName" />
           </div>
         </div>
 
@@ -100,7 +95,7 @@
         </div>
 
         <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-6 mt-2">
+          <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.alertValue ? '' : 'outline-1 outline-red-500']"
@@ -135,10 +130,7 @@
         <template v-if="props.creditCardIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">建立時間：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="yearMonthDayTimeFormat(dataParams.createdDate)"
-              disabled />
+            <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 

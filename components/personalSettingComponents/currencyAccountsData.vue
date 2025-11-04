@@ -23,11 +23,8 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.accountId ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.accountId ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.accountId"
               :disabled="props.currencyAccountIdGot ? true : false" />
           </div>
@@ -40,11 +37,8 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.accountName ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.accountName ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.accountName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountName">
@@ -56,16 +50,14 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">銀行代碼：</span>
-            <input
-              class="col-span-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-1"
-              v-model="dataParams.accountBankCode" />
+            <UInput class="col-span-1" v-model="dataParams.accountBankCode" />
           </div>
         </div>
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">銀行名稱：</span>
-            <input :class="tailwindStyles.getInputClasses('col-span-3')" v-model="dataParams.accountBankName" />
+            <UInput class="col-span-3" v-model="dataParams.accountBankName" />
           </div>
         </div>
 
@@ -88,10 +80,7 @@
         <template v-if="props.currencyAccountIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">目前金額：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="currencyFormat(dataParams.presentAmount)"
-              disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.presentAmount)" disabled />
           </div>
         </template>
         <template v-else>
@@ -154,10 +143,7 @@
         <template v-if="props.currencyAccountIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">建立時間：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="yearMonthDayTimeFormat(dataParams.createdDate)"
-              disabled />
+            <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 

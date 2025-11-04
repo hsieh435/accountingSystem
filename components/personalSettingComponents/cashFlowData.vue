@@ -23,11 +23,8 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.cashflowName ? 'outline-red-50' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.cashflowName ? 'outline-red-50' : 'outline-1 outline-red-500']"
               v-model="dataParams.cashflowName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowName">
@@ -55,10 +52,7 @@
         <template v-if="props.cashflowIdIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">目前金額：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="currencyFormat(dataParams.presentAmount)"
-              disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.presentAmount)" disabled />
           </div>
         </template>
         <template v-else>
@@ -118,10 +112,7 @@
         <template v-if="props.cashflowIdIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">建立日期：</span>
-            <input
-              :class="tailwindStyles.getInputClasses('col-span-3')"
-              :value="yearMonthDayTimeFormat(dataParams.createdDate)"
-              disabled />
+            <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 

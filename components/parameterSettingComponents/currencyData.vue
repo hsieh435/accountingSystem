@@ -20,14 +20,11 @@
       <div class="flex flex-col justify-center items-center gap-2">
         <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">貨幣代碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.currencyCode ? 'outline-red-50' : 'outline-1 outline-red-500']"
               v-model="dataParams.currencyCode"
               :disabled="props.currencyCodeGot.length > 0"
               type="search" />
@@ -38,14 +35,11 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">貨幣名稱：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.currencyName ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.currencyName ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.currencyName"
               type="search" />
           </div>
@@ -55,14 +49,11 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">貨幣符號：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.currencySymbol ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.currencySymbol ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.currencySymbol"
               type="search" />
           </div>
@@ -72,7 +63,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">最小面額：</span>
             <UInputNumber
@@ -86,7 +77,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">排序：</span>
             <UInputNumber
@@ -119,7 +110,6 @@ import {
 } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
 import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);

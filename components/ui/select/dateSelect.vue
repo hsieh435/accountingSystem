@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[150px] ">
+  <div class="w-[150px]">
 
     <VueDatePicker v-model="dateString" :min-date="props.minDate" :max-date="props.maxDate" text-input auto-apply partial-flow year-first format="yyyy/MM/dd" locale="zh-TW" week-start="0" :day-names="['日', '一', '二', '三', '四', '五', '六']" :enable-time-picker="false" :action-row="{ showNow: true }" now-button-label="今日" :highlight="{ options: { highlightDisabled: true } }">
     </VueDatePicker>

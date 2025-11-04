@@ -4,10 +4,14 @@
       <span>證券帳戶：</span>
       <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="searchingStockStorage" />
     </div>
+    <div class="bg-gray-100 flex items-center px-3 py-1">
+      <!--  -->
+    </div>
     <UAccordion
       :ui="{ label: 'mx-5', trailingIcon: 'mx-5', body: 'mx-5' }"
       :items="accordionItems"
       type="multiple"
+      :unmount-on-hide="false"
       trailing-icon="i-lucide-arrow-down">
       <template #body="{ item }">
         <stockInvestmentChart :stockAccountIdGot="searchingParams.accountId" :stockNoGot="item.content">

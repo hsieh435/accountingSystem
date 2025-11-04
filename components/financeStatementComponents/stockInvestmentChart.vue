@@ -3,15 +3,19 @@
     <div class="w-full text-base leading-8 flex flex-col justify-start items-start border-1">
       <div class="w-full grid grid-cols-5">
         <span class="col-span-2 text-right">市價：</span>
-        <span class="col-span-3">市價：</span>
+        <span class="col-span-3">{{ currencyFormat(stockLatestPrice) }} 元 / 股</span>
       </div>
       <div class="w-full grid grid-cols-5">
-        <span class="col-span-2 text-right">均價：</span>
-        <span class="col-span-3">均價：</span>
+        <span class="col-span-2 text-right">購買均價：</span>
+        <span class="col-span-3">{{ currencyFormat(stockAveragePrice) }} 元</span>
       </div>
       <div class="w-full grid grid-cols-5">
         <span class="col-span-2 text-right">持有股數：</span>
-        <span class="col-span-3">持有股數：</span>
+        <span class="col-span-3">{{ currencyFormat(stockTotalQuantity) }} 股</span>
+      </div>
+      <div class="w-full grid grid-cols-5">
+        <span class="col-span-2 text-right">損益：</span>
+        <span class="col-span-3">{{ currencyFormat(stockCurrentProfit) }} 元</span>
       </div>
     </div>
     <div class="flex justify-center items-center ms-auto">
@@ -24,7 +28,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
 import { IResponse } from "@/models/index";
-import { dateMove, getCurrentYMD } from "@/composables/tools";
+import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
@@ -37,6 +41,7 @@ const doughnutChartTitle = ref<string>("");
 const stockTotalCost = ref<number>(0);
 const stockLatestPrice = ref<number>(0);
 const stockTotalQuantity = ref<number>(0);
+const stockAveragePrice = ref<number>(0);
 const stockCurrentValue = ref<number>(0);
 const stockCurrentProfit = ref<number>(0);
 const stockInvestmentChart = ref<Chart | null>(null);
@@ -99,12 +104,14 @@ async function searchingEachStockStorageData() {
         stockTotalCost.value += res.data.data[i].tradeTotalPrice;
         stockTotalQuantity.value += res.data.data[i].quantity;
       }
-      stockCurrentValue.value = Math.round(stockLatestPrice.value) * Math.round(stockTotalQuantity.value);
+      stockAveragePrice.value = stockTotalCost.value / stockTotalQuantity.value;
+      stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
       stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
 
       // console.log("stockLatestPrice:", stockLatestPrice.value);
       // console.log("stockTotalCost:", stockTotalCost.value);
       // console.log("stockTotalQuantity:", stockTotalQuantity.value);
+      console.log("stockAveragePrice:", stockAveragePrice.value);
       // console.log("stockCurrentValue:", stockCurrentValue.value);
       // console.log("stockCurrentProfit:", stockCurrentProfit.value);
 
