@@ -16,18 +16,14 @@
 
         <div class="flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">使用者代碼：</span>
-          <input
-            :class="tailwindStyles.getInputClasses('col-span-3')"
-            id="userId"
-            v-model="dataParams.userId"
-            disabled />
+          <UInput class="col-span-3" id="userId" v-model="dataParams.userId" disabled />
         </div>
 
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">使用者姓名：</span>
-            <input
-              :class="[tailwindStyles.getInputClasses('col-span-3'), dataValidate.userName ? '' : 'outline-red-500']"
+            <UInput
+              :class="['col-span-3', dataValidate.userName ? '' : 'outline-1 outline-red-500']"
               id="userName"
               v-model="dataParams.userName"
               type="search" />
@@ -41,11 +37,8 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">舊密碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.userOldPassword ? '' : 'outline-1 outline-red-500',
-              ]"
+            <UInput
+              :class="['col-span-3', dataValidate.userOldPassword ? '' : 'outline-1 outline-red-500']"
               id="userOldPassword"
               v-model="dataParams.userOldPassword"
               type="password" />
@@ -59,11 +52,8 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">新密碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.userNewPassword ? '' : 'outline-1 outline-red-500',
-              ]"
+           <UInput
+              :class="['col-span-3', dataValidate.userNewPassword ? '' : 'outline-1 outline-red-500']"
               id="userNewPassword"
               v-model="dataParams.userNewPassword"
               type="password" />
@@ -77,11 +67,8 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">確認密碼：</span>
-            <input
-              :class="[
-                tailwindStyles.getInputClasses('col-span-3'),
-                dataValidate.secondPassword ? '' : 'outline-1 outline-red-500',
-              ]"
+             <UInput
+              :class="['col-span-3', dataValidate.secondPassword ? '' : 'outline-1 outline-red-500']"
               id="secondPassword"
               v-model="dataParams.secondPassword"
               type="password" />

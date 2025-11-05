@@ -123,8 +123,8 @@ export interface ICashFlowRecordList {
   tradeNote: string;
 }
 
-// 現金流資料新增、編輯 interface
-export interface ICashFlowData {
+// 現金流收支資料新增、編輯 interface
+export interface ICashFlowRecordData {
   updateData: ICashFlowRecordList;
   oriData: any;
 }
@@ -169,6 +169,12 @@ export interface IStoredValueCardRecordList {
   tradeNote: string;
 }
 
+// 儲值票卡收支資料新增、編輯 interface
+export interface IStoredValueCardRecordData {
+  updateData: IStoredValueCardRecordList;
+  oriData: any;
+}
+
 // 信用卡列表 interface
 export interface ICreditCardList {
   no?: number;
@@ -208,6 +214,12 @@ export interface ICreditCardRecordList {
   billMonth: string;
   tradeDescription: string;
   tradeNote: string;
+}
+
+// 信用卡收支資料新增、編輯 interface
+export interface ICreditCardRecordData {
+  updateData: ICreditCardRecordList;
+  oriData: any;
 }
 
 // 存款帳戶列表 interface
@@ -251,6 +263,12 @@ export interface IcurrencyAccountRecordList {
   currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
+}
+
+// 存款帳戶收支紀錄新增、編輯 interface
+export interface IcurrencyAccountRecordData {
+  updateData: IcurrencyAccountRecordList;
+  oriData: any;
 }
 
 // 證券帳戶列表 interface
@@ -305,7 +323,6 @@ export interface IStockAccountRecordData {
   updateData: IStockAccountRecordList;
   oriData: any;
 }
-
 
 // 存股列表 interface
 export interface IStockStorageList {

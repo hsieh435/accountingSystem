@@ -255,7 +255,6 @@ const getDefaultDataValidate = (): any => ({
 const dataValidate = reactive<any>(getDefaultDataValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const originalTradeDatetime = ref<string>("");
 const stockAccountChosen = ref<IStockAccountList>({} as IStockAccountList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -268,10 +267,15 @@ watch(open, () => {
       Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (open.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataParams.updateData, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(stockAccountChosen, {} as IStockAccountRecordList);
-    originalTradeDatetime.value = "";
+    dataParams.oriData = {
+      oriTradeDatetime: "",
+      oriTradeAmount: 0,
+      oriRemainingAmount: 0,
+      oriTransactionType: "income",
+    };
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
@@ -286,7 +290,7 @@ async function searchingStockAccountRecord() {
     });
     console.log("fetchStockAccountRecordById:", res.data.data);
     if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
+      Object.assign(dataParams.updateData, res.data.data);
       dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
       dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
       dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;

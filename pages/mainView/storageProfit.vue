@@ -4,7 +4,7 @@
       <span>證券帳戶：</span>
       <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="searchingStockStorage" />
     </div>
-    <div class="flex justify-center items-center px-3 py-1" style="height: 200px">
+    <div class="flex justify-center items-center px-3 py-1" style="height: 200px; width: 400px">
       <canvas id="stockProfitChartOverall"></canvas>
     </div>
     <UAccordion
@@ -46,6 +46,7 @@ const accordionItems = ref<AccordionItem[]>([]);
 const searchingParams = reactive<{ accountId: string }>({
   accountId: "",
 });
+const totalaccordion = ref<number>(0);
 const totalCostOverall = ref<number>(0);
 const currentValueOverall = ref<number>(0);
 const profitOverall = ref<number>(0);
@@ -58,12 +59,13 @@ async function searchingStockStorage(accountItem: IStockAccountList[]) {
 
   try {
     const res: IResponse = await fetchStockStorageProfitList(accountItem[0].accountId);
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
         label: `${item.stockNo} / ${item.stockName}`,
         content: item.stockNo,
       }));
+      // console.log("accordionItems:", accordionItems.value);
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -72,11 +74,19 @@ async function searchingStockStorage(accountItem: IStockAccountList[]) {
   }
 }
 
-async function caculateProfit(data: { totalCost: number; currentValue: number; profit: number }) {
-  // console.log("data:", data);
-  totalCostOverall.value += data.totalCost;
-  currentValueOverall.value += data.currentValue;
-  profitOverall.value += data.profit;
+async function caculateProfit(totalCost: number, currentValue: number, profit: number) {
+  console.log("data:", totalCost, currentValue, profit);
+  totalCostOverall.value += totalCost;
+  currentValueOverall.value += currentValue;
+  profitOverall.value += profit;
+  totalaccordion.value += 1;
+
+  if (accordionItems.value.length === 0 || totalaccordion.value !== accordionItems.value.length) return;
+
+  // console.log("accordionItems:", accordionItems.value.length);
+  // console.log("totalCostOverall:", totalCostOverall.value);
+  // console.log("currentValueOverall:", currentValueOverall.value);
+  // console.log("profitOverall:", profitOverall.value);
 
   const ctx = (document.getElementById("stockProfitChartOverall") as HTMLCanvasElement).getContext("2d");
   if (ctx) {

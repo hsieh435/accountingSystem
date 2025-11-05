@@ -25,7 +25,7 @@
             <div :class="['w-fit', dataValidate.creditCardId ? '' : 'outline-1 outline-red-500']">
               <accountSelect
                 selectTargetId="isCreditcardAble"
-                :accountIdGot="dataParams.creditCardId"
+                :accountIdGot="dataParams.updateData.creditCardId"
                 :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingCreditCardAccount" />
@@ -40,7 +40,7 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -54,7 +54,7 @@
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
                 accountType="isCreditcardAble"
-                :tradeCategoryGot="dataParams.tradeCategory"
+                :tradeCategoryGot="dataParams.updateData.tradeCategory"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
@@ -68,7 +68,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.tradeAmount"
+              v-model="dataParams.updateData.tradeAmount"
               orientation="vertical"
               :min="0"
               :step="setStep" />
@@ -81,18 +81,21 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency"  />
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.updateData.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
         </div>
 
         <div class="my-2">
@@ -110,7 +113,7 @@ import {
   fetchCreditCardRecordCreate,
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi";
-import { ICreditCardRecordList, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
+import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -125,21 +128,28 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: 
 const emits = defineEmits(["dataReseaching"]);
 
 const open = ref<boolean>(false);
-const getDefaultDataParams = (): ICreditCardRecordList => ({
-  tradeId: props.tradeIdGot || "",
-  creditCardId: props.creditCardIdGot,
-  tradeDatetime: "",
-  userId: "",
-  accountType: "",
-  tradeCategory: "",
-  tradeAmount: 0,
-  currency: "",
-  billMonth: "",
-  remainingAmount: 0,
-  tradeDescription: "",
-  tradeNote: "",
+const getDefaultDataParams = (): ICreditCardRecordData => ({
+  updateData: {
+    tradeId: props.tradeIdGot || "",
+    creditCardId: props.creditCardIdGot,
+    tradeDatetime: "",
+    userId: "",
+    accountType: "",
+    tradeCategory: "",
+    tradeAmount: 0,
+    currency: "",
+    billMonth: "",
+    remainingAmount: 0,
+    tradeDescription: "",
+    tradeNote: "",
+  },
+  oriData: {
+    oriTradeDatetime: "",
+    oriTradeAmount: 0,
+    oriRemainingAmount: 0,
+  },
 });
-const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
+const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
 const getDefaultDataValidate = (): any => ({
   creditCardId: true,
   tradeDatetime: true,
@@ -159,6 +169,11 @@ watch(open, () => {
   } else if (open.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
+    dataParams.oriData = {
+      oriTradeDatetime: "",
+      oriTradeAmount: 0,
+      oriRemainingAmount: 0,
+    };
   }
 });
 
@@ -170,6 +185,9 @@ async function searchingCreditCardRecord() {
     });
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
+      dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
+      dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
       open.value = true;
     } else {
       messageToast({ message: res.data.message });
@@ -180,17 +198,17 @@ async function searchingCreditCardRecord() {
 }
 
 function settingCreditCardAccount(account: ICreditCardList[]) {
-  dataParams.creditCardId = account[0].creditcardId || "";
-  dataParams.currency = account[0].currency || "";
+  dataParams.updateData.creditCardId = account[0].creditcardId || "";
+  dataParams.updateData.currency = account[0].currency || "";
 }
 
 function settingTradeDatetime(dateTime: string) {
-  dataParams.tradeDatetime = dateTime;
-  dataParams.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
+  dataParams.updateData.tradeDatetime = dateTime;
+  dataParams.updateData.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
-  dataParams.tradeCategory = tradeCategoryId;
+  dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
@@ -203,16 +221,16 @@ async function validateData() {
   dataValidate.tradeCategory = true;
   dataValidate.tradeAmount = true;
 
-  if (!dataParams.creditCardId) {
+  if (!dataParams.updateData.creditCardId) {
     dataValidate.creditCardId = false;
   }
-  if (!dataParams.tradeDatetime) {
+  if (!dataParams.updateData.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
-  if (!dataParams.tradeCategory) {
+  if (!dataParams.updateData.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
+  if (typeof dataParams.updateData.tradeAmount !== "number" || !isFinite(dataParams.updateData.tradeAmount) || dataParams.updateData.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
   }
 

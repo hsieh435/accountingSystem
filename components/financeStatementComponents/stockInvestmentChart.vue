@@ -113,12 +113,8 @@ async function searchingEachStockStorageData() {
       stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
       stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
 
-      if (stockLatestPrice.value === 0 || stockCurrentValue.value === 0) return;
-      emits("stockDataConsolidate", {
-        totalCost: stockTotalCost.value,
-        currentValue: stockCurrentValue.value,
-        profit: stockCurrentProfit.value,
-      });
+      // if (stockLatestPrice.value === 0 || stockCurrentValue.value === 0) return;
+      emits("stockDataConsolidate", stockTotalCost.value, stockCurrentValue.value, stockCurrentProfit.value);
 
       const stockData = res.data.data;
       if (stockData) {

@@ -24,7 +24,7 @@
           <div :class="['w-fit', dataValidate.accountId ? '' : 'outline-1 outline-red-500']">
             <accountSelect
               selectTargetId="isCuaccountAble"
-              :accountIdGot="dataParams.accountId"
+              :accountIdGot="dataParams.updateData.accountId"
               :sellectAll="false"
               :isDisable="props.tradeIdGot ? true : false"
               @sendbackAccount="settingAccount" />
@@ -37,7 +37,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-            <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+            <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
           </div>
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -48,7 +48,7 @@
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
           <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
             <transactionTypeSelect
-              :transactionType="dataParams.transactionType"
+              :transactionType="dataParams.updateData.transactionType"
               @sendbackTransactionType="settingTransactionType" />
           </div>
         </div>
@@ -61,7 +61,7 @@
           <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
             <tradeCategorySelect
               accountType="isCuaccountAble"
-              :tradeCategoryGot="dataParams.tradeCategory"
+              :tradeCategoryGot="dataParams.updateData.tradeCategory"
               @sendbackTradeCategory="settingTradeCategory" />
           </div>
         </div>
@@ -73,7 +73,7 @@
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
           <UInputNumber
             :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
-            v-model="dataParams.tradeAmount"
+            v-model="dataParams.updateData.tradeAmount"
             orientation="vertical"
             :min="0"
             :step="setStep"
@@ -85,24 +85,27 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">餘額：</span>
-          <UInput class="col-span-3" :value="currencyFormat(dataParams.remainingAmount)" disabled />
+          <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.updateData.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
         </div>
 
         <div class="my-2">
@@ -120,7 +123,7 @@ import {
   fetchCurrencyAccountRecordCreate,
   fetchCurrencyAccountRecordUpdate,
 } from "@/server/currencyAccountRecordApi";
-import { IcurrencyAccountRecordList, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
+import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -137,21 +140,29 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 const emits = defineEmits(["dataReseaching"]);
 
 const open = ref<boolean>(false);
-const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
-  tradeId: props.tradeIdGot || "",
-  accountId: props.accountIdGot,
-  tradeDatetime: "",
-  accountUser: "",
-  accountType: "",
-  transactionType: "income",
-  tradeCategory: "",
-  tradeAmount: 0,
-  remainingAmount: 0,
-  currency: "",
-  tradeDescription: "",
-  tradeNote: "",
+const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
+  updateData: {
+    tradeId: props.tradeIdGot || "",
+    accountId: props.accountIdGot,
+    tradeDatetime: "",
+    accountUser: "",
+    accountType: "",
+    transactionType: "income",
+    tradeCategory: "",
+    tradeAmount: 0,
+    remainingAmount: 0,
+    currency: "",
+    tradeDescription: "",
+    tradeNote: "",
+  },
+  oriData: {
+    oriTradeDatetime: "",
+    oriTradeAmount: 0,
+    oriRemainingAmount: 0,
+    oriTransactionType: "income",
+  },
 });
-const dataParams = reactive<IcurrencyAccountRecordList>(getDefaultDataParams());
+const dataParams = reactive<IcurrencyAccountRecordData>(getDefaultDataParams());
 const getDefaultDataValidate = (): any => ({
   accountId: true,
   tradeDatetime: true,
@@ -211,13 +222,13 @@ async function searchingCurrencyAccountRecord() {
 
 function settingAccount(account: ICurrencyAccountList[]) {
   storedValueCardChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICurrencyAccountList);
-  dataParams.accountId = storedValueCardChosen.value.accountId || "";
-  dataParams.currency = storedValueCardChosen.value.currency || "";
+  dataParams.updateData.accountId = storedValueCardChosen.value.accountId || "";
+  dataParams.updateData.currency = storedValueCardChosen.value.currency || "";
 
   if (props.tradeIdGot.length > 0 && account.length === 1) {
-    if (dataParams.transactionType === "income") {
+    if (dataParams.updateData.transactionType === "income") {
       originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
-    } else if (dataParams.transactionType === "expense") {
+    } else if (dataParams.updateData.transactionType === "expense") {
       originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
     }
   } else {
@@ -228,43 +239,43 @@ function settingAccount(account: ICurrencyAccountList[]) {
 }
 
 function settingTradeDatetime(dateTime: string) {
-  dataParams.tradeDatetime = dateTime;
+  dataParams.updateData.tradeDatetime = dateTime;
 }
 
 function settingTransactionType(type: string) {
-  dataParams.transactionType = type;
-  if (dataParams.accountId) {
+  dataParams.updateData.transactionType = type;
+  if (dataParams.updateData.accountId) {
     settingRemainingAmount();
   }
 }
 
 async function settingRemainingAmount() {
-  dataParams.tradeAmount = typeof dataParams.tradeAmount === "number" ? Number(dataParams.tradeAmount) : 0;
+  dataParams.updateData.tradeAmount = typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
-  if (dataParams.transactionType === "income") {
-    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.tradeAmount;
-  } else if (dataParams.transactionType === "expense") {
-    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.tradeAmount;
+  if (dataParams.updateData.transactionType === "income") {
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
+  } else if (dataParams.updateData.transactionType === "expense") {
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
   }
   // console.log("originalRemainingAmount:", originalRemainingAmount.value);
-  // console.log("tradeAmount:", dataParams.tradeAmount, Number(dataParams.tradeAmount));
-  // console.log("remainingAmount:", dataParams.remainingAmount, Number(dataParams.remainingAmount));
+  // console.log("tradeAmount:", dataParams.updateData.tradeAmount, Number(dataParams.updateData.tradeAmount));
+  // console.log("remainingAmount:", dataParams.updateData.remainingAmount, Number(dataParams.updateData.remainingAmount));
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   if (
     storedValueCardChosen.value &&
     storedValueCardChosen.value.openAlert === true &&
-    dataParams.remainingAmount < storedValueCardChosen.value.alertValue
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.alertValue
   ) {
     messageToast({
       message: `帳戶餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
-      icon: "warning"
+      icon: "warning",
     });
   }
   if (
     storedValueCardChosen.value &&
     storedValueCardChosen.value.openAlert === true &&
-    dataParams.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
@@ -272,7 +283,7 @@ async function settingRemainingAmount() {
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
-  dataParams.tradeCategory = tradeCategoryId;
+  dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
@@ -286,19 +297,19 @@ async function validateData() {
   dataValidate.tradeCategory = true;
   dataValidate.tradeAmount = true;
 
-  if (!dataParams.accountId) {
+  if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;
   }
-  if (!dataParams.tradeDatetime) {
+  if (!dataParams.updateData.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
-  if (!dataParams.transactionType) {
+  if (!dataParams.updateData.transactionType) {
     dataValidate.transactionType = false;
   }
-  if (!dataParams.tradeCategory) {
+  if (!dataParams.updateData.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
+  if (typeof dataParams.updateData.tradeAmount !== "number" || !isFinite(dataParams.updateData.tradeAmount) || dataParams.updateData.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
     // tradeAmountValidateText.value = "交易金額不得為負";
   }

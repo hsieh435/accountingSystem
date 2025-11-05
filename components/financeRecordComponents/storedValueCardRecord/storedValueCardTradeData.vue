@@ -25,7 +25,7 @@
             <div :class="['w-fit', dataValidate.storedValueCardId ? '' : 'outline-1 outline-red-500']">
               <accountSelect
                 selectTargetId="isStoredvaluecardAble"
-                :accountIdGot="dataParams.storedValueCardId"
+                :accountIdGot="dataParams.updateData.storedValueCardId"
                 :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingStoredValueCardAccount" />
@@ -40,7 +40,7 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect :dateTimeGot="dataParams.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -53,7 +53,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
-                :transactionType="dataParams.transactionType"
+                :transactionType="dataParams.updateData.transactionType"
                 @sendbackTransactionType="settingTransactionType" />
             </div>
           </div>
@@ -68,7 +68,7 @@
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
                 accountType="isStoredvaluecardAble"
-                :tradeCategoryGot="dataParams.tradeCategory"
+                :tradeCategoryGot="dataParams.updateData.tradeCategory"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
@@ -82,7 +82,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.tradeAmount"
+              v-model="dataParams.updateData.tradeAmount"
               orientation="vertical"
               :min="0"
               :step="setStep"
@@ -96,25 +96,28 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">餘額：</span>
-            <UInput class="col-span-3" :value="currencyFormat(dataParams.remainingAmount)" disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.updateData.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
         </div>
 
         <div class="my-2">
@@ -132,7 +135,13 @@ import {
   fetchStoredValueCardRecordCreate,
   fetchStoredValueCardRecordUpdate,
 } from "@/server/storedValueCardRecordApi";
-import { IStoredValueCardRecordList, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index";
+import {
+  IStoredValueCardRecordData,
+  IStoredValueCardRecordList,
+  IStoredValueCardList,
+  ICurrencyList,
+  IResponse,
+} from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -149,23 +158,30 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdG
 const emits = defineEmits(["dataReseaching"]);
 
 const open = ref<boolean>(false);
-const getDefaultDataParams = (): IStoredValueCardRecordList => ({
-  tradeId: props.tradeIdGot || "",
-  storedValueCardId: props.storedValueCardIdGot || "",
-  accountType: "",
-  tradeDatetime: "",
-  transactionType: "income",
-  tradeCategory: "",
-  tradeAmount: 0,
-  remainingAmount: 0,
-  currency: "",
-  tradeDescription: "",
-  tradeNote: "",
+const getDefaultDataParams = (): IStoredValueCardRecordData => ({
+  updateData: {
+    tradeId: props.tradeIdGot || "",
+    storedValueCardId: props.storedValueCardIdGot || "",
+    accountType: "",
+    tradeDatetime: "",
+    transactionType: "income",
+    tradeCategory: "",
+    tradeAmount: 0,
+    remainingAmount: 0,
+    currency: "",
+    tradeDescription: "",
+    tradeNote: "",
+  },
+  oriData: {
+    oriTradeDatetime: "",
+    oriRemainingAmount: 0,
+    oriTradeAmount: 0,
+    oriTransactionType: "income",
+  },
 });
-const dataParams = reactive<IStoredValueCardRecordList>(getDefaultDataParams());
+const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const originalTradeDatetime = ref<string>("");
 const getDefaultDataValidate = (): any => ({
   storedValueCardId: true,
   tradeDatetime: true,
@@ -189,7 +205,6 @@ watch(open, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
-    originalTradeDatetime.value = "";
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
@@ -205,7 +220,10 @@ async function searchingStoredValueCardRecord() {
     // console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-      originalTradeDatetime.value = res.data.data.tradeDatetime;
+      dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
+      dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
+      dataParams.oriData.oriTransactionType = res.data.data.transactionType;
 
       originalTradeAmount.value = res.data.data.tradeAmount;
       if (res.data.data.transactionType === "income") {
@@ -224,61 +242,61 @@ async function searchingStoredValueCardRecord() {
 function settingStoredValueCardAccount(account: IStoredValueCardList[]) {
   // console.log("account:", account);
   if (account && account.length > 0) {
-    dataParams.storedValueCardId = account[0].storedValueCardId;
-    dataParams.currency = account[0].currency;
-    dataParams.remainingAmount = account[0].presentAmount;
+    dataParams.updateData.storedValueCardId = account[0].storedValueCardId;
+    dataParams.updateData.currency = account[0].currency;
+    dataParams.updateData.remainingAmount = account[0].presentAmount;
     storedValueCardChosen.value = account[0] || ({} as IStoredValueCardList);
     settingRemainingAmount();
   } else {
-    dataParams.storedValueCardId = "";
-    dataParams.currency = "";
-    dataParams.remainingAmount = 0;
+    dataParams.updateData.storedValueCardId = "";
+    dataParams.updateData.currency = "";
+    dataParams.updateData.remainingAmount = 0;
     Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
   }
 }
 
 function settingTradeDatetime(dateTime: string) {
-  dataParams.tradeDatetime = dateTime;
+  dataParams.updateData.tradeDatetime = dateTime;
 }
 
 function settingTransactionType(type: string) {
-  dataParams.transactionType = type;
-  if (dataParams.storedValueCardId) {
+  dataParams.updateData.transactionType = type;
+  if (dataParams.updateData.storedValueCardId) {
     settingRemainingAmount();
   }
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
-  dataParams.tradeCategory = tradeCategoryId;
+  dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
 function settingRemainingAmount() {
-  dataParams.tradeAmount = typeof dataParams.tradeAmount === "number" ? Number(dataParams.tradeAmount) : 0;
+  dataParams.updateData.tradeAmount = typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
-  if (dataParams.transactionType === "income") {
-    dataParams.remainingAmount = originalRemainingAmount.value + dataParams.tradeAmount;
-  } else if (dataParams.transactionType === "expense") {
-    dataParams.remainingAmount = originalRemainingAmount.value - dataParams.tradeAmount;
+  if (dataParams.updateData.transactionType === "income") {
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
+  } else if (dataParams.updateData.transactionType === "expense") {
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
   }
   // console.log("originalRemainingAmount:", originalRemainingAmount.value);
-  // console.log("tradeAmount:", dataParams.tradeAmount, Number(dataParams.tradeAmount));
-  // console.log("remainingAmount:", dataParams.remainingAmount, Number(dataParams.remainingAmount));
+  // console.log("tradeAmount:", dataParams.updateData.tradeAmount, Number(dataParams.updateData.tradeAmount));
+  // console.log("remainingAmount:", dataParams.updateData.remainingAmount, Number(dataParams.updateData.remainingAmount));
   console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   if (
     storedValueCardChosen.value &&
     storedValueCardChosen.value.openAlert === true &&
-    dataParams.remainingAmount < storedValueCardChosen.value.alertValue
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.alertValue
   ) {
     messageToast({
       message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
-      icon: "warning"
+      icon: "warning",
     });
   }
   if (
     storedValueCardChosen.value &&
     storedValueCardChosen.value.openAlert === true &&
-    dataParams.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
@@ -290,11 +308,11 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.storedValueCardId = !dataParams.storedValueCardId ? false : true;
-  dataValidate.tradeDatetime = !dataParams.tradeDatetime ? false : true;
-  dataValidate.transactionType = !dataParams.transactionType ? false : true;
-  dataValidate.tradeCategory = !dataParams.tradeCategory ? false : true;
-  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
+  dataValidate.storedValueCardId = !dataParams.updateData.storedValueCardId ? false : true;
+  dataValidate.tradeDatetime = !dataParams.updateData.tradeDatetime ? false : true;
+  dataValidate.transactionType = !dataParams.updateData.transactionType ? false : true;
+  dataValidate.tradeCategory = !dataParams.updateData.tradeCategory ? false : true;
+  if (typeof dataParams.updateData.tradeAmount !== "number" || !isFinite(dataParams.updateData.tradeAmount) || dataParams.updateData.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "交易金額不得為負";
   }

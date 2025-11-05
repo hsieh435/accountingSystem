@@ -135,7 +135,7 @@ import {
   fetchCashFlowRecordCreate,
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi";
-import { ICashFlowData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
+import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
@@ -152,7 +152,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; cashflowIdGot?: st
 const emits = defineEmits(["dataReseaching"]);
 
 const open = ref<boolean>(false);
-const getDefaultDataParams = (): ICashFlowData => ({
+const getDefaultDataParams = (): ICashFlowRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
     cashflowId: "",
@@ -174,7 +174,7 @@ const getDefaultDataParams = (): ICashFlowData => ({
     oriTransactionType: "income",
   },
 });
-const dataParams = reactive<ICashFlowData>(getDefaultDataParams());
+const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const getDefaultDataValidate = (): any => ({
@@ -197,9 +197,15 @@ watch(open, () => {
       Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (open.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataParams.updateData, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
+    dataParams.oriData = {
+      oriTradeDatetime: "",
+      oriTradeAmount: 0,
+      oriRemainingAmount: 0,
+      oriTransactionType: "income",
+    };
   }
 });
 
