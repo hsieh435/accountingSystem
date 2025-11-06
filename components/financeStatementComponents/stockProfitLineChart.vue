@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
+import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";

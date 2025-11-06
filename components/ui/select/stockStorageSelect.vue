@@ -6,9 +6,9 @@
   </select>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { fetchStockStorageList } from "@/server/storageProfitApi.ts";
-import { IStockstockList, IStockStorageList, IResponse } from "@/models/index";
+import { IStockStorageList, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
@@ -32,7 +32,7 @@ onMounted(async () => {
 });
 
 watch(props, () => {
-  console.log("watch props:", props);
+  // console.log("watch props:", props);
   accountId.value = props.accountIdGot;
   if (props.isAllStorage === true || (props.isAllStorage === false && accountId.value !== "")) {
     searchingStockStorageList();
@@ -48,10 +48,10 @@ async function searchingStockStorageList() {
 
   try {
     const res: IResponse = await fetchStockStorageList({ stockAccountId: accountId.value });
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       stockList.value = res.data.data.map((item: IStockStorageList) => ({
-        label: `${item.stockNo} / ${item.stockName}`,
+        label: `${item.stockName}（${item.stockNo}）`,
         value: item.stockNo,
       }));
     } else {
@@ -62,6 +62,8 @@ async function searchingStockStorageList() {
   }
 }
 
-//
+
+
+
 </script>
 <style lang="scss" scoped></style>

@@ -109,7 +109,7 @@ async function searchingEachStockStorageData() {
         stockTotalCost.value += res.data.data[i].tradeTotalPrice;
         stockTotalQuantity.value += res.data.data[i].quantity;
       }
-      stockAveragePrice.value = stockTotalCost.value / stockTotalQuantity.value;
+      stockAveragePrice.value = (Math.round((stockTotalCost.value / stockTotalQuantity.value) * 100)) / 100;
       stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
       stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
 

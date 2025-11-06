@@ -1,10 +1,6 @@
 <template>
   <div class="inline-flex flex justify-center items-center">
 
-    <template v-if="props.showFilming">
-      <span class="mx-3"><span class="text-red-600 mx-1">∗</span>{{ props.filmingText }}</span>
-    </template>
-
 
     <template v-if="props.showCreate">
       <UButton class="btn-aomidori" icon="i-material-symbols:add-2-rounded" :label="props.createText" @click="clickCreateButton()" :disabled="props.createDisable" />
@@ -41,8 +37,6 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    showFilming?: boolean;
-    filmingText?: string;
     showCreate?: boolean;
     createText?: string;
     createDisable?: boolean;
@@ -72,8 +66,6 @@ const props = withDefaults(
     closeDisable?: boolean;
   }>(),
   {
-    showFilming: false,
-    filmingText: "必填欄位，不可空白",
     showCreate: false,
     createText: "新增",
     createDisable: false,
