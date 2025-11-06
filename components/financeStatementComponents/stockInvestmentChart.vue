@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex px-20" style="height: 150px">
-    <div class="w-3/5 text-base leading-6 grid grid-flow-col grid-rows-4 gap-4 border-1">
+    <div class="w-3/5 text-base leading-6 grid grid-flow-col grid-rows-4 gap-4">
       <div class="grid grid-cols-2">
         <span class="col-span-1 text-right">持有股數：</span>
         <span class="col-span-1">{{ currencyFormat(stockTotalQuantity) }} 股</span>
@@ -153,6 +153,9 @@ async function searchingEachStockStorageData() {
                 title: {
                   display: true,
                   text: doughnutChartTitle.value,
+                },
+                tooltip: {
+                  enabled: false,
                 },
               },
             },

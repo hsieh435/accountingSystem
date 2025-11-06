@@ -4,8 +4,21 @@
       <span>證券帳戶：</span>
       <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="searchingStockStorage" />
     </div>
-    <div class="flex justify-center items-center px-3 py-1" style="height: 200px; width: 400px">
-      <canvas id="stockProfitChartOverall"></canvas>
+    <div class="flex justify-center mx-auto px-3 py-5" style="width: 80%">
+      <div class="w-1/2 h-full grid grid-flow-col grid-rows-4 gap-2">
+        <span class="text-lg font-bold my-5">庫存損益總覽</span>
+        <div class="grid grid-cols-2">
+          <span class="col-span-1 text-right">股票市值：</span>
+          <span class="col-span-1">{{ currencyFormat(currentValueOverall) }} 元</span>
+        </div>
+        <div class="grid grid-cols-2">
+          <span class="col-span-1 text-right">總成本：</span>
+          <span class="col-span-1">{{ currencyFormat(totalCostOverall) }} 元</span>
+        </div>
+      </div>
+      <div class="w-1/2 flex justify-center items-center px-3 py-1">
+        <canvas id="stockProfitChartOverall"></canvas>
+      </div>
     </div>
     <UAccordion
       :ui="{ label: 'mx-5', trailingIcon: 'mx-5', body: 'mx-5' }"
@@ -26,6 +39,7 @@
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
 import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index";
+import { currencyFormat } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import type { AccordionItem } from "@nuxt/ui";
 import { Chart } from "chart.js/auto";
@@ -90,7 +104,6 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
 
   const ctx = (document.getElementById("stockProfitChartOverall") as HTMLCanvasElement).getContext("2d");
   if (ctx) {
-
     if (stockStorageChart.value) {
       stockStorageChart.value.destroy();
       stockStorageChart.value = null;
@@ -99,7 +112,11 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
     stockStorageChart.value = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: [profitOverall.value > 0 ? "獲利" : "虧損"],
+        labels: [
+          profitOverall.value > 0
+            ? `獲利 ${currencyFormat(Math.abs(profitOverall.value))} 元`
+            : `虧損 ${currencyFormat(Math.abs(profitOverall.value))} 元`,
+        ],
         datasets: [
           {
             label: profitOverall.value > 0 ? "獲利" : "虧損",
@@ -114,6 +131,7 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: "top",
@@ -121,6 +139,9 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
           title: {
             display: true,
             // text: doughnutChartTitle.value,
+          },
+          tooltip: {
+            enabled: false,
           },
         },
       },

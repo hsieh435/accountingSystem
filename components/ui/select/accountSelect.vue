@@ -30,7 +30,7 @@ const emits = defineEmits(["sendbackAccount"]);
 
 const accountId = ref<string>("");
 const accountList = ref<{ label: string; value: string }[]>([]);
-const searchParams = reactive<IAccountSearchingParams>({ currencyId: "" });
+const searchingParams = reactive<IAccountSearchingParams>({ currencyId: "" });
 const oriAccountList = ref<any[]>([]);
 
 const isDisabled = computed(() => props.isDisable);
@@ -49,7 +49,7 @@ watch(accountId, () => {
 
 async function loadAccountList() {
   try {
-    const list = await getAccountListByType(props.selectTargetId, searchParams);
+    const list = await getAccountListByType(props.selectTargetId, searchingParams);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
     if (props.sellectAll === false) {
       accountId.value = accountList.value[0].value || "";

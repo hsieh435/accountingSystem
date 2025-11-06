@@ -1,5 +1,4 @@
-import { defineNuxtRouteMiddleware, navigateTo, abortNavigation } from "nuxt/app";
-// import { useRoute } from "vue-router";
+import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { fetchJwtVerification } from "@/server/generalApi.ts";
 import { errorMessageDialog } from "@/composables/swalDialog.ts";
 import { decryptString } from "@/composables/crypto.ts";

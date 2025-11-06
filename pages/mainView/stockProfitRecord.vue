@@ -1,16 +1,20 @@
 <template>
-  <div class="flex-col justify-start items-center px-10 py-5">
-    <!-- <UAccordion
-      :items="items"
-      type="multiple"
-      :unmount-on-hide="false"
-      trailing-icon="i-lucide-arrow-down">
-      <template #body="{ item }"> This is the {{ item.label }} panel. </template>
-    </UAccordion> -->
+  <div class="flex-col justify-start items-center">
+    <div class="bg-gray-100 flex items-center px-3 py-1 gap-x-5">
+      <div class="flex items-center">
+        <span>證券帳戶：</span>
+        <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccount" />
+      </div>
+      <div class="flex items-center">
+        <span>證券帳戶：</span>
+        <stockStorageSelect :accountIdGot="searchingParams.accountId" :sellectAll="false" @sendbackStockNo="settingStockNo" />
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index";
 import type { AccordionItem } from "@nuxt/ui";
 
 declare function definePageMeta(meta: any): void;
@@ -20,26 +24,33 @@ definePageMeta({
   subTitle: "獲利紀錄",
 });
 
-const items = ref<AccordionItem[]>([
-  {
-    label: "Icons",
-    icon: "i-lucide-smile",
-    content: "You have nothing to do, @nuxt/icon will handle it automatically.",
-  },
-  {
-    label: "Colors",
-    icon: "i-lucide-swatch-book",
-    content: "Choose a primary and a neutral color from your Tailwind CSS theme.",
-  },
-  {
-    label: "Components",
-    icon: "i-lucide-box",
-    content: "You can customize components by using the `class` / `ui` props or in your app.config.ts.",
-  },
-]);
+const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
+const stockStorageSelect = defineAsyncComponent(() => import("@/components/ui/select/stockStorageSelect.vue"));
+
+
+
+const searchingParams = reactive<{ accountId: string; stockNo: string }>({
+  accountId: "",
+  stockNo: "",
+});
+
+
 
 onMounted(() => {
   // navigateTo("/mainView");
 });
+
+async function settingAccount(accountItem: IStockAccountList[]) {
+  searchingParams.accountId = accountItem[0]?.accountId || "";
+}
+
+
+async function settingStockNo(stockNo: string) {
+  searchingParams.stockNo = stockNo;
+  console.log("searchingParams:", searchingParams);
+}
+
+
+
 </script>
 <style lang="scss" scoped></style>
