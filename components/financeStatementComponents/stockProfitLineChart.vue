@@ -1,45 +1,46 @@
 <template>
-  <div style="width: 100%; height: 400px">
-    <canvas id="stockPriceChart"></canvas>
+  <div style="width: 100%; height: 500px" class="border-1">
+    <canvas :id="`stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
-import { watch, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
-const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
-  searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }),
-});
+const props = withDefaults(
+  defineProps<{ searchingParamsGot: IStockPriceSearchingParams; purchasePrice: number; indexGot: number }>(),
+  {
+    searchingParamsGot: () => ({ stockNo: "", stockName: "", startDate: "", endDate: "" }),
+  },
+);
 
 const lineChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 let chartInstance: Chart | null = null;
 
-watch(
-  props,
-  () => {
-    searchingStockPrice();
-  },
-  { deep: true },
-);
+onMounted(() => {
+  console.log("onMounted props:", props);
+  searchingStockPrice();
+});
 
 async function searchingStockPrice() {
   // console.log("searchingParams:", props.searchingParamsGot);
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
-    // console.log("fetchStockRangeValue:", res.data.data);
+    console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
       lineChartTitle.value =
         props.searchingParamsGot.stockName +
-        " " +
+        "股價走勢" +
+        "\n\n\n\n\n\n\n" +
+        "買入日：" +
         props.searchingParamsGot.startDate.replace(/-/g, "/") +
-        " ~ " +
-        props.searchingParamsGot.endDate.replace(/-/g, "/") +
-        "股價走勢";
+        "\n\n\n\n\n\n\n" +
+        " 買入價：" +
+        props.purchasePrice.toFixed(2);
       if (res.data.data.data.length > 0) {
         stockDataLineChart.value = res.data.data.data.map((record: any) => {
           return {
@@ -72,7 +73,9 @@ const getData = (chartData: any[]) => {
 // CanvasRenderingContext2D
 async function renderingChart() {
   // console.log(props.chartType);
-  const stockPriceChart = document.getElementById("stockPriceChart") as HTMLCanvasElement;
+  const stockProfitLineChartStockNoIndex = document.getElementById(
+    `stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`,
+  ) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -86,8 +89,10 @@ async function renderingChart() {
     ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data)))
     : 0;
   let variation = 0;
+  let currentValue = 0;
+  let lastValue = 0;
 
-  chartInstance = new Chart(stockPriceChart, {
+  chartInstance = new Chart(stockProfitLineChartStockNoIndex, {
     type: "line",
     data: {
       labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],
@@ -95,7 +100,7 @@ async function renderingChart() {
         {
           label: lineChartTitle.value,
           data: getData(stockDataLineChart.value),
-          fill: false,
+          fill: { above: "red", below: "green", target: { value: props.purchasePrice } },
         },
       ],
     },
@@ -117,8 +122,6 @@ async function renderingChart() {
             },
             footer: function (tooltipItems) {
               // console.log("tooltipItems:", tooltipItems);
-              let currentValue = 0;
-              let lastValue = 0;
               tooltipItems.forEach(function (tooltipItem) {
                 const index = tooltipItem.dataIndex;
                 currentValue = Number(tooltipItem.dataset.data[index]);
@@ -129,21 +132,18 @@ async function renderingChart() {
                     : currentValue - lastValue;
               });
               return (
-                currentValue +
+                "收盤價：" + currentValue +
                 "\n" +
-                (variation > 0 ? "▲" : variation < 0 ? "▼" : "") +
-                (variation === 0
-                  ? "0.00 ( 0.00 % ）"
-                  : (lastValue <= 0 ? "" : variation.toFixed(2)) +
-                    `（ ${lastValue <= 0 ? "N/A" : ((variation / lastValue) * 100).toFixed(2) + "%"} ）`)
+                "獲利：" +
+                (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) + "%"
               );
             },
           },
           footerColor: function () {
             switch (true) {
-              case variation > 0:
+              case currentValue > props.purchasePrice:
                 return "rgb(255, 0, 0)";
-              case variation < 0:
+              case variation < props.purchasePrice:
                 return "rgb(0, 128, 0)";
               default:
                 return "rgb(255, 255, 255)";

@@ -6,25 +6,33 @@
         <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccount" />
       </div>
       <div class="flex items-center">
-        <span>證券帳戶：</span>
-        <stockStorageSelect :accountIdGot="searchingParams.stockAccountId" :sellectAll="false" @sendbackStockNo="settingStockNo" />
+        <span>存股：</span>
+        <stockStorageSelect
+          :accountIdGot="searchingParams.stockAccountId"
+          :sellectAll="false"
+          @sendbackStockNo="settingStockNo" />
       </div>
-      <ui-buttonGroup showSearch @dataSearch="searchingStockStorage" :searchDisable="!searchingParams.stockAccountId || !searchingParams.stockNo" />
+      <ui-buttonGroup
+        showSearch
+        @dataSearch="searchingStockStorage"
+        :searchDisable="!searchingParams.stockAccountId || !searchingParams.stockNo" />
     </div>
+      <UCarousel :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'" :items="stockPurchaseRecord" auto-height arrows dots loop wheel-gestures v-slot="{ item }">
     <template v-if="stockPurchaseRecord.length > 0">
-      <UCarousel class="w-full max-w-xs mx-auto" :items="stockPurchaseRecord" auto-height arrows dots loop wheel-gestures>
-        <template #item="{ item }">
-          <stockProfitLineChart
-            :searchingParamsGot="{ stockNo: item.stockNo, stockName: item.stockName, startDate: item.tradeDatetime, endDate: getCurrentYMD() }" />
-        </template>
-      </UCarousel>
+        <stockProfitLineChart
+          :searchingParamsGot="{
+            stockNo: item.stockNo,
+            stockName: item.stockName,
+            startDate: item.tradeDatetime,
+            endDate: getCurrentYMD(),
+          }"
+          :purchasePrice="item.pricePerShare"
+          :indexGot="item.index" />
     </template>
     <template v-else>
-      <span>請選擇證券帳戶及股票以查詢獲利紀錄</span>
+      <div class="text-xl font-semibold flex justify-center my-2">請選擇證券帳戶及股票以查詢獲利紀錄</div>
     </template>
-    <!-- <UCarousel class="w-full max-w-xs mx-auto" :items="items" v-slot="{ item }" auto-height arrows dots loop wheel-gestures>
-      <img :src="item" width="320" height="320" class="rounded-lg">
-    </UCarousel> -->
+      </UCarousel>
   </div>
 </template>
 <script setup lang="ts">
@@ -47,22 +55,11 @@ const stockProfitLineChart = defineAsyncComponent(
   () => import("@/components/financeStatementComponents/stockProfitLineChart.vue"),
 );
 
-
-
 const searchingParams = reactive<{ stockAccountId: string; stockNo: string }>({
   stockAccountId: "",
   stockNo: "",
 });
-const stockPurchaseRecord = ref<IStockAccountRecordList[]>([]);
-
-const items = [
-  'https://picsum.photos/640/640?random=1',
-  'https://picsum.photos/640/320?random=2',
-  'https://picsum.photos/640/640?random=3',
-  'https://picsum.photos/640/320?random=4',
-  'https://picsum.photos/640/640?random=5',
-  'https://picsum.photos/640/320?random=6'
-]
+const stockPurchaseRecord = ref<(IStockAccountRecordList & { index?: number })[]>([]);
 
 onMounted(() => {
   // navigateTo("/mainView");
@@ -72,12 +69,9 @@ async function settingAccount(accountItem: IStockAccountList[]) {
   searchingParams.stockAccountId = accountItem[0]?.accountId || "";
 }
 
-
 async function settingStockNo(stockNo: string) {
   searchingParams.stockNo = stockNo;
 }
-
-
 
 async function searchingStockStorage() {
   stockPurchaseRecord.value = [];
@@ -86,7 +80,11 @@ async function searchingStockStorage() {
     const res: IResponse = await fetchEachStockStorageData(searchingParams);
     if (res.data.returnCode === 0) {
       stockPurchaseRecord.value = res.data.data;
-      console.log("stockPurchaseRecord:", stockPurchaseRecord.value);
+      for (let i = 0; i < stockPurchaseRecord.value.length; i++) {
+        stockPurchaseRecord.value[i].tradeDatetime = getCurrentYMD(stockPurchaseRecord.value[i].tradeDatetime);
+        stockPurchaseRecord.value[i].index = i + 1;
+      }
+      // console.log("stockPurchaseRecord:", stockPurchaseRecord.value);
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -94,8 +92,5 @@ async function searchingStockStorage() {
     errorMessageDialog({ message: (error as Error).message });
   }
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

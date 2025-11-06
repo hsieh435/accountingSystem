@@ -1,25 +1,31 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="bg-gray-100 flex items-center px-3 py-1">
-      <span>證券帳戶：</span>
-      <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="searchingStockStorage" />
+    <div class="bg-gray-100 flex gap-3 px-3 py-1">
+      <div class="flex items-center">
+        <span>證券帳戶：</span>
+        <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
+      </div>
+
+      <ui-buttonGroup showSearch @dataSearch="searchingStockStorage" :searchDisable="!searchingParams.accountId" />
     </div>
-    <div class="flex justify-center mx-auto px-3 py-5" style="width: 80%">
-      <div class="w-1/2 h-full grid grid-flow-col grid-rows-4 gap-2">
-        <span class="text-lg font-bold my-5">庫存損益總覽</span>
-        <div class="grid grid-cols-2">
-          <span class="col-span-1 text-right">股票市值：</span>
-          <span class="col-span-1">{{ currencyFormat(currentValueOverall) }} 元</span>
+    <template v-if="currentValueOverall > 0 && totalCostOverall > 0">
+      <div class="flex justify-center mx-auto px-3 py-5" style="width: 80%">
+        <div class="w-1/2 h-full grid grid-flow-col grid-rows-4 gap-2">
+          <span class="text-lg font-bold my-5">庫存損益總覽</span>
+          <div class="grid grid-cols-2">
+            <span class="col-span-1 text-right">股票市值：</span>
+            <span class="col-span-1">{{ currencyFormat(currentValueOverall) }} 元</span>
+          </div>
+          <div class="grid grid-cols-2">
+            <span class="col-span-1 text-right">總成本：</span>
+            <span class="col-span-1">{{ currencyFormat(totalCostOverall) }} 元</span>
+          </div>
         </div>
-        <div class="grid grid-cols-2">
-          <span class="col-span-1 text-right">總成本：</span>
-          <span class="col-span-1">{{ currencyFormat(totalCostOverall) }} 元</span>
+        <div class="w-1/2 flex justify-center items-center px-3 py-1">
+          <canvas id="stockProfitChartOverall"></canvas>
         </div>
       </div>
-      <div class="w-1/2 flex justify-center items-center px-3 py-1">
-        <canvas id="stockProfitChartOverall"></canvas>
-      </div>
-    </div>
+    </template>
     <UAccordion
       :ui="{ label: 'mx-5', trailingIcon: 'mx-5', body: 'mx-5' }"
       :items="accordionItems"
@@ -66,13 +72,13 @@ const currentValueOverall = ref<number>(0);
 const profitOverall = ref<number>(0);
 const stockStorageChart = ref<Chart | null>(null);
 
-async function searchingStockStorage(accountItem: IStockAccountList[]) {
-  if (!accountItem[0]?.accountId) return;
-
+async function settingAccountId(accountItem: IStockAccountList[]) {
   searchingParams.accountId = accountItem[0].accountId;
+}
 
+async function searchingStockStorage() {
   try {
-    const res: IResponse = await fetchStockStorageProfitList(accountItem[0].accountId);
+    const res: IResponse = await fetchStockStorageProfitList(searchingParams.accountId);
     console.log("res:", res.data.data);
     if (res.data.returnCode === 0) {
       accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
@@ -89,7 +95,7 @@ async function searchingStockStorage(accountItem: IStockAccountList[]) {
 }
 
 async function caculateProfit(totalCost: number, currentValue: number, profit: number) {
-  console.log("data:", totalCost, currentValue, profit);
+  // console.log("data:", totalCost, currentValue, profit);
   totalCostOverall.value += totalCost;
   currentValueOverall.value += currentValue;
   profitOverall.value += profit;

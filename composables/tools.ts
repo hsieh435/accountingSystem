@@ -77,9 +77,9 @@ export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTi
 
 
 
-// 取得今日日期 yyyy-mm-dd
-export function getCurrentYMD() {
-  const date = new Date();
+// 取得日期格式 yyyy-mm-dd 或今日日期
+export function getCurrentYMD(dateInput: string | number = ''): string {
+  const date = dateInput ? new Date(dateInput) : new Date();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const dayofMonth = String(date.getDate()).padStart(2, "0");
 
