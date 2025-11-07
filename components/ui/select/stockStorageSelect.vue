@@ -1,5 +1,6 @@
 <template>
   <select :class="tailwindStyles.getSelectClasses()" v-model="stockNo">
+    <option value="" v-if="props.sellectAll">請選擇股票</option>
     <option v-for="account in stockList" :key="account.value" :value="account.value">
       {{ account.label }}
     </option>

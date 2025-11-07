@@ -7,18 +7,23 @@
       </div>
       <div class="flex items-center">
         <span>存股：</span>
-        <stockStorageSelect
-          :accountIdGot="searchingParams.stockAccountId"
-          :sellectAll="false"
-          @sendbackStockNo="settingStockNo" />
+        <stockStorageSelect :accountIdGot="searchingParams.stockAccountId" sellectAll @sendbackStockNo="settingStockNo" />
       </div>
       <ui-buttonGroup
         showSearch
         @dataSearch="searchingStockStorage"
         :searchDisable="!searchingParams.stockAccountId || !searchingParams.stockNo" />
     </div>
-      <UCarousel :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'" :items="stockPurchaseRecord" auto-height arrows dots loop wheel-gestures v-slot="{ item }">
     <template v-if="stockPurchaseRecord.length > 0">
+      <UCarousel
+        :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'"
+        :items="stockPurchaseRecord"
+        auto-height
+        arrows
+        dots
+        loop
+        wheel-gestures
+        v-slot="{ item }">
         <stockProfitLineChart
           :searchingParamsGot="{
             stockNo: item.stockNo,
@@ -28,11 +33,11 @@
           }"
           :purchasePrice="item.pricePerShare"
           :indexGot="item.index" />
+      </UCarousel>
     </template>
     <template v-else>
       <div class="text-xl font-semibold flex justify-center my-2">請選擇證券帳戶及股票以查詢獲利紀錄</div>
     </template>
-      </UCarousel>
   </div>
 </template>
 <script setup lang="ts">

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { errorMessageDialog } from "@/composables/swalDialog";
@@ -25,6 +25,13 @@ onMounted(() => {
   console.log("onMounted props:", props);
   searchingStockPrice();
 });
+
+watch(() => props.searchingParamsGot, () => {
+    console.log("watch props:", props);
+    // searchingStockPrice();
+  },
+  { deep: true },
+);
 
 async function searchingStockPrice() {
   // console.log("searchingParams:", props.searchingParamsGot);
@@ -143,7 +150,7 @@ async function renderingChart() {
             switch (true) {
               case currentValue > props.purchasePrice:
                 return "rgb(255, 0, 0)";
-              case variation < props.purchasePrice:
+              case currentValue < props.purchasePrice:
                 return "rgb(0, 128, 0)";
               default:
                 return "rgb(255, 255, 255)";
