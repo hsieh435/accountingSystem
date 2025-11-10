@@ -7,16 +7,18 @@
       </div>
       <div class="flex items-center">
         <span>存股：</span>
-        <stockStorageSelect :accountIdGot="searchingParams.stockAccountId" sellectAll @sendbackStockNo="settingStockNo" />
+        <stockStorageSelect
+          :accountIdGot="searchingParams.stockAccountId"
+          sellectAll
+          @sendbackStockNo="settingStockNo" />
       </div>
       <ui-buttonGroup
         showSearch
         @dataSearch="searchingStockStorage"
         :searchDisable="!searchingParams.stockAccountId || !searchingParams.stockNo" />
     </div>
-    <template v-if="stockPurchaseRecord.length > 0">
+    <div class="my-5" :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'">
       <UCarousel
-        :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'"
         :items="stockPurchaseRecord"
         auto-height
         arrows
@@ -34,14 +36,15 @@
           :purchasePrice="item.pricePerShare"
           :indexGot="item.index" />
       </UCarousel>
-    </template>
-    <template v-else>
-      <div class="text-xl font-semibold flex justify-center my-2">請選擇證券帳戶及股票以查詢獲利紀錄</div>
+    </div>
+    <template v-if="stockPurchaseRecord.length === 0">
+      <!-- <div class="text-xl font-semibold flex justify-center my-2">請選擇證券帳戶及股票以查詢獲利紀錄</div> -->
+      <div class="text-xl font-semibold flex justify-center my-2"></div>
     </template>
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
+import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
@@ -65,10 +68,6 @@ const searchingParams = reactive<{ stockAccountId: string; stockNo: string }>({
   stockNo: "",
 });
 const stockPurchaseRecord = ref<(IStockAccountRecordList & { index?: number })[]>([]);
-
-onMounted(() => {
-  // navigateTo("/mainView");
-});
 
 async function settingAccount(accountItem: IStockAccountList[]) {
   searchingParams.stockAccountId = accountItem[0]?.accountId || "";

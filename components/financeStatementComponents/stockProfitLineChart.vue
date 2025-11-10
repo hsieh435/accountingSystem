@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 500px" class="border-1">
+  <div style="width: 100%; height: 500px">
     <canvas :id="`stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`"></canvas>
   </div>
 </template>
@@ -7,6 +7,7 @@
 import { onMounted, watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
+import { currencyFormat } from "@/composables/tools";
 import { errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
@@ -26,8 +27,8 @@ onMounted(() => {
   searchingStockPrice();
 });
 
-watch(() => props.searchingParamsGot, () => {
-    console.log("watch props:", props);
+watch(() => props, () => {
+    // console.log("watch props:", props);
     // searchingStockPrice();
   },
   { deep: true },
@@ -37,7 +38,7 @@ async function searchingStockPrice() {
   // console.log("searchingParams:", props.searchingParamsGot);
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
-    console.log("fetchStockRangeValue:", res.data.data);
+    // console.log("fetchStockRangeValue:", res.data.data);
     if (res.data.returnCode === 0) {
       lineChartTitle.value =
         props.searchingParamsGot.stockName +
@@ -47,7 +48,7 @@ async function searchingStockPrice() {
         props.searchingParamsGot.startDate.replace(/-/g, "/") +
         "\n\n\n\n\n\n\n" +
         " 買入價：" +
-        props.purchasePrice.toFixed(2);
+        currencyFormat(props.purchasePrice);
       if (res.data.data.data.length > 0) {
         stockDataLineChart.value = res.data.data.data.map((record: any) => {
           return {
@@ -58,7 +59,7 @@ async function searchingStockPrice() {
       } else {
         stockDataLineChart.value = [{ label: "無資料", data: 0 }];
       }
-      renderingChart();
+      await renderingChart();
     } else {
       errorMessageDialog({ message: res.data.message });
     }
@@ -79,10 +80,9 @@ const getData = (chartData: any[]) => {
 
 // CanvasRenderingContext2D
 async function renderingChart() {
-  // console.log(props.chartType);
-  const stockProfitLineChartStockNoIndex = document.getElementById(
-    `stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`,
-  ) as HTMLCanvasElement;
+  const stockProfitLineChartStockNoIndex =
+    document.getElementById(`stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`) as HTMLCanvasElement;
+  console.log("stockProfitLineChartStockNoIndex:", stockProfitLineChartStockNoIndex);
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -95,9 +95,7 @@ async function renderingChart() {
   const scalesMin = getData(stockDataLineChart.value)
     ? Math.floor(Math.min(...getData(stockDataLineChart.value).map((data) => data)))
     : 0;
-  let variation = 0;
   let currentValue = 0;
-  let lastValue = 0;
 
   chartInstance = new Chart(stockProfitLineChartStockNoIndex, {
     type: "line",
@@ -132,14 +130,9 @@ async function renderingChart() {
               tooltipItems.forEach(function (tooltipItem) {
                 const index = tooltipItem.dataIndex;
                 currentValue = Number(tooltipItem.dataset.data[index]);
-                lastValue = index > 0 ? Number(tooltipItem.dataset.data[index - 1]) : 0;
-                variation =
-                  index === 0 || !Array.isArray(tooltipItem.dataset.data) || currentValue === null || lastValue === null
-                    ? 0
-                    : currentValue - lastValue;
               });
               return (
-                "收盤價：" + currentValue +
+                "收盤價：" + currencyFormat(currentValue) +
                 "\n" +
                 "獲利：" +
                 (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) + "%"
