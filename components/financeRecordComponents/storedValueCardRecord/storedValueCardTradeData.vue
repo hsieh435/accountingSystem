@@ -137,7 +137,6 @@ import {
 } from "@/server/storedValueCardRecordApi";
 import {
   IStoredValueCardRecordData,
-  IStoredValueCardRecordList,
   IStoredValueCardList,
   ICurrencyList,
   IResponse,

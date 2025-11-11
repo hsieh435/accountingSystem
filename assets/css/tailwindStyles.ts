@@ -1,4 +1,3 @@
-
 // tables CSS styles
 export function getTableClasses() {
   return "table w-full min-w-max border-1 overflow-x-auto overflow-y-hidden mb-5";
@@ -12,9 +11,12 @@ export function getTheadtrClasses() {
   return "table-row border-1";
 }
 
-const tableLastColumn = "min-w-max sticky last:right-0";
+// changed: ensure every class for the last column is prefixed with `last:`
+// and make the last cell inherit row background and respond to group hover
+const tableLastColumn = "last:min-w-max last:sticky last:right-0 last:right-0 last:bg-inherit last:group-hover:bg-inherit";
+
 export function getThClasses() {
-  return `table-cell w-auto text-white bg-black border-r border-white px-1 py-1 first:w-[60px] last:border-r-0 last:${tableLastColumn}`;
+  return `table-cell w-auto text-white bg-black border-r border-white px-1 py-1 first:w-[60px] last:border-r-0 last:min-w-max last:sticky last:right-0`;
 }
 
 export function getTbodyClasses() {
@@ -29,7 +31,7 @@ export function getTbodytrClasses() {
 
 export function getTdClasses() {
   return `table-cell text-black border-r border-b border-gray-200 text-center align-middle px-2 py-[1px]
-  first:w-[60px] last:${tableLastColumn}`;
+  first:w-[60px] ${tableLastColumn}`;
 }
 
 export function getNoDataClasses() {

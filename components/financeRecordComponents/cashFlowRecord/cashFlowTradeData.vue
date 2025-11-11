@@ -197,15 +197,9 @@ watch(open, () => {
       Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (open.value === false) {
-    Object.assign(dataParams.updateData, getDefaultDataParams());
+    Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
-    dataParams.oriData = {
-      oriTradeDatetime: "",
-      oriTradeAmount: 0,
-      oriRemainingAmount: 0,
-      oriTransactionType: "income",
-    };
   }
 });
 

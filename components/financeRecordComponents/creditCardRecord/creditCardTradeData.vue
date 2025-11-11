@@ -169,11 +169,6 @@ watch(open, () => {
   } else if (open.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
-    dataParams.oriData = {
-      oriTradeDatetime: "",
-      oriTradeAmount: 0,
-      oriRemainingAmount: 0,
-    };
   }
 });
 

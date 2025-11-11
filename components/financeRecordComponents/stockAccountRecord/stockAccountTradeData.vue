@@ -267,15 +267,9 @@ watch(open, () => {
       Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (open.value === false) {
-    Object.assign(dataParams.updateData, getDefaultDataParams());
+    Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(stockAccountChosen, {} as IStockAccountRecordList);
-    dataParams.oriData = {
-      oriTradeDatetime: "",
-      oriTradeAmount: 0,
-      oriRemainingAmount: 0,
-      oriTransactionType: "income",
-    };
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
