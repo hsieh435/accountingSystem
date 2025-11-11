@@ -26,7 +26,7 @@
         </div>
 
         <div>
-          <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <div class="d-flex flex-row justify-start items-center grid grid-cols-6">
             <span class="col-start-1 col-end-3 text-right">原本密碼：</span>
             <UInput class="col-span-3" id="userOldPassword" v-model="userOldPassword" type="password" />
           </div>
@@ -37,7 +37,7 @@
         </div>
 
         <div>
-          <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+          <div class="d-flex flex-row justify-start items-center grid grid-cols-6">
             <span class="col-start-1 col-end-3 text-right">新密碼：</span>
             <UInput class="col-span-3" id="userNewPassword" v-model="userNewPassword" type="password" />
           </div>
@@ -45,8 +45,10 @@
             <span class="col-span-2 text-right"></span>
             <span class="col-span-4 text-red-500 mx-2">請輸入新密碼</span>
           </div>
+        </div>
 
-          <div class="d-flex flex-row justify-start items-center grid grid-cols-6 my-2">
+        <div>
+          <div class="d-flex flex-row justify-start items-center grid grid-cols-6">
             <span class="col-start-1 col-end-3 text-right">重複新密碼：</span>
             <UInput class="col-span-3" id="userNewPasswordSecond" v-model="userNewPasswordSecond" type="password" />
           </div>
