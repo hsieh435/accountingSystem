@@ -44,7 +44,7 @@ export function errorMessageDialog({ message, icon = "error", hasConfirmButton =
     icon: getSwalIcon(icon),
     title: message,
     showConfirmButton: hasConfirmButton,
-    confirmButtonText: `確定`,
+    confirmButtonText: "確定",
     width: "auto",
     color: "rgb(0, 0, 0)",
   });

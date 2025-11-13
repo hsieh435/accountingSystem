@@ -331,10 +331,10 @@ async function cashFlowRecordDataHandling() {
       emits("dataReseaching");
       open.value = false;
     } else {
-      errorMessageDialog({ message: res.data.message });
+      messageToast({ message: res.data.message, icon: "error" });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>
