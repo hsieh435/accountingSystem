@@ -18,7 +18,7 @@ import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(
   defineProps<{
-    selectTargetId: string;
+    selectTargetId?: string;
     accountIdGot?: string;
     sellectAll?: boolean;
     isDisable?: boolean;
@@ -35,8 +35,36 @@ const oriAccountList = ref<any[]>([]);
 
 const isDisabled = computed(() => props.isDisable);
 
+// Account type configuration
+const accountTypeConfig = {
+  isCashflowAble: {
+    fetch: fetchCashFlowList,
+    pkField: "cashflowId",
+    nameField: "cashflowName",
+  },
+  isStoredvaluecardAble: {
+    fetch: fetchStoredValueCardList,
+    pkField: "storedValueCardId",
+    nameField: "storedValueCardName",
+  },
+  isCreditcardAble: {
+    fetch: fetchCreditCardList,
+    pkField: "creditcardId",
+    nameField: "creditcardName",
+  },
+  isCuaccountAble: {
+    fetch: fetchCurrencyAccountList,
+    pkField: "accountId",
+    nameField: "accountName",
+  },
+  isStaccountAble: {
+    fetch: fetchStockAccountList,
+    pkField: "accountId",
+    nameField: "accountName",
+  },
+};
+
 onMounted(async () => {
-  // console.log("onMounted props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
   }
@@ -51,81 +79,36 @@ async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchingParams);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
-    if (props.sellectAll === false) {
-      accountId.value = accountList.value[0].value || "";
-    } else {
-      accountId.value = props.accountIdGot || "";
-    }
-
-    // console.log("list:", list);
-    // console.log("oriAccountList:", oriAccountList.value);
+    accountId.value = props.sellectAll ? props.accountIdGot || "" : accountList.value[0]?.value || "";
   } catch (error) {
     errorMessageDialog({ message: (error as Error).message });
   }
 }
 
 async function getAccountListByType(type: string, params: IAccountSearchingParams) {
-  switch (type) {
-    case "isCashflowAble": {
-      const res = await fetchCashFlowList(params);
-      oriAccountList.value = res.data.data;
-      for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].cashflowId;
-      }
-      // console.log("res:", res.data.data);
-      return res.data.data.map((item: any) => ({
-        label: item.cashflowName,
-        value: item.cashflowId,
-      }));
-    }
-    case "isStoredvaluecardAble": {
-      const res = await fetchStoredValueCardList(params);
-      oriAccountList.value = res.data.data;
-      for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].storedValueCardId;
-      }
-      return res.data.data.map((item: any) => ({
-        label: item.storedValueCardName,
-        value: item.storedValueCardId,
-      }));
-    }
-    case "isCreditcardAble": {
-      const res = await fetchCreditCardList(params);
-      oriAccountList.value = res.data.data;
-      for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].creditcardId;
-      }
-      return res.data.data.map((item: any) => ({
-        label: item.creditcardName,
-        value: item.creditcardId,
-      }));
-    }
-    case "isCuaccountAble": {
-      const res = await fetchCurrencyAccountList(params);
-      oriAccountList.value = res.data.data;
-      for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].accountId;
-      }
-      return res.data.data.map((item: any) => ({
-        label: item.accountName,
-        value: item.accountId,
-      }));
-    }
-    case "isStaccountAble": {
-      const res = await fetchStockAccountList(params);
-      oriAccountList.value = res.data.data;
-      for (let i = 0; i < oriAccountList.value.length; i++) {
-        oriAccountList.value[i]["pkValue"] = oriAccountList.value[i].accountId;
-      }
-      return res.data.data.map((item: any) => ({
-        label: item.accountName,
-        value: item.accountId,
-      }));
-    }
-    default:
-      oriAccountList.value = [];
-      return [];
+  const config = accountTypeConfig[type as keyof typeof accountTypeConfig];
+
+  if (!config) {
+    oriAccountList.value = [];
+    return [];
   }
+
+  const res = await config.fetch(params);
+
+  if (!res.data.data.length) {
+    oriAccountList.value = [];
+    return [];
+  }
+
+  oriAccountList.value = res.data.data.map((item: any) => ({
+    ...item,
+    pkValue: item[config.pkField],
+  }));
+
+  return res.data.data.map((item: any) => ({
+    label: item[config.nameField],
+    value: item[config.pkField],
+  }));
 }
 </script>
 <style lang="scss" scoped></style>

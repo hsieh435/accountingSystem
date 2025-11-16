@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-11-04 23:27:16
+-- Started on 2025-11-16 23:18:24
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -472,7 +472,7 @@ stockAccount	證券帳戶
 --
 
 COPY public.cashflow_list (cashflow_id, user_id, account_type, cashflow_name, currency, starting_amount, present_amount, minimum_value_allowed, alert_value, open_alert, enable, created_date, note) FROM stdin;
-CF-1759236429957	mike	cashFlow	新臺幣現金	TWD	1000.000	371.000	0.000	5000.000	t	t	2025-09-30 20:47:09+08	
+CF-1763304352080	mike	cashFlow	新臺幣現金流	TWD	5000.000	4125.000	0.000	2000.000	t	t	2025-11-16 22:45:52+08	
 \.
 
 
@@ -483,14 +483,11 @@ CF-1759236429957	mike	cashFlow	新臺幣現金	TWD	1000.000	371.000	0.000	5000.0
 --
 
 COPY public.cashflow_trade (trade_id, cashflow_id, user_id, trade_datetime, trade_category, transaction_type, trade_amount, remaining_amount, currency, trade_description, trade_note) FROM stdin;
-CF-TWD-1759418399220	CF-1759236429957	mike	2025-10-01 07:30:00+08	food	expense	75.000	2925.000	TWD	早餐	
-CF-TWD-1759243677950	CF-1759236429957	mike	2025-09-30 22:47:47.425+08	atmWithdraw	income	2000.000	3000.000	TWD		
-CF-TWD-1759418445568	CF-1759236429957	mike	2025-10-01 08:00:00+08	food	expense	55.000	2870.000	TWD	咖啡	
-CF-TWD-1759418476283	CF-1759236429957	mike	2025-10-01 12:30:00+08	food	expense	100.000	2770.000	TWD	午餐	
-CF-TWD-1759418508439	CF-1759236429957	mike	2025-10-01 18:00:00+08	transportation	expense	1200.000	1570.000	TWD	悠遊卡儲值	
-CF-TWD-1759418594420	CF-1759236429957	mike	2025-10-01 18:30:00+08	fuelBills	expense	500.000	1070.000	TWD	加油	95 無鉛汽油每公升 27.7 元，共 18.18 公升
-CF-TWD-1759418851030	CF-1759236429957	mike	2025-10-01 19:00:00+08	phoneBill	expense	599.000	471.000	TWD	9月通話費	
-CF-TWD-1759418902656	CF-1759236429957	mike	2025-10-01 19:30:00+08	food	expense	100.000	271.000	TWD	晚餐	
+CF-TWD-1763304899130	CF-1763304352080	mike	2025-11-14 08:30:00+08	food	expense	75.000	4925.000	TWD		
+CF-TWD-1763305408658	CF-1763304352080	mike	2025-11-14 12:30:00+08	food	expense	100.000	4825.000	TWD		
+CF-TWD-1763305644763	CF-1763304352080	mike	2025-11-14 18:00:00+08	food	expense	100.000	4725.000	TWD		
+CF-TWD-1763306018118	CF-1763304352080	mike	2025-11-14 19:30:00+08	fuelBills	expense	600.000	4125.000	TWD		
+CF-TWD-1763306225708	CF-1763304352080	mike	2025-11-15 10:00:00+08	books	expense	350.000	3775.000	TWD		
 \.
 
 
@@ -751,8 +748,9 @@ addValue	票卡儲值	t	t	f	f	f	12
 default	初始設置	f	f	f	f	f	99
 investments	投資	t	f	f	t	f	11
 creditcardBill	信用卡帳單	t	f	f	t	f	13
-donation	捐款	t	t	t	t	f	16
 salary	薪資	t	f	f	t	f	1
+donation	捐款	t	t	t	t	f	17
+fine	罰款	t	t	t	t	f	16
 \.
 
 
@@ -959,7 +957,7 @@ ALTER TABLE ONLY public.user_data
     ADD CONSTRAINT user_data_pkey PRIMARY KEY (user_id);
 
 
--- Completed on 2025-11-04 23:27:17
+-- Completed on 2025-11-16 23:18:24
 
 --
 -- PostgreSQL database dump complete

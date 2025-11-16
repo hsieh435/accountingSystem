@@ -13,7 +13,7 @@ export function getTheadtrClasses() {
 
 // changed: ensure every class for the last column is prefixed with `last:`
 // and make the last cell inherit row background and respond to group hover
-const tableLastColumn = "last:min-w-max last:sticky last:right-0 last:right-0 last:bg-inherit last:group-hover:bg-inherit";
+const tableLastColumn = "last:min-w-max last:sticky last:right-0 last:bg-inherit last:group-hover:bg-inherit";
 
 export function getThClasses() {
   return `table-cell w-auto text-white bg-black border-r border-white px-1 py-1 first:w-[60px] last:border-r-0 last:min-w-max last:sticky last:right-0`;
@@ -30,7 +30,7 @@ export function getTbodytrClasses() {
 }
 
 export function getTdClasses() {
-  return `table-cell text-black border-r border-b border-gray-200 text-center align-middle px-2 py-[1px]
+  return `table-cell text-black border-r border-zinc-400 text-center align-middle px-2 py-[1px]
   first:w-[60px] ${tableLastColumn}`;
 }
 

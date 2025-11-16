@@ -237,9 +237,9 @@ async function validateData() {
     dataValidate.alertValue = false;
     alertValueValidateText.value = "請填寫提醒金額";
   }
-  if (dataParams.alertValue < dataParams.startingAmount || dataParams.alertValue < dataParams.minimumValueAllowed) {
+  if (dataParams.alertValue < dataParams.minimumValueAllowed) {
     dataValidate.alertValue = false;
-    alertValueValidateText.value = "提醒金額不可小於初始金額與最小持有金額";
+    alertValueValidateText.value = "提醒金額不可小於最小持有金額";
   }
 
   if (

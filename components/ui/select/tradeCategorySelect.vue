@@ -1,8 +1,8 @@
 <template>
   <select :class="tailwindStyles.getSelectClasses()" v-model="tradeCategoryId">
-    <option v-for="category in tradeCategoryList" :key="category.value" :value="category.value">{{
-      category.label
-    }}</option>
+    <option v-for="category in tradeCategoryList" :key="category.value" :value="category.value">
+      {{ category.label }}
+    </option>
   </select>
 </template>
 <script setup lang="ts">
@@ -53,6 +53,9 @@ async function searchingTradeType() {
         }));
       if (props.sellectAll) {
         tradeCategoryList.value.unshift({ label: "所有項目", value: "" });
+      }
+      if (props.accountType === "") {
+        tradeCategoryList.value.unshift({ label: "無", value: "" });
       }
     } else {
       errorMessageDialog({ message: res.data.data.message });
