@@ -1,6 +1,6 @@
 <template>
   <select :class="tailwindStyles.getSelectClasses()" v-model="tradeCategoryId">
-    <option v-for="category in tradeCategoryList" :key="category.value" :value="category.value">
+    <option v-for="category in tradeCategoryListFiltered" :key="category.value" :value="category.value">
       {{ category.label }}
     </option>
   </select>
@@ -20,7 +20,8 @@ const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?
 const emits = defineEmits(["sendbackTradeCategory"]);
 
 const tradeCategoryId = ref<string>("");
-const tradeCategoryList = ref<ISelectData[]>([]);
+const tradeCategoryList = ref<ITradeCategory[]>([]);
+const tradeCategoryListFiltered = ref<ISelectData[]>([]);
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
@@ -31,7 +32,7 @@ onMounted(async () => {
 watch(props, async () => {
   // console.log("watch props:", props);
   tradeCategoryId.value = props.tradeCategoryGot || "";
-  await searchingTradeType();
+  await tradeCategoryListHandling();
 });
 
 watch(tradeCategoryId, () => {
@@ -43,25 +44,30 @@ async function searchingTradeType() {
     const res: IResponse = await fetchTradeCategoryList();
     // console.log("fetchTradeCategoryList:", res.data.data);
     if (res.data.returnCode === 0) {
-      tradeCategoryList.value = res.data.data
-        .filter((item: ITradeCategory) => {
-          return props.accountType ? item[props.accountType as keyof ITradeCategory] === true : true;
-        })
-        .map((item: ITradeCategory) => ({
-          label: item.tradeName,
-          value: item.tradeCode,
-        }));
-      if (props.sellectAll) {
-        tradeCategoryList.value.unshift({ label: "所有項目", value: "" });
-      }
-      if (props.accountType === "") {
-        tradeCategoryList.value.unshift({ label: "無", value: "" });
-      }
+      tradeCategoryList.value = res.data.data;
+      await tradeCategoryListHandling();
     } else {
       errorMessageDialog({ message: res.data.data.message });
     }
   } catch (error) {
     errorMessageDialog({ message: (error as Error).message });
+  }
+}
+
+async function tradeCategoryListHandling() {
+  tradeCategoryListFiltered.value = tradeCategoryList.value
+    .filter((item: ITradeCategory) => {
+      return props.accountType ? item[props.accountType as keyof ITradeCategory] === true : true;
+    })
+    .map((item: ITradeCategory) => ({
+      label: item.tradeName,
+      value: item.tradeCode,
+    }));
+  if (props.sellectAll) {
+    tradeCategoryListFiltered.value.unshift({ label: "所有項目", value: "" });
+  }
+  if (props.accountType === "") {
+    tradeCategoryListFiltered.value.unshift({ label: "無", value: "" });
   }
 }
 </script>
