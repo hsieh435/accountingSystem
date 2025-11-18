@@ -7,7 +7,7 @@
 import { ref, onMounted, watch } from "vue";
 import { ISelectData, IResponse } from "@/models/index";
 import { fetchCreditcardSchemaList } from "@/server/parameterApi";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ selectId?: string; sellectAll?: boolean; isAble?: boolean }>(), {
@@ -56,7 +56,7 @@ async function searchingSchemaList() {
       errorMessageDialog({ message: res.data.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

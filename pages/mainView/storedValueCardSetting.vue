@@ -73,7 +73,7 @@ import {
 import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -120,14 +120,10 @@ async function storedValueCardSearching() {
   try {
     const res: IResponse = await fetchStoredValueCardList(searchingParams);
     console.log("fetchStoredValueCardList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      storedValueCardList.value = res.data.data;
-      await storedValueCardListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    storedValueCardList.value = res.data.data;
+    await storedValueCardListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -147,13 +143,9 @@ async function adjustAbleStatus(card: IStoredValueCardList) {
     const res: IResponse = await (card.enable === true ? fetchEnableStoredValueCard : fetchDisableStoredValueCard)(
       card.storedValueCardId,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

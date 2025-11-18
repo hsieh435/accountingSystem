@@ -29,7 +29,7 @@ import { defineAsyncComponent, reactive } from "vue";
 import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, ICurrencyList, IResponse } from "@/models/index";
 import { getCurrentYMD, getCurrentYear } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 
@@ -58,11 +58,9 @@ async function searchingCurrencyExRate() {
     console.log("fetchCurrencyExRateInfoList:", res.data.data);
     if (res.data.returnCode === 0) {
       //
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -72,11 +70,9 @@ async function searchingCurrencyHistoryExRate() {
     console.log("fetchCurrencyHistoryExRate:", res.data.data);
     if (res.data.returnCode === 0) {
       //
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

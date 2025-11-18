@@ -46,7 +46,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
 import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import type { AccordionItem } from "@nuxt/ui";
 import { Chart } from "chart.js/auto";
 
@@ -80,17 +80,13 @@ async function searchingStockStorage() {
   try {
     const res: IResponse = await fetchStockStorageProfitList(searchingParams.accountId);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
-        label: `${item.stockNo} / ${item.stockName}`,
-        content: item.stockNo,
-      }));
-      // console.log("accordionItems:", accordionItems.value);
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
+      label: `${item.stockNo} / ${item.stockName}`,
+      content: item.stockNo,
+    }));
+    // console.log("accordionItems:", accordionItems.value);
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

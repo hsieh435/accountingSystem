@@ -7,7 +7,7 @@
 import { watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -50,11 +50,9 @@ async function searchingStockPrice() {
         stockDataLineChart.value = [{ label: "無資料", data: 0 }];
       }
       renderingChart();
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

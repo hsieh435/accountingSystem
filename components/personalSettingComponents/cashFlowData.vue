@@ -188,11 +188,9 @@ async function searchingCashflowData() {
     // console.log("fetchCashFlowById:", res.data.datares);
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -266,11 +264,9 @@ async function cashflowDataHandling() {
       messageToast({ message: res.data.message });
       emits("dataReseaching");
       open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

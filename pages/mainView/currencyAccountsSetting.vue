@@ -120,11 +120,9 @@ async function currencyAccountSearching() {
     if (res.data.returnCode === 0) {
       currencyAccountList.value = res.data.data;
       await currencyAccountListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -149,11 +147,9 @@ async function adjustAbleStatus(account: ICurrencyAccountList) {
     );
     if (res.data.returnCode === 0) {
       messageToast({ message: res.data.message });
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

@@ -40,7 +40,9 @@
           <div class="flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect
+                :dateTimeGot="dataParams.updateData.tradeDatetime"
+                @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeDatetime">
@@ -82,7 +84,10 @@
           <div class="w-full flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
             <template v-if="props.tradeIdGot">
-              <UInput class="col-span-4" :value="dataParams.updateData.stockNo + dataParams.updateData.stockName" disabled />
+              <UInput
+                class="col-span-4"
+                :value="dataParams.updateData.stockNo + dataParams.updateData.stockName"
+                disabled />
             </template>
             <template v-else>
               <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
@@ -194,9 +199,16 @@ import {
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
 } from "@/server/stockAccountRecordApi";
-import { IStockAccountRecordData, IStockAccountRecordList, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index";
+import {
+  IStockAccountRecordData,
+  IStockAccountRecordList,
+  IStockAccountList,
+  IStockList,
+  ICurrencyList,
+  IResponse,
+} from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -283,17 +295,13 @@ async function searchingStockAccountRecord() {
       tradeId: props.tradeIdGot,
     });
     console.log("fetchStockAccountRecordById:", res.data.data);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams.updateData, res.data.data);
-      dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-      dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-      dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    } else {
-      messageToast({ message: res.data.message });
-    }
+    Object.assign(dataParams.updateData, res.data.data);
+    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
+    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
+    dataParams.oriData.oriTransactionType = res.data.data.transactionType;
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -338,9 +346,11 @@ function settingTradeCategory(tradeCategoryId: string) {
 function settingTotalPrice() {
   dataParams.updateData.stockTotalPrice = dataParams.updateData.pricePerShare * dataParams.updateData.quantity;
   if (dataParams.updateData.transactionType === "income") {
-    dataParams.updateData.tradeTotalPrice = dataParams.updateData.stockTotalPrice - dataParams.updateData.handlingFee - dataParams.updateData.transactionTax;
+    dataParams.updateData.tradeTotalPrice =
+      dataParams.updateData.stockTotalPrice - dataParams.updateData.handlingFee - dataParams.updateData.transactionTax;
   } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.updateData.tradeTotalPrice = dataParams.updateData.stockTotalPrice + dataParams.updateData.handlingFee + dataParams.updateData.transactionTax;
+    dataParams.updateData.tradeTotalPrice =
+      dataParams.updateData.stockTotalPrice + dataParams.updateData.handlingFee + dataParams.updateData.transactionTax;
   }
   settingRemainingAmount();
 }
@@ -417,7 +427,11 @@ async function validateData() {
   ) {
     dataValidate.quantity = false;
   }
-  if (typeof dataParams.updateData.handlingFee !== "number" || !isFinite(dataParams.updateData.handlingFee) || dataParams.updateData.handlingFee < 0) {
+  if (
+    typeof dataParams.updateData.handlingFee !== "number" ||
+    !isFinite(dataParams.updateData.handlingFee) ||
+    dataParams.updateData.handlingFee < 0
+  ) {
     dataValidate.handlingFee = false;
   }
   if (
@@ -452,15 +466,11 @@ async function stockAccountRecordDataHandling() {
     const res: IResponse = await (props.tradeIdGot ? fetchStockAccountRecordUpdate : fetchStockAccountRecordCreate)(
       dataParams,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      emits("dataReseaching");
-      open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
+    emits("dataReseaching");
+    open.value = false;
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

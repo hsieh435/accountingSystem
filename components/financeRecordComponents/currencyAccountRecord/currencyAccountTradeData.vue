@@ -37,7 +37,9 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
           <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-            <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+            <dateTimeSelect
+              :dateTimeGot="dataParams.updateData.tradeDatetime"
+              @sendbackDateTime="settingTradeDatetime" />
           </div>
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -125,7 +127,7 @@ import {
 } from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -202,21 +204,17 @@ async function searchingCurrencyAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-      originalTradeDatetime.value = res.data.data.tradeDatetime;
+    Object.assign(dataParams, res.data.data);
+    originalTradeDatetime.value = res.data.data.tradeDatetime;
 
-      originalTradeAmount.value = res.data.data.tradeAmount;
-      if (res.data.data.transactionType === "income") {
-        originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
-      } else if (res.data.data.transactionType === "expense") {
-        originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
-      }
-    } else {
-      messageToast({ message: res.data.message });
+    originalTradeAmount.value = res.data.data.tradeAmount;
+    if (res.data.data.transactionType === "income") {
+      originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
+    } else if (res.data.data.transactionType === "expense") {
+      originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -250,7 +248,8 @@ function settingTransactionType(type: string) {
 }
 
 async function settingRemainingAmount() {
-  dataParams.updateData.tradeAmount = typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
+  dataParams.updateData.tradeAmount =
+    typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
   if (dataParams.updateData.transactionType === "income") {
     dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
@@ -309,7 +308,11 @@ async function validateData() {
   if (!dataParams.updateData.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (typeof dataParams.updateData.tradeAmount !== "number" || !isFinite(dataParams.updateData.tradeAmount) || dataParams.updateData.tradeAmount < 0) {
+  if (
+    typeof dataParams.updateData.tradeAmount !== "number" ||
+    !isFinite(dataParams.updateData.tradeAmount) ||
+    dataParams.updateData.tradeAmount < 0
+  ) {
     dataValidate.tradeAmount = false;
     // tradeAmountValidateText.value = "交易金額不得為負";
   }
@@ -334,15 +337,11 @@ async function currencyAccountRecordDataHandling() {
     const res: IResponse = await (
       props.tradeIdGot ? fetchCurrencyAccountRecordUpdate : fetchCurrencyAccountRecordCreate
     )(dataParams);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      emits("dataReseaching");
-      open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
+    emits("dataReseaching");
+    open.value = false;
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

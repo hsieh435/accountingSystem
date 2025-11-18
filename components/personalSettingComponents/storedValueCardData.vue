@@ -23,8 +23,9 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
-            <UInput :class="['col-span-3', dataValidate.storedValueCardName ? '' : 'outline-1 outline-red-500',
-              ]" v-model="dataParams.storedValueCardName" />
+            <UInput
+              :class="['col-span-3', dataValidate.storedValueCardName ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.storedValueCardName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardName">
             <span class="col-span-2 text-right"></span>
@@ -206,11 +207,9 @@ async function searchingStoredValueCardData() {
     if (res.data.returnCode === 0) {
       Object.assign(dataParams, res.data.data);
       open.value = true;
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -301,11 +300,9 @@ async function storedValueCardDataHandling() {
       messageToast({ message: res.data.message });
       emits("dataReseaching");
       open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

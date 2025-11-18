@@ -63,7 +63,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi";
 import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
@@ -116,14 +116,10 @@ async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStoredValueCardRecordList(searchingParams);
     console.log("fetchStoredValueCardRecordList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      storedValueCardRecordList.value = res.data.data;
-      await storedValueCardRecordListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    storedValueCardRecordList.value = res.data.data;
+    await storedValueCardRecordListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

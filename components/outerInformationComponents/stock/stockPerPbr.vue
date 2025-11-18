@@ -8,7 +8,7 @@ import { ref, watch } from "vue";
 import { fetchStockPerPbr } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -55,11 +55,9 @@ async function searchingStockPerPbr() {
         stockDividendYield.value = [0];
       }
       renderingChart();
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

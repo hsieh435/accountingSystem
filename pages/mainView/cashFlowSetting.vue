@@ -108,14 +108,10 @@ async function cashFlowSearching() {
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      cashFlowList.value = res.data.data;
-      await cashFlowListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    cashFlowList.value = res.data.data;
+    await cashFlowListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -129,11 +125,9 @@ async function adjustAbleStatus(card: ICashFlowList) {
     const res: IResponse = await (card.enable === true ? fetchEnableCashFlow : fetchDisableCashFlow)(card.cashflowId);
     if (res.data.returnCode === 0) {
       messageToast({ message: res.data.message });
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

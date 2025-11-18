@@ -1,8 +1,6 @@
 import { IResponse } from "@/models/index.ts";
 import Swal from "sweetalert2";
 
-
-
 function getSwalIcon(icon: string) {
   switch (icon) {
     case "success":
@@ -16,9 +14,15 @@ function getSwalIcon(icon: string) {
   }
 }
 
-
-
-export function messageToast({ message, icon = "success", existTime = 1500 }: { message: string, icon?: string, existTime?: number; }) {
+export function messageToast({
+  message,
+  icon = "success",
+  existTime = 1500,
+}: {
+  message: string;
+  icon?: string;
+  existTime?: number;
+}) {
   const Toast = Swal.mixin({
     toast: true,
     position: "top",
@@ -29,7 +33,7 @@ export function messageToast({ message, icon = "success", existTime = 1500 }: { 
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
       toast.onmouseleave = Swal.resumeTimer;
-    }
+    },
   });
   Toast.fire({
     icon: getSwalIcon(icon),
@@ -37,9 +41,15 @@ export function messageToast({ message, icon = "success", existTime = 1500 }: { 
   });
 }
 
-
-
-export function errorMessageDialog({ message, icon = "error", hasConfirmButton = false }: { message: string; icon?: string; hasConfirmButton?: boolean; }) {
+export function errorMessageDialog({
+  message,
+  icon = "error",
+  hasConfirmButton = false,
+}: {
+  message: string;
+  icon?: string;
+  hasConfirmButton?: boolean;
+}) {
   Swal.fire({
     icon: getSwalIcon(icon),
     title: message,
@@ -50,10 +60,25 @@ export function errorMessageDialog({ message, icon = "error", hasConfirmButton =
   });
 }
 
-
-
-export async function showConfirmDialog({ message, text = "", confirmButtonMsg = "確定", cancelButtonText = "取消", icon = "warning", showCancelButton = true, executionApi, apiParams }: { message: string, text?: string, confirmButtonMsg?: string, cancelButtonText?: string, icon?: string; showCancelButton?: boolean; executionApi?: Function; apiParams?: any }): Promise<boolean> {
-
+export async function showConfirmDialog({
+  message,
+  text = "",
+  confirmButtonMsg = "確定",
+  cancelButtonText = "取消",
+  icon = "warning",
+  showCancelButton = true,
+  executionApi,
+  apiParams,
+}: {
+  message: string;
+  text?: string;
+  confirmButtonMsg?: string;
+  cancelButtonText?: string;
+  icon?: string;
+  showCancelButton?: boolean;
+  executionApi?: Function;
+  apiParams?: any;
+}): Promise<boolean> {
   return Swal.fire({
     title: message,
     text: text,
@@ -64,7 +89,6 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
     width: message.length > 14 ? "auto" : "",
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
-
       const res: IResponse = await executionApi(apiParams);
       // console.log("res:", res);
 
@@ -72,7 +96,6 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
         messageToast({ message: res.data.message });
         return true;
       } else {
-        errorMessageDialog({ message: res.data.message });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {
@@ -83,15 +106,20 @@ export async function showConfirmDialog({ message, text = "", confirmButtonMsg =
   });
 }
 
-
-
-export function showDataLengthMsg({ dataLength, dataName = "資料", hasData = false, hasDataMsg = "" }: { dataLength: number; dataName?: string; hasData?: boolean; hasDataMsg?: string; }): void {
-
+export function showDataLengthMsg({
+  dataLength,
+  dataName = "資料",
+  hasData = false,
+  hasDataMsg = "",
+}: {
+  dataLength: number;
+  dataName?: string;
+  hasData?: boolean;
+  hasDataMsg?: string;
+}): void {
   if (dataLength === 0) {
     messageToast({ message: `查無${dataName}，請重新搜尋`, icon: "warning", existTime: 2000 });
-
   } else if (dataLength > 0 && hasData) {
     messageToast({ message: hasDataMsg, icon: "success", existTime: 2000 });
-
   }
 }

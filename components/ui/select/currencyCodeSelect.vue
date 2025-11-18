@@ -14,7 +14,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyListFromWeb } from "@/server/outerWebApi";
 import { ISelectData, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; isDisable?: boolean }>(), {
   currencyIdGot: "",
@@ -75,7 +75,7 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
         errorMessageDialog({ message: res.data.data.result });
       }
     } catch (error) {
-      errorMessageDialog({ message: (error as Error).message });
+      messageToast({ message: (error as Error).message, icon: "error" });
     } finally {
       loading.value = false;
     }

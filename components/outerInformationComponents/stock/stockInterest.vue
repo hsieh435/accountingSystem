@@ -8,7 +8,7 @@ import { ref, watch } from "vue";
 import { fetchStockDividendResult } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -16,8 +16,8 @@ const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchin
 });
 
 const dataLabels = ref<string[]>([]);
-const cashEarningsData = ref<{ cashEarning: number, cashEarningDate: string }[]>([]);
-const stockEarningsData = ref<{ stockEarning: number, stockEarningDate: string }[]>([]);
+const cashEarningsData = ref<{ cashEarning: number; cashEarningDate: string }[]>([]);
+const stockEarningsData = ref<{ stockEarning: number; stockEarningDate: string }[]>([]);
 
 watch(
   props,
@@ -42,7 +42,10 @@ async function searchingStockInterest() {
           return { cashEarning: stock.CashEarningsDistribution, cashEarningDate: stock.CashDividendPaymentDate || "" };
         });
         stockEarningsData.value = res.data.data.data.map((stock: any) => {
-          return { stockEarning: stock.StockEarningsDistribution, stockEarningDate: stock.StockExDividendTradingDate || ""};
+          return {
+            stockEarning: stock.StockEarningsDistribution,
+            stockEarningDate: stock.StockExDividendTradingDate || "",
+          };
         });
       } else {
         dataLabels.value = ["無資料"];
@@ -53,11 +56,9 @@ async function searchingStockInterest() {
       // console.log("dataLabels:", dataLabels.value);
       // console.log("cashEarningsData:", cashEarningsData.value);
       // console.log("stockEarningsData:", stockEarningsData.value);
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -70,7 +71,12 @@ async function renderingChart() {
     chartInstance = null;
   }
 
-  const scalesMax = Math.max(...[...cashEarningsData.value.map(item => item.cashEarning), ...stockEarningsData.value.map(item => item.stockEarning)]);
+  const scalesMax = Math.max(
+    ...[
+      ...cashEarningsData.value.map((item) => item.cashEarning),
+      ...stockEarningsData.value.map((item) => item.stockEarning),
+    ],
+  );
   // const aaaaa = [...cashEarningsData.value.map(item => item.cashEarningDate), ...stockEarningsData.value.map(item => item.stockEarningDate)];
 
   chartInstance = new Chart(earningsChart, {
@@ -79,12 +85,12 @@ async function renderingChart() {
         {
           type: "bar",
           label: "配息",
-          data: cashEarningsData.value.map(item => item.cashEarning),
+          data: cashEarningsData.value.map((item) => item.cashEarning),
         },
         {
           type: "bar",
           label: "配股",
-          data: stockEarningsData.value.map(item => item.stockEarning),
+          data: stockEarningsData.value.map((item) => item.stockEarning),
         },
       ],
       labels: dataLabels.value,
@@ -118,7 +124,13 @@ async function renderingChart() {
               const index = tooltipItems[0].dataIndex;
               const cashDate = cashEarningsData.value[index]?.cashEarningDate || "N/A";
               const stockDate = stockEarningsData.value[index]?.stockEarningDate || "N/A";
-              return "除息日: " + yearMonthDayTimeFormat(cashDate, false) + "\n" + "除權日: " + yearMonthDayTimeFormat(stockDate, false);
+              return (
+                "除息日: " +
+                yearMonthDayTimeFormat(cashDate, false) +
+                "\n" +
+                "除權日: " +
+                yearMonthDayTimeFormat(stockDate, false)
+              );
             },
           },
         },

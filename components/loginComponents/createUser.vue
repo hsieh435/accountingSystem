@@ -112,10 +112,9 @@ async function createUserDate(apiMsg?: string) {
         if (res.data.returnCode === 0) {
           messageToast({ message: res.data.message });
         } else {
-          errorMessageDialog({ message: res.data.message });
         }
       } catch (error) {
-        errorMessageDialog({ message: (error as Error).message });
+        messageToast({ message: (error as Error).message, icon: "error" });
       }
     }
   });

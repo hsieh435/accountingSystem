@@ -18,14 +18,7 @@
         :searchDisable="!searchingParams.stockAccountId || !searchingParams.stockNo" />
     </div>
     <div class="my-5" :class="stockPurchaseRecord.length > 0 ? 'w-4/5 mx-auto' : 'hidden'">
-      <UCarousel
-        :items="stockPurchaseRecord"
-        auto-height
-        arrows
-        dots
-        loop
-        wheel-gestures
-        v-slot="{ item }">
+      <UCarousel :items="stockPurchaseRecord" auto-height arrows dots loop wheel-gestures v-slot="{ item }">
         <stockProfitLineChart
           :searchingParamsGot="{
             stockNo: item.stockNo,
@@ -48,7 +41,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index";
 import { getCurrentYMD } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -82,18 +75,14 @@ async function searchingStockStorage() {
 
   try {
     const res: IResponse = await fetchEachStockStorageData(searchingParams);
-    if (res.data.returnCode === 0) {
-      stockPurchaseRecord.value = res.data.data;
-      for (let i = 0; i < stockPurchaseRecord.value.length; i++) {
-        stockPurchaseRecord.value[i].tradeDatetime = getCurrentYMD(stockPurchaseRecord.value[i].tradeDatetime);
-        stockPurchaseRecord.value[i].index = i + 1;
-      }
-      // console.log("stockPurchaseRecord:", stockPurchaseRecord.value);
-    } else {
-      errorMessageDialog({ message: res.data.message });
+    stockPurchaseRecord.value = res.data.data;
+    for (let i = 0; i < stockPurchaseRecord.value.length; i++) {
+      stockPurchaseRecord.value[i].tradeDatetime = getCurrentYMD(stockPurchaseRecord.value[i].tradeDatetime);
+      stockPurchaseRecord.value[i].index = i + 1;
     }
+    // console.log("stockPurchaseRecord:", stockPurchaseRecord.value);
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

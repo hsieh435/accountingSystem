@@ -45,7 +45,7 @@ import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
 import { IResponse } from "@/models/index";
 import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ stockAccountIdGot?: string; stockNoGot?: string }>(), {
@@ -85,7 +85,7 @@ async function searchingLatestStockPrice() {
       stockLatestPrice.value = 0;
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -103,70 +103,65 @@ async function searchingEachStockStorageData() {
       stockNo: props.stockNoGot,
     });
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      doughnutChartTitle.value = `${res.data.data[0].stockNo} / ${res.data.data[0].stockName} 投資損益`;
-      for (let i = 0; i < res.data.data.length; i++) {
-        stockTotalCost.value += res.data.data[i].tradeTotalPrice;
-        stockTotalQuantity.value += res.data.data[i].quantity;
-      }
-      stockAveragePrice.value = (Math.round((stockTotalCost.value / stockTotalQuantity.value) * 100)) / 100;
-      stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
-      stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
+    doughnutChartTitle.value = `${res.data.data[0].stockNo} / ${res.data.data[0].stockName} 投資損益`;
+    for (let i = 0; i < res.data.data.length; i++) {
+      stockTotalCost.value += res.data.data[i].tradeTotalPrice;
+      stockTotalQuantity.value += res.data.data[i].quantity;
+    }
+    stockAveragePrice.value = Math.round((stockTotalCost.value / stockTotalQuantity.value) * 100) / 100;
+    stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
+    stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
 
-      // if (stockLatestPrice.value === 0 || stockCurrentValue.value === 0) return;
-      emits("stockDataConsolidate", stockTotalCost.value, stockCurrentValue.value, stockCurrentProfit.value);
+    // if (stockLatestPrice.value === 0 || stockCurrentValue.value === 0) return;
+    emits("stockDataConsolidate", stockTotalCost.value, stockCurrentValue.value, stockCurrentProfit.value);
 
-      const stockData = res.data.data;
-      if (stockData) {
-        const ctx = (
-          document.getElementById(`stockInvestmentChart${props.stockNoGot}`) as HTMLCanvasElement
-        ).getContext("2d");
-        if (ctx) {
+    const stockData = res.data.data;
+    if (stockData) {
+      const ctx = (document.getElementById(`stockInvestmentChart${props.stockNoGot}`) as HTMLCanvasElement).getContext(
+        "2d",
+      );
+      if (ctx) {
+        if (stockInvestmentChart.value) {
+          stockInvestmentChart.value.destroy();
+          stockInvestmentChart.value = null;
+        }
 
-          if (stockInvestmentChart.value) {
-            stockInvestmentChart.value.destroy();
-            stockInvestmentChart.value = null;
-          }
-
-          stockInvestmentChart.value = new Chart(ctx, {
-            type: "doughnut",
-            data: {
-              labels: [stockCurrentProfit.value > 0 ? "獲利" : "虧損"],
-              datasets: [
-                {
-                  label: stockCurrentProfit.value > 0 ? "獲利" : "虧損",
-                  data:
-                    stockCurrentProfit.value > 0
-                      ? [stockCurrentProfit.value, stockTotalCost.value - stockCurrentProfit.value]
-                      : [stockCurrentProfit.value * -1, stockTotalCost.value + stockCurrentProfit.value],
-                  borderColor: "white",
-                  backgroundColor: [stockCurrentProfit.value > 0 ? "red" : "green", "blue"],
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "top",
-                },
-                title: {
-                  display: true,
-                  text: doughnutChartTitle.value,
-                },
-                tooltip: {
-                  enabled: false,
-                },
+        stockInvestmentChart.value = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: [stockCurrentProfit.value > 0 ? "獲利" : "虧損"],
+            datasets: [
+              {
+                label: stockCurrentProfit.value > 0 ? "獲利" : "虧損",
+                data:
+                  stockCurrentProfit.value > 0
+                    ? [stockCurrentProfit.value, stockTotalCost.value - stockCurrentProfit.value]
+                    : [stockCurrentProfit.value * -1, stockTotalCost.value + stockCurrentProfit.value],
+                borderColor: "white",
+                backgroundColor: [stockCurrentProfit.value > 0 ? "red" : "green", "blue"],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: doughnutChartTitle.value,
+              },
+              tooltip: {
+                enabled: false,
               },
             },
-          });
-        }
+          },
+        });
       }
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

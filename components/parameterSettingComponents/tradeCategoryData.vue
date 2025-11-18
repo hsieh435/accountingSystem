@@ -138,7 +138,7 @@ async function searchingTradeCategory() {
       messageToast({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -175,11 +175,9 @@ async function tradeCategoryDataHandling() {
       messageToast({ message: res.data.message });
       open.value = false;
       emits("dataReseaching");
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

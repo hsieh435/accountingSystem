@@ -14,7 +14,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
 import { IStockList, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ stockNoGot?: string; isDisable?: boolean }>(), {
   stockNoGot: "",
@@ -79,10 +79,9 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
         }));
         // console.log("filteredStockList:", filteredStockList.value);
       } else {
-        errorMessageDialog({ message: res.data.message });
       }
     } catch (error) {
-      errorMessageDialog({ message: (error as Error).message });
+      messageToast({ message: (error as Error).message, icon: "error" });
     } finally {
       loading.value = false;
     }

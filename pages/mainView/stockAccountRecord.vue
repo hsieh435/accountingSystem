@@ -69,8 +69,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
 import { IStockAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -123,14 +123,10 @@ async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStockAccountRecordList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      stockAccountRecord.value = res.data.data;
-      await stockAccountRecordFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    stockAccountRecord.value = res.data.data;
+    await stockAccountRecordFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

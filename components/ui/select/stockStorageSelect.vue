@@ -10,7 +10,7 @@
 import { ref, onMounted, watch } from "vue";
 import { fetchStockStorageList } from "@/server/storageProfitApi.ts";
 import { IStockStorageList, IResponse } from "@/models/index";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ isAllStorage?: boolean; accountIdGot?: string; sellectAll?: boolean }>(), {
@@ -46,7 +46,6 @@ watch(stockNo, () => {
 });
 
 async function searchingStockStorageList() {
-
   try {
     const res: IResponse = await fetchStockStorageList({ stockAccountId: accountId.value });
     console.log("res:", res.data.data);
@@ -55,16 +54,10 @@ async function searchingStockStorageList() {
         label: `${item.stockName}（${item.stockNo}）`,
         value: item.stockNo,
       }));
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
-
-
-
-
 </script>
 <style lang="scss" scoped></style>

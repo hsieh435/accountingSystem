@@ -3,7 +3,10 @@
     <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>儲值票卡：</span>
-        <accountSelect :selectTargetId="'isStoredvaluecardAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
+        <accountSelect
+          :selectTargetId="'isStoredvaluecardAble'"
+          :sellectAll="false"
+          @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>
@@ -42,7 +45,7 @@ import {
   IResponse,
 } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -111,11 +114,9 @@ async function settingSearchingParams() {
         expensePieChartTitle.value,
         expenseChartInstance,
       );
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

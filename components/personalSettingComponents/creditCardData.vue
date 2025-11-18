@@ -37,7 +37,7 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">發卡銀行代碼：</span>
             <UInput class="col-span-2" v-model="dataParams.creditcardBankCode" />
-            </div>
+          </div>
         </div>
 
         <div class="w-full">
@@ -214,7 +214,7 @@ async function searchingCreditCardData() {
       messageToast({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -285,11 +285,9 @@ async function creditCardDataHandling() {
       messageToast({ message: res.data.message });
       emits("dataReseaching");
       open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

@@ -10,7 +10,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
   currencyIdGot: "",
@@ -30,7 +30,6 @@ const getDefaultCurrencyItem = (): ICurrencyList => ({
   minimumDenomination: 0.1,
   sort: 50,
 });
-
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
@@ -53,7 +52,8 @@ watch(currencyId, () => {
     if (currencyList.value[i].currencyCode === currencyId.value) {
       emits("sendbackCurrencyData", currencyList.value[i]);
       break;
-    } if (currencyId.value === "") {
+    }
+    if (currencyId.value === "") {
       emits("sendbackCurrencyData", getDefaultCurrencyItem());
     }
   }
@@ -77,11 +77,9 @@ async function searchingCurrencyList() {
       } else if (props.sellectAll === false && !props.currencyIdGot) {
         currencyId.value = currencyArray.value[0].value;
       }
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

@@ -60,7 +60,7 @@ import { fetchStockAccountList, fetchEnableStockAccount, fetchDisableStockAccoun
 import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -109,14 +109,10 @@ async function stockAccountSearching() {
   try {
     const res: IResponse = await fetchStockAccountList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      stockAccountList.value = res.data.data;
-      await stockAccountListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    stockAccountList.value = res.data.data;
+    await stockAccountListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -140,13 +136,9 @@ async function adjustAbleStatus(account: IStockAccountList) {
     const res: IResponse = await (account.enable === true ? fetchEnableStockAccount : fetchDisableStockAccount)(
       account.accountId,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

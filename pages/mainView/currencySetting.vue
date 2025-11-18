@@ -51,7 +51,7 @@ import { fetchCurrencyList } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -83,14 +83,10 @@ async function searchingCurrencyList() {
   try {
     const res: IResponse = await fetchCurrencyList();
     console.log("fetchCurrencyList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      currencyList.value = res.data.data;
-      await currencyListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    currencyList.value = res.data.data;
+    await currencyListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

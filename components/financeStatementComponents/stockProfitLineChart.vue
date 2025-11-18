@@ -8,7 +8,7 @@ import { onMounted, watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(
@@ -27,7 +27,9 @@ onMounted(() => {
   searchingStockPrice();
 });
 
-watch(() => props, () => {
+watch(
+  () => props,
+  () => {
     // console.log("watch props:", props);
     // searchingStockPrice();
   },
@@ -60,11 +62,9 @@ async function searchingStockPrice() {
         stockDataLineChart.value = [{ label: "無資料", data: 0 }];
       }
       await renderingChart();
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -80,8 +80,9 @@ const getData = (chartData: any[]) => {
 
 // CanvasRenderingContext2D
 async function renderingChart() {
-  const stockProfitLineChartStockNoIndex =
-    document.getElementById(`stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`) as HTMLCanvasElement;
+  const stockProfitLineChartStockNoIndex = document.getElementById(
+    `stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`,
+  ) as HTMLCanvasElement;
   console.log("stockProfitLineChartStockNoIndex:", stockProfitLineChartStockNoIndex);
 
   if (chartInstance) {
@@ -132,10 +133,12 @@ async function renderingChart() {
                 currentValue = Number(tooltipItem.dataset.data[index]);
               });
               return (
-                "收盤價：" + currencyFormat(currentValue) +
+                "收盤價：" +
+                currencyFormat(currentValue) +
                 "\n" +
                 "獲利：" +
-                (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) + "%"
+                (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) +
+                "%"
               );
             },
           },

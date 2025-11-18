@@ -40,7 +40,9 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect
+                :dateTimeGot="dataParams.updateData.tradeDatetime"
+                @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -137,7 +139,7 @@ import {
 } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -210,23 +212,19 @@ async function searchingCashFlowRecord() {
       tradeId: props.tradeIdGot,
     });
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams.updateData, res.data.data);
-      dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-      dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-      dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-      //
-      if (res.data.data.transactionType === "income") {
-        dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
-      } else if (res.data.data.transactionType === "expense") {
-        dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + res.data.data.tradeAmount;
-      }
-    } else {
-      errorMessageDialog({ message: res.data.message });
+    Object.assign(dataParams.updateData, res.data.data);
+    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
+    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
+    dataParams.oriData.oriTransactionType = res.data.data.transactionType;
+    //
+    if (res.data.data.transactionType === "income") {
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
+    } else if (res.data.data.transactionType === "expense") {
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + res.data.data.tradeAmount;
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -301,7 +299,11 @@ async function validateData() {
   dataValidate.transactionType = !dataParams.updateData.transactionType ? false : true;
   dataValidate.tradeCategory = !dataParams.updateData.tradeCategory ? false : true;
 
-  if (typeof dataParams.updateData.tradeAmount !== "number" || !isFinite(dataParams.updateData.tradeAmount) || dataParams.updateData.tradeAmount < 0) {
+  if (
+    typeof dataParams.updateData.tradeAmount !== "number" ||
+    !isFinite(dataParams.updateData.tradeAmount) ||
+    dataParams.updateData.tradeAmount < 0
+  ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "交易金額不得為負";
   }
@@ -323,16 +325,10 @@ async function cashFlowRecordDataHandling() {
   if (!(await validateData())) return;
 
   try {
-    const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(
-      dataParams
-    );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      emits("dataReseaching");
-      open.value = false;
-    } else {
-      messageToast({ message: res.data.message, icon: "error" });
-    }
+    const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
+    messageToast({ message: res.data.message });
+    emits("dataReseaching");
+    open.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

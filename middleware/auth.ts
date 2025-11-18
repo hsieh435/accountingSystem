@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           // return abortNavigation();
         }
       } catch (error) {
-        errorMessageDialog({ message: (error as Error).message });
+        messageToast({ message: (error as Error).message, icon: "error" });
         clearLocalStorageKey(true);
         // return abortNavigation();
       }

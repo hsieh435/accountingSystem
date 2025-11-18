@@ -37,7 +37,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi";
 import { IFinanceRecordSearchingParams, IStockAccountRecordList, IStockAccountList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -101,15 +101,15 @@ async function settingSearchingParams() {
       );
       await renderingChart(
         stockAccountExpenseChart,
-        expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeTotalPrice: 0 }],
+        expenseDataPieChart.value.length > 0
+          ? expenseDataPieChart.value
+          : [{ tradeName: "無資料", tradeTotalPrice: 0 }],
         expensePieChartTitle.value,
         expenseChartInstance,
       );
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

@@ -52,7 +52,7 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">新密碼：</span>
-           <UInput
+            <UInput
               :class="['col-span-3', dataValidate.userNewPassword ? '' : 'outline-1 outline-red-500']"
               id="userNewPassword"
               v-model="dataParams.userNewPassword"
@@ -67,7 +67,7 @@
         <div>
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">確認密碼：</span>
-             <UInput
+            <UInput
               :class="['col-span-3', dataValidate.secondPassword ? '' : 'outline-1 outline-red-500']"
               id="secondPassword"
               v-model="dataParams.secondPassword"
@@ -94,9 +94,9 @@ import { navigateTo } from "nuxt/app";
 import { jwtTokenEncoded } from "@/server/index.ts";
 import { fetchUserDataChange } from "@/server/userDataApi";
 import { setLocalStorageItem } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { encryptString } from "@/composables/crypto";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
+// import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -169,15 +169,11 @@ async function submitUserData() {
 
   try {
     const res: IResponse = await fetchUserDataChange(dataParams);
-    if (res.data.returnCode === 0) {
-      messageToast(res.data.message);
-      setLocalStorageItem("userToken", res.data.data.jwt);
-      open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    messageToast(res.data.message);
+    setLocalStorageItem("userToken", res.data.data.jwt);
+    open.value = false;
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

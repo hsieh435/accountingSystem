@@ -13,7 +13,7 @@ import { fetchCreditCardList } from "@/server/creditCardApi";
 import { fetchCurrencyAccountList } from "@/server/currencyAccountApi";
 import { fetchStockAccountList } from "@/server/stockAccountApi";
 import { IAccountSearchingParams } from "@/models/index";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(
@@ -81,7 +81,7 @@ async function loadAccountList() {
     accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
     accountId.value = props.sellectAll ? props.accountIdGot || "" : accountList.value[0]?.value || "";
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

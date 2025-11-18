@@ -1,8 +1,18 @@
 <template>
   <div class="flex-col justify-start items-center px-3 py-1">
     <div class="flex justify-start items-center">
-      <UInput class="mx-1" v-model="finMindAccount" placeholder="請輸入帳號" type="search" v-on:keyup.enter="handleSearch" />
-      <UInput class="mx-1" v-model="finMindPassword" placeholder="請輸入密碼" type="password" v-on:keyup.enter="handleSearch" />
+      <UInput
+        class="mx-1"
+        v-model="finMindAccount"
+        placeholder="請輸入帳號"
+        type="search"
+        v-on:keyup.enter="handleSearch" />
+      <UInput
+        class="mx-1"
+        v-model="finMindPassword"
+        placeholder="請輸入密碼"
+        type="password"
+        v-on:keyup.enter="handleSearch" />
       <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="handleSearch"></ui-buttonGroup>
       <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkTokenStatus"></ui-buttonGroup>
     </div>
@@ -37,7 +47,7 @@ async function handleSearch() {
       errorMessageDialog({ message: result.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
   // console.log("Request Body:", JSON.stringify(payload));
 
@@ -58,20 +68,15 @@ async function handleSearch() {
   // }
 }
 
-
-
 async function checkTokenStatus() {
-
   try {
     const res: IResponse = await fetchFinMindAccountInfo();
     console.log("fetchFinMindAccountInfo:", res);
     if (res.data.returnCode === 0) {
       messageToast({ message: "Token 有效" });
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

@@ -20,7 +20,7 @@ import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index";
 import { useRoute } from "vue-router";
 import { BreadcrumbItem, NavigationMenuItem } from "@nuxt/ui";
 import { clearLocalStorageKey } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 const route = useRoute();
 
@@ -62,11 +62,9 @@ async function searchingFunctionList() {
           children: functions,
         };
       });
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

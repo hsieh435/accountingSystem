@@ -7,7 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
@@ -60,11 +60,9 @@ async function searchingCurrencyExRate() {
           chartInstance = null;
         }
       }
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

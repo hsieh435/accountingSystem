@@ -66,7 +66,7 @@ import { fetchTradeCategoryList } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
 import { sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -91,14 +91,10 @@ async function searchingTradeCategoryList() {
   try {
     const res: IResponse = await fetchTradeCategoryList();
     console.log("fetchTradeCategoryList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      tradeCategoryList.value = res.data.data;
-      await tradeCategoryListFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
-    }
+    tradeCategoryList.value = res.data.data;
+    await tradeCategoryListFilterEvent();
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

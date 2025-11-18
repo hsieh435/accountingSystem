@@ -77,11 +77,9 @@ async function handleLogin() {
       messageToast({ message: res.data.message });
       setLocalStorageItem("userToken", res.data.data.jwt);
       navigateTo("/mainView");
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

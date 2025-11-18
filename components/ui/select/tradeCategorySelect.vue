@@ -9,7 +9,7 @@
 import { ref, onMounted, watch } from "vue";
 import { ISelectData, ITradeCategory, IResponse } from "@/models/index";
 import { fetchTradeCategoryList } from "@/server/parameterApi";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?: string; sellectAll?: boolean }>(), {
@@ -50,7 +50,7 @@ async function searchingTradeType() {
       errorMessageDialog({ message: res.data.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

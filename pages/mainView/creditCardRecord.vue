@@ -61,7 +61,7 @@ import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -117,11 +117,9 @@ async function searchingFinanceRecord() {
     if (res.data.returnCode === 0) {
       creditCardRecord.value = res.data.data;
       await creditCardRecordFilterEvent();
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

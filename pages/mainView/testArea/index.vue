@@ -21,7 +21,7 @@ async function searchingStockList() {
     const res = await fetchStockList("");
     console.log("res:", res);
   } catch (error) {
-    // errorMessageDialog({ message: (error as Error).message });
+    // messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 </script>

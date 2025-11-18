@@ -224,7 +224,7 @@ async function searchingStockAccountData() {
       messageToast({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
@@ -303,11 +303,9 @@ async function stockAccountDataHandling() {
       messageToast({ message: res.data.message });
       emits("dataReseaching");
       open.value = false;
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 

@@ -37,7 +37,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
 import { IFinanceRecordSearchingParams, ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -104,11 +104,9 @@ async function settingSearchingParams() {
         expensePieChartTitle.value,
         expenseChartInstance,
       );
-    } else {
-      errorMessageDialog({ message: res.data.message });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
