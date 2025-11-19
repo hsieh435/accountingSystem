@@ -7,7 +7,7 @@ import { fetchUserList, fetchUserCreate } from "@/server/userDataApi";
 import { IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 import { encryptString } from "@/composables/crypto";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import Swal from "sweetalert2";
 
 const userAccount = ref<string>("");
@@ -109,10 +109,7 @@ async function createUserDate(apiMsg?: string) {
       // console.log("result:", result.value);
       try {
         const res: IResponse = await fetchUserCreate(result.value);
-        if (res.data.returnCode === 0) {
-          messageToast({ message: res.data.message });
-        } else {
-        }
+        messageToast({ message: res.data.message });
       } catch (error) {
         messageToast({ message: (error as Error).message, icon: "error" });
       }

@@ -14,7 +14,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchStockList } from "@/server/outerWebApi";
 import { IStockList, IResponse } from "@/models/index";
 import { debounceFn } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ stockNoGot?: string; isDisable?: boolean }>(), {
   stockNoGot: "",
@@ -71,15 +71,12 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
     try {
       const res: IResponse = await fetchStockList(keyword.trim());
       // console.log("fetchStockList:", JSON.parse(res.data.data));
-      if (res.data.returnCode === 0) {
-        rawStockList.value = JSON.parse(res.data.data);
-        filteredStockList.value = rawStockList.value.map((item: IStockList) => ({
-          value: item.stock_id,
-          label: `${item.stock_name}（${item.stock_id}）`,
-        }));
-        // console.log("filteredStockList:", filteredStockList.value);
-      } else {
-      }
+      rawStockList.value = JSON.parse(res.data.data);
+      filteredStockList.value = rawStockList.value.map((item: IStockList) => ({
+        value: item.stock_id,
+        label: `${item.stock_name}（${item.stock_id}）`,
+      }));
+      // console.log("filteredStockList:", filteredStockList.value);
     } catch (error) {
       messageToast({ message: (error as Error).message, icon: "error" });
     } finally {

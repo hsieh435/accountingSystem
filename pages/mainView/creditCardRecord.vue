@@ -61,7 +61,7 @@ import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -114,10 +114,8 @@ async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      creditCardRecord.value = res.data.data;
-      await creditCardRecordFilterEvent();
-    }
+    creditCardRecord.value = res.data.data;
+    await creditCardRecordFilterEvent();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

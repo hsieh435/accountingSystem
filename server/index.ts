@@ -11,7 +11,7 @@ const requestCount = ref<number>(0);
 
 watch(requestCount, () => {
   // console.log("requestCount:", requestCount.value);
-  if (requestCount.value >= 1) {
+  if (requestCount.value > 0) {
     isLoading.value = true;
   } else {
     isLoading.value = false;

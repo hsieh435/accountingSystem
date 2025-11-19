@@ -8,7 +8,7 @@ import { onMounted, watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { currencyFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(
@@ -41,28 +41,26 @@ async function searchingStockPrice() {
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
     // console.log("fetchStockRangeValue:", res.data.data);
-    if (res.data.returnCode === 0) {
-      lineChartTitle.value =
-        props.searchingParamsGot.stockName +
-        "股價走勢" +
-        "\n\n\n\n\n\n\n" +
-        "買入日：" +
-        props.searchingParamsGot.startDate.replace(/-/g, "/") +
-        "\n\n\n\n\n\n\n" +
-        " 買入價：" +
-        currencyFormat(props.purchasePrice);
-      if (res.data.data.data.length > 0) {
-        stockDataLineChart.value = res.data.data.data.map((record: any) => {
-          return {
-            label: record.date.replace(/-/g, "/"),
-            data: record.close,
-          };
-        });
-      } else {
-        stockDataLineChart.value = [{ label: "無資料", data: 0 }];
-      }
-      await renderingChart();
+    lineChartTitle.value =
+      props.searchingParamsGot.stockName +
+      "股價走勢" +
+      "\n\n\n\n\n\n\n" +
+      "買入日：" +
+      props.searchingParamsGot.startDate.replace(/-/g, "/") +
+      "\n\n\n\n\n\n\n" +
+      " 買入價：" +
+      currencyFormat(props.purchasePrice);
+    if (res.data.data.data.length > 0) {
+      stockDataLineChart.value = res.data.data.data.map((record: any) => {
+        return {
+          label: record.date.replace(/-/g, "/"),
+          data: record.close,
+        };
+      });
+    } else {
+      stockDataLineChart.value = [{ label: "無資料", data: 0 }];
     }
+    await renderingChart();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

@@ -192,18 +192,16 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(open, () => {
   if (open.value === true) {
+    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    Object.assign(dataValidate, getDefaultDataValidate());
+    originalRemainingAmount.value = 0;
+    originalTradeAmount.value = 0;
+    tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingStoredValueCardRecord();
     } else {
       Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
-    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
-    originalRemainingAmount.value = 0;
-    originalTradeAmount.value = 0;
-    tradeAmountValidateText.value = "";
   }
 });
 
@@ -232,19 +230,19 @@ async function searchingStoredValueCardRecord() {
 }
 
 function settingStoredValueCardAccount(account: IStoredValueCardList[]) {
-  // console.log("account:", account);
-  if (account && account.length > 0) {
-    dataParams.updateData.storedValueCardId = account[0].storedValueCardId;
-    dataParams.updateData.currency = account[0].currency;
-    dataParams.updateData.remainingAmount = account[0].presentAmount;
-    storedValueCardChosen.value = account[0] || ({} as IStoredValueCardList);
-    settingRemainingAmount();
-  } else {
-    dataParams.updateData.storedValueCardId = "";
-    dataParams.updateData.currency = "";
-    dataParams.updateData.remainingAmount = 0;
-    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+  console.log("account:", account);
+  storedValueCardChosen.value = account[0] || ({} as IStoredValueCardList);
+  dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
+  dataParams.updateData.currency = storedValueCardChosen.value.currency;
+  dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
+  if (props.tradeIdGot.length > 0 && account.length === 1) {
+     if (dataParams.updateData.transactionType === "income") {
+      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount - originalTradeAmount.value;
+    } else if (dataParams.updateData.transactionType === "expense") {
+      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount + originalTradeAmount.value;
+    }
   }
+  settingRemainingAmount();
 }
 
 function settingTradeDatetime(dateTime: string) {

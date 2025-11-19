@@ -69,8 +69,8 @@ import {
 } from "@/server/currencyAccountApi";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -117,10 +117,8 @@ async function currencyAccountSearching() {
   try {
     const res: IResponse = await fetchCurrencyAccountList(searchingParams);
     console.log("fetchCurrencyAccountList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      currencyAccountList.value = res.data.data;
-      await currencyAccountListFilterEvent();
-    }
+    currencyAccountList.value = res.data.data;
+    await currencyAccountListFilterEvent();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -145,9 +143,7 @@ async function adjustAbleStatus(account: ICurrencyAccountList) {
     const res: IResponse = await (account.enable === true ? fetchEnableCurrencyAccount : fetchDisableCurrencyAccount)(
       account.accountId,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

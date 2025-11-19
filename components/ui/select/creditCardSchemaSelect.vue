@@ -7,7 +7,7 @@
 import { ref, onMounted, watch } from "vue";
 import { ISelectData, IResponse } from "@/models/index";
 import { fetchCreditcardSchemaList } from "@/server/parameterApi";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ selectId?: string; sellectAll?: boolean; isAble?: boolean }>(), {
@@ -40,20 +40,16 @@ async function searchingSchemaList() {
   try {
     const res: IResponse = await fetchCreditcardSchemaList();
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      schemaArray.value = res.data.data.map((item: any) => ({
-        label: item.schemaName,
-        value: item.schemaCode,
-      }));
+    schemaArray.value = res.data.data.map((item: any) => ({
+      label: item.schemaName,
+      value: item.schemaCode,
+    }));
 
-      if (props.sellectAll) {
-        schemaArray.value.unshift({ label: "所有發卡機構", value: "" });
-      } else if (props.sellectAll === false && !props.selectId) {
-        schemaId.value = schemaArray.value[0].value;
-        emits("sendbackSchemaId", schemaId.value);
-      }
-    } else {
-      errorMessageDialog({ message: res.data.data.message });
+    if (props.sellectAll) {
+      schemaArray.value.unshift({ label: "所有發卡機構", value: "" });
+    } else if (props.sellectAll === false && !props.selectId) {
+      schemaId.value = schemaArray.value[0].value;
+      emits("sendbackSchemaId", schemaId.value);
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });

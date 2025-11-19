@@ -66,7 +66,7 @@ import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } fr
 import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -111,10 +111,8 @@ async function creditCardSearching() {
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      creditCardList.value = res.data.data;
-      await creditCardListFilterEvent();
-    }
+    creditCardList.value = res.data.data;
+    await creditCardListFilterEvent();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -140,9 +138,7 @@ async function adjustAbleStatus(card: ICreditCardList) {
     const res: IResponse = await (card.enable === true ? fetchEnableCreditCard : fetchDisableCreditCard)(
       card.creditcardId,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

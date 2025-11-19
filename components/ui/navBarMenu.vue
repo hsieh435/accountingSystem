@@ -20,7 +20,7 @@ import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index";
 import { useRoute } from "vue-router";
 import { BreadcrumbItem, NavigationMenuItem } from "@nuxt/ui";
 import { clearLocalStorageKey } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const route = useRoute();
 
@@ -46,23 +46,21 @@ async function searchingFunctionList() {
   try {
     const res: IResponse = await fetchFunctionList();
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      navbarMenuList.value = res.data.data.map((group: IFunctionGroupList) => {
-        const functions = group.functionList
-          .filter((func: IFunctionList) => func.functionGroupId === group.functionGroupId)
-          .map((func: IFunctionList) => ({
-            label: func.functionName,
-            to: func.url,
-            icon: func.functionIcon,
-          }));
-        return {
-          label: group.functionGroupName,
-          functionGroupId: group.functionGroupId,
-          icon: group.functionGroupIcon,
-          children: functions,
-        };
-      });
-    }
+    navbarMenuList.value = res.data.data.map((group: IFunctionGroupList) => {
+      const functions = group.functionList
+        .filter((func: IFunctionList) => func.functionGroupId === group.functionGroupId)
+        .map((func: IFunctionList) => ({
+          label: func.functionName,
+          to: func.url,
+          icon: func.functionIcon,
+        }));
+      return {
+        label: group.functionGroupName,
+        functionGroupId: group.functionGroupId,
+        icon: group.functionGroupIcon,
+        children: functions,
+      };
+    });
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

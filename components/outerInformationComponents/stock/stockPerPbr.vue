@@ -8,7 +8,7 @@ import { ref, watch } from "vue";
 import { fetchStockPerPbr } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -34,28 +34,26 @@ async function searchingStockPerPbr() {
   try {
     const res: IResponse = await fetchStockPerPbr(props.searchingParamsGot);
     // console.log("fetchStockPerPbr:", res.data.data);
-    if (res.data.returnCode === 0) {
-      if (res.data.data.data.length > 0) {
-        dataLabels.value = res.data.data.data.map((stock: any) => {
-          return stock.date;
-        });
-        stockPer.value = res.data.data.data.map((stock: any) => {
-          return stock.PER;
-        });
-        stockPbr.value = res.data.data.data.map((stock: any) => {
-          return stock.PBR;
-        });
-        stockDividendYield.value = res.data.data.data.map((stock: any) => {
-          return stock.dividend_yield;
-        });
-      } else {
-        dataLabels.value = ["無資料"];
-        stockPer.value = [0];
-        stockPbr.value = [0];
-        stockDividendYield.value = [0];
-      }
-      renderingChart();
+    if (res.data.data.data.length > 0) {
+      dataLabels.value = res.data.data.data.map((stock: any) => {
+        return stock.date;
+      });
+      stockPer.value = res.data.data.data.map((stock: any) => {
+        return stock.PER;
+      });
+      stockPbr.value = res.data.data.data.map((stock: any) => {
+        return stock.PBR;
+      });
+      stockDividendYield.value = res.data.data.data.map((stock: any) => {
+        return stock.dividend_yield;
+      });
+    } else {
+      dataLabels.value = ["無資料"];
+      stockPer.value = [0];
+      stockPbr.value = [0];
+      stockDividendYield.value = [0];
     }
+    renderingChart();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

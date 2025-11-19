@@ -7,7 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
@@ -35,30 +35,28 @@ async function searchingCurrencyExRate() {
   try {
     const res: IResponse = await fetchCurrencyHistoryExRate(props.searchingParamsGot);
     console.log("fetchCurrencyHistoryExRate:", res.data.data);
-    if (res.data.returnCode === 0) {
-      if (res.data.data.data.length > 0) {
-        dataLabels.value = res.data.data.data.map((exRate: any) => {
-          return exRate.date;
-        });
-        currencyCashBuyExRate.value = res.data.data.data.map((exRate: any) => {
-          return exRate.cash_buy;
-        });
-        currencyCashSellExRate.value = res.data.data.data.map((exRate: any) => {
-          return exRate.cash_sell;
-        });
-        currencySpotBuyExRate.value = res.data.data.data.map((exRate: any) => {
-          return exRate.spot_buy;
-        });
-        currencySpotSellExRate.value = res.data.data.data.map((exRate: any) => {
-          return exRate.spot_sell;
-        });
+    if (res.data.data.data.length > 0) {
+      dataLabels.value = res.data.data.data.map((exRate: any) => {
+        return exRate.date;
+      });
+      currencyCashBuyExRate.value = res.data.data.data.map((exRate: any) => {
+        return exRate.cash_buy;
+      });
+      currencyCashSellExRate.value = res.data.data.data.map((exRate: any) => {
+        return exRate.cash_sell;
+      });
+      currencySpotBuyExRate.value = res.data.data.data.map((exRate: any) => {
+        return exRate.spot_buy;
+      });
+      currencySpotSellExRate.value = res.data.data.data.map((exRate: any) => {
+        return exRate.spot_sell;
+      });
 
-        renderingChart();
-      } else {
-        if (chartInstance) {
-          chartInstance.destroy();
-          chartInstance = null;
-        }
+      renderingChart();
+    } else {
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
       }
     }
   } catch (error) {

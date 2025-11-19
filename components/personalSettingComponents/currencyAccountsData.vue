@@ -165,7 +165,7 @@ import {
 } from "@/server/currencyAccountApi";
 import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
@@ -221,12 +221,9 @@ watch(open, () => {
 async function searchingCurrencyAccountData() {
   try {
     const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-      open.value = true;
-    } else {
-      messageToast({ message: res.data.message });
-    }
+    messageToast({ message: res.data.message });
+    Object.assign(dataParams, res.data.data);
+    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -303,11 +300,10 @@ async function currencyAccountDataHandling() {
     const res: IResponse = await (props.currencyAccountIdGot ? fetchCurrencyAccountUpdate : fetchCurrencyAccountCreate)(
       dataParams,
     );
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      open.value = false;
-      emits("dataReseaching");
-    }
+    messageToast({ message: res.data.message });
+    messageToast({ message: res.data.message });
+    open.value = false;
+    emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

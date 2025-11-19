@@ -63,7 +63,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 declare function definePageMeta(meta: any): void;
@@ -117,10 +117,8 @@ async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCurrencyAccountRecordList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      currencyAccountRecord.value = res.data.data;
-      await currencyAccountRecordFilterEvent();
-    }
+    currencyAccountRecord.value = res.data.data;
+    await currencyAccountRecordFilterEvent();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

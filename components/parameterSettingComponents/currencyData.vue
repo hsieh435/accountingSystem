@@ -109,7 +109,7 @@ import {
   fetchCurrencyDelete,
 } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
@@ -151,16 +151,7 @@ async function searchingCurrencyData() {
   try {
     const res: IResponse = await fetchCurrencyByCurrencyCode(props.currencyCodeGot);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-      // dataParams.currencyCode = res.data.data.currencyCode;
-      // dataParams.currencyName = res.data.data.currencyName;
-      // dataParams.currencySymbol = res.data.data.currencySymbol;
-      // dataParams.minimumDenomination = res.data.data.minimumDenomination;
-      // dataParams.sort = res.data.data.sort;
-    } else {
-      messageToast({ message: res.data.message });
-    }
+    Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -208,11 +199,9 @@ async function currencyDataHandling() {
   try {
     const res: IResponse = await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(dataParams);
     console.log("res:", res);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      open.value = false;
-      emits("dataReseaching");
-    }
+    messageToast({ message: res.data.message });
+    open.value = false;
+    emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

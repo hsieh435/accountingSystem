@@ -8,7 +8,7 @@ import { ref, watch } from "vue";
 import { fetchStockDividendResult } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -33,30 +33,28 @@ async function searchingStockInterest() {
   try {
     const res: IResponse = await fetchStockDividendResult(props.searchingParamsGot);
     console.log("fetchStockDividendResult:", res.data.data.data);
-    if (res.data.returnCode === 0) {
-      if (res.data.data.data.length > 0) {
-        dataLabels.value = res.data.data.data.map((stock: any) => {
-          return stock.year;
-        });
-        cashEarningsData.value = res.data.data.data.map((stock: any) => {
-          return { cashEarning: stock.CashEarningsDistribution, cashEarningDate: stock.CashDividendPaymentDate || "" };
-        });
-        stockEarningsData.value = res.data.data.data.map((stock: any) => {
-          return {
-            stockEarning: stock.StockEarningsDistribution,
-            stockEarningDate: stock.StockExDividendTradingDate || "",
-          };
-        });
-      } else {
-        dataLabels.value = ["無資料"];
-        cashEarningsData.value = [];
-        stockEarningsData.value = [];
-      }
-      renderingChart();
-      // console.log("dataLabels:", dataLabels.value);
-      // console.log("cashEarningsData:", cashEarningsData.value);
-      // console.log("stockEarningsData:", stockEarningsData.value);
+    if (res.data.data.data.length > 0) {
+      dataLabels.value = res.data.data.data.map((stock: any) => {
+        return stock.year;
+      });
+      cashEarningsData.value = res.data.data.data.map((stock: any) => {
+        return { cashEarning: stock.CashEarningsDistribution, cashEarningDate: stock.CashDividendPaymentDate || "" };
+      });
+      stockEarningsData.value = res.data.data.data.map((stock: any) => {
+        return {
+          stockEarning: stock.StockEarningsDistribution,
+          stockEarningDate: stock.StockExDividendTradingDate || "",
+        };
+      });
+    } else {
+      dataLabels.value = ["無資料"];
+      cashEarningsData.value = [];
+      stockEarningsData.value = [];
     }
+    renderingChart();
+    // console.log("dataLabels:", dataLabels.value);
+    // console.log("cashEarningsData:", cashEarningsData.value);
+    // console.log("stockEarningsData:", stockEarningsData.value);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

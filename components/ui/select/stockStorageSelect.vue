@@ -10,7 +10,7 @@
 import { ref, onMounted, watch } from "vue";
 import { fetchStockStorageList } from "@/server/storageProfitApi.ts";
 import { IStockStorageList, IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
 
 const props = withDefaults(defineProps<{ isAllStorage?: boolean; accountIdGot?: string; sellectAll?: boolean }>(), {
@@ -49,12 +49,10 @@ async function searchingStockStorageList() {
   try {
     const res: IResponse = await fetchStockStorageList({ stockAccountId: accountId.value });
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      stockList.value = res.data.data.map((item: IStockStorageList) => ({
-        label: `${item.stockName}（${item.stockNo}）`,
-        value: item.stockNo,
-      }));
-    }
+    stockList.value = res.data.data.map((item: IStockStorageList) => ({
+      label: `${item.stockName}（${item.stockNo}）`,
+      value: item.stockNo,
+    }));
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

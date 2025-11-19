@@ -63,9 +63,14 @@
   background-color: colors.$aomidori;
 }
 
-.btn-shinbashi {
+.btn-midori {
   @extend %btn-text-light;
-  background-color: colors.$shinbashi;
+  background-color: colors.$midori;
+}
+
+.btn-tsuyukusa {
+  @extend %btn-text-light;
+  background-color: colors.$tsuyukusa;
 }
 
 .btn-nibi {

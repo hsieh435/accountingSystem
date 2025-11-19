@@ -152,7 +152,7 @@ import {
 } from "@/server/creditCardApi";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
 import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -207,12 +207,8 @@ watch(open, () => {
 async function searchingCreditCardData() {
   try {
     const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-      open.value = true;
-    } else {
-      messageToast({ message: res.data.message });
-    }
+    Object.assign(dataParams, res.data.data);
+    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -281,11 +277,9 @@ async function creditCardDataHandling() {
 
   try {
     const res: IResponse = await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(dataParams);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      emits("dataReseaching");
-      open.value = false;
-    }
+    messageToast({ message: res.data.message });
+    emits("dataReseaching");
+    open.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

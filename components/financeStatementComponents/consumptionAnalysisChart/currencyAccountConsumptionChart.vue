@@ -42,7 +42,7 @@ import {
   IResponse,
 } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -80,36 +80,34 @@ async function settingSearchingParams() {
   try {
     const res: IResponse = await fetchCurrencyAccountRecordList(searchParams);
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      incomePieChartTitle.value =
-        yearMonthDayTimeFormat(searchParams.startingDate, false) +
-        " ~ " +
-        yearMonthDayTimeFormat(searchParams.endDate, false) +
-        " 收入分析";
-      expensePieChartTitle.value =
-        yearMonthDayTimeFormat(searchParams.startingDate, false) +
-        " ~ " +
-        yearMonthDayTimeFormat(searchParams.endDate, false) +
-        " 消費分析";
+    incomePieChartTitle.value =
+      yearMonthDayTimeFormat(searchParams.startingDate, false) +
+      " ~ " +
+      yearMonthDayTimeFormat(searchParams.endDate, false) +
+      " 收入分析";
+    expensePieChartTitle.value =
+      yearMonthDayTimeFormat(searchParams.startingDate, false) +
+      " ~ " +
+      yearMonthDayTimeFormat(searchParams.endDate, false) +
+      " 消費分析";
 
-      incomeDataPieChart.value = await aggregateData(res.data.data, "income");
-      expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
-      const currencyAccountIncomeChart = document.getElementById("currencyAccountIncomeChart") as HTMLCanvasElement;
-      const currencyAccountExpenseChart = document.getElementById("currencyAccountExpenseChart") as HTMLCanvasElement;
+    incomeDataPieChart.value = await aggregateData(res.data.data, "income");
+    expenseDataPieChart.value = await aggregateData(res.data.data, "expense");
+    const currencyAccountIncomeChart = document.getElementById("currencyAccountIncomeChart") as HTMLCanvasElement;
+    const currencyAccountExpenseChart = document.getElementById("currencyAccountExpenseChart") as HTMLCanvasElement;
 
-      await renderingChart(
-        currencyAccountIncomeChart,
-        incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
-        incomePieChartTitle.value,
-        incomeChartInstance,
-      );
-      await renderingChart(
-        currencyAccountExpenseChart,
-        expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
-        expensePieChartTitle.value,
-        expenseChartInstance,
-      );
-    }
+    await renderingChart(
+      currencyAccountIncomeChart,
+      incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+      incomePieChartTitle.value,
+      incomeChartInstance,
+    );
+    await renderingChart(
+      currencyAccountExpenseChart,
+      expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+      expensePieChartTitle.value,
+      expenseChartInstance,
+    );
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

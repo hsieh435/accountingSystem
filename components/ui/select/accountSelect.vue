@@ -32,8 +32,19 @@ const accountId = ref<string>("");
 const accountList = ref<{ label: string; value: string }[]>([]);
 const searchingParams = reactive<IAccountSearchingParams>({ currencyId: "" });
 const oriAccountList = ref<any[]>([]);
-
 const isDisabled = computed(() => props.isDisable);
+
+onMounted(async () => {
+  // console.log("accountId:", accountId.value);
+  if (props.selectTargetId) {
+    await loadAccountList();
+  }
+});
+
+watch(accountId, () => {
+  const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
+  emits("sendbackAccount", selectedItem ? [selectedItem] : []);
+});
 
 // Account type configuration
 const accountTypeConfig = {
@@ -63,17 +74,6 @@ const accountTypeConfig = {
     nameField: "accountName",
   },
 };
-
-onMounted(async () => {
-  if (props.selectTargetId) {
-    await loadAccountList();
-  }
-});
-
-watch(accountId, () => {
-  const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
-  emits("sendbackAccount", selectedItem ? [selectedItem] : []);
-});
 
 async function loadAccountList() {
   try {

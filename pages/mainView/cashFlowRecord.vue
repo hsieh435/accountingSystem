@@ -63,8 +63,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
+import { messageToast } from "@/composables/swalDialog";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -114,10 +114,8 @@ async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
     console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      cashFlowRecord.value = res.data.data;
-      await cashFlowRecordFilterEvent();
-    }
+    cashFlowRecord.value = res.data.data;
+    await cashFlowRecordFilterEvent();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

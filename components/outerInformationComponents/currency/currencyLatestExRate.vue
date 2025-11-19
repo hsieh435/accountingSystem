@@ -7,8 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyLatestExRate } from "@/server/outerWebApi";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
@@ -30,14 +29,12 @@ async function searchingCurrencyExRate() {
   try {
     const res: IResponse = await fetchCurrencyLatestExRate(props.searchingParamsGot.currencyId);
     // console.log("fetchCurrencyLatestExRate:", res.data.data);
-    if (res.data.returnCode === 0) {
-      currencyExRate.value = Object.entries(res.data.data.rates).map(([key, value]) => ({
-        currencyName: key || "?",
-        exchangeRate: Number(value) || 0,
-      }));
-      console.log("currencyExRate.value:", currencyExRate.value);
-      renderingChart();
-    }
+    currencyExRate.value = Object.entries(res.data.data.rates).map(([key, value]) => ({
+      currencyName: key || "?",
+      exchangeRate: Number(value) || 0,
+    }));
+    console.log("currencyExRate.value:", currencyExRate.value);
+    renderingChart();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

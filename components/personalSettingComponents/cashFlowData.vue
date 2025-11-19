@@ -129,7 +129,7 @@ import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
 import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
@@ -186,9 +186,7 @@ async function searchingCashflowData() {
   try {
     const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
     // console.log("fetchCashFlowById:", res.data.datares);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-    }
+    Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -260,11 +258,9 @@ async function cashflowDataHandling() {
   try {
     const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(dataParams);
     // console.log("RES:", res);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      emits("dataReseaching");
-      open.value = false;
-    }
+    messageToast({ message: res.data.message });
+    emits("dataReseaching");
+    open.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

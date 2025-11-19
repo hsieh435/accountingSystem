@@ -1,6 +1,6 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { fetchJwtVerification } from "@/server/generalApi.ts";
-import { errorMessageDialog } from "@/composables/swalDialog.ts";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
 import { decryptString } from "@/composables/crypto.ts";
 import { clearLocalStorageKey } from "@/composables/tools.ts";
 

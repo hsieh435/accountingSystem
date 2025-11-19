@@ -32,7 +32,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi";
 import { IFinanceRecordSearchingParams, ICreditCardRecordList, ICreditCardList, IResponse } from "@/models/index";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -67,23 +67,21 @@ async function settingSearchingParams() {
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchParams);
     // console.log("res:", res.data.data);
-    if (res.data.returnCode === 0) {
-      incomePieChartTitle.value =
-        yearMonthDayTimeFormat(searchParams.startingDate, false) +
-        " ~ " +
-        yearMonthDayTimeFormat(searchParams.endDate, false) +
-        " 消費分析";
+    incomePieChartTitle.value =
+      yearMonthDayTimeFormat(searchParams.startingDate, false) +
+      " ~ " +
+      yearMonthDayTimeFormat(searchParams.endDate, false) +
+      " 消費分析";
 
-      incomeDataPieChart.value = await aggregateData(res.data.data);
-      const creditCardConsumptionChart = document.getElementById("creditCardConsumptionChart") as HTMLCanvasElement;
+    incomeDataPieChart.value = await aggregateData(res.data.data);
+    const creditCardConsumptionChart = document.getElementById("creditCardConsumptionChart") as HTMLCanvasElement;
 
-      await renderingChart(
-        creditCardConsumptionChart,
-        incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
-        incomePieChartTitle.value,
-        chartInstanceRef,
-      );
-    }
+    await renderingChart(
+      creditCardConsumptionChart,
+      incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
+      incomePieChartTitle.value,
+      chartInstanceRef,
+    );
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

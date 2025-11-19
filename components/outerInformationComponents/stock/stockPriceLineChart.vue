@@ -7,7 +7,7 @@
 import { watch, ref } from "vue";
 import { fetchStockRangeValue } from "@/server/outerWebApi";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {
@@ -31,26 +31,24 @@ async function searchingStockPrice() {
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
     // console.log("fetchStockRangeValue:", res.data.data);
-    if (res.data.returnCode === 0) {
-      lineChartTitle.value =
-        props.searchingParamsGot.stockName +
-        " " +
-        props.searchingParamsGot.startDate.replace(/-/g, "/") +
-        " ~ " +
-        props.searchingParamsGot.endDate.replace(/-/g, "/") +
-        "股價走勢";
-      if (res.data.data.data.length > 0) {
-        stockDataLineChart.value = res.data.data.data.map((record: any) => {
-          return {
-            label: record.date.replace(/-/g, "/"),
-            data: record.close,
-          };
-        });
-      } else {
-        stockDataLineChart.value = [{ label: "無資料", data: 0 }];
-      }
-      renderingChart();
+    lineChartTitle.value =
+      props.searchingParamsGot.stockName +
+      " " +
+      props.searchingParamsGot.startDate.replace(/-/g, "/") +
+      " ~ " +
+      props.searchingParamsGot.endDate.replace(/-/g, "/") +
+      "股價走勢";
+    if (res.data.data.data.length > 0) {
+      stockDataLineChart.value = res.data.data.data.map((record: any) => {
+        return {
+          label: record.date.replace(/-/g, "/"),
+          data: record.close,
+        };
+      });
+    } else {
+      stockDataLineChart.value = [{ label: "無資料", data: 0 }];
     }
+    renderingChart();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

@@ -89,7 +89,7 @@ import {
   fetchDeleteTradeCategory,
 } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog, showConfirmDialog } from "@/composables/swalDialog";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ tradeCodeGot?: string }>(), { tradeCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
@@ -132,11 +132,7 @@ async function searchingTradeCategory() {
   try {
     const res: IResponse = await fetchTradeCategory(props.tradeCodeGot);
     // console.log("res:", res);
-    if (res.data.returnCode === 0) {
-      Object.assign(dataParams, res.data.data);
-    } else {
-      messageToast({ message: res.data.message });
-    }
+    Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -171,11 +167,9 @@ async function tradeCategoryDataHandling() {
   try {
     const res: IResponse = await (props.tradeCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(dataParams);
     console.log("res:", res);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      open.value = false;
-      emits("dataReseaching");
-    }
+    messageToast({ message: res.data.message });
+    open.value = false;
+    emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

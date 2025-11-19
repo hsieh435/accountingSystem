@@ -8,17 +8,22 @@
 
 
     <template v-if="props.showSave">
-      <UButton class="btn-aomidori" icon="i-ic:outline-save" :label="props.saveText" @click="clickSaveButton()" :disabled="props.saveDisable" />
+      <UButton class="btn-midori" icon="i-ic:outline-save" :label="props.saveText" @click="clickSaveButton()" :disabled="props.saveDisable" />
     </template>
 
 
     <template v-if="props.showView">
-      <UButton class="btn-shinbashi" icon="i-fa7-solid:binoculars" :label="props.viewText" @click="clickViewButton()" :disabled="props.viewDisable" />
+      <UButton class="btn-tsuyukusa" icon="i-fa7-solid:binoculars" :label="props.viewText" @click="clickViewButton()" :disabled="props.viewDisable" />
     </template>
 
 
     <template v-if="props.showSearch">
       <UButton class="btn-nibi" icon="i-mage:search" :label="props.searchText" @click="clickSearchButton()" :disabled="props.searchDisable" />
+    </template>
+
+
+    <template v-if="props.showCopy">
+      <UButton class="btn-nibi" icon="i-mage:search" :label="props.copyText" @click="clickCopyButton()" :disabled="props.copyDisable" />
     </template>
 
 

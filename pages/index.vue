@@ -49,7 +49,7 @@
 import { ref } from "vue";
 import { IResponse } from "@/models/index.ts";
 import { fetchUserLogin } from "@/server/userDataApi";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 import { navigateTo } from "nuxt/app";
 import { setLocalStorageItem } from "@/composables/tools";
 import { encryptString } from "@/composables/crypto";
@@ -73,11 +73,9 @@ async function handleLogin() {
       password: encryptString(password.value),
     });
     // console.log("res:", res);
-    if (res.data.returnCode === 0) {
-      messageToast({ message: res.data.message });
-      setLocalStorageItem("userToken", res.data.data.jwt);
-      navigateTo("/mainView");
-    }
+    messageToast({ message: res.data.message });
+    setLocalStorageItem("userToken", res.data.data.jwt);
+    navigateTo("/mainView");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

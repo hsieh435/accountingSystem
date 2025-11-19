@@ -10,7 +10,7 @@ import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
 import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { messageToast } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
   currencyIdGot: "",
@@ -65,18 +65,16 @@ async function searchingCurrencyList() {
   try {
     const res: IResponse = await fetchCurrencyList();
     // console.log("fetchCurrencyList:", res.data.data);
-    if (res.data.returnCode === 0) {
-      currencyList.value = res.data.data;
-      currencyArray.value = res.data.data.map((item: ICurrencyList) => ({
-        label: item.currencyName,
-        value: item.currencyCode,
-      }));
+    currencyList.value = res.data.data;
+    currencyArray.value = res.data.data.map((item: ICurrencyList) => ({
+      label: item.currencyName,
+      value: item.currencyCode,
+    }));
 
-      if (props.sellectAll) {
-        currencyArray.value.unshift({ label: "所有貨幣", value: "" });
-      } else if (props.sellectAll === false && !props.currencyIdGot) {
-        currencyId.value = currencyArray.value[0].value;
-      }
+    if (props.sellectAll) {
+      currencyArray.value.unshift({ label: "所有貨幣", value: "" });
+    } else if (props.sellectAll === false && !props.currencyIdGot) {
+      currencyId.value = currencyArray.value[0].value;
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
