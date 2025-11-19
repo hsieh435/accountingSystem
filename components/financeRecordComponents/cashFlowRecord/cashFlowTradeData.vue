@@ -243,7 +243,6 @@ function settingCashflowAccount(account: ICashFlowList[]) {
   } else {
     originalRemainingAmount.value = cashFlowChosen.value.presentAmount || 0;
   }
-  // console.log("cashFlowChosen:", cashFlowChosen.value);
   settingRemainingAmount();
 }
 
@@ -261,6 +260,7 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
+  console.log("cashFlowChosen:", cashFlowChosen.value);
   console.log("dataParams:", dataParams.updateData);
   dataParams.updateData.tradeAmount =
     typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
@@ -281,14 +281,13 @@ function settingRemainingAmount() {
       icon: "warning",
     });
   }
-  if (
-    cashFlowChosen.value &&
-    cashFlowChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed
-  ) {
-    dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
-  }
+  // if (
+  //   cashFlowChosen.value &&
+  //   dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed
+  // ) {
+  //   dataValidate.tradeAmount = false;
+  //   tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
+  // }
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
