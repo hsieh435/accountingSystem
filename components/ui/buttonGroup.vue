@@ -3,37 +3,44 @@
 
 
     <template v-if="props.showCreate">
-      <UButton class="btn-aomidori" icon="i-material-symbols:add-2-rounded" :label="props.createText" @click="clickCreateButton()" :disabled="props.createDisable" />
+      <UButton class="btn-aomidori" @click="clickCreateButton()" :disabled="props.createDisable" >
+        <font-awesome-icon :icon="['fas', 'plus']" /><span>{{ props.createText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showSave">
-      <UButton class="btn-midori" icon="i-ic:outline-save" :label="props.saveText" @click="clickSaveButton()" :disabled="props.saveDisable" />
+      <UButton class="btn-midori" @click="clickSaveButton()" :disabled="props.saveDisable" >
+        <font-awesome-icon :icon="['far', 'save']" /><span>{{ props.saveText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showView">
-      <UButton class="btn-tsuyukusa" icon="i-fa7-solid:binoculars" :label="props.viewText" @click="clickViewButton()" :disabled="props.viewDisable" />
+      <UButton class="btn-tsuyukusa" @click="clickViewButton()" :disabled="props.viewDisable" >
+        <font-awesome-icon :icon="['fas', 'binoculars']" /><span>{{ props.viewText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showSearch">
-      <UButton class="btn-nibi" icon="i-mage:search" :label="props.searchText" @click="clickSearchButton()" :disabled="props.searchDisable" />
-    </template>
-
-
-    <template v-if="props.showCopy">
-      <UButton class="btn-nibi" icon="i-mage:search" :label="props.copyText" @click="clickCopyButton()" :disabled="props.copyDisable" />
+      <UButton class="btn-nibi" @click="clickSearchButton()" :disabled="props.searchDisable" >
+        <font-awesome-icon :icon="['fas', 'search']" /><span>{{ props.searchText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showClose">
-      <UButton class="btn-keshizumi" icon="i-material-symbols:close" :label="props.closeText" @click="clickCloseButton()" :disabled="props.closeDisable" />
+      <UButton class="btn-keshizumi" @click="clickCloseButton()" :disabled="props.closeDisable" >
+        <font-awesome-icon :icon="['fas', 'times']" /><span>{{ props.closeText }}</span>
+      </UButton>
     </template>
 
 
     <template v-if="props.showRemove">
-      <UButton class="btn-kurenainoyashio" icon="i-jam:trash" :label="props.removeText" @click="clickRemoveButton()" :disabled="props.removeDisable" />
+      <UButton class="btn-kurenainoyashio" @click="clickRemoveButton()" :disabled="props.removeDisable" >
+        <font-awesome-icon :icon="['fas', 'trash']" /><span>{{ props.removeText }}</span>
+      </UButton>
     </template>
 
 
@@ -54,15 +61,6 @@ const props = withDefaults(
     showSearch?: boolean;
     searchText?: string;
     searchDisable?: boolean;
-    showSend?: boolean;
-    sendText?: string;
-    sendDisable?: boolean;
-    showPrint?: boolean;
-    printText?: string;
-    printDisable?: boolean;
-    showCopy?: boolean;
-    copyText?: string;
-    copyDisable?: boolean;
     showRemove?: boolean;
     removeText?: string;
     removeDisable?: boolean;
@@ -83,15 +81,6 @@ const props = withDefaults(
     showSearch: false,
     searchText: "查詢",
     searchDisable: false,
-    showSend: false,
-    sendText: "送出",
-    sendDisable: false,
-    showPrint: false,
-    printText: "下載",
-    printDisable: false,
-    showCopy: false,
-    copyText: "複製",
-    copyDisable: false,
     showRemove: false,
     removeText: "刪除",
     removeDisable: false,
@@ -105,9 +94,6 @@ const emits = defineEmits([
   "dataSave",
   "dataView",
   "dataSearch",
-  "dataSend",
-  "dataPrint",
-  "dataCopy",
   "dataRemove",
   "dataClose",
 ]);
@@ -137,26 +123,8 @@ async function clickSearchButton() {
 
 
 
-async function clickSendButton() {
-  emits("dataSend");
-}
-
-
-
-async function clickPrintButton() {
-  emits("dataPrint");
-}
-
-
-
 async function clickCloseButton() {
   emits("dataClose");
-}
-
-
-
-async function clickCopyButton() {
-  emits("dataCopy");
 }
 
 
