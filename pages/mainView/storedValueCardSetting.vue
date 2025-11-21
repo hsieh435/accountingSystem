@@ -43,7 +43,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <UIcon name="i-fa7-solid:check" v-if="card.openAlert" />
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert"  />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
