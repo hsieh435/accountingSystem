@@ -41,7 +41,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <UIcon name="i-fa7-solid:check" v-if="card.openAlert" />
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.expirationDate.slice(0, 7) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>

@@ -37,10 +37,10 @@
                   >
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <UIcon name="i-fa7-solid:check" v-if="account.openAlert" />
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="account.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <UIcon name="i-fa7-solid:check" v-if="account.isSalaryAccount" />
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="account.isSalaryAccount" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
