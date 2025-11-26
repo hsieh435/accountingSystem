@@ -19,7 +19,7 @@
                   placeholder=""
                   autocomplete="off"
                   v-on:keyup.enter="handleLogin" />
-                <label :class="labelClasses" for="account">帳號：</label>
+                <label :class="labelClasses" for="account">ACCOUNT</label>
               </div>
               <div class="relative">
                 <input
@@ -31,10 +31,10 @@
                   placeholder=""
                   autocomplete="off"
                   v-on:keyup.enter="handleLogin" />
-                <label :class="labelClasses" for="password">密碼：</label>
+                <label :class="labelClasses" for="password">PASSWORD</label>
               </div>
               <div class="flex justify-center items-center">
-                <UButton class="btn-ruri" label="登入" icon="i-material-symbols:login" @click="handleLogin()" />
+                <UButton class="btn-ruri" label="LOG IN" icon="i-material-symbols:login" @click="handleLogin()" />
                 <loginComponents-resetPassword />
                 <loginComponents-createUser />
               </div>
