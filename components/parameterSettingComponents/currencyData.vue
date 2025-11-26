@@ -84,7 +84,7 @@
               :class="['col-span-3', dataValidate.sort ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.sort"
               orientation="vertical"
-              :step="0.01" />
+              :step="1" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
             <span class="col-span-2 text-right"></span>
