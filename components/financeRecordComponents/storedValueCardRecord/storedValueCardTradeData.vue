@@ -2,7 +2,7 @@
   <UModal
     title="儲值票卡收支紀錄"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openTradeData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -124,7 +124,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="storedValueCardRecordDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
     </template>
@@ -153,7 +153,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdG
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): IStoredValueCardRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
@@ -190,8 +190,8 @@ const storedValueCardChosen = ref<IStoredValueCardList>({} as IStoredValueCardLi
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openTradeData, () => {
+  if (openTradeData.value === true) {
     Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
     Object.assign(dataValidate, getDefaultDataValidate());
     originalRemainingAmount.value = 0;
@@ -236,7 +236,7 @@ function settingStoredValueCardAccount(account: IStoredValueCardList[]) {
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
   dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
   if (props.tradeIdGot.length > 0 && account.length === 1) {
-     if (dataParams.updateData.transactionType === "income") {
+    if (dataParams.updateData.transactionType === "income") {
       originalRemainingAmount.value = storedValueCardChosen.value.presentAmount - originalTradeAmount.value;
     } else if (dataParams.updateData.transactionType === "expense") {
       originalRemainingAmount.value = storedValueCardChosen.value.presentAmount + originalTradeAmount.value;
@@ -334,7 +334,7 @@ async function storedValueCardRecordDataHandling() {
     )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

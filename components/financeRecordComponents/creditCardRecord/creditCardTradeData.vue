@@ -2,7 +2,7 @@
   <UModal
     title="信用卡花費紀錄"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openTradeData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -102,7 +102,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="creditCardRecordDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
     </template>
@@ -129,7 +129,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: 
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): ICreditCardRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
@@ -161,14 +161,14 @@ const getDefaultDataValidate = (): any => ({
 const setStep = ref<number>(1);
 const dataValidate = reactive<any>(getDefaultDataValidate());
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openTradeData, () => {
+  if (openTradeData.value === true) {
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     } else {
       Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -184,7 +184,7 @@ async function searchingCreditCardRecord() {
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
     dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-    open.value = true;
+    openTradeData.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -252,7 +252,7 @@ async function creditCardRecordDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

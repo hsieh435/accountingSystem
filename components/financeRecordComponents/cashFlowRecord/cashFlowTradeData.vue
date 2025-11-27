@@ -2,7 +2,7 @@
   <UModal
     title="現金收支紀錄"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openTradeData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -124,7 +124,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="cashFlowRecordDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
     </template>
@@ -153,7 +153,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; cashflowIdGot?: st
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): ICashFlowRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
@@ -191,18 +191,18 @@ const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openTradeData, () => {
+  if (openTradeData.value === true) {
+    if (props.tradeIdGot) {
+      searchingCashFlowRecord();
+    }
+  } else {
+    Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
-    if (props.tradeIdGot) {
-      searchingCashFlowRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
-    }
   }
 });
 
@@ -281,13 +281,13 @@ function settingRemainingAmount() {
       icon: "warning",
     });
   }
-  // if (
-  //   cashFlowChosen.value &&
-  //   dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed
-  // ) {
-  //   dataValidate.tradeAmount = false;
-  //   tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
-  // }
+  if (
+    cashFlowChosen.value &&
+    dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed
+  ) {
+    dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
+  }
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
@@ -329,7 +329,7 @@ async function cashFlowRecordDataHandling() {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

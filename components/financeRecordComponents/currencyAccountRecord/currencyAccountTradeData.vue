@@ -2,7 +2,7 @@
   <UModal
     title="銀行帳戶收支紀錄"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openTradeData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -112,7 +112,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="currencyAccountRecordDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
     </template>
@@ -141,7 +141,7 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
@@ -180,14 +180,14 @@ const storedValueCardChosen = ref<ICurrencyAccountList>({} as ICurrencyAccountLi
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openTradeData, () => {
+  if (openTradeData.value === true) {
     if (props.tradeIdGot) {
       searchingCurrencyAccountRecord();
     } else {
       Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(storedValueCardChosen, {} as ICurrencyAccountList);
@@ -339,7 +339,7 @@ async function currencyAccountRecordDataHandling() {
     )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
