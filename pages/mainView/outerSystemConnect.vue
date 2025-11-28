@@ -6,6 +6,12 @@
       <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="connectingFinMind"></ui-buttonGroup>
       <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkFinMindTokenStatus"></ui-buttonGroup>
     </div>
+    <!-- <div class="flex justify-start items-center gap-1">
+      <UInput v-model="finMindAccount" placeholder="請輸入帳號" type="search" v-on:keyup.enter="connectingFinMind" />
+      <UInput v-model="finMindPassword" placeholder="請輸入密碼" type="password" v-on:keyup.enter="connectingFinMind" />
+      <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="connectingFinMind"></ui-buttonGroup>
+      <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkFinMindTokenStatus"></ui-buttonGroup>
+    </div> -->
   </div>
 </template>
 <script setup lang="ts">
