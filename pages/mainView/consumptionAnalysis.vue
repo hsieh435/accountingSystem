@@ -8,27 +8,27 @@
     <ul>
       <li title="現金流">
         <label for="tab1" role="button">
-          <UIcon class="mx-1" name="i-mdi:wallet-bifold" /><span>現金流</span>
+          <font-awesome-icon class="mx-1" :icon="['fas', 'money-bill-alt']" /><span>現金流</span>
         </label>
       </li>
       <li title="儲值票卡">
         <label for="tab2" role="button">
-          <UIcon class="mx-1" name="i-fa7-solid:window-restore" /><span>儲值票卡</span>
+          <font-awesome-icon class="mx-1" :icon="['fas', 'ticket-alt']" /><span>儲值票卡</span>
         </label>
       </li>
       <li title="信用卡">
         <label for="tab3" role="button">
-          <UIcon class="mx-1" name="i-fa7-solid:credit-card" /><span>信用卡</span>
+          <font-awesome-icon class="mx-1" :icon="['fas', 'credit-card']" /><span>信用卡</span>
         </label>
       </li>
       <li title="存款帳戶">
         <label for="tab4" role="button">
-          <UIcon class="mx-1" name="i-fa7-solid:money-check-dollar" /><span>存款帳戶</span>
+           <font-awesome-icon class="mx-1" :icon="['fas', 'dollar-sign']" /><span>存款帳戶</span>
         </label>
       </li>
       <li title="證券帳戶">
         <label for="tab5" role="button">
-          <UIcon class="mx-1" name="i-fa7-solid:arrow-trend-up" /><span>證券帳戶</span>
+          <font-awesome-icon class="mx-1" :icon="['fas', 'arrow-trend-up']" /><span>證券帳戶</span>
         </label>
       </li>
     </ul>
@@ -118,23 +118,12 @@ definePageMeta({
   -ms-user-select: none;
   user-select: none;
 }
-.tabs ul li label svg {
-  fill: rgb(146, 157, 175);
-  height: 1.2em;
-  vertical-align: bottom;
-  margin-right: 0.2em;
-  transition: all 0.2s ease-in-out;
-}
+
 .tabs ul li label:hover,
 .tabs ul li label:focus,
 .tabs ul li label:active {
   outline: 0;
   color: rgb(190, 197, 207);
-}
-.tabs ul li label:hover svg,
-.tabs ul li label:focus svg,
-.tabs ul li label:active svg {
-  fill: rgb(190, 197, 207);
 }
 .tabs .slider {
   position: relative;
@@ -251,9 +240,6 @@ definePageMeta({
 @media (max-width: 1000px) {
   .tabs ul li label {
     white-space: initial;
-  }
-  .tabs ul li label svg {
-    height: 1.5em;
   }
 }
 </style>

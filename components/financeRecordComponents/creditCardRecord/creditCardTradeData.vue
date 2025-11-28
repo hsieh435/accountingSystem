@@ -116,6 +116,7 @@ import {
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
+import { dataObjectValidate } from "@/composables/tools";
 import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -165,8 +166,6 @@ watch(openTradeData, () => {
   if (openTradeData.value === true) {
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
@@ -209,10 +208,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.creditCardId = true;
-  dataValidate.tradeDatetime = true;
-  dataValidate.tradeCategory = true;
-  dataValidate.tradeAmount = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.updateData.creditCardId) {
     dataValidate.creditCardId = false;
@@ -231,16 +227,7 @@ async function validateData() {
     dataValidate.tradeAmount = false;
   }
 
-  if (
-    !dataValidate.creditCardId ||
-    !dataValidate.tradeDatetime ||
-    !dataValidate.tradeCategory ||
-    !dataValidate.tradeAmount
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function creditCardRecordDataHandling() {

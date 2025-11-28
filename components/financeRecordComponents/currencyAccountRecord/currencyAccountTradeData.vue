@@ -126,7 +126,7 @@ import {
   fetchCurrencyAccountRecordUpdate,
 } from "@/server/currencyAccountRecordApi";
 import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -184,8 +184,6 @@ watch(openTradeData, () => {
   if (openTradeData.value === true) {
     if (props.tradeIdGot) {
       searchingCurrencyAccountRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
@@ -290,11 +288,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.accountId = true;
-  dataValidate.tradeDatetime = true;
-  dataValidate.transactionType = true;
-  dataValidate.tradeCategory = true;
-  dataValidate.tradeAmount = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;
@@ -317,17 +311,7 @@ async function validateData() {
     // tradeAmountValidateText.value = "交易金額不得為負";
   }
 
-  if (
-    !dataValidate.accountId ||
-    !dataValidate.tradeDatetime ||
-    !dataValidate.transactionType ||
-    !dataValidate.tradeCategory ||
-    !dataValidate.tradeAmount
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function currencyAccountRecordDataHandling() {

@@ -1,20 +1,10 @@
 <template>
   <div class="flex-col justify-start items-center px-3 py-1">
-    <div class="flex justify-start items-center">
-      <UInput
-        class="mx-1"
-        v-model="finMindAccount"
-        placeholder="請輸入帳號"
-        type="search"
-        v-on:keyup.enter="handleSearch" />
-      <UInput
-        class="mx-1"
-        v-model="finMindPassword"
-        placeholder="請輸入密碼"
-        type="password"
-        v-on:keyup.enter="handleSearch" />
-      <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="handleSearch"></ui-buttonGroup>
-      <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkTokenStatus"></ui-buttonGroup>
+    <div class="flex justify-start items-center gap-1">
+      <UInput v-model="finMindAccount" placeholder="請輸入帳號" type="search" v-on:keyup.enter="connectingFinMind" />
+      <UInput v-model="finMindPassword" placeholder="請輸入密碼" type="password" v-on:keyup.enter="connectingFinMind" />
+      <ui-buttonGroup showSearch :searchText="'連線 FinMind'" @dataSearch="connectingFinMind"></ui-buttonGroup>
+      <ui-buttonGroup showSearch :searchText="'Token 狀態'" @dataSearch="checkFinMindTokenStatus"></ui-buttonGroup>
     </div>
   </div>
 </template>
@@ -34,7 +24,7 @@ definePageMeta({
 const finMindAccount = ref<string>("");
 const finMindPassword = ref<string>("");
 
-async function handleSearch() {
+async function connectingFinMind() {
   try {
     const result: IResponse = await fetchFinMindTestConnection({
       user_id: finMindAccount.value.trim(),
@@ -68,7 +58,7 @@ async function handleSearch() {
   // }
 }
 
-async function checkTokenStatus() {
+async function checkFinMindTokenStatus() {
   try {
     const res: IResponse = await fetchFinMindAccountInfo();
     console.log("fetchFinMindAccountInfo:", res);

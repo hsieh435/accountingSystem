@@ -2,7 +2,7 @@
   <UModal
     title="收支資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="opentradecategorydata"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -74,7 +74,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="tradeCategoryDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="opentradecategorydata = false" />
         </div>
       </div>
     </template>
@@ -89,12 +89,13 @@ import {
   fetchDeleteTradeCategory,
 } from "@/server/parameterApi";
 import { ITradeCategory, IResponse } from "@/models/index";
+import { dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ tradeCodeGot?: string }>(), { tradeCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const opentradecategorydata = ref<boolean>(false);
 const getDefaultDataParams = (): ITradeCategory => ({
   tradeCode: props.tradeCodeGot || "",
   tradeName: "",
@@ -113,14 +114,12 @@ const getDefaultDataValidate = (): any => ({
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
 
-watch(open, () => {
-  if (open.value === true) {
+watch(opentradecategorydata, () => {
+  if (opentradecategorydata.value === true) {
     if (props.tradeCodeGot) {
       searchingTradeCategory();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (opentradecategorydata.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -139,11 +138,7 @@ async function searchingTradeCategory() {
 }
 
 async function validateData() {
-  dataValidate.currencyCode = true;
-  dataValidate.currencyName = true;
-  dataValidate.currencySymbol = true;
-  dataValidate.minimumDenomination = true;
-  dataValidate.sort = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.tradeCode) {
     dataValidate.tradeCode = false;
@@ -154,11 +149,8 @@ async function validateData() {
   if (!dataParams.sort) {
     dataValidate.sort = false;
   }
-  if (!dataValidate.tradeCode || !dataValidate.tradeName || !dataValidate.sort) {
-    return false;
-  } else {
-    return true;
-  }
+
+  return dataObjectValidate(dataValidate);
 }
 
 async function tradeCategoryDataHandling() {
@@ -168,7 +160,7 @@ async function tradeCategoryDataHandling() {
     const res: IResponse = await (props.tradeCodeGot ? fetchUpdateTradeCategory : fetchCreateTradeCategory)(dataParams);
     console.log("res:", res);
     messageToast({ message: res.data.message });
-    open.value = false;
+    opentradecategorydata.value = false;
     emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -184,7 +176,7 @@ async function removeTradeCategory() {
   });
 
   if (confirmResult) {
-    open.value = false;
+    opentradecategorydata.value = false;
     emits("dataReseaching");
   }
 }

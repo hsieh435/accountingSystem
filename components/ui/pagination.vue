@@ -20,7 +20,7 @@
 
     <template v-if="props.showSortSelect && sortMethodGot.length > 0">
       <div class="flex flex-row justify-start items-center me-2 my-1">
-        <UIcon class="mx-1" name="i-ic:outline-sort-by-alpha" />
+        <font-awesome-icon class="mx-1" :icon="['fas', 'sort-alpha-down']" />
         <select class="form-select form-select-sm w-auto mx-1" @change="clickSortSelect" v-model="sortSelectValue">
           <template v-for="(sort, sortIndex) in sortMethodGot" :key="sortIndex">
             <option :value="sort.value">{{ sort.sortText }}</option>
@@ -31,7 +31,7 @@
 
     <template v-if="props.showFilter">
       <div class="flex flex-row justify-start items-center me-2 my-1">
-        <UIcon class="mx-1" name="i-stash:sliders-h" />
+        <font-awesome-icon class="mx-1" :icon="['fas', 'sliders-h']" />
         <UInput class="mx-1" v-model="keyWord" :type="'search'" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
       </div>
     </template>

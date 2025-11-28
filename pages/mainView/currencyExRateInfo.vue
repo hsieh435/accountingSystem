@@ -25,10 +25,14 @@
       <input type="radio" id="tab2" name="tab-control" />
       <ul>
         <li title="今日匯率">
-          <label for="tab1" role="button"><span>今日匯率</span></label>
+          <label for="tab1" role="button">
+            <font-awesome-icon class="mx-1" :icon="['fas', 'chart-line']" /><span>今日匯率</span>
+          </label>
         </li>
         <li title="歷史紀錄">
-          <label for="tab2" role="button"><span>歷史紀錄</span></label>
+          <label for="tab2" role="button">
+            <font-awesome-icon class="mx-1" :icon="['far', 'clipboard']" /><span>歷史紀錄</span>
+          </label>
         </li>
       </ul>
 
@@ -132,23 +136,11 @@ async function sendingParams() {
   -ms-user-select: none;
   user-select: none;
 }
-.tabs ul li label svg {
-  fill: rgb(146, 157, 175);
-  height: 1.2em;
-  vertical-align: bottom;
-  margin-right: 0.2em;
-  transition: all 0.2s ease-in-out;
-}
 .tabs ul li label:hover,
 .tabs ul li label:focus,
 .tabs ul li label:active {
   outline: 0;
   color: rgb(190, 197, 207);
-}
-.tabs ul li label:hover svg,
-.tabs ul li label:focus svg,
-.tabs ul li label:active svg {
-  fill: rgb(190, 197, 207);
 }
 .tabs .slider {
   position: relative;
@@ -230,9 +222,6 @@ async function sendingParams() {
 @media (max-width: 1000px) {
   .tabs ul li label {
     white-space: initial;
-  }
-  .tabs ul li label svg {
-    height: 1.5em;
   }
 }
 </style>

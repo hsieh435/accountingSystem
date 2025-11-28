@@ -31,17 +31,17 @@
       <ul>
         <li title="股價走勢">
           <label for="tab1" role="button">
-            <UIcon class="mx-1" name="i-streamline-plump:stock" /><span>股價走勢</span>
+            <font-awesome-icon class="mx-1" :icon="['fas', 'chart-line']" /><span>股價走勢</span>
           </label>
         </li>
         <li title="除權息">
           <label for="tab2" role="button">
-            <UIcon class="mx-1" name="i-fa7-solid:money-bill-trend-up" /><span>除權息</span>
+            <font-awesome-icon class="mx-1" :icon="['fas', 'money-bill-alt']" /><span>除權息</span>
           </label>
         </li>
         <li title="本益比 / 股價淨值比">
           <label for="tab3" role="button">
-            <UIcon class="mx-1" name="i-fa7-solid:percent" /><span>本益比 / 股價淨值比</span>
+            <font-awesome-icon class="mx-1" :icon="['fas', 'percent']" /><span>本益比 / 股價淨值比</span>
           </label>
         </li>
       </ul>
@@ -156,23 +156,11 @@ async function sendingParams() {
   -ms-user-select: none;
   user-select: none;
 }
-.tabs ul li label svg {
-  fill: rgb(146, 157, 175);
-  height: 1.2em;
-  vertical-align: bottom;
-  margin-right: 0.2em;
-  transition: all 0.2s ease-in-out;
-}
 .tabs ul li label:hover,
 .tabs ul li label:focus,
 .tabs ul li label:active {
   outline: 0;
   color: rgb(190, 197, 207);
-}
-.tabs ul li label:hover svg,
-.tabs ul li label:focus svg,
-.tabs ul li label:active svg {
-  fill: rgb(190, 197, 207);
 }
 .tabs .slider {
   position: relative;
@@ -266,9 +254,6 @@ async function sendingParams() {
 @media (max-width: 1000px) {
   .tabs ul li label {
     white-space: initial;
-  }
-  .tabs ul li label svg {
-    height: 1.5em;
   }
 }
 </style>

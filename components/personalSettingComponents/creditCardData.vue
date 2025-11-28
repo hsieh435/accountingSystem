@@ -2,7 +2,7 @@
   <UModal
     title="信用卡資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openCreditCardData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -136,7 +136,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="creditCardDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openCreditCardData = false" />
         </div>
       </div>
     </template>
@@ -151,7 +151,7 @@ import {
   fetchCreditCardDelete,
 } from "@/server/creditCardApi";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
@@ -161,7 +161,7 @@ const yearMonthComponent = defineAsyncComponent(() => import("@/components/ui/se
 const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openCreditCardData = ref<boolean>(false);
 const getDefaultDataParams = (): ICreditCardList => ({
   creditcardId: props.creditCardIdGot || "",
   userId: "",
@@ -191,14 +191,12 @@ const dataValidate = reactive<any>(getDefaultDataValidate());
 const creditPerMonthValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openCreditCardData, () => {
+  if (openCreditCardData.value === true) {
     if (props.creditCardIdGot) {
       searchingCreditCardData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openCreditCardData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -208,7 +206,6 @@ async function searchingCreditCardData() {
   try {
     const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
     Object.assign(dataParams, res.data.data);
-    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -227,11 +224,7 @@ async function settingExpirationDate(year: number, month: number) {
 }
 
 async function validateData() {
-  dataValidate.creditcardName = true;
-  dataValidate.creditcardSchema = true;
-  dataValidate.currency = true;
-  dataValidate.creditPerMonth = true;
-  dataValidate.alertValue = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.creditcardName) {
     dataValidate.creditcardName = false;
@@ -259,17 +252,7 @@ async function validateData() {
     alertValueValidateText.value = "提醒金額不得大於信用額度";
   }
 
-  if (
-    !dataValidate.creditcardName ||
-    !dataValidate.creditcardSchema ||
-    !dataValidate.currency ||
-    !dataValidate.creditPerMonth ||
-    !dataValidate.alertValue
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function creditCardDataHandling() {
@@ -279,7 +262,7 @@ async function creditCardDataHandling() {
     const res: IResponse = await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openCreditCardData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -295,7 +278,7 @@ async function removeCreditcardData() {
 
   if (confirmResult) {
     emits("dataReseaching");
-    open.value = false;
+    openCreditCardData.value = false;
   }
 }
 </script>

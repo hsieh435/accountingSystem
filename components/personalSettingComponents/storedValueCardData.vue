@@ -2,7 +2,7 @@
   <UModal
     title="儲值票卡資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openStoredValueCardData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -133,7 +133,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="storedValueCardDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openStoredValueCardData = false" />
         </div>
       </div>
     </template>
@@ -148,7 +148,7 @@ import {
   fetchStoredValueCardDelete,
 } from "@/server/storedValueCardApi";
 import { IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
+import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -156,7 +156,7 @@ const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/u
 const props = withDefaults(defineProps<{ storedValueCardIdGot?: string }>(), { storedValueCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openStoredValueCardData = ref<boolean>(false);
 const getDefaultDataParams = (): IStoredValueCardList => ({
   storedValueCardId: props.storedValueCardIdGot || "",
   userId: "",
@@ -188,14 +188,12 @@ const minimumValueAllowedValidateText = ref<string>("");
 const maximumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openStoredValueCardData, () => {
+  if (openStoredValueCardData.value === true) {
     if (props.storedValueCardIdGot) {
       searchingStoredValueCardData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openStoredValueCardData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -205,7 +203,6 @@ async function searchingStoredValueCardData() {
   try {
     const res: IResponse = await fetchStoredValueCardById(props.storedValueCardIdGot);
     Object.assign(dataParams, res.data.data);
-    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -216,12 +213,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.storedValueCardName = true;
-  dataValidate.currency = true;
-  dataValidate.startingAmount = true;
-  dataValidate.minimumValueAllowed = true;
-  dataValidate.maximumValueAllowed = true;
-  dataValidate.alertValue = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.storedValueCardName) {
     dataValidate.storedValueCardName = false;
@@ -273,18 +265,7 @@ async function validateData() {
     alertValueValidateText.value = "提醒金額需介於最小儲值金額與最大儲值金額之間";
   }
 
-  if (
-    !dataValidate.storedValueCardName ||
-    !dataValidate.currency ||
-    !dataValidate.startingAmount ||
-    !dataValidate.minimumValueAllowed ||
-    !dataValidate.maximumValueAllowed ||
-    !dataValidate.alertValue
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function storedValueCardDataHandling() {
@@ -296,7 +277,7 @@ async function storedValueCardDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openStoredValueCardData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -312,7 +293,7 @@ async function removeStoredValueCardData() {
 
   if (confirmResult) {
     emits("dataReseaching");
-    open.value = false;
+    openStoredValueCardData.value = false;
   }
 }
 </script>

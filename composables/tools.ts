@@ -88,6 +88,19 @@ export function getCurrentYMD(dateInput: string | number = ''): string {
 
 
 
+// 取得西元年月格式 yyyy-mm
+export function yearMonthFormat(dateString: string) {
+  // if (!dateString) return "";
+  let date = new Date(dateString);
+
+  if (isNaN(date.getFullYear()) || isNaN(date.getMonth()) || !dateString) return "";
+
+  const month = ("00" + (date.getMonth() + 1)).slice(-2);
+  return `${date.getFullYear()}-${month}`;
+}
+
+
+
 // 取得當下年分，type 為 number
 export function getCurrentYear() {
   return new Date().getFullYear();
@@ -106,19 +119,6 @@ export function getCurrentDate() {
 // 取得當下時間戳，type 為 number
 export function getCurrentTimestamp() {
   return new Date().getTime();
-}
-
-
-
-// 取得西元年月格式 yyyy-mm
-export function yearMonthFormat(dateString: string) {
-  // if (!dateString) return "";
-  let date = new Date(dateString);
-
-  if (isNaN(date.getFullYear()) || isNaN(date.getMonth()) || !dateString) return "";
-
-  const month = ("00" + (date.getMonth() + 1)).slice(-2);
-  return `${date.getFullYear()}-${month}`;
 }
 
 
@@ -177,6 +177,12 @@ export function sliceArray(dataArray: any[] = [], page: number = 1, pageSize: nu
   } else {
     return [];
   }
+}
+
+
+
+export function dataObjectValidate(validateObject: Object): boolean {
+  return Object.values(validateObject).every(value => value === true);
 }
 
 

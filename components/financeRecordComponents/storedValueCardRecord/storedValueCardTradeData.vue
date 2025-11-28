@@ -138,7 +138,7 @@ import {
   fetchStoredValueCardRecordUpdate,
 } from "@/server/storedValueCardRecordApi";
 import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -192,16 +192,16 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    if (props.tradeIdGot) {
+      searchingStoredValueCardRecord();
+    }
+  } else {
+    Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
-    if (props.tradeIdGot) {
-      searchingStoredValueCardRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
-    }
   }
 });
 
@@ -299,10 +299,8 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.storedValueCardId = !dataParams.updateData.storedValueCardId ? false : true;
-  dataValidate.tradeDatetime = !dataParams.updateData.tradeDatetime ? false : true;
-  dataValidate.transactionType = !dataParams.updateData.transactionType ? false : true;
-  dataValidate.tradeCategory = !dataParams.updateData.tradeCategory ? false : true;
+  Object.assign(dataValidate, getDefaultDataValidate());
+
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
     !isFinite(dataParams.updateData.tradeAmount) ||
@@ -312,17 +310,7 @@ async function validateData() {
     tradeAmountValidateText.value = "交易金額不得為負";
   }
 
-  if (
-    !dataValidate.storedValueCardId ||
-    !dataValidate.tradeDatetime ||
-    !dataValidate.transactionType ||
-    !dataValidate.tradeCategory ||
-    !dataValidate.tradeAmount
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function storedValueCardRecordDataHandling() {

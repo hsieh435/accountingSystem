@@ -1,15 +1,14 @@
 <template>
-  <!-- <ui-buttonGroup :showSave="true" :saveText="'更改密碼'" @dataSave="userPasswordChange()" /> -->
   <UModal
     title="重設使用者密碼"
-    v-model:open="open"
+    v-model:open="openresetpassword"
     :dismissible="false"
     :close="{
       color: 'primary',
       variant: 'outline',
       class: 'rounded-full',
     }">
-    <UButton class="btn-aomidori" icon="i-ic:outline-save" label="更改密碼" @click="open = true" />
+    <UButton class="btn-aomidori" icon="i-ic:outline-save" label="更改密碼" @click="openresetpassword = true" />
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
         <span><span class="text-red-600 mx-1">※</span>皆為必填欄位</span>
@@ -68,7 +67,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 
-const open = ref<boolean>(false);
+const openresetpassword = ref<boolean>(false);
 const userAccount = ref<string>("");
 const userOldPassword = ref<string>("");
 const userNewPassword = ref<string>("");

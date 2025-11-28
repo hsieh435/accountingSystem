@@ -138,7 +138,7 @@ import {
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -295,10 +295,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.cashflowId = !dataParams.updateData.cashflowId ? false : true;
-  dataValidate.tradeDatetime = !dataParams.updateData.tradeDatetime ? false : true;
-  dataValidate.transactionType = !dataParams.updateData.transactionType ? false : true;
-  dataValidate.tradeCategory = !dataParams.updateData.tradeCategory ? false : true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
@@ -309,17 +306,7 @@ async function validateData() {
     tradeAmountValidateText.value = "交易金額不得為負";
   }
 
-  if (
-    !dataValidate.cashflowId ||
-    !dataValidate.tradeDatetime ||
-    !dataValidate.transactionType ||
-    !dataValidate.tradeCategory ||
-    !dataValidate.tradeAmount
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function cashFlowRecordDataHandling() {

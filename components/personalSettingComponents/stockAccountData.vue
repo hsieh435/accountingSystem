@@ -2,7 +2,7 @@
   <UModal
     title="證券帳戶資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openStockAccountData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -146,7 +146,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="stockAccountDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openStockAccountData = false" />
         </div>
       </div>
     </template>
@@ -161,7 +161,7 @@ import {
   fetchStockAccountDelete,
 } from "@/server/stockAccountApi";
 import { IStockAccountList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -169,7 +169,7 @@ const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/u
 const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openStockAccountData = ref<boolean>(false);
 const getDefaultDataParams = (): IStockAccountList => ({
   accountId: props.stockAccountIGot || "",
   userId: "",
@@ -201,14 +201,12 @@ const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openStockAccountData, () => {
+  if (openStockAccountData.value === true) {
     if (props.stockAccountIGot) {
       searchingStockAccountData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openStockAccountData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -218,7 +216,6 @@ async function searchingStockAccountData() {
   try {
     const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
     Object.assign(dataParams, res.data.data);
-    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -229,12 +226,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.accountId = true;
-  dataValidate.accountName = true;
-  dataValidate.currency = true;
-  dataValidate.startingAmount = true;
-  dataValidate.minimumValueAllowed = true;
-  dataValidate.alertValue = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.accountId) {
     dataValidate.accountId = false;
@@ -274,18 +266,7 @@ async function validateData() {
     alertValueValidateText.value = "提醒金額不得低於最小允許金額";
   }
 
-  if (
-    !dataValidate.accountId ||
-    !dataValidate.accountName ||
-    !dataValidate.currency ||
-    !dataValidate.startingAmount ||
-    !dataValidate.minimumValueAllowed ||
-    !dataValidate.alertValue
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function stockAccountDataHandling() {
@@ -297,7 +278,7 @@ async function stockAccountDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openStockAccountData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -313,7 +294,7 @@ async function removeStockAccountData() {
 
   if (confirmResult) {
     emits("dataReseaching");
-    open.value = false;
+    openStockAccountData.value = false;
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <UModal
     title="存款帳戶資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openCurrencyAccountsData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -149,7 +149,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="currencyAccountDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openCurrencyAccountsData = false" />
         </div>
       </div>
     </template>
@@ -164,7 +164,7 @@ import {
   fetchCurrencyAccountDelete,
 } from "@/server/currencyAccountApi";
 import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -172,7 +172,7 @@ const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/u
 const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openCurrencyAccountsData = ref<boolean>(false);
 const getDefaultDataParams = (): ICurrencyAccountList => ({
   accountId: props.currencyAccountIdGot || "",
   userId: "",
@@ -205,14 +205,12 @@ const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openCurrencyAccountsData, () => {
+  if (openCurrencyAccountsData.value === true) {
     if (props.currencyAccountIdGot) {
       searchingCurrencyAccountData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openCurrencyAccountsData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -223,7 +221,6 @@ async function searchingCurrencyAccountData() {
     const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
     messageToast({ message: res.data.message });
     Object.assign(dataParams, res.data.data);
-    open.value = true;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -234,12 +231,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.accountId = true;
-  dataValidate.accountName = true;
-  dataValidate.currency = true;
-  dataValidate.startingAmount = true;
-  dataValidate.minimumValueAllowed = true;
-  dataValidate.alertValue = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.accountId) {
     dataValidate.accountId = false;
@@ -279,18 +271,7 @@ async function validateData() {
     alertValueValidateText.value = "請填寫提醒金額";
   }
 
-  if (
-    !dataValidate.accountId ||
-    !dataValidate.accountName ||
-    !dataValidate.currency ||
-    !dataValidate.startingAmount ||
-    !dataValidate.minimumValueAllowed ||
-    !dataValidate.alertValue
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function currencyAccountDataHandling() {
@@ -301,8 +282,7 @@ async function currencyAccountDataHandling() {
       dataParams,
     );
     messageToast({ message: res.data.message });
-    messageToast({ message: res.data.message });
-    open.value = false;
+    openCurrencyAccountsData.value = false;
     emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -319,7 +299,7 @@ async function removeCurrencyAccountData() {
 
   if (confirmResult) {
     emits("dataReseaching");
-    open.value = false;
+    openCurrencyAccountsData.value = false;
   }
 }
 </script>

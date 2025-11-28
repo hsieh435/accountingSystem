@@ -2,7 +2,7 @@
   <UModal
     title="貨幣資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="opencurrencydata"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -94,7 +94,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="currencyDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="opencurrencydata = false" />
         </div>
       </div>
     </template>
@@ -109,12 +109,13 @@ import {
   fetchCurrencyDelete,
 } from "@/server/parameterApi";
 import { ICurrencyList, IResponse } from "@/models/index";
+import { dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const opencurrencydata = ref<boolean>(false);
 const getDefaultDataParams = (): ICurrencyList => ({
   currencyCode: props.currencyCodeGot || "",
   currencyName: "",
@@ -132,14 +133,12 @@ const getDefaultDataValidate = (): any => ({
 });
 const dataValidate = reactive<any>(getDefaultDataValidate());
 
-watch(open, () => {
-  if (open.value === true) {
+watch(opencurrencydata, () => {
+  if (opencurrencydata.value === true) {
     if (props.currencyCodeGot) {
       searchingCurrencyData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (opencurrencydata.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -158,11 +157,7 @@ async function searchingCurrencyData() {
 }
 
 async function validateData() {
-  dataValidate.currencyCode = true;
-  dataValidate.currencyName = true;
-  dataValidate.currencySymbol = true;
-  dataValidate.minimumDenomination = true;
-  dataValidate.sort = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.currencyCode) {
     dataValidate.currencyCode = false;
@@ -180,17 +175,7 @@ async function validateData() {
     dataValidate.sort = false;
   }
 
-  if (
-    !dataValidate.currencyCode ||
-    !dataValidate.currencyName ||
-    !dataValidate.currencySymbol ||
-    !dataValidate.minimumDenomination ||
-    !dataValidate.sort
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function currencyDataHandling() {
@@ -200,7 +185,7 @@ async function currencyDataHandling() {
     const res: IResponse = await (props.currencyCodeGot ? fetchCurrencyUpdate : fetchCurrencyCreate)(dataParams);
     console.log("res:", res);
     messageToast({ message: res.data.message });
-    open.value = false;
+    opencurrencydata.value = false;
     emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -216,7 +201,7 @@ async function removeCurrency() {
   });
 
   if (confirmResult) {
-    open.value = false;
+    opencurrencydata.value = false;
     emits("dataReseaching");
   }
 }

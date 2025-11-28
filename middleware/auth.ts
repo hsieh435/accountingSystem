@@ -15,7 +15,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if (!userToken && to.path !== "") {
       clearLocalStorageKey(false);
-      // return abortNavigation();
     } else if (userToken) {
       try {
         const res = await fetchJwtVerification({ token: decryptString(userToken) });
@@ -25,12 +24,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         } else {
           errorMessageDialog({ message: res.data.message || "" });
           clearLocalStorageKey(true);
-          // return abortNavigation();
         }
       } catch (error) {
         messageToast({ message: (error as Error).message, icon: "error" });
         clearLocalStorageKey(true);
-        // return abortNavigation();
       }
     }
   }

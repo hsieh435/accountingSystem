@@ -207,7 +207,7 @@ import {
   ICurrencyList,
   IResponse,
 } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast } from "@/composables/swalDialog";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -275,8 +275,6 @@ watch(openTradeData, () => {
   if (openTradeData.value === true) {
     if (props.tradeIdGot) {
       searchingStockAccountRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
@@ -387,15 +385,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.accountId = true;
-  dataValidate.tradeDatetime = true;
-  dataValidate.transactionType = true;
-  dataValidate.stockNo = true;
-  dataValidate.tradeCategory = true;
-  dataValidate.pricePerShare = true;
-  dataValidate.quantity = true;
-  dataValidate.handlingFee = true;
-  dataValidate.transactionTax = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;
@@ -442,21 +432,7 @@ async function validateData() {
     dataValidate.transactionTax = false;
   }
 
-  if (
-    !dataValidate.accountId ||
-    !dataValidate.tradeDatetime ||
-    !dataValidate.transactionType ||
-    !dataValidate.stockNo ||
-    !dataValidate.tradeCategory ||
-    !dataValidate.pricePerShare ||
-    !dataValidate.quantity ||
-    !dataValidate.handlingFee ||
-    !dataValidate.transactionTax
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function stockAccountRecordDataHandling() {

@@ -4,8 +4,11 @@
 import { defineNuxtPlugin } from "nuxt/app";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPlus, faTimes, faTrash, faRightToBracket, faHouse, faCaretRight, faMagnifyingGlass, faPenToSquare, faTrashCan, faSliders, faBinoculars, faSignOutAlt, faX, faCheck, faMoneyBillTrendUp, faChartLine, faPercent, faWallet, faWindowRestore, faCreditCard, faMoneyCheckDollar, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
-import { faSave, } from "@fortawesome/free-regular-svg-icons";
+import { faPlus, faBinoculars, faTimes, faSearch, faCheck, faTrash, faSlidersH, faSortAlphaDown, faMoneyBillAlt, faCreditCard, faTicketAlt, faDollarSign, faArrowTrendUp, faChartLine, faPercent,
+
+
+  faRightToBracket, faPenToSquare, faSignOutAlt, faX, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faClipboard } from "@fortawesome/free-regular-svg-icons";
 // import { fab } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -20,29 +23,29 @@ import { faSave, } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faPlus,
+  faBinoculars,
   faSave,
   faTimes,
+  faSearch,
   faTrash,
-
-  faRightToBracket,
-  faHouse,
-  faCaretRight,
-  faMagnifyingGlass,
-  faPenToSquare,
-  faTrashCan,
-  faSliders,
-  faBinoculars,
-  faSignOutAlt,
-  faX,
   faCheck,
-  faMoneyBillTrendUp,
+  faSlidersH,
+  faSortAlphaDown,
+  faMoneyBillAlt,
+  faCreditCard,
+  faTicketAlt,
+  faDollarSign,
+  faArrowTrendUp,
   faChartLine,
   faPercent,
+  faClipboard,
+
+
+  faRightToBracket,
+  faPenToSquare,
+  faSignOutAlt,
+  faX,
   faWallet,
-  faWindowRestore,
-  faCreditCard,
-  faMoneyCheckDollar,
-  faArrowTrendUp,
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";

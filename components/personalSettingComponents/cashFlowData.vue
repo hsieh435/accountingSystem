@@ -2,7 +2,7 @@
   <UModal
     title="現金流資料設定"
     description="資料內容"
-    v-model:open="open"
+    v-model:open="openCashFlowData"
     :dismissible="false"
     :close="{
       color: 'primary',
@@ -118,7 +118,7 @@
 
         <div class="my-2">
           <ui-buttonGroup showSave @dataSave="cashflowDataHandling" />
-          <ui-buttonGroup showClose @dataClose="open = false" />
+          <ui-buttonGroup showClose @dataClose="openCashFlowData = false" />
         </div>
       </div>
     </template>
@@ -128,7 +128,7 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
 import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat } from "@/composables/tools";
+import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -139,7 +139,7 @@ const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: b
 });
 const emits = defineEmits(["dataReseaching"]);
 
-const open = ref<boolean>(false);
+const openCashFlowData = ref<boolean>(false);
 const getDefaultDataParams = (): ICashFlowList => ({
   cashflowId: props.cashflowIdIdGot || "",
   userId: "",
@@ -168,14 +168,12 @@ const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(open, () => {
-  if (open.value === true) {
+watch(openCashFlowData, () => {
+  if (openCashFlowData.value === true) {
     if (props.cashflowIdIdGot) {
       searchingCashflowData();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
     }
-  } else if (open.value === false) {
+  } else if (openCashFlowData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
   }
@@ -197,11 +195,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  dataValidate.cashflowName = true;
-  dataValidate.currency = true;
-  dataValidate.startingAmount = true;
-  dataValidate.minimumValueAllowed = true;
-  dataValidate.alertValue = true;
+  Object.assign(dataValidate, getDefaultDataValidate());
 
   if (!dataParams.cashflowName) {
     dataValidate.cashflowName = false;
@@ -238,17 +232,7 @@ async function validateData() {
     alertValueValidateText.value = "提醒金額不可小於最小持有金額";
   }
 
-  if (
-    !dataValidate.cashflowName ||
-    !dataValidate.currency ||
-    !dataValidate.startingAmount ||
-    !dataValidate.minimumValueAllowed ||
-    !dataValidate.alertValue
-  ) {
-    return false;
-  } else {
-    return true;
-  }
+  return dataObjectValidate(dataValidate);
 }
 
 async function cashflowDataHandling() {
@@ -260,7 +244,7 @@ async function cashflowDataHandling() {
     // console.log("RES:", res);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    open.value = false;
+    openCashFlowData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -276,7 +260,7 @@ async function removeCashFlowData() {
 
   if (confirmResult) {
     emits("dataReseaching");
-    open.value = false;
+    openCashFlowData.value = false;
   }
 }
 </script>
