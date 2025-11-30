@@ -297,6 +297,10 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultDataValidate());
 
+  if (!dataParams.updateData.tradeCategory) {
+    dataValidate.tradeCategory = false;
+  }
+
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
     !isFinite(dataParams.updateData.tradeAmount) ||
