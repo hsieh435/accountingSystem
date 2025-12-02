@@ -45,6 +45,7 @@
                       :tradeIdGot="record.tradeId"
                       :accountIdGot="record.accountId"
                       @dataReseaching="searchingFinanceRecord" />
+                    <!-- <ui-buttonGroup showRemove :removeText="'刪除存款帳戶收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>

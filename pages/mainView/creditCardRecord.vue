@@ -42,6 +42,7 @@
                       :tradeIdGot="record.tradeId"
                       :creditCardIdGot="record.creditCardId"
                       @dataReseaching="searchingFinanceRecord" />
+                    <!-- <ui-buttonGroup showRemove :removeText="'刪除信用卡收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>

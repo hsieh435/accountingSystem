@@ -45,6 +45,7 @@
                       :tradeIdGot="record.tradeId"
                       :storedValueCardIdGot="record.storedValueCardId"
                       @dataReseaching="searchingFinanceRecord" />
+                    <!-- <ui-buttonGroup showRemove :removeText="'刪除儲值票卡收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>

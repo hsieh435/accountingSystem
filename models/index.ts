@@ -108,6 +108,7 @@ export interface ICashFlowRecordList {
   tradeId: string;
   cashflowId: string;
   cashflowName?: string;
+  enable?: boolean;
   userId: string;
   tradeDatetime: string;
   accountType: string;
@@ -155,6 +156,7 @@ export interface IStoredValueCardRecordList {
   tradeId: string;
   storedValueCardId: string;
   storedValueCardName?: string;
+  enable?: boolean;
   accountType: string;
   tradeDatetime: string;
   transactionType: string;
@@ -202,6 +204,7 @@ export interface ICreditCardRecordList {
   tradeId: string;
   creditCardId: string;
   creditcardName?: string;
+  enable?: boolean;
   tradeDatetime: string;
   userId: string;
   accountType: string;
@@ -250,6 +253,7 @@ export interface IcurrencyAccountRecordList {
   tradeId: string;
   accountId: string;
   accountName?: string;
+  enable?: boolean;
   tradeDatetime: string;
   accountUser: string;
   accountType: string;
@@ -301,6 +305,7 @@ export interface IStockAccountRecordList {
   accountUser: string;
   transactionType: string;
   transactionName?: string;
+  enable?: boolean;
   tradeCategory: string;
   tradeName?: string;
   stockNo: string;

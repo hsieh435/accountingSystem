@@ -45,6 +45,7 @@
                       :cashflowIdGot="record.cashflowId"
                       :tradeIdGot="record.tradeId"
                       @dataReseaching="searchingFinanceRecord" />
+                    <!-- <ui-buttonGroup showRemove :removeText="'刪除現金收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>
