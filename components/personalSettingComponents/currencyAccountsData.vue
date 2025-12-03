@@ -219,8 +219,7 @@ watch(openCurrencyAccountsData, () => {
 async function searchingCurrencyAccountData() {
   try {
     const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
-    messageToast({ message: res.data.message });
-    Object.assign(dataParams, res.data.data);
+    Object.assign(dataParams, res.data.data[0]);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

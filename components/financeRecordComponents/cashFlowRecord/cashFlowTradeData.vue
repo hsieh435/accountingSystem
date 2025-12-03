@@ -197,6 +197,7 @@ watch(openTradeData, () => {
       searchingCashFlowRecord();
     }
   } else {
+    console.log("openTradeData:", openTradeData.value);
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
@@ -212,18 +213,18 @@ async function searchingCashFlowRecord() {
       cashflowId: props.cashflowIdGot,
       tradeId: props.tradeIdGot,
     });
-    // console.log("res:", res.data.data);
-    Object.assign(dataParams.updateData, res.data.data);
-    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-    dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    originalTradeAmount.value = res.data.data.tradeAmount;
+    // console.log("res:", res.data.data[0]);
+    Object.assign(dataParams.updateData, res.data.data[0]);
+    dataParams.oriData.oriTradeDatetime = res.data.data[0].tradeDatetime;
+    dataParams.oriData.oriTradeAmount = res.data.data[0].tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data[0].remainingAmount;
+    dataParams.oriData.oriTransactionType = res.data.data[0].transactionType;
+    originalTradeAmount.value = res.data.data[0].tradeAmount;
     //
-    if (res.data.data.transactionType === "income") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
-    } else if (res.data.data.transactionType === "expense") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + res.data.data.tradeAmount;
+    if (res.data.data[0].transactionType === "income") {
+      dataParams.oriData.oriRemainingAmount = res.data.data[0].remainingAmount - res.data.data[0].tradeAmount;
+    } else if (res.data.data[0].transactionType === "expense") {
+      dataParams.oriData.oriRemainingAmount = res.data.data[0].remainingAmount + res.data.data[0].tradeAmount;
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -232,6 +233,7 @@ async function searchingCashFlowRecord() {
 
 function settingCashflowAccount(account: ICashFlowList[]) {
   cashFlowChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICashFlowList);
+  // console.log("cashFlowChosen:", cashFlowChosen.value);
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
   dataParams.updateData.currency = cashFlowChosen.value.currency || "";
   if (props.tradeIdGot.length > 0 && account.length === 1) {
@@ -260,8 +262,6 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
-  console.log("cashFlowChosen:", cashFlowChosen.value);
-  console.log("dataParams:", dataParams.updateData);
   dataParams.updateData.tradeAmount =
     typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
@@ -281,10 +281,15 @@ function settingRemainingAmount() {
       icon: "warning",
     });
   }
+  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
+  // console.log("dataParams:", dataParams.updateData);
   if (
     cashFlowChosen.value &&
     dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed
   ) {
+    // console.log("dataParams.updateData.remainingAmount", dataParams.updateData.remainingAmount);
+    // console.log("cashFlowChosen", cashFlowChosen.value);
+
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
   }

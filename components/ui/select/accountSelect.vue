@@ -43,6 +43,8 @@ onMounted(async () => {
 
 watch(accountId, () => {
   const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
+  // console.log("accountId:", accountId.value);
+  // console.log("selectedItem:", selectedItem);
   emits("sendbackAccount", selectedItem ? [selectedItem] : []);
 });
 

@@ -202,14 +202,14 @@ async function searchingCurrencyAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    Object.assign(dataParams, res.data.data);
-    originalTradeDatetime.value = res.data.data.tradeDatetime;
+    Object.assign(dataParams, res.data.data[0]);
+    originalTradeDatetime.value = res.data.data[0].tradeDatetime;
 
-    originalTradeAmount.value = res.data.data.tradeAmount;
-    if (res.data.data.transactionType === "income") {
-      originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
-    } else if (res.data.data.transactionType === "expense") {
-      originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
+    originalTradeAmount.value = res.data.data[0].tradeAmount;
+    if (res.data.data[0].transactionType === "income") {
+      originalRemainingAmount.value = res.data.data[0].remainingAmount - res.data.data[0].tradeAmount;
+    } else if (res.data.data[0].transactionType === "expense") {
+      originalRemainingAmount.value = res.data.data[0].remainingAmount + res.data.data[0].tradeAmount;
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });

@@ -215,7 +215,7 @@ watch(openStockAccountData, () => {
 async function searchingStockAccountData() {
   try {
     const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
-    Object.assign(dataParams, res.data.data);
+    Object.assign(dataParams, res.data.data[0]);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

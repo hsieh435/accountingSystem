@@ -179,11 +179,10 @@ async function searchingCreditCardRecord() {
       creditCardId: props.creditCardIdGot,
       tradeId: props.tradeIdGot,
     });
-    Object.assign(dataParams, res.data.data);
-    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-    openTradeData.value = true;
+    Object.assign(dataParams, res.data.data[0]);
+    dataParams.oriData.oriTradeDatetime = res.data.data[0].tradeDatetime;
+    dataParams.oriData.oriTradeAmount = res.data.data[0].tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data[0].remainingAmount;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

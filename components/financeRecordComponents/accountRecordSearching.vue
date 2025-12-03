@@ -33,7 +33,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { IFinanceRecordSearchingParams, ICashFlowList, ICurrencyList } from "@/models/index";
+import { IFinanceRecordSearchingParams, ICurrencyList } from "@/models/index";
 import { getCurrentYear } from "@/composables/tools";
 
 const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName?: string }>(), {
@@ -55,8 +55,9 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(accountItem: ICashFlowList[]) {
-  searchParams.accountId = accountItem[0].cashflowId || "";
+async function settingAccountId(accountItem: any[]) {
+  // console.log("accountItem:", accountItem);
+  searchParams.accountId = accountItem[0].pkValue || "";
   searchParams.currencyId = accountItem[0].currency || "";
 }
 

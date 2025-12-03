@@ -205,7 +205,7 @@ watch(openCreditCardData, () => {
 async function searchingCreditCardData() {
   try {
     const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
-    Object.assign(dataParams, res.data.data);
+    Object.assign(dataParams, res.data.data[0]);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
