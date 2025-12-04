@@ -202,7 +202,7 @@ watch(openStoredValueCardData, () => {
 async function searchingStoredValueCardData() {
   try {
     const res: IResponse = await fetchStoredValueCardById(props.storedValueCardIdGot);
-    Object.assign(dataParams, res.data.data[0]);
+    Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

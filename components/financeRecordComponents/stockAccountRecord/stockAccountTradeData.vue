@@ -292,12 +292,12 @@ async function searchingStockAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchStockAccountRecordById:", res.data.data[0]);
-    Object.assign(dataParams.updateData, res.data.data[0]);
-    dataParams.oriData.oriTradeDatetime = res.data.data[0].tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data[0].tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data[0].remainingAmount;
-    dataParams.oriData.oriTransactionType = res.data.data[0].transactionType;
+    console.log("fetchStockAccountRecordById:", res.data.data);
+    Object.assign(dataParams.updateData, res.data.data);
+    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
+    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
+    dataParams.oriData.oriTransactionType = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
