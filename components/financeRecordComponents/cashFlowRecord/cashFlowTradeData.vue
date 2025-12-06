@@ -193,17 +193,15 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    if (props.tradeIdGot) {
-      searchingCashFlowRecord();
-    }
-  } else {
-    console.log("openTradeData:", openTradeData.value);
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
+    if (props.tradeIdGot) {
+      searchingCashFlowRecord();
+    }
   }
 });
 
@@ -213,11 +211,10 @@ async function searchingCashFlowRecord() {
       cashflowId: props.cashflowIdGot,
       tradeId: props.tradeIdGot,
     });
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
     originalTradeAmount.value = res.data.data.tradeAmount;
     //
@@ -262,6 +259,10 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
+  console.log("原先餘額:", originalRemainingAmount.value);
+  console.log("紀錄資料:", dataParams.updateData);
+  console.log("現金流", cashFlowChosen.value);
+  console.log("紀錄餘額", dataParams.updateData.remainingAmount);
   dataParams.updateData.tradeAmount =
     typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
@@ -274,21 +275,19 @@ function settingRemainingAmount() {
   if (
     cashFlowChosen.value &&
     cashFlowChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < cashFlowChosen.value.alertValue
+    dataParams.updateData.remainingAmount < cashFlowChosen.value.alertValue &&
+    openTradeData.value === true
   ) {
     messageToast({
       message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
       icon: "warning",
     });
   }
-  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
-  // console.log("dataParams:", dataParams.updateData);
   if (cashFlowChosen.value && dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed) {
-    // console.log("dataParams.updateData.remainingAmount", dataParams.updateData.remainingAmount);
-    // console.log("cashFlowChosen", cashFlowChosen.value);
-
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
+  } else {
+    dataValidate.tradeAmount = true;
   }
 }
 

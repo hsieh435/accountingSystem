@@ -212,7 +212,7 @@ async function searchingStoredValueCardRecord() {
       tradeId: props.tradeIdGot,
     });
     // console.log("res:", res.data.data);
-    Object.assign(dataParams, res.data.data);
+    Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
     dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;

@@ -111,7 +111,7 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 }
 
 async function searchingFinanceRecord() {
-  console.log("searchingParams:", searchingParams);
+  // console.log("searchingParams:", searchingParams);
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
     console.log("res:", res.data.data);

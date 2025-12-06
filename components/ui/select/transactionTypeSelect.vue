@@ -28,13 +28,14 @@ onMounted(() => {
 });
 
 watch(props, () => {
+  // console.log("watch props:", props);
   transactionTypeValue.value = props.transactionType || "";
-}, { immediate: true });
+});
 
 watch(transactionTypeValue, () => {
   // console.log("Selected value:", transactionTypeValue.value);
   emits("sendbackTransactionType", transactionTypeValue.value);
-}, { immediate: true });
+});
 
 
 
