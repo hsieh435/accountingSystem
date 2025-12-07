@@ -292,7 +292,7 @@ async function searchingStockAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchStockAccountRecordById:", res.data.data);
+    // console.log("fetchStockAccountRecordById:", res.data.data);
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
@@ -303,19 +303,19 @@ async function searchingStockAccountRecord() {
   }
 }
 
-function settingAccount(account: IStockAccountList[]) {
-  stockAccountChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as IStockAccountRecordList);
+function settingAccount(account: IStockAccountList) {
+  stockAccountChosen.value = account || ({} as IStockAccountRecordList);
   dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
   dataParams.updateData.currency = stockAccountChosen.value.currency || "";
 
-  if (props.tradeIdGot.length > 0 && account.length === 1) {
+  if (props.tradeIdGot.length > 0 && account) {
     if (dataParams.updateData.transactionType === "income") {
-      originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
+      originalRemainingAmount.value = account.presentAmount - originalTradeAmount.value;
     } else if (dataParams.updateData.transactionType === "expense") {
-      originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
+      originalRemainingAmount.value = account.presentAmount + originalTradeAmount.value;
     }
   } else {
-    originalRemainingAmount.value = account[0].presentAmount || 0;
+    originalRemainingAmount.value = account.presentAmount || 0;
   }
   // console.log("stockAccountChosen:", stockAccountChosen.value);
   settingRemainingAmount();

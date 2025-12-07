@@ -55,10 +55,10 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(accountItem: any[]) {
+async function settingAccountId(accountItem: any) {
   // console.log("accountItem:", accountItem);
-  searchParams.accountId = accountItem[0].pkValue || "";
-  searchParams.currencyId = accountItem[0].currency || "";
+  searchParams.accountId = accountItem?.pkValue || "";
+  searchParams.currencyId = accountItem?.currency || "";
 }
 
 async function settingCurrency(currencyData: ICurrencyList) {

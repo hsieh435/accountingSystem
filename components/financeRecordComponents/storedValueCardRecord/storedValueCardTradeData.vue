@@ -88,7 +88,7 @@
               orientation="vertical"
               :min="0"
               :step="setStep"
-              @change="settingRemainingAmount()" />
+              @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
@@ -228,13 +228,13 @@ async function searchingStoredValueCardRecord() {
   }
 }
 
-function settingStoredValueCardAccount(account: IStoredValueCardList[]) {
+function settingStoredValueCardAccount(account: IStoredValueCardList) {
   console.log("account:", account);
-  storedValueCardChosen.value = account[0] || ({} as IStoredValueCardList);
+  storedValueCardChosen.value = account || ({} as IStoredValueCardList);
   dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
   dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
-  if (props.tradeIdGot.length > 0 && account.length === 1) {
+  if (props.tradeIdGot.length > 0 && account) {
     if (dataParams.updateData.transactionType === "income") {
       originalRemainingAmount.value = storedValueCardChosen.value.presentAmount - originalTradeAmount.value;
     } else if (dataParams.updateData.transactionType === "expense") {

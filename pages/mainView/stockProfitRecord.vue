@@ -62,8 +62,8 @@ const searchingParams = reactive<{ stockAccountId: string; stockNo: string }>({
 });
 const stockPurchaseRecord = ref<(IStockAccountRecordList & { index?: number })[]>([]);
 
-async function settingAccount(accountItem: IStockAccountList[]) {
-  searchingParams.stockAccountId = accountItem[0]?.accountId || "";
+async function settingAccount(accountItem: IStockAccountList) {
+  searchingParams.stockAccountId = accountItem?.accountId || "";
 }
 
 async function settingStockNo(stockNo: string) {

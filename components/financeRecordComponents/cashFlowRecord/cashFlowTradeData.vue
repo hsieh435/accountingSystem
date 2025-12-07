@@ -88,7 +88,7 @@
               orientation="vertical"
               :min="0"
               :step="setStep"
-              @change="settingRemainingAmount()" />
+              @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
@@ -211,7 +211,7 @@ async function searchingCashFlowRecord() {
       cashflowId: props.cashflowIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("res:", res.data.data);
+    console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
@@ -228,12 +228,12 @@ async function searchingCashFlowRecord() {
   }
 }
 
-function settingCashflowAccount(account: ICashFlowList[]) {
-  cashFlowChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICashFlowList);
+function settingCashflowAccount(account: ICashFlowList) {
+  cashFlowChosen.value = account || ({} as ICashFlowList);
   // console.log("cashFlowChosen:", cashFlowChosen.value);
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
   dataParams.updateData.currency = cashFlowChosen.value.currency || "";
-  if (props.tradeIdGot.length > 0 && account.length === 1) {
+  if (props.tradeIdGot.length > 0 && account) {
     if (dataParams.updateData.transactionType === "income") {
       originalRemainingAmount.value = cashFlowChosen.value.presentAmount - originalTradeAmount.value;
     } else if (dataParams.updateData.transactionType === "expense") {
@@ -258,19 +258,21 @@ function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-function settingRemainingAmount() {
-  console.log("原先餘額:", originalRemainingAmount.value);
-  console.log("紀錄資料:", dataParams.updateData);
-  console.log("現金流", cashFlowChosen.value);
-  console.log("紀錄餘額", dataParams.updateData.remainingAmount);
-  dataParams.updateData.tradeAmount =
-    typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
+async function settingRemainingAmount() {
+
+  // dataParams.updateData.tradeAmount =
+  //   typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
+  // dataParams.updateData.remainingAmount = cashFlowChosen.value.presentAmount || 0;
   if (dataParams.updateData.transactionType === "income") {
     dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
   }
+  // console.log("原先餘額:", originalRemainingAmount.value);
+  // console.log("紀錄資料:", dataParams.updateData);
+  // console.log("現金流", cashFlowChosen.value);
+  // console.log("紀錄餘額", dataParams.updateData.remainingAmount);
 
   if (
     cashFlowChosen.value &&

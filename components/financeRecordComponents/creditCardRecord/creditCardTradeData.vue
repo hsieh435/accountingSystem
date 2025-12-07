@@ -188,9 +188,9 @@ async function searchingCreditCardRecord() {
   }
 }
 
-function settingCreditCardAccount(account: ICreditCardList[]) {
-  dataParams.updateData.creditCardId = account[0].creditcardId || "";
-  dataParams.updateData.currency = account[0].currency || "";
+function settingCreditCardAccount(account: ICreditCardList) {
+  dataParams.updateData.creditCardId = account.creditcardId || "";
+  dataParams.updateData.currency = account.currency || "";
 }
 
 function settingTradeDatetime(dateTime: string) {

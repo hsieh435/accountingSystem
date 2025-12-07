@@ -79,7 +79,7 @@
             orientation="vertical"
             :min="0"
             :step="setStep"
-            @change="settingRemainingAmount()" />
+            @update:modelValue="settingRemainingAmount()" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
           <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
@@ -216,19 +216,19 @@ async function searchingCurrencyAccountRecord() {
   }
 }
 
-function settingAccount(account: ICurrencyAccountList[]) {
-  storedValueCardChosen.value = JSON.parse(JSON.stringify(account[0])) || ({} as ICurrencyAccountList);
+function settingAccount(account: ICurrencyAccountList) {
+  storedValueCardChosen.value = account || ({} as ICurrencyAccountList);
   dataParams.updateData.accountId = storedValueCardChosen.value.accountId || "";
   dataParams.updateData.currency = storedValueCardChosen.value.currency || "";
 
-  if (props.tradeIdGot.length > 0 && account.length === 1) {
+  if (props.tradeIdGot.length > 0 && account) {
     if (dataParams.updateData.transactionType === "income") {
-      originalRemainingAmount.value = account[0].presentAmount - originalTradeAmount.value;
+      originalRemainingAmount.value = account.presentAmount - originalTradeAmount.value;
     } else if (dataParams.updateData.transactionType === "expense") {
-      originalRemainingAmount.value = account[0].presentAmount + originalTradeAmount.value;
+      originalRemainingAmount.value = account.presentAmount + originalTradeAmount.value;
     }
   } else {
-    originalRemainingAmount.value = account[0].presentAmount || 0;
+    originalRemainingAmount.value = account.presentAmount || 0;
   }
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
   settingRemainingAmount();
