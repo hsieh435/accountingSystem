@@ -11,10 +11,10 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchCurrencyListFromWeb } from "@/server/outerWebApi";
-import { ISelectData, IResponse } from "@/models/index";
-import { debounceFn } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchCurrencyListFromWeb } from "@/server/outerWebApi.ts";
+import { ISelectData, IResponse } from "@/models/index.ts";
+import { debounceFn } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; isDisable?: boolean }>(), {
   currencyIdGot: "",

@@ -3,11 +3,11 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchUserList, fetchUserCreate } from "@/server/userDataApi";
-import { IResponse } from "@/models/index";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { encryptString } from "@/composables/crypto";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchUserList, fetchUserCreate } from "@/server/userDataApi.ts";
+import { IResponse } from "@/models/index.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
+import { encryptString } from "@/composables/crypto.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import Swal from "sweetalert2";
 
 const userAccount = ref<string>("");

@@ -198,7 +198,7 @@ import {
   fetchStockAccountRecordById,
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
-} from "@/server/stockAccountRecordApi";
+} from "@/server/stockAccountRecordApi.ts";
 import {
   IStockAccountRecordData,
   IStockAccountRecordList,
@@ -206,9 +206,9 @@ import {
   IStockList,
   ICurrencyList,
   IResponse,
-} from "@/models/index";
-import { currencyFormat, dataObjectValidate } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/models/index.ts";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));

@@ -60,11 +60,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from "vue";
-import { fetchTradeCategoryList } from "@/server/parameterApi";
-import { ITradeCategory, IResponse } from "@/models/index";
-import { sliceArray } from "@/composables/tools";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchTradeCategoryList } from "@/server/parameterApi.ts";
+import { ITradeCategory, IResponse } from "@/models/index.ts";
+import { sliceArray } from "@/composables/tools.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

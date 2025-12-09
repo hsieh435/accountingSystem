@@ -5,9 +5,9 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
-import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi.ts";
+import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {

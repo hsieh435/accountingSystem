@@ -126,10 +126,10 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi";
-import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools";
-import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
+import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi.ts";
+import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 

@@ -39,9 +39,9 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
-import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index";
-import { getCurrentYMD } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index.ts";
+import { getCurrentYMD } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

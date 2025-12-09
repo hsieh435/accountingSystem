@@ -5,10 +5,10 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { ISelectData, IResponse } from "@/models/index";
-import { fetchCreditcardSchemaList } from "@/server/parameterApi";
-import { messageToast } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
+import { ISelectData, IResponse } from "@/models/index.ts";
+import { fetchCreditcardSchemaList } from "@/server/parameterApi.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 const props = withDefaults(defineProps<{ selectId?: string; sellectAll?: boolean; isAble?: boolean }>(), {
   selectId: "",

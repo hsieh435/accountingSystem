@@ -7,7 +7,10 @@
 
     <div class="flex items-center">
       <span>貨幣：</span>
-      <dataBaseCurrencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId.length > 0" @sendbackCurrencyData="settingCurrency" />
+      <dataBaseCurrencySelect
+        :currencyIdGot="searchParams.currencyId"
+        :isDisable="searchParams.accountId.length > 0"
+        @sendbackCurrencyData="settingCurrency" />
     </div>
 
     <div class="flex items-center">
@@ -33,8 +36,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { IFinanceRecordSearchingParams, ICurrencyList } from "@/models/index";
-import { getCurrentYear } from "@/composables/tools";
+import { IFinanceRecordSearchingParams, ICurrencyList } from "@/models/index.ts";
+import { getCurrentYear } from "@/composables/tools.ts";
 
 const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName?: string }>(), {
   accountTypeId: "",

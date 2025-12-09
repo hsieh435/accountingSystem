@@ -107,10 +107,10 @@ import {
   fetchCurrencyCreate,
   fetchCurrencyUpdate,
   fetchCurrencyDelete,
-} from "@/server/parameterApi";
-import { ICurrencyList, IResponse } from "@/models/index";
-import { dataObjectValidate } from "@/composables/tools";
-import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
+} from "@/server/parameterApi.ts";
+import { ICurrencyList, IResponse } from "@/models/index.ts";
+import { dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const props = withDefaults(defineProps<{ currencyCodeGot?: string }>(), { currencyCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);

@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, watch } from "vue";
-import { IAccountSearchingParams, ICurrencyList } from "@/models/index";
+import { IAccountSearchingParams, ICurrencyList } from "@/models/index.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 

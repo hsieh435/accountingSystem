@@ -1,22 +1,30 @@
 <template>
   <div class="flex flex-wrap justify-between items-center px-2">
-
     <div class="flex flex-wrap justify-start items-center me-2 my-1">
       <span>共 {{ props.totalDataQuanity }} 筆</span>
-      <USelect v-model="itemsPerPage" :items="perPageArray" class="w-auto mx-2" :disabled="props.totalDataQuanity <= props.pageArrayGot[0]" />
+      <USelect
+        v-model="itemsPerPage"
+        :items="perPageArray"
+        class="w-auto mx-2"
+        :disabled="props.totalDataQuanity <= props.pageArrayGot[0]" />
 
       <template v-if="props.totalDataQuanity > props.pageArrayGot[0]">
-        <UPagination class="mx-2" v-model:page="currentPage" :items-per-page="itemsPerPage" :total="props.totalDataQuanity" show-edges :sibling-count="1" variant="outline" />
+        <UPagination
+          class="mx-2"
+          v-model:page="currentPage"
+          :items-per-page="itemsPerPage"
+          :total="props.totalDataQuanity"
+          show-edges
+          :sibling-count="1"
+          variant="outline" />
 
         <div class="flex flex-row justify-start items-center">
           <span class="mx-1">前往第</span>
-          <UInputNumber style="width: 120px;" v-model="pageTarget" :min="1" :max="totalPages" />
+          <UInputNumber style="width: 120px" v-model="pageTarget" :min="1" :max="totalPages" />
           <span class="mx-1">頁</span>
         </div>
       </template>
-
     </div>
-
 
     <template v-if="props.showSortSelect && sortMethodGot.length > 0">
       <div class="flex flex-row justify-start items-center me-2 my-1">
@@ -32,23 +40,24 @@
     <template v-if="props.showFilter">
       <div class="flex flex-row justify-start items-center me-2 my-1">
         <font-awesome-icon class="mx-1" :icon="['fas', 'sliders-h']" />
-        <UInput class="mx-1" v-model="keyWord" :type="'search'" :placeholder="props.searchingPlaceholder" icon="i-lucide-search" size="md" />
+        <UInput
+          class="mx-1"
+          v-model="keyWord"
+          :type="'search'"
+          :placeholder="props.searchingPlaceholder"
+          icon="i-lucide-search"
+          size="md" />
       </div>
     </template>
-
-
 
     <!-- <template v-if="props.showCheckBox">
       <UCheckbox v-model="isCheckBoxPicked" :label="props.checkBoxTitle" />
     </template> -->
-
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { ISortArray } from "@/models/index";
-
-
+import { ISortArray } from "@/models/index.ts";
 
 const props = withDefaults(
   defineProps<{
@@ -92,7 +101,6 @@ const props = withDefaults(
 );
 const emits = defineEmits(["tableSliceChange", "checkboxChange", "sortSelectChange", "filterChange"]);
 
-
 // 目前頁數
 const currentPage = ref<number>(1);
 
@@ -112,17 +120,12 @@ const pageTarget = ref<number>(1);
 const keyWord = ref<string>("");
 const keyWordPlaceholder = ref<string>("");
 
-
-
 const sortMethodGot = ref<ISortArray[]>([]);
 const sortSelectValue = ref<number>(0);
 
 const filterValue = ref<string>("");
 
-
 const isCheckBoxPicked = ref<boolean>(false);
-
-
 
 onMounted(() => {
   // 初始化頁數
@@ -132,7 +135,9 @@ onMounted(() => {
     return { label: `${item} 筆 / 頁`, value: item };
   });
 
-  itemsPerPage.value = perPageArray.value.some(item => item.value === props.dataPerpage) ? props.dataPerpage : perPageArray.value[0].value;
+  itemsPerPage.value = perPageArray.value.some((item) => item.value === props.dataPerpage)
+    ? props.dataPerpage
+    : perPageArray.value[0].value;
 
   totalPages.value = Math.ceil(props.totalDataQuanity / itemsPerPage.value);
   currentPage.value = 1;
@@ -146,23 +151,22 @@ onMounted(() => {
 
   keyWordPlaceholder.value = props.searchingPlaceholder ? props.searchingPlaceholder : "";
 
-
   sortMethodGot.value = JSON.parse(JSON.stringify(props.sortMethod));
   for (let i = 0; i < sortMethodGot.value.length; i++) {
     sortMethodGot.value[i]["value"] = i;
   }
   sortSelectValue.value = sortMethodGot.value.length > 0 ? sortMethodGot.value[0].value || 0 : 0;
 
-
   isCheckBoxPicked.value = props.checkBoxValue;
 });
-
 
 watch(props, () => {
   // console.log("watch props:", props);
   perPageArray.value = props.pageArrayGot.map((item) => ({ label: `${item} 筆 / 頁`, value: item }));
 
-  itemsPerPage.value = perPageArray.value.some(item => item.value === props.dataPerpage) ? props.dataPerpage : perPageArray.value[0].value;
+  itemsPerPage.value = perPageArray.value.some((item) => item.value === props.dataPerpage)
+    ? props.dataPerpage
+    : perPageArray.value[0].value;
 
   totalPages.value = Math.ceil(props.totalDataQuanity / itemsPerPage.value);
   currentPage.value =
@@ -178,22 +182,24 @@ watch(props, () => {
   pageTarget.value = currentPage.value;
 });
 
-
 watch([currentPage, itemsPerPage, keyWord], () => {
-  emits("tableSliceChange", { currentPage: currentPage.value, itemsPerPage: itemsPerPage.value, keyWord: keyWord.value });
+  emits("tableSliceChange", {
+    currentPage: currentPage.value,
+    itemsPerPage: itemsPerPage.value,
+    keyWord: keyWord.value,
+  });
 });
 
 watch(isCheckBoxPicked, () => {
   emits("checkboxChange", isCheckBoxPicked.value);
 });
 
-
-
 async function clickSortSelect() {
-  emits("sortSelectChange", sortMethodGot.value[sortSelectValue.value].sortId, sortMethodGot.value[sortSelectValue.value].code);
+  emits(
+    "sortSelectChange",
+    sortMethodGot.value[sortSelectValue.value].sortId,
+    sortMethodGot.value[sortSelectValue.value].code,
+  );
 }
-
-
-
 </script>
 <style lang="scss" scoped></style>

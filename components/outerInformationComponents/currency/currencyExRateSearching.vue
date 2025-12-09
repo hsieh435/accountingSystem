@@ -26,10 +26,10 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerWebApi";
-import { ICurrencyExRateSearchingParams, ICurrencyList, IResponse } from "@/models/index";
-import { getCurrentYMD, getCurrentYear } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerWebApi.ts";
+import { ICurrencyExRateSearchingParams, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getCurrentYMD, getCurrentYear } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const emits = defineEmits(["sendbackSearchingData"]);
 

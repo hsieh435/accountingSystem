@@ -5,7 +5,12 @@
         :items="navbarMenuList"
         contentOrientation="vertical"
         trailingIcon="i-lucide-arrow-down"
-        :ui="{ viewportWrapper: 'border-0 border-black p-0', viewport: 'border-0 border-purple-500', content: 'border-0 border-rose-500', indicator: 'border-0 border-sky-500' }" />
+        :ui="{
+          viewportWrapper: 'border-0 border-black p-0',
+          viewport: 'border-0 border-purple-500',
+          content: 'border-0 border-rose-500',
+          indicator: 'border-0 border-sky-500',
+        }" />
     </div>
 
     <!-- Nuxt 的 <NuxtLink to="/path"></NuxtLink> 標籤，概念相當於 Vue 的 <RouterLink to="/path"></RouterLink> -->
@@ -19,12 +24,12 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchFunctionList } from "@/server/functionAPI";
-import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index";
+import { fetchFunctionList } from "@/server/functionApi.ts";
+import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index.ts";
 import { useRoute } from "vue-router";
 import { BreadcrumbItem, NavigationMenuItem } from "@nuxt/ui";
-import { clearLocalStorageKey } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { clearLocalStorageKey } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const route = useRoute();
 

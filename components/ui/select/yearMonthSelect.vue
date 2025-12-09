@@ -1,19 +1,30 @@
 <template>
-  <div style="width: 150px;">
-    <VueDatePicker v-model="selectedYearMonth" month-picker text-input auto-apply partial-flow year-first :min-date="minDate" :max-date="maxDate" format="yyyy/MM" locale="zh-TW" :highlight="{ options: { highlightDisabled: true } }">
+  <div style="width: 150px">
+    <VueDatePicker
+      v-model="selectedYearMonth"
+      month-picker
+      text-input
+      auto-apply
+      partial-flow
+      year-first
+      :min-date="minDate"
+      :max-date="maxDate"
+      format="yyyy/MM"
+      locale="zh-TW"
+      :highlight="{ options: { highlightDisabled: true } }">
     </VueDatePicker>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
-import { getCurrentYear, getCurrentMonth } from "@/composables/tools";
+import { getCurrentYear, getCurrentMonth } from "@/composables/tools.ts";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
-
-const props = withDefaults(defineProps<{ yearMonthGot?: string; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number; }>(), { yearMonthGot: "", maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 });
+const props = withDefaults(
+  defineProps<{ yearMonthGot?: string; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number }>(),
+  { yearMonthGot: "", maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 },
+);
 const emits = defineEmits(["sendbackYearMonth"]);
-
-
 
 const selectedYear = ref<number>(getCurrentYear());
 const selectedMonth = ref<number>(getCurrentMonth());
@@ -54,8 +65,5 @@ watch(selectedYearMonth, () => {
   // console.log("watch selectedYearMonth:", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
   emits("sendbackYearMonth", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);
 });
-
-
-
 </script>
 <style lang="scss" scoped></style>

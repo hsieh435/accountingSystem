@@ -52,8 +52,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive, ref } from "vue";
-import { ICurrencyExRateSearchingParams } from "@/models/index";
-import { getCurrentYMD, getCurrentYear } from "@/composables/tools";
+import { ICurrencyExRateSearchingParams } from "@/models/index.ts";
+import { getCurrentYMD, getCurrentYear } from "@/composables/tools.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -83,7 +83,7 @@ const currencyExRateParams = ref<ICurrencyExRateSearchingParams>({
   endDate: "",
 });
 
-async function settingCurrencyId(currency: {currencyCode: string, currencyName: string}) {
+async function settingCurrencyId(currency: { currencyCode: string; currencyName: string }) {
   searchingParams.currencyId = currency.currencyCode;
 }
 

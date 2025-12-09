@@ -34,15 +34,15 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi";
+import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi.ts";
 import {
   IFinanceRecordSearchingParams,
   IcurrencyAccountRecordList,
   ICurrencyAccountList,
   IResponse,
-} from "@/models/index";
-import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/models/index.ts";
+import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));

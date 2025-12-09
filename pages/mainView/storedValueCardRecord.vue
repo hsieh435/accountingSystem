@@ -61,11 +61,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi";
-import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index";
-import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
+import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi.ts";
+import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
+import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

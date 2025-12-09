@@ -43,9 +43,9 @@
 import { ref, onMounted } from "vue";
 import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
 import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
-import { IResponse } from "@/models/index";
-import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { IResponse } from "@/models/index.ts";
+import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ stockAccountIdGot?: string; stockNoGot?: string }>(), {

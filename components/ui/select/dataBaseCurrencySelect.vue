@@ -7,10 +7,10 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchCurrencyList } from "@/server/parameterApi";
-import { ISelectData, ICurrencyList, IResponse } from "@/models/index";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchCurrencyList } from "@/server/parameterApi.ts";
+import { ISelectData, ICurrencyList, IResponse } from "@/models/index.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
   currencyIdGot: "",

@@ -87,10 +87,10 @@ import {
   fetchCreateTradeCategory,
   fetchUpdateTradeCategory,
   fetchDeleteTradeCategory,
-} from "@/server/parameterApi";
-import { ITradeCategory, IResponse } from "@/models/index";
-import { dataObjectValidate } from "@/composables/tools";
-import { messageToast, showConfirmDialog } from "@/composables/swalDialog";
+} from "@/server/parameterApi.ts";
+import { ITradeCategory, IResponse } from "@/models/index.ts";
+import { dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const props = withDefaults(defineProps<{ tradeCodeGot?: string }>(), { tradeCodeGot: "" });
 const emits = defineEmits(["dataReseaching"]);

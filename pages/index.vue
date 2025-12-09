@@ -48,11 +48,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { IResponse } from "@/models/index.ts";
-import { fetchUserLogin } from "@/server/userDataApi";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchUserLogin } from "@/server/userDataApi.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { navigateTo } from "nuxt/app";
-import { setLocalStorageItem } from "@/composables/tools";
-import { encryptString } from "@/composables/crypto";
+import { setLocalStorageItem } from "@/composables/tools.ts";
+import { encryptString } from "@/composables/crypto.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

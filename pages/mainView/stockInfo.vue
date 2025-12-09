@@ -66,8 +66,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { IStockPriceSearchingParams, IStockList } from "@/models/index";
-import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools";
+import { IStockPriceSearchingParams, IStockList } from "@/models/index.ts";
+import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({
@@ -78,9 +78,13 @@ definePageMeta({
 
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
-const stockPriceLineChart = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"));
+const stockPriceLineChart = defineAsyncComponent(
+  () => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"),
+);
 const stockPerPbr = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPbr.vue"));
-const stockInterest = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockInterest.vue"));
+const stockInterest = defineAsyncComponent(
+  () => import("@/components/outerInformationComponents/stock/stockInterest.vue"),
+);
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",
@@ -95,8 +99,6 @@ const stockPriceParams = ref<IStockPriceSearchingParams>({
   startDate: "",
   endDate: "",
 });
-
-
 
 async function settingStockNo(selectedData: IStockList) {
   searchingParams.stockNo = selectedData.stock_id;

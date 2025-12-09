@@ -5,10 +5,10 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchStockDividendResult } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IResponse } from "@/models/index";
-import { yearMonthDayTimeFormat } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchStockDividendResult } from "@/server/outerWebApi.ts";
+import { IStockPriceSearchingParams, IResponse } from "@/models/index.ts";
+import { yearMonthDayTimeFormat } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {

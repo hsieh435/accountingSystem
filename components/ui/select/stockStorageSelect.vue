@@ -9,9 +9,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { fetchStockStorageList } from "@/server/storageProfitApi.ts";
-import { IStockStorageList, IResponse } from "@/models/index";
-import { messageToast } from "@/composables/swalDialog";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
+import { IStockStorageList, IResponse } from "@/models/index.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 const props = withDefaults(defineProps<{ isAllStorage?: boolean; accountIdGot?: string; sellectAll?: boolean }>(), {
   isAllStorage: false,

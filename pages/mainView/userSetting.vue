@@ -89,14 +89,14 @@
 </template>
 <script setup lang="ts">
 import { onMounted, watch, reactive, ref } from "vue";
-import { IUserData, IResponse } from "@/models/index";
+import { IUserData, IResponse } from "@/models/index.ts";
 import { navigateTo } from "nuxt/app";
 import { jwtTokenEncoded } from "@/server/index.ts";
-import { fetchUserDataChange } from "@/server/userDataApi";
-import { setLocalStorageItem } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
-import { encryptString } from "@/composables/crypto";
-// import * as tailwindStyles from "@/assets/css/tailwindStyles";
+import { fetchUserDataChange } from "@/server/userDataApi.ts";
+import { setLocalStorageItem } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
+import { encryptString } from "@/composables/crypto.ts";
+// import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

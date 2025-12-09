@@ -114,10 +114,10 @@ import {
   fetchCreditCardRecordById,
   fetchCreditCardRecordCreate,
   fetchCreditCardRecordUpdate,
-} from "@/server/creditCardRecordApi";
-import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index";
-import { dataObjectValidate } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/server/creditCardRecordApi.ts";
+import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));

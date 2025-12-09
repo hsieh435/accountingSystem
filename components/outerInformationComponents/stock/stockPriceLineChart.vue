@@ -5,9 +5,9 @@
 </template>
 <script setup lang="ts">
 import { watch, ref } from "vue";
-import { fetchStockRangeValue } from "@/server/outerWebApi";
-import { IStockPriceSearchingParams, IResponse } from "@/models/index";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
+import { IStockPriceSearchingParams, IResponse } from "@/models/index.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: IStockPriceSearchingParams }>(), {

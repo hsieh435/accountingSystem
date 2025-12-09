@@ -136,10 +136,10 @@ import {
   fetchCashFlowRecordByTradeId,
   fetchCashFlowRecordCreate,
   fetchCashFlowRecordUpdate,
-} from "@/server/cashFlowRecordApi";
-import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, dataObjectValidate } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/server/cashFlowRecordApi.ts";
+import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -259,7 +259,6 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 async function settingRemainingAmount() {
-
   // dataParams.updateData.tradeAmount =
   //   typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //

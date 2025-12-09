@@ -16,9 +16,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerWebApi";
-import { IResponse } from "@/models/index";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog";
+import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerWebApi.ts";
+import { IResponse } from "@/models/index.ts";
+import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

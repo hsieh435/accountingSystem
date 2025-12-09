@@ -44,9 +44,9 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
-import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index";
-import { currencyFormat } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index.ts";
+import { currencyFormat } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import type { AccordionItem } from "@nuxt/ui";
 import { Chart } from "chart.js/auto";
 

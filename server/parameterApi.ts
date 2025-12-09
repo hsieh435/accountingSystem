@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { ITradeCategory, ICurrencyList } from "@/models/index";
+import { ITradeCategory, ICurrencyList } from "@/models/index.ts";
 
 // schema
 export async function fetchCreditcardSchemaList() {

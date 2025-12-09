@@ -1,15 +1,11 @@
 
-1.建後端、FLUTTER 資料夾
+1.API 研究
 
-2.各別資料 swal 視窗
+2.SQL語法
 
-3.API 研究
+3.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
 
-4.SQL語法
-
-5.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
-
-6.收支紀錄餘額呈現方式、修改調整方式
+4.收支紀錄餘額呈現方式、修改調整方式
 
 
 

@@ -62,11 +62,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi";
-import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast } from "@/composables/swalDialog";
+import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi.ts";
+import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index.ts";
+import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

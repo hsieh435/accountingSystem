@@ -43,7 +43,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert"  />
+                    <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
@@ -69,11 +69,11 @@ import {
   fetchStoredValueCardList,
   fetchEnableStoredValueCard,
   fetchDisableStoredValueCard,
-} from "@/server/storedValueCardApi";
-import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index";
-import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools";
-import * as tailwindStyles from "@/assets/css/tailwindStyles";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/server/storedValueCardApi.ts";
+import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index.ts";
+import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: any): void;
 definePageMeta({

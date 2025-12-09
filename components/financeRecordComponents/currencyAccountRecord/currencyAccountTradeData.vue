@@ -124,10 +124,10 @@ import {
   fetchCurrencyAccountRecordById,
   fetchCurrencyAccountRecordCreate,
   fetchCurrencyAccountRecordUpdate,
-} from "@/server/currencyAccountRecordApi";
-import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index";
-import { currencyFormat, dataObjectValidate } from "@/composables/tools";
-import { messageToast } from "@/composables/swalDialog";
+} from "@/server/currencyAccountRecordApi.ts";
+import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));

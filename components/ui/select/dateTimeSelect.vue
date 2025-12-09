@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { getCurrentTimestamp } from "@/composables/tools";
+import { getCurrentTimestamp } from "@/composables/tools.ts";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 const props = withDefaults(
@@ -39,12 +39,16 @@ onMounted(async () => {
   dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
 });
 
-watch(() => props, () => {
-  // console.log("watch props:", props);
-  dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
-},{
-  deep: true,
-});
+watch(
+  () => props,
+  () => {
+    // console.log("watch props:", props);
+    dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
+  },
+  {
+    deep: true,
+  },
+);
 
 watch(dateTimeString, () => {
   if (dateTimeString.value) {
