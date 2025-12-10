@@ -38,7 +38,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
+import { fetchEachStockStorageData } from "@/server/stockStorageProfitApi.ts";
 import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index.ts";
 import { getCurrentYMD } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";

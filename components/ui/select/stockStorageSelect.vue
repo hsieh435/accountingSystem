@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchStockStorageList } from "@/server/storageProfitApi.ts";
+import { fetchStockStorageList } from "@/server/stockStorageProfitApi.ts";
 import { IStockStorageList, IResponse } from "@/models/index.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";

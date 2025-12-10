@@ -43,7 +43,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchStockStorageProfitList } from "@/server/storageProfitApi.ts";
+import { fetchStockStorageProfitList } from "@/server/stockStorageProfitApi.ts";
 import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index.ts";
 import { currencyFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";

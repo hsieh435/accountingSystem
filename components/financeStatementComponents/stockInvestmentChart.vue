@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchEachStockStorageData } from "@/server/storageProfitApi.ts";
+import { fetchEachStockStorageData } from "@/server/stockStorageProfitApi.ts";
 import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
 import { IResponse } from "@/models/index.ts";
 import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools.ts";
