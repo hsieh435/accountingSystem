@@ -177,8 +177,6 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
   },
 });
 const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
-const originalRemainingAmount = ref<number>(0);
-const originalTradeAmount = ref<number>(0);
 const getDefaultDataValidate = (): any => ({
   cashflowId: true,
   tradeDatetime: true,
@@ -196,8 +194,6 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultDataValidate());
     Object.assign(cashFlowChosen, {} as ICashFlowList);
-    originalRemainingAmount.value = 0;
-    originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingCashFlowRecord();
@@ -216,7 +212,6 @@ async function searchingCashFlowRecord() {
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    originalTradeAmount.value = res.data.data.tradeAmount;
     //
     if (res.data.data.transactionType === "income") {
       dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
@@ -233,15 +228,7 @@ function settingCashflowAccount(account: ICashFlowList) {
   // console.log("cashFlowChosen:", cashFlowChosen.value);
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
   dataParams.updateData.currency = cashFlowChosen.value.currency || "";
-  if (props.tradeIdGot.length > 0 && account) {
-    if (dataParams.updateData.transactionType === "income") {
-      originalRemainingAmount.value = cashFlowChosen.value.presentAmount - originalTradeAmount.value;
-    } else if (dataParams.updateData.transactionType === "expense") {
-      originalRemainingAmount.value = cashFlowChosen.value.presentAmount + originalTradeAmount.value;
-    }
-  } else {
-    originalRemainingAmount.value = cashFlowChosen.value.presentAmount || 0;
-  }
+  //
   settingRemainingAmount();
 }
 
@@ -259,19 +246,14 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 async function settingRemainingAmount() {
-  // dataParams.updateData.tradeAmount =
-  //   typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
-  // dataParams.updateData.remainingAmount = cashFlowChosen.value.presentAmount || 0;
   if (dataParams.updateData.transactionType === "income") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
+    console.log("收入");
+    dataParams.updateData.remainingAmount = dataParams.oriData.oriRemainingAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
+    console.log("支出");
+    dataParams.updateData.remainingAmount = dataParams.oriData.oriRemainingAmount - dataParams.updateData.tradeAmount;
   }
-  // console.log("原先餘額:", originalRemainingAmount.value);
-  // console.log("紀錄資料:", dataParams.updateData);
-  // console.log("現金流", cashFlowChosen.value);
-  // console.log("紀錄餘額", dataParams.updateData.remainingAmount);
 
   if (
     cashFlowChosen.value &&
@@ -280,6 +262,7 @@ async function settingRemainingAmount() {
     openTradeData.value === true
   ) {
     messageToast({
+      // message: `${dataParams.updateData.remainingAmount} V.S ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
       message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
       icon: "warning",
     });
