@@ -148,6 +148,7 @@ import {
   fetchStoredValueCardDelete,
 } from "@/server/storedValueCardApi.ts";
 import { IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
 import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -174,15 +175,7 @@ const getDefaultDataParams = (): IStoredValueCardList => ({
   note: "",
 });
 const dataParams = reactive<IStoredValueCardList>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  storedValueCardName: true,
-  currency: true,
-  startingAmount: true,
-  minimumValueAllowed: true,
-  maximumValueAllowed: true,
-  alertValue: true,
-});
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const maximumValueAllowedValidateText = ref<string>("");
@@ -195,7 +188,7 @@ watch(openStoredValueCardData, () => {
     }
   } else if (openStoredValueCardData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
@@ -213,7 +206,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultAccountDataValidate());
 
   if (!dataParams.storedValueCardName) {
     dataValidate.storedValueCardName = false;

@@ -151,6 +151,7 @@ import {
   fetchCreditCardDelete,
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
 import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -180,14 +181,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   note: "",
 });
 const dataParams = reactive<ICreditCardList>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  creditcardName: true,
-  creditcardSchema: true,
-  currency: true,
-  creditPerMonth: true,
-  alertValue: true,
-});
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultAccountDataValidate());
 const creditPerMonthValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
@@ -198,7 +192,7 @@ watch(openCreditCardData, () => {
     }
   } else if (openCreditCardData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
@@ -224,7 +218,7 @@ async function settingExpirationDate(year: number, month: number) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultAccountDataValidate());
 
   if (!dataParams.creditcardName) {
     dataValidate.creditcardName = false;

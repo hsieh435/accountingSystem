@@ -116,6 +116,7 @@ import {
   fetchCreditCardRecordUpdate,
 } from "@/server/creditCardRecordApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultTradeDataValidate } from "@/components/financeRecordComponents/tradeDataTools.ts";
 import { dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -153,14 +154,8 @@ const getDefaultDataParams = (): ICreditCardRecordData => ({
   },
 });
 const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  creditCardId: true,
-  tradeDatetime: true,
-  tradeCategory: true,
-  tradeAmount: true,
-});
 const setStep = ref<number>(1);
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultTradeDataValidate());
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
@@ -169,7 +164,7 @@ watch(openTradeData, () => {
     }
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(dataValidate, getDefaultTradeDataValidate());
   }
 });
 
@@ -207,7 +202,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultTradeDataValidate());
 
   if (!dataParams.updateData.creditCardId) {
     dataValidate.creditCardId = false;

@@ -128,6 +128,7 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi.ts";
 import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -156,14 +157,7 @@ const getDefaultDataParams = (): ICashFlowList => ({
   note: "",
 });
 const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  cashflowName: true,
-  currency: true,
-  startingAmount: true,
-  minimumValueAllowed: true,
-  alertValue: true,
-});
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
@@ -175,7 +169,7 @@ watch(openCashFlowData, () => {
     }
   } else if (openCashFlowData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
@@ -194,7 +188,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultAccountDataValidate());
 
   if (!dataParams.cashflowName) {
     dataValidate.cashflowName = false;

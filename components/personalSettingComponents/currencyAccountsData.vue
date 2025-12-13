@@ -164,6 +164,7 @@ import {
   fetchCurrencyAccountDelete,
 } from "@/server/currencyAccountApi.ts";
 import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -192,15 +193,7 @@ const getDefaultDataParams = (): ICurrencyAccountList => ({
   note: "",
 });
 const dataParams = reactive<ICurrencyAccountList>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  accountId: true,
-  accountName: true,
-  currency: true,
-  startingAmount: true,
-  minimumValueAllowed: true,
-  alertValue: true,
-});
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
@@ -212,7 +205,7 @@ watch(openCurrencyAccountsData, () => {
     }
   } else if (openCurrencyAccountsData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
@@ -230,7 +223,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultAccountDataValidate());
 
   if (!dataParams.accountId) {
     dataValidate.accountId = false;

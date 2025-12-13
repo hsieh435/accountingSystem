@@ -138,6 +138,7 @@ import {
   fetchCashFlowRecordUpdate,
 } from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultTradeDataValidate } from "@/components/financeRecordComponents/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -177,28 +178,28 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
   },
 });
 const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
-  cashflowId: true,
-  tradeDatetime: true,
-  tradeAmount: true,
-  transactionType: true,
-  tradeCategory: true,
-});
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<any>(getDefaultTradeDataValidate());
 const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
-    Object.assign(cashFlowChosen, {} as ICashFlowList);
-    tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingCashFlowRecord();
+    } else {
+      Object.assign(dataParams, getDefaultDataParams());
+      Object.assign(cashFlowChosen, {} as ICashFlowList);
+      Object.assign(dataValidate, getDefaultTradeDataValidate());
+      tradeAmountValidateText.value = "";
     }
   }
+  // else {
+  //   Object.assign(dataParams, getDefaultDataParams());
+  //   Object.assign(cashFlowChosen, {} as ICashFlowList);
+  //   Object.assign(dataValidate, getDefaultTradeDataValidate());
+  //   tradeAmountValidateText.value = "";
+  // }
 });
 
 async function searchingCashFlowRecord() {
@@ -254,6 +255,8 @@ async function settingRemainingAmount() {
     console.log("支出");
     dataParams.updateData.remainingAmount = dataParams.oriData.oriRemainingAmount - dataParams.updateData.tradeAmount;
   }
+  console.log("remainingAmount:", dataParams.updateData.remainingAmount);
+  console.log("alertValue:", cashFlowChosen.value.alertValue);
 
   if (
     cashFlowChosen.value &&
@@ -262,8 +265,8 @@ async function settingRemainingAmount() {
     openTradeData.value === true
   ) {
     messageToast({
-      // message: `${dataParams.updateData.remainingAmount} V.S ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
-      message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      message: `${dataParams.updateData.remainingAmount} V.S ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      // message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
       icon: "warning",
     });
   }
@@ -280,7 +283,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultDataValidate());
+  Object.assign(dataValidate, getDefaultTradeDataValidate());
 
   if (!dataParams.updateData.tradeCategory) {
     dataValidate.tradeCategory = false;
