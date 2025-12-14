@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 400px">
-    <canvas id="stockPerPbrChart"></canvas>
+    <canvas :id="`stockPerPbrChart${props.searchingParamsGot.stockNo}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
@@ -60,7 +60,8 @@ async function searchingStockPerPbr() {
 }
 
 async function renderingChart() {
-  const stockPerPbrChart = document.getElementById("stockPerPbrChart") as HTMLCanvasElement;
+  const stockPerPbrChartStockNo =
+    document.getElementById(`stockPerPbrChart${props.searchingParamsGot.stockNo}`) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -68,7 +69,7 @@ async function renderingChart() {
   }
 
   const scalesMax = Math.max(...[...stockPer.value, ...stockPbr.value, ...stockDividendYield.value]);
-  chartInstance = new Chart(stockPerPbrChart, {
+  chartInstance = new Chart(stockPerPbrChartStockNo, {
     data: {
       datasets: [
         {

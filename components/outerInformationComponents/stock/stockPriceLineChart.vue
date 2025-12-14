@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 400px">
-    <canvas id="stockPriceChart"></canvas>
+    <canvas :id="`stockPriceChart${props.searchingParamsGot.stockNo}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
@@ -67,7 +67,8 @@ const getData = (chartData: any[]) => {
 // CanvasRenderingContext2D
 async function renderingChart() {
   // console.log(props.chartType);
-  const stockPriceChart = document.getElementById("stockPriceChart") as HTMLCanvasElement;
+  const stockPriceChartStockNo =
+    document.getElementById(`stockPriceChart${props.searchingParamsGot.stockNo}`) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -82,7 +83,7 @@ async function renderingChart() {
     : 0;
   let variation = 0;
 
-  chartInstance = new Chart(stockPriceChart, {
+  chartInstance = new Chart(stockPriceChartStockNo, {
     type: "line",
     data: {
       labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],

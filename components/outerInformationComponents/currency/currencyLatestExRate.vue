@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 400px">
-    <canvas id="currencyLatestExRateChart"></canvas>
+    <canvas :id="`currencyLatestExRateChart${props.searchingParamsGot.currencyId}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
@@ -41,7 +41,8 @@ async function searchingCurrencyExRate() {
 }
 
 async function renderingChart() {
-  const currencyLatestExRateChart = document.getElementById("currencyLatestExRateChart") as HTMLCanvasElement;
+  const currencyLatestExRateChartCurrencyId =
+    document.getElementById(`currencyLatestExRateChart${props.searchingParamsGot.currencyId}`) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -50,7 +51,7 @@ async function renderingChart() {
 
   // const scalesMax = Math.max(...currencyExRate.value);
   const scalesMax = 150;
-  // chartInstance = new Chart(currencyLatestExRateChart, {
+  // chartInstance = new Chart(currencyLatestExRateChartCurrencyId, {
   //   data: {
   //     datasets: [
   //       {

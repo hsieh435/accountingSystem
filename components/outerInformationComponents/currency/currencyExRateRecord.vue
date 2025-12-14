@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 400px">
-    <canvas id="currencyExRateRecordChart"></canvas>
+    <canvas :id="`currencyExRateRecordChart${props.searchingParamsGot.currencyId}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
@@ -65,7 +65,8 @@ async function searchingCurrencyExRate() {
 }
 
 async function renderingChart() {
-  const currencyExRateRecordChart = document.getElementById("currencyExRateRecordChart") as HTMLCanvasElement;
+  const currencyExRateRecordChartCurrencyId =
+    document.getElementById(`currencyExRateRecordChart${props.searchingParamsGot.currencyId}`) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -89,7 +90,7 @@ async function renderingChart() {
     ],
   );
   //
-  chartInstance = new Chart(currencyExRateRecordChart, {
+  chartInstance = new Chart(currencyExRateRecordChartCurrencyId, {
     data: {
       datasets: [
         {
