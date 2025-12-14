@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 400px">
-    <canvas id="earningsChart"></canvas>
+    <canvas :id="`earningsChart${props.searchingParamsGot.stockNo}`"></canvas>
   </div>
 </template>
 <script setup lang="ts">
@@ -62,7 +62,8 @@ async function searchingStockInterest() {
 
 async function renderingChart() {
   // console.log(props.chartType);
-  const earningsChart = document.getElementById("earningsChart") as HTMLCanvasElement;
+  const earningsChartStockNo =
+    document.getElementById(`earningsChart${props.searchingParamsGot.stockNo}`) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -75,9 +76,8 @@ async function renderingChart() {
       ...stockEarningsData.value.map((item) => item.stockEarning),
     ],
   );
-  // const aaaaa = [...cashEarningsData.value.map(item => item.cashEarningDate), ...stockEarningsData.value.map(item => item.stockEarningDate)];
 
-  chartInstance = new Chart(earningsChart, {
+  chartInstance = new Chart(earningsChartStockNo, {
     data: {
       datasets: [
         {

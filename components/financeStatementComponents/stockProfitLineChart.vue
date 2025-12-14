@@ -27,13 +27,10 @@ onMounted(() => {
   searchingStockPrice();
 });
 
-watch(
-  () => props,
-  () => {
-    // console.log("watch props:", props);
-    // searchingStockPrice();
-  },
-  { deep: true },
+watch(() => props, () => {
+  // console.log("watch props:", props);
+  // searchingStockPrice();
+  }, { deep: true },
 );
 
 async function searchingStockPrice() {

@@ -70,7 +70,7 @@ onMounted(async () => {
 });
 
 async function searchingLatestStockPrice() {
-  stockLatestPrice.value = 0;
+  // stockLatestPrice.value = 0;
 
   try {
     const res: IResponse = await fetchStockRangeValue({
@@ -85,6 +85,7 @@ async function searchingLatestStockPrice() {
       stockLatestPrice.value = 0;
     }
   } catch (error) {
+    stockLatestPrice.value = 0;
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
