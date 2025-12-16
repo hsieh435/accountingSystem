@@ -50,7 +50,7 @@ import { messageToast } from "@/composables/swalDialog.ts";
 import type { AccordionItem } from "@nuxt/ui";
 import { Chart } from "chart.js/auto";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "財務報表",

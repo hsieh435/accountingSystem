@@ -133,7 +133,7 @@ export function dateMove(dateStr: string , days: number = 0): string {
 
 
 // 金額，三位一撇
-export function currencyFormat(numberGot: any) {
+export function currencyFormat(numberGot: number) {
   return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
 }
 

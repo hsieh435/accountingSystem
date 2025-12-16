@@ -5,7 +5,7 @@
 
 
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   breadcrumb: "首頁",

@@ -177,9 +177,9 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
   },
 });
 const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const dataValidate = reactive<any>(getDefaultTradeDataValidate());
 const storedValueCardChosen = ref<IStoredValueCardList>({} as IStoredValueCardList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");

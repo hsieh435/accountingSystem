@@ -98,7 +98,7 @@ import { messageToast } from "@/composables/swalDialog.ts";
 import { encryptString } from "@/composables/crypto.ts";
 // import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "個人設定",
@@ -113,7 +113,7 @@ const dataParams = reactive<IUserData>({
   userNewPassword: "",
   secondPassword: "",
 });
-const dataValidate = reactive<any>({
+const dataValidate = reactive<{ [key: string]: boolean }>({
   userId: true,
   userName: true,
   userOldPassword: true,

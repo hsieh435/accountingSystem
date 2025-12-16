@@ -107,12 +107,12 @@ const getDefaultDataParams = (): ITradeCategory => ({
   sort: 0,
 });
 const dataParams = reactive<ITradeCategory>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
+const getDefaultDataValidate = (): { [key: string]: boolean } => ({
   tradeCode: true,
   tradeName: true,
   sort: true,
 });
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultDataValidate());
 
 watch(opentradecategorydata, () => {
   if (opentradecategorydata.value === true) {

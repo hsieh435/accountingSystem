@@ -175,7 +175,7 @@ const getDefaultDataParams = (): IStoredValueCardList => ({
   note: "",
 });
 const dataParams = reactive<IStoredValueCardList>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultAccountDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const maximumValueAllowedValidateText = ref<string>("");

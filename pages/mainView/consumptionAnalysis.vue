@@ -70,7 +70,7 @@ const currencyAccountConsumptionChart = defineAsyncComponent(() => import("@/com
 
 const stockAccountConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/stockAccountConsumptionChart.vue"));
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "財務報表",

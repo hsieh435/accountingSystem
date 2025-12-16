@@ -254,7 +254,7 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
   },
 });
 const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultTradeDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const stockAccountChosen = ref<IStockAccountList>({} as IStockAccountList);

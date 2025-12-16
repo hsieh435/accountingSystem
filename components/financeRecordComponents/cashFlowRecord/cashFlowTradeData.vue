@@ -178,7 +178,7 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
   },
 });
 const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultTradeDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
 const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -250,10 +250,12 @@ async function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income") {
     console.log("收入");
-    dataParams.updateData.remainingAmount = dataParams.oriData.oriRemainingAmount + dataParams.updateData.tradeAmount;
+    dataParams.updateData.remainingAmount =
+      Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     console.log("支出");
-    dataParams.updateData.remainingAmount = dataParams.oriData.oriRemainingAmount - dataParams.updateData.tradeAmount;
+    dataParams.updateData.remainingAmount =
+      Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
   }
   console.log("remainingAmount:", dataParams.updateData.remainingAmount);
   console.log("alertValue:", cashFlowChosen.value.alertValue);

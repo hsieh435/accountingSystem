@@ -20,7 +20,7 @@ import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/ou
 import { IResponse } from "@/models/index.ts";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "資訊查詢",

@@ -43,7 +43,7 @@ import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/
 import { getCurrentYMD } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "財務報表",

@@ -69,7 +69,7 @@ import { defineAsyncComponent, ref, reactive } from "vue";
 import { IStockPriceSearchingParams, IStockList } from "@/models/index.ts";
 import { getCurrentYMD, getCurrentYear, getCurrentMonth, getCurrentDate, dateMove } from "@/composables/tools.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "資訊查詢",

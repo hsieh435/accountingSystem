@@ -157,7 +157,7 @@ const getDefaultDataParams = (): ICashFlowList => ({
   note: "",
 });
 const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultAccountDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");

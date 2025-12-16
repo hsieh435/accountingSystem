@@ -72,7 +72,7 @@ import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composable
 import { messageToast } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "個人設定",

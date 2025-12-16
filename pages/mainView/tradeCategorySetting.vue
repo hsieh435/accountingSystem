@@ -66,7 +66,7 @@ import { sliceArray } from "@/composables/tools.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "參數設定",

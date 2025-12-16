@@ -166,7 +166,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
   },
 });
 const dataParams = reactive<IcurrencyAccountRecordData>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultTradeDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");

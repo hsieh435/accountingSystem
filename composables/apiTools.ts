@@ -23,9 +23,8 @@ export async function downloadFunction({
     } else {
       errorMessageDialog({ message: res.data?.message || "下載失敗" });
     }
-  } catch (error: any) {
-    const errorMsg = JSON.parse(await error.response.data.text()).message;
-    errorMessageDialog({ message: errorMsg });
+  } catch (error) {
+    errorMessageDialog({ message: (error as Error).message, icon: "error" });
   }
 }
 

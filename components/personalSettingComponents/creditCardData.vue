@@ -181,7 +181,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   note: "",
 });
 const dataParams = reactive<ICreditCardList>(getDefaultDataParams());
-const dataValidate = reactive<any>(getDefaultAccountDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
 const creditPerMonthValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 

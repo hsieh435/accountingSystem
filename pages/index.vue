@@ -54,7 +54,7 @@ import { navigateTo } from "nuxt/app";
 import { setLocalStorageItem } from "@/composables/tools.ts";
 import { encryptString } from "@/composables/crypto.ts";
 
-declare function definePageMeta(meta: any): void;
+declare function definePageMeta(meta: { [key: string]: boolean }): void;
 definePageMeta({
   layout: false,
 });

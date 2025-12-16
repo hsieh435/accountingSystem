@@ -124,14 +124,14 @@ const getDefaultDataParams = (): ICurrencyList => ({
   sort: 0,
 });
 const dataParams = reactive<ICurrencyList>(getDefaultDataParams());
-const getDefaultDataValidate = (): any => ({
+const getDefaultDataValidate = (): { [key: string]: boolean } => ({
   currencyCode: true,
   currencyName: true,
   currencySymbol: true,
   minimumDenomination: true,
   sort: true,
 });
-const dataValidate = reactive<any>(getDefaultDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultDataValidate());
 
 watch(opencurrencydata, () => {
   if (opencurrencydata.value === true) {

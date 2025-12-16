@@ -154,8 +154,8 @@ const getDefaultDataParams = (): ICreditCardRecordData => ({
   },
 });
 const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
 const setStep = ref<number>(1);
-const dataValidate = reactive<any>(getDefaultTradeDataValidate());
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {

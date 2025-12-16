@@ -73,7 +73,7 @@ const userAccount = ref<string>("");
 const userOldPassword = ref<string>("");
 const userNewPassword = ref<string>("");
 const userNewPasswordSecond = ref<string>("");
-const dataValidate = reactive<any>({
+const dataValidate = reactive<{ [key: string]: boolean }>({
   userAccount: true,
   userOldPassword: true,
   userNewPassword: true,

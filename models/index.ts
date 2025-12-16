@@ -127,7 +127,12 @@ export interface ICashFlowRecordList {
 // 現金流收支資料新增、編輯 interface
 export interface ICashFlowRecordData {
   updateData: ICashFlowRecordList;
-  oriData: any;
+  oriData: {
+    oriTradeDatetime: string;
+    oriTradeAmount: number;
+    oriRemainingAmount: number;
+    oriTransactionType: string;
+  };
 }
 
 // 儲值票卡列表 interface
@@ -174,7 +179,12 @@ export interface IStoredValueCardRecordList {
 // 儲值票卡收支資料新增、編輯 interface
 export interface IStoredValueCardRecordData {
   updateData: IStoredValueCardRecordList;
-  oriData: any;
+  oriData: {
+    oriTradeDatetime: string;
+    oriTradeAmount: number;
+    oriRemainingAmount: number;
+    oriTransactionType: string;
+  };
 }
 
 // 信用卡列表 interface
@@ -222,7 +232,11 @@ export interface ICreditCardRecordList {
 // 信用卡收支資料新增、編輯 interface
 export interface ICreditCardRecordData {
   updateData: ICreditCardRecordList;
-  oriData: any;
+  oriData: {
+    oriTradeDatetime: string;
+    oriTradeAmount: number;
+    oriRemainingAmount: number;
+  };
 }
 
 // 存款帳戶列表 interface
@@ -272,7 +286,12 @@ export interface IcurrencyAccountRecordList {
 // 存款帳戶收支紀錄新增、編輯 interface
 export interface IcurrencyAccountRecordData {
   updateData: IcurrencyAccountRecordList;
-  oriData: any;
+  oriData: {
+    oriTradeDatetime: string;
+    oriTradeAmount: number;
+    oriRemainingAmount: number;
+    oriTransactionType: string;
+  };
 }
 
 // 證券帳戶列表 interface
@@ -326,7 +345,12 @@ export interface IStockAccountRecordList {
 // 證券帳戶收支資料新增、編輯 interface
 export interface IStockAccountRecordData {
   updateData: IStockAccountRecordList;
-  oriData: any;
+  oriData: {
+    oriTradeDatetime: string;
+    oriTradeAmount: number;
+    oriRemainingAmount: number;
+    oriTransactionType: string;
+  };
 }
 
 // 存股列表 interface
