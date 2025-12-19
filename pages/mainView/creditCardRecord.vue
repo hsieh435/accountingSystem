@@ -72,10 +72,10 @@ definePageMeta({
 });
 
 const accountRecordSearching = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/accountRecordSearching.vue"),
+  () => import("@/components/financeRecord/accountRecordSearching.vue"),
 );
 const creditCardTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/creditCardRecord/creditCardTradeData.vue"),
+  () => import("@/components/financeRecord/creditCardRecord/creditCardTradeData.vue"),
 );
 
 const currentPage = ref<number>(1);

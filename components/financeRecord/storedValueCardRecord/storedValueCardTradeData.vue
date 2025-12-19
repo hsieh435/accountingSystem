@@ -1,6 +1,6 @@
 <template>
   <UModal
-    title="現金收支紀錄"
+    title="儲值票卡收支紀錄"
     description="資料內容"
     v-model:open="openTradeData"
     :dismissible="false"
@@ -10,10 +10,10 @@
       class: 'rounded-full',
     }">
     <template v-if="props.tradeIdGot">
-      <ui-buttonGroup showView :viewText="'檢視現金收支'" />
+      <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" />
     </template>
     <template v-if="!props.tradeIdGot">
-      <ui-buttonGroup showCreate :createText="'新增現金收支'" />
+      <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -21,18 +21,18 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流：</span>
-            <div :class="['w-fit', dataValidate.cashflowId ? '' : 'outline-1 outline-red-500']">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡：</span>
+            <div :class="['w-fit', dataValidate.storedValueCardId ? '' : 'outline-1 outline-red-500']">
               <accountSelect
-                selectTargetId="isCashflowAble"
-                :accountIdGot="dataParams.updateData.cashflowId"
+                selectTargetId="isStoredvaluecardAble"
+                :accountIdGot="dataParams.updateData.storedValueCardId"
                 :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
-                @sendbackAccount="settingCashflowAccount" />
+                @sendbackAccount="settingStoredValueCardAccount" />
             </div>
           </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇收支</span>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardId">
+            <span class="col-start-3 col-span-4 text-red-500">請選擇儲值票卡</span>
           </div>
         </div>
 
@@ -69,7 +69,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
-                accountType="isCashflowAble"
+                accountType="isStoredvaluecardAble"
                 :tradeCategoryGot="dataParams.updateData.tradeCategory"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
@@ -123,7 +123,7 @@
         </div>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="cashFlowRecordDataHandling" />
+          <ui-buttonGroup showSave @dataSave="storedValueCardRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
@@ -133,12 +133,12 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import {
-  fetchCashFlowRecordByTradeId,
-  fetchCashFlowRecordCreate,
-  fetchCashFlowRecordUpdate,
-} from "@/server/cashFlowRecordApi.ts";
-import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeDataValidate } from "@/components/financeRecordComponents/tradeDataTools.ts";
+  fetchStoredValueCardRecordById,
+  fetchStoredValueCardRecordCreate,
+  fetchStoredValueCardRecordUpdate,
+} from "@/server/storedValueCardRecordApi.ts";
+import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultTradeValidate } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -148,20 +148,19 @@ const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; cashflowIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdGot?: string }>(), {
   tradeIdGot: "",
-  cashflowIdGot: "",
+  storedValueCardIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
-const getDefaultDataParams = (): ICashFlowRecordData => ({
+const getDefaultDataParams = (): IStoredValueCardRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
-    cashflowId: "",
-    userId: "",
+    storedValueCardId: props.storedValueCardIdGot || "",
+    accountType: "",
     tradeDatetime: "",
-    accountType: "cashFlow",
     transactionType: "income",
     tradeCategory: "",
     tradeAmount: 0,
@@ -172,64 +171,70 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
   },
   oriData: {
     oriTradeDatetime: "",
-    oriTradeAmount: 0,
     oriRemainingAmount: 0,
+    oriTradeAmount: 0,
     oriTransactionType: "income",
   },
 });
-const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
-const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
-const cashFlowChosen = ref<ICashFlowList>({} as ICashFlowList);
+const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
+const originalRemainingAmount = ref<number>(0);
+const originalTradeAmount = ref<number>(0);
+const storedValueCardChosen = ref<IStoredValueCardList>({} as IStoredValueCardList);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
     if (props.tradeIdGot) {
-      searchingCashFlowRecord();
-    } else {
-      Object.assign(dataParams, getDefaultDataParams());
-      Object.assign(cashFlowChosen, {} as ICashFlowList);
-      Object.assign(dataValidate, getDefaultTradeDataValidate());
-      tradeAmountValidateText.value = "";
+      searchingStoredValueCardRecord();
     }
+  } else {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultTradeValidate());
+    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    originalRemainingAmount.value = 0;
+    originalTradeAmount.value = 0;
+    tradeAmountValidateText.value = "";
   }
-  // else {
-  //   Object.assign(dataParams, getDefaultDataParams());
-  //   Object.assign(cashFlowChosen, {} as ICashFlowList);
-  //   Object.assign(dataValidate, getDefaultTradeDataValidate());
-  //   tradeAmountValidateText.value = "";
-  // }
 });
 
-async function searchingCashFlowRecord() {
+async function searchingStoredValueCardRecord() {
   try {
-    const res: IResponse = await fetchCashFlowRecordByTradeId({
-      cashflowId: props.cashflowIdGot,
+    const res: IResponse = await fetchStoredValueCardRecordById({
+      storedValueCardId: props.storedValueCardIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchCashFlowRecordByTradeId:", res.data.data);
+    // console.log("res:", res.data.data);
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    //
+    originalTradeAmount.value = res.data.data.tradeAmount;
     if (res.data.data.transactionType === "income") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
+      originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
     } else if (res.data.data.transactionType === "expense") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + res.data.data.tradeAmount;
+      originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-function settingCashflowAccount(account: ICashFlowList) {
-  cashFlowChosen.value = account || ({} as ICashFlowList);
-  // console.log("cashFlowChosen:", cashFlowChosen.value);
-  dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
-  dataParams.updateData.currency = cashFlowChosen.value.currency || "";
-  //
+function settingStoredValueCardAccount(account: IStoredValueCardList) {
+  console.log("account:", account);
+  storedValueCardChosen.value = account || ({} as IStoredValueCardList);
+  dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
+  dataParams.updateData.currency = storedValueCardChosen.value.currency;
+  dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
+  if (props.tradeIdGot.length > 0 && account) {
+    if (dataParams.updateData.transactionType === "income") {
+      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount - originalTradeAmount.value;
+    } else if (dataParams.updateData.transactionType === "expense") {
+      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount + originalTradeAmount.value;
+    }
+  }
   settingRemainingAmount();
 }
 
@@ -239,44 +244,46 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
-  settingRemainingAmount();
+  if (dataParams.updateData.storedValueCardId) {
+    settingRemainingAmount();
+  }
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-async function settingRemainingAmount() {
+function settingRemainingAmount() {
+  dataParams.updateData.tradeAmount =
+    typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
   if (dataParams.updateData.transactionType === "income") {
-    console.log("收入");
-    dataParams.updateData.remainingAmount =
-      Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
-    console.log("支出");
-    dataParams.updateData.remainingAmount =
-      Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
+    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
   }
-  console.log("remainingAmount:", dataParams.updateData.remainingAmount);
-  console.log("alertValue:", cashFlowChosen.value.alertValue);
+  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
+  // console.log("tradeAmount:", dataParams.updateData.tradeAmount, Number(dataParams.updateData.tradeAmount));
+  // console.log("remainingAmount:", dataParams.updateData.remainingAmount, Number(dataParams.updateData.remainingAmount));
+  console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   if (
-    cashFlowChosen.value &&
-    cashFlowChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < cashFlowChosen.value.alertValue &&
-    openTradeData.value === true
+    storedValueCardChosen.value &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.alertValue
   ) {
     messageToast({
-      message: `${dataParams.updateData.remainingAmount} V.S ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
-      // message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
       icon: "warning",
     });
   }
-  if (cashFlowChosen.value && dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed) {
+  if (
+    storedValueCardChosen.value &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.updateData.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
+  ) {
     dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
-  } else {
-    dataValidate.tradeAmount = true;
+    tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
   }
 }
 
@@ -285,11 +292,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultTradeDataValidate());
-
-  if (!dataParams.updateData.tradeCategory) {
-    dataValidate.tradeCategory = false;
-  }
+  Object.assign(dataValidate, getDefaultTradeValidate());
 
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
@@ -303,11 +306,13 @@ async function validateData() {
   return dataObjectValidate(dataValidate);
 }
 
-async function cashFlowRecordDataHandling() {
+async function storedValueCardRecordDataHandling() {
   if (!(await validateData())) return;
 
   try {
-    const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
+    const res: IResponse = await (
+      props.tradeIdGot ? fetchStoredValueCardRecordUpdate : fetchStoredValueCardRecordCreate
+    )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
     openTradeData.value = false;

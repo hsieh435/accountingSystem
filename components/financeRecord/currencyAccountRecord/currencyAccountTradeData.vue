@@ -126,7 +126,7 @@ import {
   fetchCurrencyAccountRecordUpdate,
 } from "@/server/currencyAccountRecordApi.ts";
 import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeDataValidate } from "@/components/financeRecordComponents/tradeDataTools.ts";
+import { getDefaultTradeValidate } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -166,7 +166,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
   },
 });
 const dataParams = reactive<IcurrencyAccountRecordData>(getDefaultDataParams());
-const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeDataValidate());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
 const originalTradeDatetime = ref<string>("");
@@ -181,7 +181,7 @@ watch(openTradeData, () => {
     }
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultTradeDataValidate());
+    Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(storedValueCardChosen, {} as ICurrencyAccountList);
     originalTradeDatetime.value = "";
     originalRemainingAmount.value = 0;
@@ -282,7 +282,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function validateData() {
-  Object.assign(dataValidate, getDefaultTradeDataValidate());
+  Object.assign(dataValidate, getDefaultTradeValidate());
 
   if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;

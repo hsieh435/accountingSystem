@@ -75,10 +75,10 @@ definePageMeta({
 });
 
 const accountRecordSearching = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/accountRecordSearching.vue"),
+  () => import("@/components/financeRecord/accountRecordSearching.vue"),
 );
 const currencyAccountTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecordComponents/currencyAccountRecord/currencyAccountTradeData.vue"),
+  () => import("@/components/financeRecord/currencyAccountRecord/currencyAccountTradeData.vue"),
 );
 
 const currentPage = ref<number>(1);
