@@ -75,10 +75,8 @@ definePageMeta({
   subTitle: "信用卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
-const creditCardData = defineAsyncComponent(() => import("@/components/personalSettingComponents/creditCardData.vue"));
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
+const creditCardData = defineAsyncComponent(() => import("@/components/personalSetting/creditCardData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

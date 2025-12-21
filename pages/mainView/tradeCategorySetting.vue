@@ -73,9 +73,7 @@ definePageMeta({
   subTitle: "支出類型設定",
 });
 
-const tradeCategoryData = defineAsyncComponent(
-  () => import("@/components/parameterSettingComponents/tradeCategoryData.vue"),
-);
+const tradeCategoryData = defineAsyncComponent(() => import("@/components/parameterSetting/tradeCategoryData.vue"));
 
 const tradeCategoryList = ref<ITradeCategory[]>([]);
 const tradeCategoryListFiltered = ref<ITradeCategory[]>([]);

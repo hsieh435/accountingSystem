@@ -207,7 +207,7 @@ import {
   ICurrencyList,
   IResponse,
 } from "@/models/index.ts";
-import { getDefaultTradeValidate } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultCurrencyAccount } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -257,7 +257,7 @@ const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const stockAccountChosen = ref<IStockAccountList>({} as IStockAccountList);
+const stockAccountChosen = ref<IStockAccountList>(getDefaultCurrencyAccount());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -269,7 +269,7 @@ watch(openTradeData, () => {
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
-    Object.assign(stockAccountChosen, {} as IStockAccountRecordList);
+    Object.assign(stockAccountChosen, getDefaultCurrencyAccount());
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";

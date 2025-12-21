@@ -151,7 +151,7 @@ import {
   fetchCreditCardDelete,
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
 import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

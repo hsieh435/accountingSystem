@@ -82,12 +82,8 @@ definePageMeta({
   subTitle: "儲值票卡資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
-const storedValueCardData = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/storedValueCardData.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
+const storedValueCardData = defineAsyncComponent(() => import("@/components/personalSetting/storedValueCardData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

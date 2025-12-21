@@ -161,7 +161,7 @@ import {
   fetchStockAccountDelete,
 } from "@/server/stockAccountApi.ts";
 import { IStockAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

@@ -79,12 +79,10 @@ definePageMeta({
 const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 const stockPriceLineChart = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/stock/stockPriceLineChart.vue"),
+  () => import("@/components/outerSystemConnection/stock/stockPriceLineChart.vue"),
 );
-const stockPerPbr = defineAsyncComponent(() => import("@/components/outerInformationComponents/stock/stockPerPbr.vue"));
-const stockInterest = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/stock/stockInterest.vue"),
-);
+const stockPerPbr = defineAsyncComponent(() => import("@/components/outerSystemConnection/stock/stockPerPbr.vue"));
+const stockInterest = defineAsyncComponent(() => import("@/components/outerSystemConnection/stock/stockInterest.vue"));
 
 const searchingParams = reactive<IStockPriceSearchingParams>({
   stockNo: "",

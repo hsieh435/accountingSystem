@@ -1,4 +1,10 @@
-import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import {
+  ICashFlowList,
+  IStoredValueCardList,
+  ICreditCardList,
+  ICurrencyAccountList,
+  IStockAccountList,
+} from "@/models/index.ts";
 
 
 
@@ -34,4 +40,85 @@ export const getDefaultCashFlow = (): ICashFlowList => ({
   enable: false,
   createdDate: "",
   note: "",
-})
+});
+
+
+
+export const getDefaultStoredValueCard = (): IStoredValueCardList => ({
+  storedValueCardId: "",
+  userId: "",
+  accountType: "",
+  storedValueCardName: "",
+  currency: "",
+  startingAmount: 0,
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  maximumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
+  enable: false,
+  createdDate: "",
+  note: "",
+});
+
+
+
+export const getDefaultCreditCard = (): ICreditCardList => ({
+  creditcardId: "",
+  userId: "",
+  accountType: "",
+  creditcardName: "",
+  creditcardBankCode: "",
+  creditcardBankName: "",
+  creditcardSchema: "",
+  currency: "",
+  creditPerMonth: 0,
+  expirationDate: "",
+  alertValue: 0,
+  openAlert: false,
+  enable: false,
+  createdDate: "",
+  note: "",
+});
+
+
+
+export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
+  accountId: "",
+  userId: "",
+  accountType: "",
+  accountName: "",
+  accountBankCode: "",
+  accountBankName: "",
+  currency: "",
+  currencyName: "",
+  startingAmount: 0,
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
+  isSalaryAccount: false,
+  enable: false,
+  createdDate: "",
+  note: "",
+});
+
+
+
+export const getDefaultStockAccount = (): IStockAccountList => ({
+  accountId:  "",
+  userId: "",
+  accountType: "",
+  accountName: "",
+  accountBankCode: "",
+  accountBankName: "",
+  currency: "",
+  startingAmount: 0,
+  presentAmount: 0,
+  minimumValueAllowed: 0,
+  alertValue: 0,
+  openAlert: false,
+  enable: false,
+  createdDate: "",
+  note: "",
+});

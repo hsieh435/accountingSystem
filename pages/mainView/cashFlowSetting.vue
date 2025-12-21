@@ -74,10 +74,8 @@ definePageMeta({
   subTitle: "現金資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
-const cashFlowData = defineAsyncComponent(() => import("@/components/personalSettingComponents/cashFlowData.vue"));
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
+const cashFlowData = defineAsyncComponent(() => import("@/components/personalSetting/cashFlowData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

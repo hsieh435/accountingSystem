@@ -58,7 +58,7 @@ definePageMeta({
   subTitle: "支出類型設定",
 });
 
-const currencyData = defineAsyncComponent(() => import("@/components/parameterSettingComponents/currencyData.vue"));
+const currencyData = defineAsyncComponent(() => import("@/components/parameterSetting/currencyData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

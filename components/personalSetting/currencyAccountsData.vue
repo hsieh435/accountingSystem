@@ -1,20 +1,20 @@
 <template>
   <UModal
-    title="現金流資料設定"
+    title="存款帳戶資料設定"
     description="資料內容"
-    v-model:open="openCashFlowData"
+    v-model:open="openCurrencyAccountsData"
     :dismissible="false"
     :close="{
       color: 'primary',
       variant: 'outline',
       class: 'rounded-full',
     }">
-    <template v-if="props.cashflowIdIdGot">
-      <ui-buttonGroup showView :viewText="'檢視現金流資料'" />
-      <ui-buttonGroup showRemove :removeText="'刪除現金流資料'" @dataRemove="removeCashFlowData()" />
+    <template v-if="props.currencyAccountIdGot">
+      <ui-buttonGroup showView :viewText="'檢視存款帳戶'" />
+      <ui-buttonGroup showRemove :removeText="'刪除存款帳戶'" @dataRemove="removeCurrencyAccountData()" />
     </template>
-    <template v-if="!props.cashflowIdIdGot">
-      <ui-buttonGroup showCreate :createText="'新增現金流資料'" />
+    <template v-if="!props.currencyAccountIdGot">
+      <ui-buttonGroup showCreate :createText="'新增存款帳戶'" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -22,34 +22,62 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
             <UInput
-              :class="['col-span-3', dataValidate.cashflowName ? 'outline-red-50' : 'outline-1 outline-red-500']"
-              v-model="dataParams.cashflowName" />
+              :class="['col-span-3', dataValidate.accountId ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.accountId"
+              :disabled="props.currencyAccountIdGot ? true : false" />
           </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowName">
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountId">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入現金流名稱</span>
+            <span class="col-span-4 text-red-500 mx-2">請填寫存款帳戶號碼</span>
           </div>
         </div>
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流貨幣：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶名稱：</span>
+            <UInput
+              :class="['col-span-3', dataValidate.accountName ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.accountName" />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountName">
+            <span class="col-span-2 text-right"></span>
+            <span class="col-span-4 text-red-500 mx-2">請填寫存款帳戶名稱</span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">銀行代碼：</span>
+            <UInput class="col-span-1" v-model="dataParams.accountBankCode" />
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right">銀行名稱：</span>
+            <UInput class="col-span-3" v-model="dataParams.accountBankName" />
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-start items-center grid grid-cols-6">
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
             <div :class="['w-fit', dataValidate.currency ? '' : 'outline-1 outline-red-500']">
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
-                :isDisable="props.cashflowIdIdGot ? true : false"
+                :isDisable="props.currencyAccountIdGot ? true : false"
                 @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇貨幣</span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇結算貨幣</span>
           </div>
         </div>
 
-        <template v-if="props.cashflowIdIdGot">
+        <template v-if="props.currencyAccountIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">目前金額：</span>
             <UInput class="col-span-3" :value="currencyFormat(dataParams.presentAmount)" disabled />
@@ -73,7 +101,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小允許金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.minimumValueAllowed ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.minimumValueAllowed"
@@ -86,7 +114,7 @@
         </div>
 
         <div class="w-full">
-          <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.alertValue ? '' : 'outline-1 outline-red-500']"
@@ -102,6 +130,9 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">提醒：</span>
           <USwitch v-model="dataParams.openAlert" />
+          <div class="flex justify-start items-center col-span-3">
+            <UCheckbox label="薪資帳戶" v-model="dataParams.isSalaryAccount" size="xl" />
+          </div>
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
@@ -109,16 +140,16 @@
           <UTextarea class="col-span-3" v-model="dataParams.note" />
         </div>
 
-        <template v-if="props.cashflowIdIdGot">
+        <template v-if="props.currencyAccountIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">建立日期：</span>
+            <span class="col-span-2 text-right">建立時間：</span>
             <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="cashflowDataHandling" />
-          <ui-buttonGroup showClose @dataClose="openCashFlowData = false" />
+          <ui-buttonGroup showSave @dataSave="currencyAccountDataHandling" />
+          <ui-buttonGroup showClose @dataClose="openCurrencyAccountsData = false" />
         </div>
       </div>
     </template>
@@ -126,57 +157,61 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi.ts";
-import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
+import {
+  fetchCurrencyAccountById,
+  fetchCurrencyAccountCreate,
+  fetchCurrencyAccountUpdate,
+  fetchCurrencyAccountDelete,
+} from "@/server/currencyAccountApi.ts";
+import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: boolean }>(), {
-  cashflowIdIdGot: "",
-  isDisable: false,
-});
+const props = withDefaults(defineProps<{ currencyAccountIdGot?: string }>(), { currencyAccountIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
 
-const openCashFlowData = ref<boolean>(false);
-const getDefaultDataParams = (): ICashFlowList => ({
-  cashflowId: props.cashflowIdIdGot || "",
+const openCurrencyAccountsData = ref<boolean>(false);
+const getDefaultDataParams = (): ICurrencyAccountList => ({
+  accountId: props.currencyAccountIdGot || "",
   userId: "",
-  accountType: "cashFlow",
-  cashflowName: "",
+  accountType: "currencyAccount",
+  accountName: "",
+  accountBankCode: "",
+  accountBankName: "",
   currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
+  isSalaryAccount: false,
   enable: true,
   createdDate: "",
   note: "",
 });
-const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
+const dataParams = reactive<ICurrencyAccountList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(openCashFlowData, () => {
-  if (openCashFlowData.value === true) {
-    if (props.cashflowIdIdGot) {
-      searchingCashflowData();
+watch(openCurrencyAccountsData, () => {
+  if (openCurrencyAccountsData.value === true) {
+    if (props.currencyAccountIdGot) {
+      searchingCurrencyAccountData();
     }
-  } else if (openCashFlowData.value === false) {
+  } else if (openCurrencyAccountsData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
-async function searchingCashflowData() {
-  // console.log("props:", props);
+async function searchingCurrencyAccountData() {
   try {
-    const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
+    const res: IResponse = await fetchCurrencyAccountById(props.currencyAccountIdGot);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -190,8 +225,11 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultAccountDataValidate());
 
-  if (!dataParams.cashflowName) {
-    dataValidate.cashflowName = false;
+  if (!dataParams.accountId) {
+    dataValidate.accountId = false;
+  }
+  if (!dataParams.accountName) {
+    dataValidate.accountName = false;
   }
   if (!dataParams.currency) {
     dataValidate.currency = false;
@@ -202,7 +240,7 @@ async function validateData() {
     dataParams.startingAmount < 0
   ) {
     dataValidate.startingAmount = false;
-    startingAmountValidateText.value = "請填寫初始金額";
+    startingAmountValidateText.value = "請填寫帳戶初始金額";
   }
   if (
     typeof dataParams.minimumValueAllowed !== "number" ||
@@ -210,50 +248,50 @@ async function validateData() {
     dataParams.minimumValueAllowed < 0
   ) {
     dataValidate.minimumValueAllowed = false;
-    minimumValueAllowedValidateText.value = "請填寫最小持有金額";
+    minimumValueAllowedValidateText.value = "請填寫帳戶最小允許金額";
   }
-  if (dataParams.minimumValueAllowed > dataParams.startingAmount) {
+  if (dataParams.minimumValueAllowed < dataParams.startingAmount) {
     dataValidate.minimumValueAllowed = false;
-    minimumValueAllowedValidateText.value = "初始金額必須大於最小持有金額";
+    minimumValueAllowedValidateText.value = "最小允許金額不得小於帳戶初始金額";
+  }
+  if (dataParams.alertValue < dataParams.minimumValueAllowed) {
+    dataValidate.alertValue = false;
+    alertValueValidateText.value = "提醒金額不得低於最小允許金額";
   }
   if (typeof dataParams.alertValue !== "number" || !isFinite(dataParams.alertValue) || dataParams.alertValue < 0) {
     dataValidate.alertValue = false;
     alertValueValidateText.value = "請填寫提醒金額";
   }
-  if (dataParams.alertValue < dataParams.minimumValueAllowed) {
-    dataValidate.alertValue = false;
-    alertValueValidateText.value = "提醒金額不可小於最小持有金額";
-  }
 
   return dataObjectValidate(dataValidate);
 }
 
-async function cashflowDataHandling() {
-  // console.log("dataParams:", dataParams);
+async function currencyAccountDataHandling() {
   if (!(await validateData())) return;
 
   try {
-    const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(dataParams);
-    // console.log("RES:", res);
+    const res: IResponse = await (props.currencyAccountIdGot ? fetchCurrencyAccountUpdate : fetchCurrencyAccountCreate)(
+      dataParams,
+    );
     messageToast({ message: res.data.message });
+    openCurrencyAccountsData.value = false;
     emits("dataReseaching");
-    openCashFlowData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-async function removeCashFlowData() {
+async function removeCurrencyAccountData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除現金流資料",
+    message: "即將刪除存款帳戶資料",
     confirmButtonMsg: "確認刪除",
-    executionApi: fetchCashFlowDelete,
-    apiParams: props.cashflowIdIdGot,
+    executionApi: fetchCurrencyAccountDelete,
+    apiParams: props.currencyAccountIdGot,
   });
 
   if (confirmResult) {
     emits("dataReseaching");
-    openCashFlowData.value = false;
+    openCurrencyAccountsData.value = false;
   }
 }
 </script>

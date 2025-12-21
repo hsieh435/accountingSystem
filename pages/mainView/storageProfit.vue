@@ -59,7 +59,7 @@ definePageMeta({
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const stockInvestmentChart = defineAsyncComponent(
-  () => import("@/components/financeStatementComponents/stockInvestmentChart.vue"),
+  () => import("@/components/financeStatement/stockInvestmentChart.vue"),
 );
 
 const accordionItems = ref<AccordionItem[]>([]);

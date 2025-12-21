@@ -1,20 +1,20 @@
 <template>
   <UModal
-    title="儲值票卡資料設定"
+    title="現金流資料設定"
     description="資料內容"
-    v-model:open="openStoredValueCardData"
+    v-model:open="openCashFlowData"
     :dismissible="false"
     :close="{
       color: 'primary',
       variant: 'outline',
       class: 'rounded-full',
     }">
-    <template v-if="props.storedValueCardIdGot">
-      <ui-buttonGroup showView :viewText="'檢視儲值票卡'" />
-      <ui-buttonGroup showRemove :removeText="'刪除儲值票卡'" @dataRemove="removeStoredValueCardData()" />
+    <template v-if="props.cashflowIdIdGot">
+      <ui-buttonGroup showView :viewText="'檢視現金流資料'" />
+      <ui-buttonGroup showRemove :removeText="'刪除現金流資料'" @dataRemove="removeCashFlowData()" />
     </template>
-    <template v-if="!props.storedValueCardIdGot">
-      <ui-buttonGroup showCreate :createText="'新增儲值票卡'" />
+    <template v-if="!props.cashflowIdIdGot">
+      <ui-buttonGroup showCreate :createText="'新增現金流資料'" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -22,37 +22,37 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>儲值票卡名稱：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流名稱：</span>
             <UInput
-              :class="['col-span-3', dataValidate.storedValueCardName ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.storedValueCardName" />
+              :class="['col-span-3', dataValidate.cashflowName ? 'outline-red-50' : 'outline-1 outline-red-500']"
+              v-model="dataParams.cashflowName" />
           </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.storedValueCardName">
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowName">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請填寫儲值票卡名稱</span>
+            <span class="col-span-4 text-red-500 mx-2">請輸入現金流名稱</span>
           </div>
         </div>
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>結算貨幣：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>現金流貨幣：</span>
             <div :class="['w-fit', dataValidate.currency ? '' : 'outline-1 outline-red-500']">
               <dataBaseCurrencySelect
                 :currencyIdGot="dataParams.currency"
-                :isDisable="props.storedValueCardIdGot ? true : false"
+                :isDisable="props.cashflowIdIdGot ? true : false"
                 @sendbackCurrencyData="settingCurrency" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇票卡結算貨幣</span>
+            <span class="col-span-4 text-red-500 mx-2">請選擇貨幣</span>
           </div>
         </div>
 
-        <template v-if="props.storedValueCardIdGot">
+        <template v-if="props.cashflowIdIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">目前金額：</span>
-            <UInputNumber class="col-span-3" v-model="dataParams.presentAmount" orientation="vertical" disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.presentAmount)" disabled />
           </div>
         </template>
         <template v-else>
@@ -62,8 +62,7 @@
               <UInputNumber
                 :class="['col-span-3', dataValidate.startingAmount ? '' : 'outline-1 outline-red-500']"
                 v-model="dataParams.startingAmount"
-                orientation="vertical"
-                :disabled="props.storedValueCardIdGot ? true : false" />
+                orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
               <span class="col-span-2 text-right"></span>
@@ -74,7 +73,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小儲值金額：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最小持有金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.minimumValueAllowed ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.minimumValueAllowed"
@@ -87,21 +86,7 @@
         </div>
 
         <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>最大儲值金額：</span>
-            <UInputNumber
-              :class="['col-span-3', dataValidate.maximumValueAllowed ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.maximumValueAllowed"
-              orientation="vertical" />
-          </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.maximumValueAllowed">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ maximumValueAllowedValidateText }}</span>
-          </div>
-        </div>
-
-        <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-6">
+          <div class="w-full flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>提醒金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.alertValue ? '' : 'outline-1 outline-red-500']"
@@ -124,16 +109,16 @@
           <UTextarea class="col-span-3" v-model="dataParams.note" />
         </div>
 
-        <template v-if="props.storedValueCardIdGot">
+        <template v-if="props.cashflowIdIdGot">
           <div class="w-full flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">建立時間：</span>
+            <span class="col-span-2 text-right">建立日期：</span>
             <UInput class="col-span-3" :value="yearMonthDayTimeFormat(dataParams.createdDate)" disabled />
           </div>
         </template>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="storedValueCardDataHandling" />
-          <ui-buttonGroup showClose @dataClose="openStoredValueCardData = false" />
+          <ui-buttonGroup showSave @dataSave="cashflowDataHandling" />
+          <ui-buttonGroup showClose @dataClose="openCashFlowData = false" />
         </div>
       </div>
     </template>
@@ -142,59 +127,61 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import {
-  fetchStoredValueCardById,
-  fetchStoredValueCardCreate,
-  fetchStoredValueCardUpdate,
-  fetchStoredValueCardDelete,
-} from "@/server/storedValueCardApi.ts";
-import { IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSettingComponents/accountDataTools.ts";
-import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
+  fetchCashFlowById,
+  fetchCashFlowCreate,
+  fetchCashFlowUpdate,
+  fetchCashFlowDelete,
+} from "@/server/cashFlowApi.ts";
+import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
+import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ storedValueCardIdGot?: string }>(), { storedValueCardIdGot: "" });
+const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: boolean }>(), {
+  cashflowIdIdGot: "",
+  isDisable: false,
+});
 const emits = defineEmits(["dataReseaching"]);
 
-const openStoredValueCardData = ref<boolean>(false);
-const getDefaultDataParams = (): IStoredValueCardList => ({
-  storedValueCardId: props.storedValueCardIdGot || "",
+const openCashFlowData = ref<boolean>(false);
+const getDefaultDataParams = (): ICashFlowList => ({
+  cashflowId: props.cashflowIdIdGot || "",
   userId: "",
-  accountType: "storedValueCard",
-  storedValueCardName: "",
+  accountType: "cashFlow",
+  cashflowName: "",
   currency: "",
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
-  maximumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
   enable: true,
   createdDate: "",
   note: "",
 });
-const dataParams = reactive<IStoredValueCardList>(getDefaultDataParams());
+const dataParams = reactive<ICashFlowList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
 const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
-const maximumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
-watch(openStoredValueCardData, () => {
-  if (openStoredValueCardData.value === true) {
-    if (props.storedValueCardIdGot) {
-      searchingStoredValueCardData();
+watch(openCashFlowData, () => {
+  if (openCashFlowData.value === true) {
+    if (props.cashflowIdIdGot) {
+      searchingCashflowData();
     }
-  } else if (openStoredValueCardData.value === false) {
+  } else if (openCashFlowData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
-async function searchingStoredValueCardData() {
+async function searchingCashflowData() {
+  // console.log("props:", props);
   try {
-    const res: IResponse = await fetchStoredValueCardById(props.storedValueCardIdGot);
+    const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -208,8 +195,8 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultAccountDataValidate());
 
-  if (!dataParams.storedValueCardName) {
-    dataValidate.storedValueCardName = false;
+  if (!dataParams.cashflowName) {
+    dataValidate.cashflowName = false;
   }
   if (!dataParams.currency) {
     dataValidate.currency = false;
@@ -220,7 +207,7 @@ async function validateData() {
     dataParams.startingAmount < 0
   ) {
     dataValidate.startingAmount = false;
-    startingAmountValidateText.value = "請填寫儲值票卡初始金額";
+    startingAmountValidateText.value = "請填寫初始金額";
   }
   if (
     typeof dataParams.minimumValueAllowed !== "number" ||
@@ -228,65 +215,50 @@ async function validateData() {
     dataParams.minimumValueAllowed < 0
   ) {
     dataValidate.minimumValueAllowed = false;
-    minimumValueAllowedValidateText.value = "請填寫儲值票卡最小儲值金額";
+    minimumValueAllowedValidateText.value = "請填寫最小持有金額";
   }
-  if (
-    typeof dataParams.maximumValueAllowed !== "number" ||
-    !isFinite(dataParams.maximumValueAllowed) ||
-    dataParams.maximumValueAllowed <= 0
-  ) {
-    dataValidate.maximumValueAllowed = false;
-    maximumValueAllowedValidateText.value = "請填寫儲值票卡最大儲值金額";
-  }
-  if (dataParams.maximumValueAllowed <= dataParams.minimumValueAllowed) {
-    dataValidate.maximumValueAllowed = false;
-    maximumValueAllowedValidateText.value = "儲值票卡最小儲值金額必須小於最大儲值金額";
+  if (dataParams.minimumValueAllowed > dataParams.startingAmount) {
+    dataValidate.minimumValueAllowed = false;
+    minimumValueAllowedValidateText.value = "初始金額必須大於最小持有金額";
   }
   if (typeof dataParams.alertValue !== "number" || !isFinite(dataParams.alertValue) || dataParams.alertValue < 0) {
     dataValidate.alertValue = false;
     alertValueValidateText.value = "請填寫提醒金額";
   }
-  if (dataParams.minimumValueAllowed < dataParams.startingAmount) {
-    dataValidate.minimumValueAllowed = false;
-    minimumValueAllowedValidateText.value = "最小允許金額不得小於帳戶初始金額";
-  }
-  if (
-    dataParams.alertValue < dataParams.minimumValueAllowed ||
-    dataParams.alertValue > dataParams.maximumValueAllowed
-  ) {
+  if (dataParams.alertValue < dataParams.minimumValueAllowed) {
     dataValidate.alertValue = false;
-    alertValueValidateText.value = "提醒金額需介於最小儲值金額與最大儲值金額之間";
+    alertValueValidateText.value = "提醒金額不可小於最小持有金額";
   }
 
   return dataObjectValidate(dataValidate);
 }
 
-async function storedValueCardDataHandling() {
+async function cashflowDataHandling() {
+  // console.log("dataParams:", dataParams);
   if (!(await validateData())) return;
 
   try {
-    const res: IResponse = await (props.storedValueCardIdGot ? fetchStoredValueCardUpdate : fetchStoredValueCardCreate)(
-      dataParams,
-    );
+    const res: IResponse = await (props.cashflowIdIdGot ? fetchCashFlowUpdate : fetchCashFlowCreate)(dataParams);
+    // console.log("RES:", res);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    openStoredValueCardData.value = false;
+    openCashFlowData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-async function removeStoredValueCardData() {
+async function removeCashFlowData() {
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除儲值票卡資料",
+    message: "即將刪除現金流資料",
     confirmButtonMsg: "確認刪除",
-    executionApi: fetchStoredValueCardDelete,
-    apiParams: props.storedValueCardIdGot,
+    executionApi: fetchCashFlowDelete,
+    apiParams: props.cashflowIdIdGot,
   });
 
   if (confirmResult) {
     emits("dataReseaching");
-    openStoredValueCardData.value = false;
+    openCashFlowData.value = false;
   }
 }
 </script>

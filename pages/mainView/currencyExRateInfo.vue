@@ -65,10 +65,10 @@ definePageMeta({
 const currencyCodeSelect = defineAsyncComponent(() => import("@/components/ui/select/currencyCodeSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 const currencyExRateRecord = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/currency/currencyExRateRecord.vue"),
+  () => import("@/components/outerSystemConnection/currency/currencyExRateRecord.vue"),
 );
 const currencyLatestExRate = defineAsyncComponent(
-  () => import("@/components/outerInformationComponents/currency/currencyLatestExRate.vue"),
+  () => import("@/components/outerSystemConnection/currency/currencyLatestExRate.vue"),
 );
 
 const searchingParams = reactive<ICurrencyExRateSearchingParams>({

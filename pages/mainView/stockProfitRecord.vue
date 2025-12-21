@@ -53,7 +53,7 @@ definePageMeta({
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const stockStorageSelect = defineAsyncComponent(() => import("@/components/ui/select/stockStorageSelect.vue"));
 const stockProfitLineChart = defineAsyncComponent(
-  () => import("@/components/financeStatementComponents/stockProfitLineChart.vue"),
+  () => import("@/components/financeStatement/stockProfitLineChart.vue"),
 );
 
 const searchingParams = reactive<{ stockAccountId: string; stockNo: string }>({

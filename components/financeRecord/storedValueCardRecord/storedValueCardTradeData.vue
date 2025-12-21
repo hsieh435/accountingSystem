@@ -138,7 +138,7 @@ import {
   fetchStoredValueCardRecordUpdate,
 } from "@/server/storedValueCardRecordApi.ts";
 import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultStoredValueCard } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -180,7 +180,7 @@ const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const storedValueCardChosen = ref<IStoredValueCardList>({} as IStoredValueCardList);
+const storedValueCardChosen = ref<IStoredValueCardList>(getDefaultStoredValueCard());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -192,7 +192,7 @@ watch(openTradeData, () => {
   } else {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
-    Object.assign(storedValueCardChosen, {} as IStoredValueCardList);
+    Object.assign(storedValueCardChosen, getDefaultStoredValueCard());
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";

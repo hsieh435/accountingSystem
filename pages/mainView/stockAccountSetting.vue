@@ -69,12 +69,8 @@ definePageMeta({
   subTitle: "證券帳戶資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
-const stockAccountData = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/stockAccountData.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
+const stockAccountData = defineAsyncComponent(() => import("@/components/personalSetting/stockAccountData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

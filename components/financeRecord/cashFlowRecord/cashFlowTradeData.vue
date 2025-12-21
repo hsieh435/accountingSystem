@@ -141,7 +141,7 @@ import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/
 import { getDefaultTradeValidate, getDefaultCashFlow } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
-import { get } from "http";
+
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));

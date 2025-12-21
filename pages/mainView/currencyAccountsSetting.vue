@@ -79,11 +79,9 @@ definePageMeta({
   subTitle: "存款帳戶資料設定",
 });
 
-const accountSearching = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/accountSearching.vue"),
-);
+const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
 const currencyAccountsData = defineAsyncComponent(
-  () => import("@/components/personalSettingComponents/currencyAccountsData.vue"),
+  () => import("@/components/personalSetting/currencyAccountsData.vue"),
 );
 
 const currentPage = ref<number>(1);

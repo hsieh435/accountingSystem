@@ -23,7 +23,7 @@
       </li>
       <li title="存款帳戶">
         <label for="tab4" role="button">
-           <font-awesome-icon class="mx-1" :icon="['fas', 'dollar-sign']" /><span>存款帳戶</span>
+          <font-awesome-icon class="mx-1" :icon="['fas', 'dollar-sign']" /><span>存款帳戶</span>
         </label>
       </li>
       <li title="證券帳戶">
@@ -59,29 +59,34 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
 
+const cashFlowConsumptionChart = defineAsyncComponent(
+  () => import("@/components/financeStatement/consumptionAnalysisChart/cashFlowConsumptionChart.vue"),
+);
 
-const cashFlowConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/cashFlowConsumptionChart.vue"));
+const storedValueCardConsumptionChart = defineAsyncComponent(
+  () => import("@/components/financeStatement/consumptionAnalysisChart/storedValueCardConsumptionChart.vue"),
+);
 
-const storedValueCardConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/storedValueCardConsumptionChart.vue"));
+const creditCardConsumptionChart = defineAsyncComponent(
+  () => import("@/components/financeStatement/consumptionAnalysisChart/creditCardConsumptionChart.vue"),
+);
 
-const creditCardConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/creditCardConsumptionChart.vue"));
+const currencyAccountConsumptionChart = defineAsyncComponent(
+  () => import("@/components/financeStatement/consumptionAnalysisChart/currencyAccountConsumptionChart.vue"),
+);
 
-const currencyAccountConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/currencyAccountConsumptionChart.vue"));
-
-const stockAccountConsumptionChart = defineAsyncComponent(() => import("@/components/financeStatementComponents/consumptionAnalysisChart/stockAccountConsumptionChart.vue"));
+const stockAccountConsumptionChart = defineAsyncComponent(
+  () => import("@/components/financeStatement/consumptionAnalysisChart/stockAccountConsumptionChart.vue"),
+);
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
   functionTitle: "財務報表",
   subTitle: "消費分析",
-})
-
-
-
+});
 </script>
 <style lang="scss" scoped>
-
 .tabs input[name="tab-control"] {
   display: none;
 }
