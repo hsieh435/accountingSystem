@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="bg-gray-100 flex items-center px-3 py-1 gap-x-5">
+    <div class="bg-gray-100 flex items-center gap-x-5 px-3 py-1">
       <div class="flex items-center">
         <span>證券帳戶：</span>
         <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccount" />

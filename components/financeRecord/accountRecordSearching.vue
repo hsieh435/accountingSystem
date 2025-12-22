@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full gap-x-3 gap-y-1 px-3 py-1">
+  <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center gap-x-3 gap-y-1 px-3 py-1">
     <div class="flex items-center">
       <span>{{ props.accountTypeName ? props.accountTypeName + "：" : "" }}</span>
       <accountSelect :selectTargetId="props.accountTypeId" :sellectAll="false" @sendbackAccount="settingAccountId" />

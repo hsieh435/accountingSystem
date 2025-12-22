@@ -1,10 +1,10 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
-      <div class="flex items-center me-3 my-1">
+    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center gap-x-3 gap-y-1 px-3 py-1">
+      <div class="flex items-center">
         <span>貨幣：</span><currencyCodeSelect @sendbackCurrencyId="settingCurrencyId" />
       </div>
-      <div class="flex items-center me-3 my-1">
+      <div class="flex items-center">
         <span>查詢區間：</span>
         <dateSelect
           :dateSelect="searchingParams.startDate"
