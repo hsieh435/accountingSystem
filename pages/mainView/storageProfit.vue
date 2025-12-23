@@ -72,8 +72,8 @@ const currentValueOverall = ref<number>(0);
 const profitOverall = ref<number>(0);
 const stockStorageChart = ref<Chart | null>(null);
 
-async function settingAccountId(accountItem: IStockAccountList) {
-  searchingParams.accountId = accountItem.accountId;
+async function settingAccountId(accountItem: IStockAccountList | null) {
+  searchingParams.accountId = accountItem?.accountId || "";
 }
 
 async function searchingStockStorage() {

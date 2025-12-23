@@ -11,6 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視信用卡花費'" />
+      <ui-buttonGroup showRemove :removeText="'刪除信用卡花費'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增信用卡花費'" />
@@ -184,7 +185,7 @@ async function searchingCreditCardRecord() {
 }
 
 function settingCreditCardAccount(account: ICreditCardList) {
-  dataParams.updateData.creditCardId = account.creditcardId || "";
+  dataParams.updateData.creditCardId = account.creditcardId || getDefaultCreditCard().creditcardId;
   dataParams.updateData.currency = account.currency || "";
 }
 
@@ -237,6 +238,12 @@ async function creditCardRecordDataHandling() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
+}
+
+
+
+async function deleteTradeRecord() {
+  console.log(850000);
 }
 </script>
 <style lang="scss" scoped></style>

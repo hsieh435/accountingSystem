@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
-      <div class="flex items-center me-3 my-1">
+    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center gap-x-3 px-3 py-1">
+      <div class="flex items-center my-1">
         <span>儲值票卡：</span>
-        <accountSelect
-          :selectTargetId="'isStoredvaluecardAble'"
-          :sellectAll="false"
-          @sendbackAccount="settingAccountId" />
+        <accountSelect :selectTargetId="'isStoredvaluecardAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>
@@ -67,7 +64,7 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   endDate: getCurrentYear() + "-12-31",
 });
 
-async function settingAccountId(accountItem: IStoredValueCardList) {
+async function settingAccountId(accountItem: IStoredValueCardList | null) {
   searchParams.accountId = accountItem?.storedValueCardId || "";
   searchParams.currencyId = accountItem?.currency || "";
 }

@@ -11,6 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視現金收支'" />
+      <ui-buttonGroup showRemove :removeText="'刪除現金收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增現金收支'" />
@@ -225,13 +226,17 @@ async function searchingCashFlowRecord() {
   }
 }
 
-function settingCashflowAccount(account: ICashFlowList) {
+function settingCashflowAccount(account: ICashFlowList | null) {
   console.log("account:", account);
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
   dataParams.updateData.currency = cashFlowChosen.value.currency || "";
   //
-  settingRemainingAmount();
+  if (account === null) {
+    dataParams.updateData.remainingAmount = 0;
+  } else {
+    settingRemainingAmount();
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -315,6 +320,12 @@ async function cashFlowRecordDataHandling() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
+}
+
+
+
+async function deleteTradeRecord() {
+  console.log(850000);
 }
 </script>
 <style lang="scss" scoped></style>

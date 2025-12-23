@@ -11,6 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視銀行帳戶收支'" />
+      <ui-buttonGroup showRemove :removeText="'刪除銀行帳戶收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增銀行帳戶收支'" />
@@ -210,8 +211,8 @@ async function searchingCurrencyAccountRecord() {
   }
 }
 
-function settingAccount(account: ICurrencyAccountList) {
-  storedValueCardChosen.value = account || ({} as ICurrencyAccountList);
+function settingAccount(account: ICurrencyAccountList | null) {
+  storedValueCardChosen.value = account || getDefaultCurrencyAccount();
   dataParams.updateData.accountId = storedValueCardChosen.value.accountId || "";
   dataParams.updateData.currency = storedValueCardChosen.value.currency || "";
 
@@ -222,7 +223,7 @@ function settingAccount(account: ICurrencyAccountList) {
       originalRemainingAmount.value = account.presentAmount + originalTradeAmount.value;
     }
   } else {
-    originalRemainingAmount.value = account.presentAmount || 0;
+    originalRemainingAmount.value = storedValueCardChosen.value.presentAmount || 0;
   }
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
   settingRemainingAmount();
@@ -321,6 +322,12 @@ async function currencyAccountRecordDataHandling() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
+}
+
+
+
+async function deleteTradeRecord() {
+  console.log(850000);
 }
 </script>
 <style lang="scss" scoped></style>

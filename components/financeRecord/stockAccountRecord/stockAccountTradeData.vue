@@ -11,6 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視證券帳戶收支'" />
+      <ui-buttonGroup showRemove :removeText="'刪除證券帳戶收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增證券帳戶收支'" />
@@ -207,7 +208,7 @@ import {
   ICurrencyList,
   IResponse,
 } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCurrencyAccount } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultStockAccount } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -257,7 +258,7 @@ const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const originalRemainingAmount = ref<number>(0);
 const originalTradeAmount = ref<number>(0);
-const stockAccountChosen = ref<IStockAccountList>(getDefaultCurrencyAccount());
+const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -269,7 +270,7 @@ watch(openTradeData, () => {
   } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
-    Object.assign(stockAccountChosen, getDefaultCurrencyAccount());
+    Object.assign(stockAccountChosen, getDefaultStockAccount());
     originalRemainingAmount.value = 0;
     originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
@@ -293,8 +294,8 @@ async function searchingStockAccountRecord() {
   }
 }
 
-function settingAccount(account: IStockAccountList) {
-  stockAccountChosen.value = account || ({} as IStockAccountRecordList);
+function settingAccount(account: IStockAccountList | null) {
+  stockAccountChosen.value = account || getDefaultStockAccount();
   dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
   dataParams.updateData.currency = stockAccountChosen.value.currency || "";
 
@@ -305,7 +306,7 @@ function settingAccount(account: IStockAccountList) {
       originalRemainingAmount.value = account.presentAmount + originalTradeAmount.value;
     }
   } else {
-    originalRemainingAmount.value = account.presentAmount || 0;
+    originalRemainingAmount.value = stockAccountChosen.value.presentAmount || 0;
   }
   // console.log("stockAccountChosen:", stockAccountChosen.value);
   settingRemainingAmount();
@@ -438,6 +439,12 @@ async function stockAccountRecordDataHandling() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
+}
+
+
+
+async function deleteTradeRecord() {
+  console.log(850000);
 }
 </script>
 <style lang="scss" scoped></style>

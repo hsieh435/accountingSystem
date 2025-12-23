@@ -11,6 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" />
+      <ui-buttonGroup showRemove :removeText="'刪除儲值票卡收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" />
@@ -222,9 +223,9 @@ async function searchingStoredValueCardRecord() {
   }
 }
 
-function settingStoredValueCardAccount(account: IStoredValueCardList) {
+function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
   console.log("account:", account);
-  storedValueCardChosen.value = account || ({} as IStoredValueCardList);
+  storedValueCardChosen.value = account || getDefaultStoredValueCard();
   dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
   dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
@@ -319,6 +320,12 @@ async function storedValueCardRecordDataHandling() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
+}
+
+
+
+async function deleteTradeRecord() {
+  console.log(850000);
 }
 </script>
 <style lang="scss" scoped></style>
