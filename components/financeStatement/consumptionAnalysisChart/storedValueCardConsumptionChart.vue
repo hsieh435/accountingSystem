@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center gap-x-3 px-3 py-1">
-      <div class="flex items-center my-1">
+    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center px-3 py-1">
+      <div class="flex items-center me-3 my-1">
         <span>儲值票卡：</span>
         <accountSelect :selectTargetId="'isStoredvaluecardAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
       </div>

@@ -80,19 +80,15 @@ async function createUserDate(apiMsg?: string) {
       if (!userAccount.value) {
         errors.push("請填寫使用者帳號");
       }
-
       if (!userName.value) {
         errors.push("請填寫使用者名稱");
       }
-
       if (!userPassword.value) {
         errors.push("請填寫使用者密碼");
       }
-
       if (userPassword.value !== userSsecondPassword.value) {
         errors.push("兩次密碼不同");
       }
-
       if (errors.length > 0) {
         Swal.showValidationMessage(errors.map((error, index) => `${index + 1}. ${error}`).join("<br>"));
         return false;

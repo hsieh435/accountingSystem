@@ -17,10 +17,8 @@ const searchingParams = reactive<IAccountSearchingParams>({
   currencyId: "",
 });
 
-watch(
-  searchingParams,
-  () => {
-    emits("sendbackSearchingParams", searchingParams);
+watch(searchingParams, () => {
+  emits("sendbackSearchingParams", searchingParams);
   },
   {
     deep: true,

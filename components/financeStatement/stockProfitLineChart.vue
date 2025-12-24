@@ -23,7 +23,7 @@ const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
 let chartInstance: Chart | null = null;
 
 onMounted(() => {
-  console.log("onMounted props:", props);
+  // console.log("onMounted props:", props);
   searchingStockPrice();
 });
 
@@ -73,7 +73,7 @@ const getData = (chartData: any[]) => {
   return data;
 };
 
-// CanvasRenderingContext2D
+
 async function renderingChart() {
   const stockProfitLineChartStockNoIndex = document.getElementById(
     `stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`,
@@ -128,9 +128,7 @@ async function renderingChart() {
                 currentValue = Number(tooltipItem.dataset.data[index]);
               });
               return (
-                "收盤價：" +
-                currencyFormat(currentValue) +
-                "\n" +
+                "收盤價：" + currencyFormat(currentValue) + "\n" +
                 "獲利：" +
                 (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) +
                 "%"

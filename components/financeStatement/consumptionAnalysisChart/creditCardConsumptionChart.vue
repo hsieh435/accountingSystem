@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-wrap justify-start items-center bg-gray-100 w-full px-3 py-1">
+    <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>信用卡：</span>
         <accountSelect :selectTargetId="'isCreditcardAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
