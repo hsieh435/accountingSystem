@@ -202,7 +202,6 @@ import {
 } from "@/server/stockAccountRecordApi.ts";
 import {
   IStockAccountRecordData,
-  IStockAccountRecordList,
   IStockAccountList,
   IStockList,
   ICurrencyList,
