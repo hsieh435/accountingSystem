@@ -88,7 +88,6 @@
               v-model="dataParams.updateData.tradeAmount"
               orientation="vertical"
               :min="0"
-              :step="setStep"
               @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">

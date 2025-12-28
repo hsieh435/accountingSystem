@@ -76,7 +76,7 @@ import { IResponse } from "@/models/index.ts";
 import { encryptString } from "@/composables/crypto.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
-const openTradeData = ref<boolean>(true);
+const openTradeData = ref<boolean>(false);
 const userAccount = ref<string>("");
 const userName = ref<string>("");
 const userPassword = ref<string>("");
