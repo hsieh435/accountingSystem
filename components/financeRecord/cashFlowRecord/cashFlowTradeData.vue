@@ -228,14 +228,12 @@ async function searchingCashFlowRecord() {
 function settingCashflowAccount(account: ICashFlowList | null) {
   console.log("account:", account);
   cashFlowChosen.value = account || getDefaultCashFlow();
-  dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId || "";
-  dataParams.updateData.currency = cashFlowChosen.value.currency || "";
-  //
-  if (account === null) {
-    dataParams.updateData.remainingAmount = 0;
-  } else {
-    settingRemainingAmount();
+  dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
+  dataParams.updateData.currency = cashFlowChosen.value.currency;
+  if (props.tradeIdGot.length === 0) {
+    dataParams.updateData.remainingAmount = cashFlowChosen.value.presentAmount;
   }
+  settingRemainingAmount();
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -253,14 +251,20 @@ function settingTradeCategory(tradeCategoryId: string) {
 
 async function settingRemainingAmount() {
   //
-  if (dataParams.updateData.transactionType === "income") {
-    console.log("收入");
+  if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length > 0) {
+    console.log("舊單收入");
     dataParams.updateData.remainingAmount =
       Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
-  } else if (dataParams.updateData.transactionType === "expense") {
-    console.log("支出");
+  } else if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length === 0) {
+    console.log("新單收入");
+    dataParams.updateData.remainingAmount += dataParams.updateData.tradeAmount;
+  } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length > 0) {
+    console.log("舊單支出");
     dataParams.updateData.remainingAmount =
       Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
+  } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length === 0) {
+    console.log("新單支出");
+    dataParams.updateData.remainingAmount -= dataParams.updateData.tradeAmount;
   }
   console.log("remainingAmount:", dataParams.updateData.remainingAmount);
   console.log("cashFlowChosen:", cashFlowChosen.value);
@@ -272,8 +276,8 @@ async function settingRemainingAmount() {
     cashFlowChosen.value.openAlert === true
   ) {
     messageToast({
-      message: `${dataParams.updateData.remainingAmount} V.S ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
-      // message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      message:
+        `現金餘額 ${currencyFormat(dataParams.updateData.remainingAmount)} 已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
       icon: "warning",
     });
   }
