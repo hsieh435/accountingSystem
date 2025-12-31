@@ -98,7 +98,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">餘額：</span>
+            <span class="col-span-2 text-right">票卡餘額：</span>
             <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
           </div>
         </div>
@@ -316,7 +316,6 @@ async function storedValueCardRecordDataHandling() {
     )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

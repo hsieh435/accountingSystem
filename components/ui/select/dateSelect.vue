@@ -17,7 +17,6 @@
       now-button-label="今日"
       :highlight="{ options: { highlightDisabled: true } }">
     </VueDatePicker>
-    <!-- :action-row="{ showNow: true }" now-button-label="今日" -->
   </div>
 </template>
 <script setup lang="ts">
@@ -44,13 +43,10 @@ watch(props, () => {
   dateString.value = props.dateSelect || getCurrentYMD();
 });
 
-watch(
-  () => dateString.value,
-  () => {
-    // console.log("watch dateString:", dateString.value);
-    const newDate = new Date(dateString.value);
-    emits("sendbackDate", `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`);
-  },
-);
+watch(() => dateString.value, () => {
+  // console.log("watch dateString:", dateString.value);
+  const newDate = new Date(dateString.value);
+  emits("sendbackDate", `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`);
+});
 </script>
 <style lang="scss" scoped></style>

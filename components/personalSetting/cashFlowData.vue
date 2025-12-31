@@ -126,12 +126,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import {
-  fetchCashFlowById,
-  fetchCashFlowCreate,
-  fetchCashFlowUpdate,
-  fetchCashFlowDelete,
-} from "@/server/cashFlowApi.ts";
+import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi.ts";
 import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";

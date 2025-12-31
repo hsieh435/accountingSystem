@@ -97,7 +97,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">餘額：</span>
+            <span class="col-span-2 text-right">現金餘額：</span>
             <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
           </div>
         </div>
@@ -214,11 +214,12 @@ async function searchingCashFlowRecord() {
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
+    // dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
     //
     if (res.data.data.transactionType === "income") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - res.data.data.tradeAmount;
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - dataParams.oriData.oriTradeAmount;
     } else if (res.data.data.transactionType === "expense") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + res.data.data.tradeAmount;
+      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + dataParams.oriData.oriTradeAmount;
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -253,18 +254,18 @@ async function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length > 0) {
     console.log("舊單收入");
-    dataParams.updateData.remainingAmount =
-      Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
+    // dataParams.updateData.remainingAmount =
+    //   Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length === 0) {
     console.log("新單收入");
-    dataParams.updateData.remainingAmount += dataParams.updateData.tradeAmount;
+    // dataParams.updateData.remainingAmount += dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length > 0) {
     console.log("舊單支出");
-    dataParams.updateData.remainingAmount =
-      Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
+    // dataParams.updateData.remainingAmount =
+    //   Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length === 0) {
     console.log("新單支出");
-    dataParams.updateData.remainingAmount -= dataParams.updateData.tradeAmount;
+    // dataParams.updateData.remainingAmount -= dataParams.updateData.tradeAmount;
   }
   console.log("remainingAmount:", dataParams.updateData.remainingAmount);
   console.log("cashFlowChosen:", cashFlowChosen.value);
@@ -313,13 +314,13 @@ async function validateData() {
 }
 
 async function cashFlowRecordDataHandling() {
+  console.log("dataParams:", dataParams);
   if (!(await validateData())) return;
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

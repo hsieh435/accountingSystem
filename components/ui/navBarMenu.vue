@@ -1,16 +1,7 @@
 <template>
   <div class="flex-col justify-center items-center w-full">
     <div class="bg-sky-200">
-      <UNavigationMenu
-        :items="navbarMenuList"
-        contentOrientation="vertical"
-        trailingIcon="i-lucide-arrow-down"
-        :ui="{
-          viewportWrapper: 'border-0 border-black p-0',
-          viewport: 'border-0 border-purple-500',
-          content: 'border-0 border-rose-500',
-          indicator: 'border-0 border-sky-500',
-        }" />
+      <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" />
     </div>
 
     <!-- Nuxt 的 <NuxtLink to="/path"></NuxtLink> 標籤，概念相當於 Vue 的 <RouterLink to="/path"></RouterLink> -->

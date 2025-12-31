@@ -234,7 +234,6 @@ async function creditCardRecordDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
-    openTradeData.value = false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
