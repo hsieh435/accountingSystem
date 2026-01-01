@@ -136,11 +136,12 @@ import {
   fetchCashFlowRecordByTradeId,
   fetchCashFlowRecordCreate,
   fetchCashFlowRecordUpdate,
+  fetchCashFlowRecordDelete,
 } from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCashFlow } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -254,34 +255,22 @@ async function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length > 0) {
     console.log("舊單收入");
-    // dataParams.updateData.remainingAmount =
-    //   Number(dataParams.oriData.oriRemainingAmount) + dataParams.updateData.tradeAmount;
+    //
   } else if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length === 0) {
     console.log("新單收入");
-    // dataParams.updateData.remainingAmount += dataParams.updateData.tradeAmount;
+    //
   } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length > 0) {
     console.log("舊單支出");
-    // dataParams.updateData.remainingAmount =
-    //   Number(dataParams.oriData.oriRemainingAmount) - dataParams.updateData.tradeAmount;
+    //
   } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length === 0) {
     console.log("新單支出");
-    // dataParams.updateData.remainingAmount -= dataParams.updateData.tradeAmount;
+    //
   }
-  console.log("remainingAmount:", dataParams.updateData.remainingAmount);
-  console.log("cashFlowChosen:", cashFlowChosen.value);
 
-  if (
-    openTradeData.value === true &&
-    props.tradeIdGot &&
-    dataParams.updateData.remainingAmount < cashFlowChosen.value.alertValue &&
-    cashFlowChosen.value.openAlert === true
-  ) {
-    messageToast({
-      message:
-        `現金餘額 ${currencyFormat(dataParams.updateData.remainingAmount)} 已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
-      icon: "warning",
-    });
-  }
+
+  //
+
+
   if (cashFlowChosen.value && dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
@@ -329,7 +318,17 @@ async function cashFlowRecordDataHandling() {
 
 
 async function deleteTradeRecord() {
-  console.log(850000);
+
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除現金流資料",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCashFlowRecordDelete,
+    apiParams: props.tradeIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>
