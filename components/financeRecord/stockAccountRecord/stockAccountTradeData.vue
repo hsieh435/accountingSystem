@@ -162,7 +162,7 @@
 
         <div class="flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">帳戶餘額：</span>
-          <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
+          <UInput class="col-span-3" :value="currencyFormat(dataParams.oriData.oriRemainingAmount)" disabled />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-8">
@@ -199,6 +199,7 @@ import {
   fetchStockAccountRecordById,
   fetchStockAccountRecordCreate,
   fetchStockAccountRecordUpdate,
+  fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
 import {
   IStockAccountRecordData,
@@ -209,7 +210,7 @@ import {
 } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultStockAccount } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -255,8 +256,8 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
 });
 const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
-const originalRemainingAmount = ref<number>(0);
-const originalTradeAmount = ref<number>(0);
+// const originalRemainingAmount = ref<number>(0);
+// const originalTradeAmount = ref<number>(0);
 const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -270,8 +271,6 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(stockAccountChosen, getDefaultStockAccount());
-    originalRemainingAmount.value = 0;
-    originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
   }
 });
@@ -286,7 +285,6 @@ async function searchingStockAccountRecord() {
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -298,15 +296,6 @@ function settingAccount(account: IStockAccountList | null) {
   dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
   dataParams.updateData.currency = stockAccountChosen.value.currency || "";
 
-  if (props.tradeIdGot.length > 0 && account) {
-    if (dataParams.updateData.transactionType === "income") {
-      originalRemainingAmount.value = account.presentAmount - originalTradeAmount.value;
-    } else if (dataParams.updateData.transactionType === "expense") {
-      originalRemainingAmount.value = account.presentAmount + originalTradeAmount.value;
-    }
-  } else {
-    originalRemainingAmount.value = stockAccountChosen.value.presentAmount || 0;
-  }
   // console.log("stockAccountChosen:", stockAccountChosen.value);
   settingRemainingAmount();
 }
@@ -344,16 +333,20 @@ function settingTotalPrice() {
 }
 
 function settingRemainingAmount() {
+
   if (dataParams.updateData.transactionType === "income") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeTotalPrice;
+    dataParams.oriData.oriRemainingAmount =
+      stockAccountChosen.value.presentAmount - dataParams.updateData.tradeTotalPrice;
   } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeTotalPrice;
+    dataParams.oriData.oriRemainingAmount =
+      stockAccountChosen.value.presentAmount + dataParams.updateData.tradeTotalPrice;
   }
 
   if (
-    stockAccountChosen.value &&
+    openTradeData.value === true &&
+    stockAccountChosen.value.accountId.length > 0 &&
     stockAccountChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < stockAccountChosen.value.alertValue
+    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.minimumValueAllowed
   ) {
     messageToast({
       message: `帳戶餘額已低於 ${currencyFormat(stockAccountChosen.value.alertValue)} 元`,
@@ -361,9 +354,9 @@ function settingRemainingAmount() {
     });
   }
   if (
-    stockAccountChosen.value &&
-    stockAccountChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < stockAccountChosen.value.minimumValueAllowed
+    openTradeData.value === true &&
+    stockAccountChosen.value.accountId.length > 0 &&
+    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
@@ -442,7 +435,17 @@ async function stockAccountRecordDataHandling() {
 
 
 async function deleteTradeRecord() {
-  console.log(850000);
+
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除證券帳戶紀錄",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchStockAccountRecordDelete,
+    apiParams: props.tradeIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>

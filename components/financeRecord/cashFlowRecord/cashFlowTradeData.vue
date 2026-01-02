@@ -98,7 +98,7 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">現金餘額：</span>
-            <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.oriData.oriRemainingAmount)" disabled />
           </div>
         </div>
 
@@ -132,12 +132,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import {
-  fetchCashFlowRecordByTradeId,
-  fetchCashFlowRecordCreate,
-  fetchCashFlowRecordUpdate,
-  fetchCashFlowRecordDelete,
-} from "@/server/cashFlowRecordApi.ts";
+import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate, fetchCashFlowRecordDelete } from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCashFlow } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
@@ -190,12 +185,6 @@ watch(openTradeData, () => {
     if (props.tradeIdGot) {
       searchingCashFlowRecord();
     }
-    // else {
-    //   Object.assign(dataParams, getDefaultDataParams());
-    //   Object.assign(cashFlowChosen, getDefaultCashFlow());
-    //   Object.assign(dataValidate, getDefaultTradeValidate());
-    //   tradeAmountValidateText.value = "";
-    // }
   } else {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(cashFlowChosen, getDefaultCashFlow());
@@ -215,26 +204,17 @@ async function searchingCashFlowRecord() {
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    // dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
-    //
-    if (res.data.data.transactionType === "income") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount - dataParams.oriData.oriTradeAmount;
-    } else if (res.data.data.transactionType === "expense") {
-      dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount + dataParams.oriData.oriTradeAmount;
-    }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
 function settingCashflowAccount(account: ICashFlowList | null) {
-  console.log("account:", account);
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
   dataParams.updateData.currency = cashFlowChosen.value.currency;
-  if (props.tradeIdGot.length === 0) {
-    dataParams.updateData.remainingAmount = cashFlowChosen.value.presentAmount;
-  }
+  console.log("cashFlowChosen:", cashFlowChosen.value);
+
   settingRemainingAmount();
 }
 
@@ -244,7 +224,9 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
-  settingRemainingAmount();
+  if (dataParams.updateData.cashflowId.length > 0) {
+    settingRemainingAmount();
+  }
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
@@ -253,25 +235,29 @@ function settingTradeCategory(tradeCategoryId: string) {
 
 async function settingRemainingAmount() {
   //
-  if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length > 0) {
-    console.log("舊單收入");
-    //
-  } else if (dataParams.updateData.transactionType === "income" && props.tradeIdGot.length === 0) {
-    console.log("新單收入");
-    //
-  } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length > 0) {
-    console.log("舊單支出");
-    //
-  } else if (dataParams.updateData.transactionType === "expense" && props.tradeIdGot.length === 0) {
-    console.log("新單支出");
-    //
+  if (dataParams.updateData.transactionType === "income") {
+    dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount - dataParams.updateData.tradeAmount;
+  } else if (dataParams.updateData.transactionType === "expense") {
+    dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount + dataParams.updateData.tradeAmount;
   }
 
+  if (
+    openTradeData.value === true &&
+    cashFlowChosen.value.cashflowId.length > 0 &&
+    cashFlowChosen.value.openAlert === true &&
+    dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.minimumValueAllowed
+  ) {
+    messageToast({
+      message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.minimumValueAllowed)} 元`,
+      icon: "warning",
+    });
+  }
 
-  //
-
-
-  if (cashFlowChosen.value && dataParams.updateData.remainingAmount < cashFlowChosen.value.minimumValueAllowed) {
+  if (
+    openTradeData.value === true &&
+    cashFlowChosen.value.cashflowId.length > 0 &&
+    dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.minimumValueAllowed
+  ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
   } else {
@@ -320,7 +306,7 @@ async function cashFlowRecordDataHandling() {
 async function deleteTradeRecord() {
 
   const confirmResult = await showConfirmDialog({
-    message: "即將刪除現金流資料",
+    message: "即將刪除現金流紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowRecordDelete,
     apiParams: props.tradeIdGot,

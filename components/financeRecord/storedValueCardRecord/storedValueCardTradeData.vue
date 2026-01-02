@@ -99,7 +99,7 @@
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right">票卡餘額：</span>
-            <UInput class="col-span-3" :value="currencyFormat(dataParams.updateData.remainingAmount)" disabled />
+            <UInput class="col-span-3" :value="currencyFormat(dataParams.oriData.oriRemainingAmount)" disabled />
           </div>
         </div>
 
@@ -133,15 +133,11 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import {
-  fetchStoredValueCardRecordById,
-  fetchStoredValueCardRecordCreate,
-  fetchStoredValueCardRecordUpdate,
-} from "@/server/storedValueCardRecordApi.ts";
+import { fetchStoredValueCardRecordById, fetchStoredValueCardRecordCreate, fetchStoredValueCardRecordUpdate, fetchStoredValueCardRecordDelete } from "@/server/storedValueCardRecordApi.ts";
 import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultStoredValueCard } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -179,8 +175,6 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
 });
 const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
-const originalRemainingAmount = ref<number>(0);
-const originalTradeAmount = ref<number>(0);
 const storedValueCardChosen = ref<IStoredValueCardList>(getDefaultStoredValueCard());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -194,8 +188,6 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(storedValueCardChosen, getDefaultStoredValueCard());
-    originalRemainingAmount.value = 0;
-    originalTradeAmount.value = 0;
     tradeAmountValidateText.value = "";
   }
 });
@@ -210,32 +202,18 @@ async function searchingStoredValueCardRecord() {
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
-    originalTradeAmount.value = res.data.data.tradeAmount;
-    if (res.data.data.transactionType === "income") {
-      originalRemainingAmount.value = res.data.data.remainingAmount - res.data.data.tradeAmount;
-    } else if (res.data.data.transactionType === "expense") {
-      originalRemainingAmount.value = res.data.data.remainingAmount + res.data.data.tradeAmount;
-    }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
 function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
-  console.log("account:", account);
   storedValueCardChosen.value = account || getDefaultStoredValueCard();
   dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
-  dataParams.updateData.remainingAmount = storedValueCardChosen.value.presentAmount;
-  if (props.tradeIdGot.length > 0 && account) {
-    if (dataParams.updateData.transactionType === "income") {
-      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount - originalTradeAmount.value;
-    } else if (dataParams.updateData.transactionType === "expense") {
-      originalRemainingAmount.value = storedValueCardChosen.value.presentAmount + originalTradeAmount.value;
-    }
-  }
+  // console.log("storedValueCardChosen:", storedValueCardChosen.value);
+
   settingRemainingAmount();
 }
 
@@ -245,7 +223,7 @@ function settingTradeDatetime(dateTime: string) {
 
 function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
-  if (dataParams.updateData.storedValueCardId) {
+  if (dataParams.updateData.storedValueCardId.length > 0) {
     settingRemainingAmount();
   }
 }
@@ -255,36 +233,36 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
-  dataParams.updateData.tradeAmount =
-    typeof dataParams.updateData.tradeAmount === "number" ? Number(dataParams.updateData.tradeAmount) : 0;
   //
   if (dataParams.updateData.transactionType === "income") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value + dataParams.updateData.tradeAmount;
+    dataParams.oriData.oriRemainingAmount =
+      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.updateData.remainingAmount = originalRemainingAmount.value - dataParams.updateData.tradeAmount;
+    dataParams.oriData.oriRemainingAmount =
+      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
   }
-  // console.log("originalRemainingAmount:", originalRemainingAmount.value);
-  // console.log("tradeAmount:", dataParams.updateData.tradeAmount, Number(dataParams.updateData.tradeAmount));
-  // console.log("remainingAmount:", dataParams.updateData.remainingAmount, Number(dataParams.updateData.remainingAmount));
-  console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   if (
-    storedValueCardChosen.value &&
+    openTradeData.value === true &&
+    storedValueCardChosen.value.storedValueCardId.length > 0 &&
     storedValueCardChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < storedValueCardChosen.value.alertValue
+     dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.alertValue
   ) {
     messageToast({
       message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
       icon: "warning",
     });
   }
+
   if (
-    storedValueCardChosen.value &&
-    storedValueCardChosen.value.openAlert === true &&
-    dataParams.updateData.remainingAmount < storedValueCardChosen.value.minimumValueAllowed
+    openTradeData.value === true &&
+    storedValueCardChosen.value.storedValueCardId.length > 0 &&
+    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `現金流最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
+    tradeAmountValidateText.value = `票卡最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
+  } else {
+    dataValidate.tradeAmount = true;
   }
 }
 
@@ -324,7 +302,17 @@ async function storedValueCardRecordDataHandling() {
 
 
 async function deleteTradeRecord() {
-  console.log(850000);
+
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除票卡記錄",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchStoredValueCardRecordDelete,
+    apiParams: props.tradeIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>
