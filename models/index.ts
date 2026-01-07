@@ -385,9 +385,9 @@ export interface IStockPriceSearchingParams {
 // 存股列表 interface
 export interface IStockList {
   date: string;
-  industry_category: string;
-  stock_id: string;
-  stock_name: string;
+  industryCategory: string;
+  stockId: string;
+  stockName: string;
   type: string;
 }
 

@@ -225,10 +225,10 @@ async function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
   }
 
   if (

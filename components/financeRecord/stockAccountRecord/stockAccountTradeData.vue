@@ -312,8 +312,8 @@ function settingTransactionType(type: string) {
 }
 
 function settingStockNo(stockItem: IStockList) {
-  dataParams.updateData.stockNo = stockItem.stock_id;
-  dataParams.updateData.stockName = stockItem.stock_name;
+  dataParams.updateData.stockNo = stockItem.stockId;
+  dataParams.updateData.stockName = stockItem.stockName;
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
@@ -336,10 +336,10 @@ function settingRemainingAmount() {
 
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount - dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount + dataParams.updateData.tradeTotalPrice;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount + dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount - dataParams.updateData.tradeTotalPrice;
   }
 
   if (

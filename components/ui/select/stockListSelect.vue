@@ -50,7 +50,7 @@ watch(stockSelected, () => {
   // console.log("stockSelected:", stockSelected.value);
 
   if (stockSelected.value) {
-    const selectedItem = rawStockList.value.find((item) => item.stock_id === stockSelected.value);
+    const selectedItem = rawStockList.value.find((item) => item.stockId === stockSelected.value);
     // console.log("selectedItem:", selectedItem);
     emits("sendbackStockNo", selectedItem);
   } else {
@@ -70,11 +70,11 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
     loading.value = true;
     try {
       const res: IResponse = await fetchStockList(keyword.trim());
-      // console.log("fetchStockList:", JSON.parse(res.data.data));
-      rawStockList.value = JSON.parse(res.data.data);
-      filteredStockList.value = rawStockList.value.map((item: IStockList) => ({
-        value: item.stock_id,
-        label: `${item.stock_name}（${item.stock_id}）`,
+      console.log("fetchStockList:", res.data.data);
+      rawStockList.value = res.data.data;
+      filteredStockList.value = res.data.data.map((item: IStockList) => ({
+        value: item.stockId,
+        label: `${item.stockName}（${item.stockId}）`,
       }));
       // console.log("filteredStockList:", filteredStockList.value);
     } catch (error) {

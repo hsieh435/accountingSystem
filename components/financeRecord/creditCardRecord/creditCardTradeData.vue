@@ -115,11 +115,12 @@ import {
   fetchCreditCardRecordById,
   fetchCreditCardRecordCreate,
   fetchCreditCardRecordUpdate,
+  fetchCreditCardRecordDelete,
 } from "@/server/creditCardRecordApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCreditCard } from "@/components/financeRecord/tradeDataTools.ts";
 import { dataObjectValidate } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -242,7 +243,17 @@ async function creditCardRecordDataHandling() {
 
 
 async function deleteTradeRecord() {
-  console.log(850000);
+
+  const confirmResult = await showConfirmDialog({
+    message: "即將刪除信用卡記錄",
+    confirmButtonMsg: "確認刪除",
+    executionApi: fetchCreditCardRecordDelete,
+    apiParams: props.tradeIdGot,
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
+  }
 }
 </script>
 <style lang="scss" scoped></style>

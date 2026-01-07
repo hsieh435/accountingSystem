@@ -236,17 +236,17 @@ function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
   }
 
   if (
     openTradeData.value === true &&
     storedValueCardChosen.value.storedValueCardId.length > 0 &&
     storedValueCardChosen.value.openAlert === true &&
-     dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.alertValue
+    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.alertValue
   ) {
     messageToast({
       message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,

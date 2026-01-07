@@ -2,7 +2,8 @@ import { ref, watch } from "vue";
 import { isLoading } from "@/components/ui/spinnerState.ts";
 import { decryptString } from "@/composables/crypto.ts";
 
-const baseURL = "http://localhost:3600";
+const systemName = "accounting_system_backend"
+const baseURL = `http://localhost:3600/${systemName}`;
 const requestCount = ref<number>(0);
 
 watch(requestCount, () => {

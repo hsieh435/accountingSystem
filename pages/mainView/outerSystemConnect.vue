@@ -67,9 +67,13 @@ async function connectingFinMind() {
 async function checkFinMindTokenStatus() {
   try {
     const res: IResponse = await fetchFinMindAccountInfo();
-    console.log("fetchFinMindAccountInfo:", res);
+    console.log("fetchFinMindAccountInfo:", res.data.data);
+    const tokenInfo = res.data.data;
     if (res.data.returnCode === 0) {
-      messageToast({ message: "Token 有效" });
+      messageToast({
+        message: `Token 使用上限：${tokenInfo.apiRequestLimit}` + "\n" + `Token 使用次數：${tokenInfo.userCount}`,
+        existTime: 5000,
+      });
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
