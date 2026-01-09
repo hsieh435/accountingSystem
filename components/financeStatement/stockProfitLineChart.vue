@@ -78,7 +78,7 @@ async function renderingChart() {
   const stockProfitLineChartStockNoIndex = document.getElementById(
     `stockProfitLineChart${props.searchingParamsGot.stockNo}${props.indexGot}`,
   ) as HTMLCanvasElement;
-  console.log("stockProfitLineChartStockNoIndex:", stockProfitLineChartStockNoIndex);
+  // console.log("stockProfitLineChartStockNoIndex:", stockProfitLineChartStockNoIndex);
 
   if (chartInstance) {
     chartInstance.destroy();
