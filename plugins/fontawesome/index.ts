@@ -4,11 +4,11 @@
 import { defineNuxtPlugin } from "nuxt/app";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPlus, faBinoculars, faTimes, faSearch, faCheck, faTrash, faSlidersH, faSortAlphaDown, faMoneyBillAlt, faCreditCard, faTicketAlt, faDollarSign, faArrowTrendUp, faChartLine, faPercent,
+import { faPlus, faBinoculars, faTimes, faSearch, faCheck, faTrash, faSlidersH, faSortAlphaDown, faMoneyBillAlt, faCreditCard, faTicketAlt, faDollarSign, faArrowTrendUp, faChartLine, faPercent, faTools,
 
 
-  faRightToBracket, faPenToSquare, faSignOutAlt, faX, faWallet } from "@fortawesome/free-solid-svg-icons";
-import { faSave, faClipboard } from "@fortawesome/free-regular-svg-icons";
+  faRightToBracket, faPenToSquare, faSignOutAlt, faX, faWallet, faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faClipboard, faUserCircle } from "@fortawesome/free-regular-svg-icons";
 // import { fab } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -17,7 +17,7 @@ import { faSave, faClipboard } from "@fortawesome/free-regular-svg-icons";
 // fal => Light
 // fab => free-brands-svg-icons
 
-//
+// 
 
 
 
@@ -38,7 +38,9 @@ library.add(
   faArrowTrendUp,
   faChartLine,
   faPercent,
+  faTools,
   faClipboard,
+  faUserCircle,
 
 
   faRightToBracket,
@@ -46,6 +48,7 @@ library.add(
   faSignOutAlt,
   faX,
   faWallet,
+  faArrowDown
 );
 
 import { config } from "@fortawesome/fontawesome-svg-core";

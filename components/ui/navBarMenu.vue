@@ -1,19 +1,22 @@
 <template>
   <div class="flex-col justify-center items-center w-full">
     <div class="bg-sky-200">
-      <!-- <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" /> -->
+      <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" />
 
-      <nav class="flex border-b shadow-lg relative px-4">
+      <nav class="flex border-t shadow-lg relative px-4">
         <ul
           class="flex absolute top-full left-0 relative py-2"
           v-for="(functionGroup, functionGroupIndex) in navbarMenuList"
           :key="functionGroupIndex">
           <li class="w-full relative mx-1 parent">
-            <a class="flex justify-between items-center gap-x-2 inline-flex space-x-3 rounded-lg px-3 py-2 hover:bg-gray-50">
+            <a class="flex justify-between items-center gap-x-2 inline-flex space-x-2 rounded-lg px-3 py-1 hover:bg-gray-50">
+              <!-- <font-awesome-icon :icon="functionGroup.icon" />
+              <font-awesome-icon :icon="['far', 'user-circle']" /> -->
               <span><label>{{ functionGroup.label }}</label></span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <font-awesome-icon :icon="['fas', 'arrow-down']" />
+              <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
-              </svg>
+              </svg> -->
             </a>
             <ul class="bg-white shadow-lg rounded-lg absolute left-0 z-20 transition duration-300 child">
               <li

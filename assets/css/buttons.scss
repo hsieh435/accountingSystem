@@ -78,6 +78,11 @@
   background-color: colors.$nibi;
 }
 
+.btn-shion {
+  @extend %btn-text-dark;
+  background-color: colors.$shion;
+}
+
 .btn-kurenainoyashio {
   @extend %btn-text-light;
   background-color: colors.$kurenainoyashio;

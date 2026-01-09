@@ -11,10 +11,12 @@
     }">
     <template v-if="props.creditCardIdGot">
       <ui-buttonGroup showView :viewText="'檢視信用卡'" />
+      <ui-buttonGroup operation :operationText="'批次收支結算'" @dataOperate="currentMonthExpenditure('')" />
       <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
     </template>
     <template v-if="!props.creditCardIdGot">
       <ui-buttonGroup showCreate :createText="'新增信用卡'" />
+      <ui-buttonGroup operation :operationText="'本月收支結算'" @dataOperate="currentMonthExpenditure(props.creditCardIdGot)" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -261,6 +263,14 @@ async function creditCardDataHandling() {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
+
+
+
+async function currentMonthExpenditure(creditCardId: string) {
+  console.log("creditCardId:", creditCardId);
+}
+
+
 
 async function removeCreditcardData() {
   const confirmResult = await showConfirmDialog({

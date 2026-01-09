@@ -30,6 +30,13 @@
     </template>
 
 
+    <template v-if="props.operation">
+      <UButton class="btn-shion" @click="clickOperateButton()" :disabled="props.operationDisable" >
+        <font-awesome-icon :icon="['fas', 'tools']" /><span>{{ props.operationText }}</span>
+      </UButton>
+    </template>
+
+
     <template v-if="props.showClose">
       <UButton class="btn-keshizumi" @click="clickCloseButton()" :disabled="props.closeDisable" >
         <font-awesome-icon :icon="['fas', 'times']" /><span>{{ props.closeText }}</span>
@@ -61,6 +68,9 @@ const props = withDefaults(
     showSearch?: boolean;
     searchText?: string;
     searchDisable?: boolean;
+    operation?: boolean;
+    operationText?: string;
+    operationDisable?: boolean;
     showRemove?: boolean;
     removeText?: string;
     removeDisable?: boolean;
@@ -81,6 +91,9 @@ const props = withDefaults(
     showSearch: false,
     searchText: "查詢",
     searchDisable: false,
+    operation: false,
+    operationText: "操作",
+    operationDisable: false,
     showRemove: false,
     removeText: "刪除",
     removeDisable: false,
@@ -94,6 +107,7 @@ const emits = defineEmits([
   "dataSave",
   "dataView",
   "dataSearch",
+  "dataOperate",
   "dataRemove",
   "dataClose",
 ]);
@@ -119,6 +133,12 @@ async function clickViewButton() {
 
 async function clickSearchButton() {
   emits("dataSearch");
+}
+
+
+
+async function clickOperateButton() {
+  emits("dataOperate");
 }
 
 
