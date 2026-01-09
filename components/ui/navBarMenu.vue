@@ -1,7 +1,35 @@
 <template>
   <div class="flex-col justify-center items-center w-full">
     <div class="bg-sky-200">
-      <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" />
+      <!-- <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" /> -->
+
+      <nav class="flex border-b shadow-lg relative px-4">
+        <ul
+          class="flex absolute top-full left-0 relative py-2"
+          v-for="(functionGroup, functionGroupIndex) in navbarMenuList"
+          :key="functionGroupIndex">
+          <li class="w-full relative mx-1 parent">
+            <a class="flex justify-between items-center gap-x-2 inline-flex space-x-3 rounded-lg px-3 py-2 hover:bg-gray-50">
+              <span><label>{{ functionGroup.label }}</label></span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+              </svg>
+            </a>
+            <ul class="bg-white shadow-lg rounded-lg absolute left-0 z-20 transition duration-300 child">
+              <li
+                class="w-auto rounded-lg mx-2 my-1 p-0 transition duration-300"
+                v-for="(functions, functionsIndex) in functionGroup.children"
+                :key="functionsIndex">
+                <NuxtLink
+                  class="w-full flex items-center ps-2 pe-4 py-2 transition duration-300 cursor-pointer hover:bg-zinc-200 rounded-lg"
+                  :to="functions.to">
+                  <span class="w-full text-nowrap mx-2">{{ functions.label }}</span>
+                </NuxtLink>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <!-- Nuxt 的 <NuxtLink to="/path"></NuxtLink> 標籤，概念相當於 Vue 的 <RouterLink to="/path"></RouterLink> -->
@@ -15,7 +43,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchFunctionList } from "@/server/functionApi.ts";
+import { fetchFunctionList } from "@/server/functionListApi.ts";
 import { IResponse, IFunctionGroupList, IFunctionList } from "@/models/index.ts";
 import { useRoute } from "vue-router";
 import { BreadcrumbItem, NavigationMenuItem } from "@nuxt/ui";
@@ -61,6 +89,7 @@ async function searchingFunctionList() {
         children: functions,
       };
     });
+    console.log("navbarMenuList:", navbarMenuList.value);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -79,4 +108,20 @@ function getbreadcrumbItemList() {
   }
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// @media only screen and (min-width: 0px) {
+.parent:hover .child {
+  height: auto;
+  opacity: 1;
+  overflow: none;
+  transform: translateY(0);
+}
+.child {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-10%);
+  // background-color: rgb(114, 51, 51);
+}
+// }
+</style>

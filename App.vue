@@ -2,7 +2,7 @@
   <UApp>
     <NuxtLayout>
       <spinner v-if="isLoading" />
-      <NuxtPage/>
+      <NuxtPage />
     </NuxtLayout>
   </UApp>
 </template>

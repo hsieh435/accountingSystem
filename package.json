@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
+    "build": "NODE_ENV=production nuxt build",
+    "dev": "nuxt dev --dotenv .env.development",
+    "local": "nuxt dev --dotenv .env.local",
+    "preview": "nuxt preview --dotenv .env.production",
     "cleanup": "nuxt cleanup",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

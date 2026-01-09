@@ -29,7 +29,7 @@ watch(
 async function searchingStockPrice() {
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
-    console.log("fetchStockRangeValue:", res.data.data);
+    // console.log("fetchStockRangeValue:", res.data.data);
     lineChartTitle.value =
       props.searchingParamsGot.stockName +
       " " +
