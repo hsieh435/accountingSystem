@@ -11,12 +11,12 @@
     }">
     <template v-if="props.creditCardIdGot">
       <ui-buttonGroup showView :viewText="'檢視信用卡'" />
-      <ui-buttonGroup operation :operationText="'批次收支結算'" @dataOperate="currentMonthExpenditure('')" />
+      <ui-buttonGroup operation :operationText="'批次收支結算'" @dataOperate="currentMonthExpenditure(props.creditCardIdGot)" />
       <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
     </template>
     <template v-if="!props.creditCardIdGot">
       <ui-buttonGroup showCreate :createText="'新增信用卡'" />
-      <ui-buttonGroup operation :operationText="'本月收支結算'" @dataOperate="currentMonthExpenditure(props.creditCardIdGot)" />
+      <ui-buttonGroup operation :operationText="'本月收支結算'" @dataOperate="currentMonthExpenditure('')" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -151,10 +151,11 @@ import {
   fetchCreditCardCreate,
   fetchCreditCardUpdate,
   fetchCreditCardDelete,
+  fetchCreditCardExpenditure,
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
-import { yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
+import { yearMonthDayTimeFormat, dataObjectValidate, getCurrentYear, getCurrentMonth } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
@@ -175,6 +176,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   creditcardSchema: "",
   currency: "",
   creditPerMonth: 0,
+  expenditureCurrentMonth: 0,
   expirationDate: "",
   alertValue: 0,
   openAlert: false,
@@ -266,12 +268,6 @@ async function creditCardDataHandling() {
 
 
 
-async function currentMonthExpenditure(creditCardId: string) {
-  console.log("creditCardId:", creditCardId);
-}
-
-
-
 async function removeCreditcardData() {
   const confirmResult = await showConfirmDialog({
     message: "即將刪除信用卡資料",
@@ -283,6 +279,23 @@ async function removeCreditcardData() {
   if (confirmResult) {
     emits("dataReseaching");
     openCreditCardData.value = false;
+  }
+}
+
+
+
+async function currentMonthExpenditure(creditCardId: string) {
+  console.log("creditCardId:", creditCardId);
+
+  const confirmResult = await showConfirmDialog({
+    message: `結算 ${getCurrentYear()} 年 ${getCurrentMonth()} 月信用卡收支`,
+    confirmButtonMsg: "執行結算",
+    executionApi: fetchCreditCardExpenditure,
+    apiParams: { creditcardId: creditCardId },
+  });
+
+  if (confirmResult) {
+    emits("dataReseaching");
   }
 }
 </script>

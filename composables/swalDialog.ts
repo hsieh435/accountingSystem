@@ -89,13 +89,18 @@ export async function showConfirmDialog({
     width: message.length > 14 ? "auto" : "",
   }).then(async (result) => {
     if (typeof executionApi === "function" && result.isConfirmed) {
-      const res: IResponse = await executionApi(apiParams);
-      // console.log("res:", res);
-
-      if (res.data.returnCode === 0) {
-        messageToast({ message: res.data.message });
-        return true;
-      } else {
+      try {
+        const res: IResponse = await executionApi(apiParams);
+        console.log("res:", res);
+        if (res.data.returnCode === 0) {
+          messageToast({ message: res.data.message });
+          return true;
+        } else {
+          errorMessageDialog({ message: res.data.message });
+          return false;
+        }
+      } catch (error) {
+        errorMessageDialog({ message: (error as Error).message });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {

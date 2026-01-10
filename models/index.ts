@@ -201,6 +201,7 @@ export interface ICreditCardList {
   currencyName?: string;
   creditPerMonth: number;
   expirationDate: string;
+  expenditureCurrentMonth: number;
   alertValue: number;
   openAlert: boolean;
   enable: boolean;

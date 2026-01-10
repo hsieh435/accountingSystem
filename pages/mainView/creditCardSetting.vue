@@ -17,10 +17,11 @@
                   <div :class="tailwindStyles.getThClasses()">啟用</div>
                   <div :class="tailwindStyles.getThClasses()">NO.</div>
                   <div :class="tailwindStyles.getThClasses()">信用卡名稱</div>
-                  <div :class="tailwindStyles.getThClasses()">發卡銀行代號 / 名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">發卡銀行</div>
                   <div :class="tailwindStyles.getThClasses()">發卡機構</div>
                   <div :class="tailwindStyles.getThClasses()">結算貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">每月額度</div>
+                  <div :class="tailwindStyles.getThClasses()">本月結算</div>
                   <div :class="tailwindStyles.getThClasses()">消費提醒</div>
                   <div :class="tailwindStyles.getThClasses()">到期</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
@@ -40,6 +41,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.expenditureCurrentMonth) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />
                   </div>
