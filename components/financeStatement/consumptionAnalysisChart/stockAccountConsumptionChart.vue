@@ -59,8 +59,8 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
   currencyId: "",
   tradeCategory: "",
-  startingDate: getCurrentYear() + "-01-01",
-  endDate: getCurrentYear() + "-12-31",
+  startingDate: getCurrentYear() + "-01-01 00:00:00.001",
+  endDate: getCurrentYear() + "-12-31 23:59:59.999",
 });
 
 async function settingAccountId(accountItem: IStockAccountList | null) {

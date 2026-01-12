@@ -73,8 +73,8 @@ const currencyLatestExRate = defineAsyncComponent(
 
 const searchingParams = reactive<ICurrencyExRateSearchingParams>({
   currencyId: "",
-  startDate: getCurrentYear() - 1 + "-01-01",
-  endDate: getCurrentYMD(),
+  startDate: getCurrentYear() - 1 + "-01-01 00:00:00.000",
+  endDate: getCurrentYMD() + " 23:59:59.999",
 });
 
 const currencyExRateParams = ref<ICurrencyExRateSearchingParams>({

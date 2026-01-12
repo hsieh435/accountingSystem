@@ -8,7 +8,7 @@
         <span>查詢區間：</span>
         <dateSelect
           :dateSelect="searchingParams.startDate"
-          :minDate="'1967-01-01'"
+          :minDate="'1967-01-01 00:00:00.000'"
           :maxDate="dateMove(searchingParams.endDate, -1)"
           @sendbackDate="settingStart" />
         <span class="mx-1">～</span>
