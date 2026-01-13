@@ -66,6 +66,16 @@
           </div>
         </div>
 
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">貨幣：</span>
+          <div class="w-fit">
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.updateData.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
+          </div>
+        </div>
+
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
@@ -78,16 +88,6 @@
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
             <span class="col-start-3 col-span-4 text-red-500">交易金額不得為負</span>
-          </div>
-        </div>
-
-        <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right">貨幣：</span>
-          <div class="w-fit">
-            <dataBaseCurrencySelect
-              :currencyIdGot="dataParams.updateData.currency"
-              isDisable
-              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 

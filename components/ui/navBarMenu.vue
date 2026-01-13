@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col justify-center items-center w-full">
     <div class="bg-sky-200">
-      <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" />
+      <!-- <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" /> -->
 
       <nav class="flex border-t shadow-lg relative px-4">
         <ul
@@ -14,9 +14,6 @@
               <font-awesome-icon :icon="['far', 'user-circle']" /> -->
               <span><label>{{ functionGroup.label }}</label></span>
               <font-awesome-icon :icon="['fas', 'arrow-down']" />
-              <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
-              </svg> -->
             </a>
             <ul class="bg-white shadow-lg rounded-lg absolute left-0 z-20 transition duration-300 child">
               <li
