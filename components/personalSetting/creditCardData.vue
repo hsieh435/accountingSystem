@@ -191,12 +191,11 @@ const alertValueValidateText = ref<string>("");
 
 watch(openCreditCardData, () => {
   if (openCreditCardData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.creditCardIdGot) {
       searchingCreditCardData();
     }
-  } else if (openCreditCardData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 

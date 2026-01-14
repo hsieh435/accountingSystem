@@ -161,12 +161,11 @@ const setStep = ref<number>(1);
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultTradeValidate());
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     }
-  } else if (openTradeData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultTradeValidate());
   }
 });
 

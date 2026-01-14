@@ -264,14 +264,13 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    if (props.tradeIdGot) {
-      searchingStockAccountRecord();
-    }
-  } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(stockAccountChosen, getDefaultStockAccount());
     tradeAmountValidateText.value = "";
+    if (props.tradeIdGot) {
+      searchingStockAccountRecord();
+    }
   }
 });
 

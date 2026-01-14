@@ -82,19 +82,19 @@ export function yearMonthFormat(dateString: string) {
   return `${date.getFullYear()}-${month}`;
 }
 
-// 取得當下年分，type 為 number
-export function getCurrentYear() {
-  return new Date().getFullYear();
+// 取得當下或日期時間字串年分，type 為 number
+export function getCurrentYear(dateString: string = "") {
+  return dateString === "" ? new Date().getFullYear() : new Date(dateString).getFullYear();
 }
 
-// 取得當下月分，type 為 number
-export function getCurrentMonth() {
-  return new Date().getMonth() + 1;
+// 取得當下或日期時間字串月分，type 為 number
+export function getCurrentMonth(dateString: string = "") {
+  return dateString === "" ? new Date().getMonth() + 1 : new Date(dateString).getMonth() + 1;
 }
 
-// 取得當下日，type 為 number
-export function getCurrentDate() {
-  return new Date().getDate();
+// 取得當下或日期時間字串日，type 為 number
+export function getCurrentDate(dateString: string = "") {
+  return dateString === "" ? new Date().getDate() : new Date(dateString).getDate();
 }
 
 // 取得特定月份的天数

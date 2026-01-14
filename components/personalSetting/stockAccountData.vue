@@ -196,12 +196,11 @@ const alertValueValidateText = ref<string>("");
 
 watch(openStockAccountData, () => {
   if (openStockAccountData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.stockAccountIGot) {
       searchingStockAccountData();
     }
-  } else if (openStockAccountData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 

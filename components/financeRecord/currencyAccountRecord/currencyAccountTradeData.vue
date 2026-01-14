@@ -175,14 +175,13 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    if (props.tradeIdGot) {
-      searchingCurrencyAccountRecord();
-    }
-  } else if (openTradeData.value === false) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(storedValueCardChosen, getDefaultCurrencyAccount());
     tradeAmountValidateText.value = "";
+    if (props.tradeIdGot) {
+      searchingCurrencyAccountRecord();
+    }
   }
 });
 

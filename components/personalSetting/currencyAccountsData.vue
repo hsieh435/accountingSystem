@@ -200,12 +200,11 @@ const alertValueValidateText = ref<string>("");
 
 watch(openCurrencyAccountsData, () => {
   if (openCurrencyAccountsData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.currencyAccountIdGot) {
       searchingCurrencyAccountData();
     }
-  } else if (openCurrencyAccountsData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 

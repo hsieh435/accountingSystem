@@ -182,14 +182,13 @@ const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
-    if (props.tradeIdGot) {
-      searchingCashFlowRecord();
-    }
-  } else {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(cashFlowChosen, getDefaultCashFlow());
     Object.assign(dataValidate, getDefaultTradeValidate());
     tradeAmountValidateText.value = "";
+    if (props.tradeIdGot) {
+      searchingCashFlowRecord();
+    }
   }
 });
 

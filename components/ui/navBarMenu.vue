@@ -9,11 +9,12 @@
           v-for="(functionGroup, functionGroupIndex) in navbarMenuList"
           :key="functionGroupIndex">
           <li class="w-full relative mx-1 parent">
-            <a class="flex justify-between items-center gap-x-2 inline-flex space-x-2 rounded-lg px-3 py-1 hover:bg-gray-50">
+            <a
+              class="flex justify-between items-center gap-x-2 inline-flex space-x-2 rounded-lg px-3 py-1 hover:bg-gray-50">
               <!-- <font-awesome-icon :icon="functionGroup.icon" />
               <font-awesome-icon :icon="['far', 'user-circle']" /> -->
-              <span><label>{{ functionGroup.label }}</label></span>
-              <font-awesome-icon :icon="['fas', 'arrow-down']" />
+              <label>{{ functionGroup.label }}</label>
+              <font-awesome-icon class="arrowIcon" :icon="['fas', 'arrow-down']" />
             </a>
             <ul class="bg-white shadow-lg rounded-lg absolute left-0 z-20 transition duration-300 child">
               <li
@@ -89,7 +90,7 @@ async function searchingFunctionList() {
         children: functions,
       };
     });
-    console.log("navbarMenuList:", navbarMenuList.value);
+    // console.log("navbarMenuList:", navbarMenuList.value);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -109,19 +110,25 @@ function getbreadcrumbItemList() {
 }
 </script>
 <style lang="scss" scoped>
-// @media only screen and (min-width: 0px) {
-.parent:hover .child {
-  height: auto;
-  opacity: 1;
-  overflow: none;
-  transform: translateY(0);
+.parent:hover {
+
+  .child {
+    height: auto;
+    opacity: 1;
+    overflow: none;
+    transform: translateY(0);
+  }
+
+  .arrowIcon {
+    transition: transform 300ms ease-in-out;
+    transform: rotate(180deg);
+  }
 }
+
 .child {
   height: 0;
   opacity: 0;
   overflow: hidden;
   transform: translateY(-10%);
-  // background-color: rgb(114, 51, 51);
 }
-// }
 </style>

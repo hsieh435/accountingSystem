@@ -164,12 +164,11 @@ const alertValueValidateText = ref<string>("");
 
 watch(openCashFlowData, () => {
   if (openCashFlowData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.cashflowIdIdGot) {
       searchingCashflowData();
     }
-  } else if (openCashFlowData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 

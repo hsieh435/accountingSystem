@@ -70,7 +70,7 @@ onMounted(async () => {
 });
 
 async function searchingLatestStockPrice() {
-  // stockLatestPrice.value = 0;
+  stockLatestPrice.value = 0;
 
   try {
     const res: IResponse = await fetchStockRangeValue({
@@ -81,11 +81,8 @@ async function searchingLatestStockPrice() {
     // console.log("searchingLatestStockPrice:", res.data.data);
     if (res.data.data.data.length > 0) {
       stockLatestPrice.value = res.data.data.data[res.data.data.data.length - 1].close;
-    } else {
-      stockLatestPrice.value = 0;
     }
   } catch (error) {
-    stockLatestPrice.value = 0;
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
@@ -103,7 +100,8 @@ async function searchingEachStockStorageData() {
       stockAccountId: props.stockAccountIdGot,
       stockNo: props.stockNoGot,
     });
-    // console.log("res:", res.data.data);
+    console.log("res:", res.data.data);
+    console.log(900000);
     doughnutChartTitle.value = `${res.data.data.stockNo} / ${res.data.data.stockName} 投資損益`;
     for (let i = 0; i < res.data.data.length; i++) {
       stockTotalCost.value += res.data.data[i].tradeTotalPrice;

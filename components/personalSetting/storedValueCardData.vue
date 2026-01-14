@@ -183,12 +183,11 @@ const alertValueValidateText = ref<string>("");
 
 watch(openStoredValueCardData, () => {
   if (openStoredValueCardData.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.storedValueCardIdGot) {
       searchingStoredValueCardData();
     }
-  } else if (openStoredValueCardData.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultAccountDataValidate());
   }
 });
 
