@@ -75,6 +75,7 @@ export const getDefaultCreditCard = (): ICreditCardList => ({
   creditPerMonth: 0,
   expirationDate: "",
   alertValue: 0,
+  expenditureCurrentMonth: 0,
   openAlert: false,
   enable: false,
   createdDate: "",
