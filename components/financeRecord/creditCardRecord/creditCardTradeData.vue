@@ -84,10 +84,11 @@
               v-model="dataParams.updateData.tradeAmount"
               orientation="vertical"
               :min="0"
-              :step="setStep" />
+              :step="setStep"
+              @change="settingUsageAlert" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
-            <span class="col-start-3 col-span-4 text-red-500">交易金額不得為負</span>
+            <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
           </div>
         </div>
 
@@ -119,7 +120,7 @@ import {
 } from "@/server/creditCardRecordApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCreditCard } from "@/components/financeRecord/tradeDataTools.ts";
-import { dataObjectValidate } from "@/composables/tools.ts";
+import { getCurrentYear, getCurrentMonth, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -152,17 +153,21 @@ const getDefaultDataParams = (): ICreditCardRecordData => ({
   oriData: {
     oriTradeDatetime: "",
     oriTradeAmount: 0,
-    oriRemainingAmount: 0,
+    oriCreditUsage: 0,
   },
 });
 const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
+const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
 const setStep = ref<number>(1);
+const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
+    Object.assign(creditCardChosen, getDefaultCreditCard());
+    tradeAmountValidateText.value = " ";
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     }
@@ -178,20 +183,22 @@ async function searchingCreditCardRecord() {
     Object.assign(dataParams, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
-    dataParams.oriData.oriRemainingAmount = res.data.data.remainingAmount;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-function settingCreditCardAccount(account: ICreditCardList) {
-  dataParams.updateData.creditCardId = account.creditcardId || getDefaultCreditCard().creditcardId;
-  dataParams.updateData.currency = account.currency || "";
+function settingCreditCardAccount(account: ICreditCardList | null) {
+  creditCardChosen.value = account || getDefaultCreditCard();
+  dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
+  dataParams.updateData.currency = creditCardChosen.value.currency || "";
+  settingUsageAlert();
 }
 
 function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
   dataParams.updateData.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
+  settingUsageAlert();
 }
 
 function settingTradeCategory(tradeCategoryId: string) {
@@ -200,6 +207,30 @@ function settingTradeCategory(tradeCategoryId: string) {
 
 function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
+}
+
+function settingUsageAlert() {
+  // getCurrentYear() === getCurrentYear(dataParams.updateData.tradeDatetime) &&
+  // getCurrentMonth() === getCurrentMonth(dataParams.updateData.tradeDatetime)
+  console.log("billMonth", dataParams.updateData.billMonth);
+  console.log("billMonth", `${getCurrentYear()}-${String(getCurrentMonth()).padStart(2, "0")}-01`);
+  if (dataParams.updateData.billMonth === `${getCurrentYear()}-${String(getCurrentMonth()).padStart(2, "0")}-01`) {
+    console.log(950000);
+    if (
+      creditCardChosen.value.openAlert === true &&
+      creditCardChosen.value.alertValue >
+        creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount
+    ) {
+      messageToast({
+        message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${
+          creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount
+        } 元`,
+        icon: "warning",
+      });
+    }
+  } else {
+    console.log(850000);
+  }
 }
 
 async function validateData() {
@@ -220,6 +251,11 @@ async function validateData() {
     dataParams.updateData.tradeAmount < 0
   ) {
     dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = "確實填寫交易金額";
+  }
+  if (creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount > creditCardChosen.value.creditPerMonth) {
+    dataValidate.tradeAmount = false;
+    tradeAmountValidateText.value = "本月交易金額超過信用額度";
   }
 
   return dataObjectValidate(dataValidate);

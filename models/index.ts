@@ -236,7 +236,7 @@ export interface ICreditCardRecordData {
   oriData: {
     oriTradeDatetime: string;
     oriTradeAmount: number;
-    oriRemainingAmount: number;
+    oriCreditUsage: number;
   };
 }
 
