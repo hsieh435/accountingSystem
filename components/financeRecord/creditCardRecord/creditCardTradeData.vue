@@ -167,7 +167,7 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(creditCardChosen, getDefaultCreditCard());
-    tradeAmountValidateText.value = " ";
+    tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     }
