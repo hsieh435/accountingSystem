@@ -27,6 +27,13 @@ export async function fetchCreditCardUpdate(data: ICreditCardList) {
   return await response.json();
 }
 
+export async function fetchCreditCardMonthlyExpenditure(data: { creditcardId: string; tradeDatetime: string;}) {
+  const response = await apiFetch("/api/creditCard/monthly/expenditure", "PUT", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
 export async function fetchEnableCreditCard(creditcardId: string) {
   const response = await apiFetch(`/api/creditCard/enable/${creditcardId}`, "GET");
   return await response.json();

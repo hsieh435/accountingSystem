@@ -118,9 +118,10 @@ import {
   fetchCreditCardRecordUpdate,
   fetchCreditCardRecordDelete,
 } from "@/server/creditCardRecordApi.ts";
+import { fetchCreditCardMonthlyExpenditure } from "@/server/creditCardApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCreditCard } from "@/components/financeRecord/tradeDataTools.ts";
-import { getCurrentYear, getCurrentMonth, dataObjectValidate } from "@/composables/tools.ts";
+import { dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -159,6 +160,7 @@ const getDefaultDataParams = (): ICreditCardRecordData => ({
 const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
+const spendCalculation = ref<number>(0);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -173,6 +175,19 @@ watch(openTradeData, () => {
     }
   }
 });
+
+async function creditcardmonthlyexpenditure() {
+  try {
+    const res: IResponse = await fetchCreditCardMonthlyExpenditure({
+      creditcardId: dataParams.updateData.creditCardId || "",
+      tradeDatetime: dataParams.updateData.billMonth || "",
+    });
+    console.log("res:", res.data.data.tradeTotal);
+    spendCalculation.value = res.data.data.tradeTotal || 0;
+  } catch (error) {
+    messageToast({ message: (error as Error).message, icon: "error" });
+  }
+}
 
 async function searchingCreditCardRecord() {
   try {
@@ -209,27 +224,16 @@ function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 
-function settingUsageAlert() {
+async function settingUsageAlert() {
   // getCurrentYear() === getCurrentYear(dataParams.updateData.tradeDatetime) &&
   // getCurrentMonth() === getCurrentMonth(dataParams.updateData.tradeDatetime)
-  console.log("billMonth", dataParams.updateData.billMonth);
-  console.log("billMonth", `${getCurrentYear()}-${String(getCurrentMonth()).padStart(2, "0")}-01`);
-  if (dataParams.updateData.billMonth === `${getCurrentYear()}-${String(getCurrentMonth()).padStart(2, "0")}-01`) {
-    console.log(950000);
-    if (
-      creditCardChosen.value.openAlert === true &&
-      creditCardChosen.value.alertValue >
-        creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount
-    ) {
-      messageToast({
-        message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${
-          creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount
-        } 元`,
-        icon: "warning",
-      });
-    }
-  } else {
-    console.log(850000);
+  if (creditCardChosen.value.openAlert === true) {
+    await creditcardmonthlyexpenditure();
+    messageToast({
+      message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${
+      spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
+       icon: "warning",
+    });
   }
 }
 
@@ -253,7 +257,10 @@ async function validateData() {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "確實填寫交易金額";
   }
-  if (creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount > creditCardChosen.value.creditPerMonth) {
+  if (
+    creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount >
+    creditCardChosen.value.creditPerMonth
+  ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "本月交易金額超過信用額度";
   }
@@ -275,10 +282,7 @@ async function creditCardRecordDataHandling() {
   }
 }
 
-
-
 async function deleteTradeRecord() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除信用卡記錄",
     confirmButtonMsg: "確認刪除",
