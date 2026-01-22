@@ -21,6 +21,7 @@
                 <div :class="tailwindStyles.getThClasses()">信用卡</div>
                 <div :class="tailwindStyles.getThClasses()">存款帳戶</div>
                 <div :class="tailwindStyles.getThClasses()">證券帳戶</div>
+                <div :class="tailwindStyles.getThClasses()">排序</div>
                 <div :class="tailwindStyles.getThClasses()">操作</div>
               </div>
             </div>
@@ -44,6 +45,7 @@
                 <div :class="tailwindStyles.getTdClasses()">
                   <font-awesome-icon :icon="['fas', 'check']" v-if="trade.isStaccountAble" />
                 </div>
+                <div :class="tailwindStyles.getTdClasses()">{{ trade.sort }}</div>
                 <div :class="tailwindStyles.getTdClasses()">
                   <tradeCategoryData :tradeCodeGot="trade.tradeCode" @dataReseaching="searchingTradeCategoryList" />
                 </div>

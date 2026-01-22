@@ -293,7 +293,7 @@ async function cashFlowRecordDataHandling() {
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
-    messageToast({ message: res.data.message });
+    messageToast({ message: res.data.message, icon: res.data.returnCode === 0 ? "success" : "error" });
     emits("dataReseaching");
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
