@@ -280,10 +280,10 @@ async function searchingStockAccountRecord() {
       accountId: props.accountIdGot,
       tradeId: props.tradeIdGot,
     });
-    // console.log("fetchStockAccountRecordById:", res.data.data);
+    console.log("fetchStockAccountRecordById:", res.data.data);
     Object.assign(dataParams.updateData, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    dataParams.oriData.oriTradeAmount = res.data.data.tradeTotalPrice;
     dataParams.oriData.oriTransactionType = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -294,9 +294,21 @@ function settingAccount(account: IStockAccountList | null) {
   stockAccountChosen.value = account || getDefaultStockAccount();
   dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
   dataParams.updateData.currency = stockAccountChosen.value.currency || "";
-
+  dataParams.oriData.oriRemainingAmount = stockAccountChosen.value.presentAmount;
   // console.log("stockAccountChosen:", stockAccountChosen.value);
   settingRemainingAmount();
+
+  if (
+    openTradeData.value === true &&
+    stockAccountChosen.value.accountId.length > 0 &&
+    stockAccountChosen.value.openAlert === true &&
+    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.alertValue
+  ) {
+    messageToast({
+      message: `帳戶餘額已低於 ${currencyFormat(stockAccountChosen.value.alertValue)} 元`,
+      icon: "warning",
+    });
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -335,23 +347,12 @@ function settingRemainingAmount() {
 
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount + dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeTotalPrice;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount - dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeTotalPrice;
   }
 
-  if (
-    openTradeData.value === true &&
-    stockAccountChosen.value.accountId.length > 0 &&
-    stockAccountChosen.value.openAlert === true &&
-    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.minimumValueAllowed
-  ) {
-    messageToast({
-      message: `帳戶餘額已低於 ${currencyFormat(stockAccountChosen.value.alertValue)} 元`,
-      icon: "warning",
-    });
-  }
   if (
     openTradeData.value === true &&
     stockAccountChosen.value.accountId.length > 0 &&

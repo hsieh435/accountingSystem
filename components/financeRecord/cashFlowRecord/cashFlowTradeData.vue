@@ -211,10 +211,23 @@ async function searchingCashFlowRecord() {
 function settingCashflowAccount(account: ICashFlowList | null) {
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
-  dataParams.updateData.currency = cashFlowChosen.value.currency;
-  console.log("cashFlowChosen:", cashFlowChosen.value);
+  dataParams.updateData.currency = cashFlowChosen.value.currency
+  dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount;;
+  // console.log("cashFlowChosen:", cashFlowChosen.value);
 
   settingRemainingAmount();
+
+  if (
+    openTradeData.value === true &&
+    cashFlowChosen.value.cashflowId.length > 0 &&
+    cashFlowChosen.value.openAlert === true &&
+    dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.alertValue
+  ) {
+    messageToast({
+      message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.alertValue)} 元`,
+      icon: "warning",
+    });
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -233,23 +246,12 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 async function settingRemainingAmount() {
-  //
   if (dataParams.updateData.transactionType === "income") {
-    dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+    dataParams.oriData.oriRemainingAmount =
+      cashFlowChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount - dataParams.updateData.tradeAmount;
-  }
-
-  if (
-    openTradeData.value === true &&
-    cashFlowChosen.value.cashflowId.length > 0 &&
-    cashFlowChosen.value.openAlert === true &&
-    dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.minimumValueAllowed
-  ) {
-    messageToast({
-      message: `現金餘額已低於 ${currencyFormat(cashFlowChosen.value.minimumValueAllowed)} 元`,
-      icon: "warning",
-    });
+    dataParams.oriData.oriRemainingAmount =
+      cashFlowChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
   }
 
   if (
@@ -258,7 +260,7 @@ async function settingRemainingAmount() {
     dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `現金流最低允許值為：${cashFlowChosen.value.minimumValueAllowed}`;
+    tradeAmountValidateText.value = `現金流最低允許值為：${currencyFormat(cashFlowChosen.value.minimumValueAllowed)}`;
   } else {
     dataValidate.tradeAmount = true;
   }

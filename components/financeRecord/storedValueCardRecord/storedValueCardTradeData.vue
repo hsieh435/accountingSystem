@@ -211,9 +211,21 @@ function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
   storedValueCardChosen.value = account || getDefaultStoredValueCard();
   dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
+  dataParams.oriData.oriRemainingAmount = storedValueCardChosen.value.presentAmount;
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
   settingRemainingAmount();
+  if (
+    openTradeData.value === true &&
+    storedValueCardChosen.value.storedValueCardId.length > 0 &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.alertValue
+  ) {
+    messageToast({
+      message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
+      icon: "warning",
+    });
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -232,25 +244,12 @@ function settingTradeCategory(tradeCategoryId: string) {
 }
 
 function settingRemainingAmount() {
-  //
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
-  }
-
-  if (
-    openTradeData.value === true &&
-    storedValueCardChosen.value.storedValueCardId.length > 0 &&
-    storedValueCardChosen.value.openAlert === true &&
-    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.alertValue
-  ) {
-    messageToast({
-      message: `票卡餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
-      icon: "warning",
-    });
+      storedValueCardChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
   }
 
   if (
@@ -259,7 +258,7 @@ function settingRemainingAmount() {
     dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `票卡最低允許值為：${storedValueCardChosen.value.minimumValueAllowed}`;
+    tradeAmountValidateText.value = `票卡最低允許值為：${currencyFormat(storedValueCardChosen.value.minimumValueAllowed)}`;
   } else {
     dataValidate.tradeAmount = true;
   }

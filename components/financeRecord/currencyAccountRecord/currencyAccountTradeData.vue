@@ -200,13 +200,25 @@ async function searchingCurrencyAccountRecord() {
   }
 }
 
-function settingAccount(account: ICurrencyAccountList | null) {
+async function settingAccount(account: ICurrencyAccountList | null) {
   storedValueCardChosen.value = account || getDefaultCurrencyAccount();
   dataParams.updateData.accountId = storedValueCardChosen.value.accountId || "";
   dataParams.updateData.currency = storedValueCardChosen.value.currency || "";
-  console.log("storedValueCardChosen:", storedValueCardChosen.value);
-
+  dataParams.oriData.oriRemainingAmount = storedValueCardChosen.value.presentAmount;
+  // console.log("storedValueCardChosen:", storedValueCardChosen.value);
   settingRemainingAmount();
+
+  if (
+    openTradeData.value === true &&
+    storedValueCardChosen.value.accountId.length > 0 &&
+    storedValueCardChosen.value.openAlert === true &&
+    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.minimumValueAllowed
+  ) {
+    messageToast({
+      message: `帳戶餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
+      icon: "warning",
+    });
+  }
 }
 
 function settingTradeDatetime(dateTime: string) {
@@ -224,23 +236,12 @@ async function settingRemainingAmount() {
   //
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      storedValueCardChosen.value.presentAmount - dataParams.updateData.tradeAmount;
+      storedValueCardChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
   }
 
-  if (
-    openTradeData.value === true &&
-    storedValueCardChosen.value.accountId.length > 0 &&
-    storedValueCardChosen.value.openAlert === true &&
-    dataParams.oriData.oriRemainingAmount < storedValueCardChosen.value.minimumValueAllowed
-  ) {
-    messageToast({
-      message: `帳戶餘額已低於 ${currencyFormat(storedValueCardChosen.value.alertValue)} 元`,
-      icon: "warning",
-    });
-  }
 
   if (
     openTradeData.value === true &&
