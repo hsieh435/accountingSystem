@@ -310,7 +310,10 @@ async function deleteTradeRecord() {
     message: "即將刪除現金流紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowRecordDelete,
-    apiParams: props.tradeIdGot,
+    apiParams: {
+      tradeId: props.tradeIdGot,
+      cashflowId: props.cashflowIdGot
+    },
   });
 
   if (confirmResult) {

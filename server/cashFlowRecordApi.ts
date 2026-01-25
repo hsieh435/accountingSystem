@@ -29,7 +29,9 @@ export async function fetchCashFlowRecordUpdate(data: ICashFlowRecordData) {
   return await response.json();
 }
 
-export async function fetchCashFlowRecordDelete(cashFlowRecordId: string) {
-  const response = await apiFetch(`/api/cashFlowRecord/delete/${cashFlowRecordId}`, "GET");
+export async function fetchCashFlowRecordDelete(data: { cashFlowRecordId: string, cashflowId: string }) {
+  const response = await apiFetch(`/api/cashFlowRecord/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
