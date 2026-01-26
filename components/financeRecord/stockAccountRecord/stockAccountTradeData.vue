@@ -440,7 +440,10 @@ async function deleteTradeRecord() {
     message: "即將刪除證券帳戶紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStockAccountRecordDelete,
-    apiParams: props.tradeIdGot,
+    apiParams: {
+      tradeId: props.tradeIdGot,
+      accountId: props.accountIdGot
+    },
   });
 
   if (confirmResult) {

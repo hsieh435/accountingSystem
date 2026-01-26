@@ -305,7 +305,10 @@ async function deleteTradeRecord() {
     message: "即將刪除票卡記錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStoredValueCardRecordDelete,
-    apiParams: props.tradeIdGot,
+    apiParams: {
+      tradeId: props.tradeIdGot,
+      storedValueCardId: props.storedValueCardIdGot
+    },
   });
 
   if (confirmResult) {

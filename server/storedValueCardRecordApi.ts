@@ -29,7 +29,9 @@ export async function fetchStoredValueCardRecordUpdate(data: IStoredValueCardRec
   return await response.json();
 }
 
-export async function fetchStoredValueCardRecordDelete(storedValueCardId: string) {
-  const response = await apiFetch(`/api/storedValueCardRecord/delete/${storedValueCardId}`, "GET");
+export async function fetchStoredValueCardRecordDelete(data: { tradeId: string; storedValueCardId: string }) {
+  const response = await apiFetch(`/api/storedValueCardRecord/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }

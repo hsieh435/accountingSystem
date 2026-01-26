@@ -230,9 +230,9 @@ async function settingUsageAlert() {
   if (creditCardChosen.value.openAlert === true) {
     await creditcardmonthlyexpenditure();
     messageToast({
-      message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${
-      spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
-       icon: "warning",
+      message:
+        `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
+      icon: "warning",
     });
   }
 }
@@ -287,7 +287,10 @@ async function deleteTradeRecord() {
     message: "即將刪除信用卡記錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCreditCardRecordDelete,
-    apiParams: props.tradeIdGot,
+    apiParams: {
+      tradeId: props.tradeIdGot,
+      creditCardId: props.creditCardIdGot
+    },
   });
 
   if (confirmResult) {

@@ -29,7 +29,7 @@ export async function fetchCurrencyAccountRecordUpdate(data: IcurrencyAccountRec
   return await response.json();
 }
 
-export async function fetchCurrencyAccountRecordDelete(data: IcurrencyAccountRecordData) {
+export async function fetchCurrencyAccountRecordDelete(data: { tradeId: string; accountId: string }) {
   const response = await apiFetch(`/api/currencyAccountRecord/delete`, "POST", {
     body: JSON.stringify(data),
   });

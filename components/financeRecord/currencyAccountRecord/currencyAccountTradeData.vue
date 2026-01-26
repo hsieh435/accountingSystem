@@ -309,7 +309,10 @@ async function deleteTradeRecord() {
     message: "即將刪除存款帳戶紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCurrencyAccountRecordDelete,
-    apiParams: props.tradeIdGot,
+    apiParams: {
+      tradeId: props.tradeIdGot,
+      accountId: props.accountIdGot
+    },
   });
 
   if (confirmResult) {
