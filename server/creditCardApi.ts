@@ -34,6 +34,13 @@ export async function fetchCreditCardMonthlyExpenditure(data: { creditcardId: st
   return await response.json();
 }
 
+export async function fetchCreditCardExpenditure(data: { creditcardId: string }) {
+  const response = await apiFetch(`/api/creditCard/expenditure`, "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
 export async function fetchEnableCreditCard(creditcardId: string) {
   const response = await apiFetch(`/api/creditCard/enable/${creditcardId}`, "GET");
   return await response.json();
@@ -41,13 +48,6 @@ export async function fetchEnableCreditCard(creditcardId: string) {
 
 export async function fetchDisableCreditCard(creditcardId: string) {
   const response = await apiFetch(`/api/creditCard/disable/${creditcardId}`, "GET");
-  return await response.json();
-}
-
-export async function fetchCreditCardExpenditure(data: { creditcardId: string }) {
-  const response = await apiFetch(`/api/creditCard/expenditure`, "POST", {
-    body: JSON.stringify(data),
-  });
   return await response.json();
 }
 

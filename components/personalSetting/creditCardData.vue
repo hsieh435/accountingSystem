@@ -284,13 +284,16 @@ async function removeCreditcardData() {
 
 
 async function currentMonthExpenditure(creditCardId: string) {
-  console.log("creditCardId:", creditCardId);
+  // console.log("creditCardId:", creditCardId);
 
   const confirmResult = await showConfirmDialog({
     message: `結算 ${getCurrentYear()} 年 ${getCurrentMonth()} 月信用卡收支`,
     confirmButtonMsg: "執行結算",
     executionApi: fetchCreditCardExpenditure,
-    apiParams: { creditcardId: creditCardId },
+    apiParams: {
+      creditcardId: creditCardId,
+      yearMonth: `${getCurrentYear()}-${getCurrentMonth().toString().padStart(2, "0")}`
+    },
   });
 
   if (confirmResult) {
