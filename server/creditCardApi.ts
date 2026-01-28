@@ -27,20 +27,6 @@ export async function fetchCreditCardUpdate(data: ICreditCardList) {
   return await response.json();
 }
 
-export async function fetchCreditCardMonthlyExpenditure(data: { creditcardId: string; tradeDatetime: string;}) {
-  const response = await apiFetch("/api/creditCard/monthly/expenditure", "PUT", {
-    body: JSON.stringify(data),
-  });
-  return await response.json();
-}
-
-export async function fetchCreditCardExpenditure(data: { creditcardId: string }) {
-  const response = await apiFetch(`/api/creditCard/expenditure`, "POST", {
-    body: JSON.stringify(data),
-  });
-  return await response.json();
-}
-
 export async function fetchEnableCreditCard(creditcardId: string) {
   const response = await apiFetch(`/api/creditCard/enable/${creditcardId}`, "GET");
   return await response.json();
@@ -53,5 +39,19 @@ export async function fetchDisableCreditCard(creditcardId: string) {
 
 export async function fetchCreditCardDelete(creditCardId: string) {
   const response = await apiFetch(`/api/creditCard/delete/${creditCardId}`, "GET");
+  return await response.json();
+}
+
+export async function fetchCreditCardLimit(data: { creditcardId: string; yearMonth: string; }) {
+  const response = await apiFetch("/api/creditCard/limit", "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
+export async function fetchCreditCardMonthExpenditure(data: { creditcardId: string; tradeDatetime: string;}) {
+  const response = await apiFetch("/api/creditCard/monthExpenditure", "PUT", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }

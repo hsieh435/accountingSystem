@@ -41,9 +41,7 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect
-                :dateTimeGot="dataParams.updateData.tradeDatetime"
-                @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -118,10 +116,11 @@ import {
   fetchCreditCardRecordUpdate,
   fetchCreditCardRecordDelete,
 } from "@/server/creditCardRecordApi.ts";
-import { fetchCreditCardMonthlyExpenditure } from "@/server/creditCardApi.ts";
+import { fetchCreditCardLimit } from "@/server/creditCardApi.ts";
+import { fetchCreditCardMonthExpenditure } from "@/server/creditCardApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultTradeValidate, getDefaultCreditCard } from "@/components/financeRecord/tradeDataTools.ts";
-import { dataObjectValidate } from "@/composables/tools.ts";
+import { yearMonthFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
@@ -161,6 +160,7 @@ const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
 const spendCalculation = ref<number>(0);
+const limitCurrentMonth = ref<number>(0);
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -178,7 +178,7 @@ watch(openTradeData, () => {
 
 async function creditcardmonthlyexpenditure() {
   try {
-    const res: IResponse = await fetchCreditCardMonthlyExpenditure({
+    const res: IResponse = await fetchCreditCardMonthExpenditure({
       creditcardId: dataParams.updateData.creditCardId || "",
       tradeDatetime: dataParams.updateData.billMonth || "",
     });
@@ -203,16 +203,32 @@ async function searchingCreditCardRecord() {
   }
 }
 
+async function searchingcreditcardlimit() {
+
+  try {
+    const res: IResponse = await fetchCreditCardLimit({
+      creditcardId: dataParams.updateData.creditCardId,
+      yearMonth: yearMonthFormat(dataParams.updateData.tradeDatetime),
+    });
+    // console.log("res:", res.data.data);
+    limitCurrentMonth.value = res.data.data[0].limitCredit || 0;
+  } catch (error) {
+    messageToast({ message: (error as Error).message, icon: "error" });
+  }
+}
+
 function settingCreditCardAccount(account: ICreditCardList | null) {
   creditCardChosen.value = account || getDefaultCreditCard();
   dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
   dataParams.updateData.currency = creditCardChosen.value.currency || "";
+  searchingcreditcardlimit();
   settingUsageAlert();
 }
 
 function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
   dataParams.updateData.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
+  searchingcreditcardlimit();
   settingUsageAlert();
 }
 
@@ -257,10 +273,7 @@ async function validateData() {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "確實填寫交易金額";
   }
-  if (
-    creditCardChosen.value.expenditureCurrentMonth + dataParams.updateData.tradeAmount >
-    creditCardChosen.value.creditPerMonth
-  ) {
+  if (spendCalculation.value + dataParams.updateData.tradeAmount > limitCurrentMonth.value) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "本月交易金額超過信用額度";
   }

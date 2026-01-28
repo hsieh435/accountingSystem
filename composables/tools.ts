@@ -72,11 +72,10 @@ export function getCurrentYMD(dateInput: string | number = ""): string {
 }
 
 // 取得西元年月格式 yyyy-mm
-export function yearMonthFormat(dateString: string) {
+export function yearMonthFormat(dateString: string = "") {
   // if (!dateString) return "";
-  let date = new Date(dateString);
-
-  if (isNaN(date.getFullYear()) || isNaN(date.getMonth()) || !dateString) return "";
+  let date = dateString ? new Date(dateString) : new Date();
+  if (isNaN(date.getFullYear()) || isNaN(date.getMonth())) return "";
 
   const month = ("00" + (date.getMonth() + 1)).slice(-2);
   return `${date.getFullYear()}-${month}`;

@@ -5,8 +5,6 @@
 
 3.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
 
-4.新增信用卡各月額度設定頁面於參數設定
-
 
 
 Nuxt.js 3

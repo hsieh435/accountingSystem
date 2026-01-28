@@ -11,12 +11,10 @@
     }">
     <template v-if="props.creditCardIdGot">
       <ui-buttonGroup showView :viewText="'檢視信用卡'" />
-      <ui-buttonGroup operation :operationText="'批次收支結算'" @dataOperate="currentMonthExpenditure(props.creditCardIdGot)" />
       <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData()" />
     </template>
     <template v-if="!props.creditCardIdGot">
       <ui-buttonGroup showCreate :createText="'新增信用卡'" />
-      <ui-buttonGroup operation :operationText="'本月收支結算'" @dataOperate="currentMonthExpenditure('')" />
     </template>
     <template #body>
       <div class="flex flex-col justify-center items-center gap-2">
@@ -151,7 +149,6 @@ import {
   fetchCreditCardCreate,
   fetchCreditCardUpdate,
   fetchCreditCardDelete,
-  fetchCreditCardExpenditure,
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
@@ -282,23 +279,5 @@ async function removeCreditcardData() {
 }
 
 
-
-async function currentMonthExpenditure(creditCardId: string) {
-  // console.log("creditCardId:", creditCardId);
-
-  const confirmResult = await showConfirmDialog({
-    message: `結算 ${getCurrentYear()} 年 ${getCurrentMonth()} 月信用卡收支`,
-    confirmButtonMsg: "執行結算",
-    executionApi: fetchCreditCardExpenditure,
-    apiParams: {
-      creditcardId: creditCardId,
-      yearMonth: `${getCurrentYear()}-${getCurrentMonth().toString().padStart(2, "0")}`
-    },
-  });
-
-  if (confirmResult) {
-    emits("dataReseaching");
-  }
-}
 </script>
 <style lang="scss" scoped></style>
