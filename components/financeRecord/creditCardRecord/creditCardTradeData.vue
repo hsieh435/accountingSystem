@@ -195,6 +195,7 @@ async function searchingCreditCardRecord() {
       creditCardId: props.creditCardIdGot,
       tradeId: props.tradeIdGot,
     });
+    console.log("fetchCreditCardRecordById:", res.data.data);
     Object.assign(dataParams, res.data.data);
     dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
     dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;

@@ -39,13 +39,13 @@ Import the accounting.sql file into the database using restore mode.
 
 
 
-前端使用技術 / technology in frontend
+前端使用技術 / skill using in frontend
 UI / UX：SCSS + Tailwind + Nuxt UI
 Nuxt 3
 chart.js
 
 
-後端使用技術 / technology in backend
+後端使用技術 / skill using in backend
 node.js
 
 資料庫 / database

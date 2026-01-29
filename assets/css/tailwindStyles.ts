@@ -1,6 +1,6 @@
 // tables CSS styles
 export function getTableClasses() {
-  return "table w-full min-w-max border-1 overflow-x-auto overflow-y-hidden mb-5";
+  return "table w-full min-w-max border-1";
 }
 
 export function getTheadClasses() {

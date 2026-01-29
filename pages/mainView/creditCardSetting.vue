@@ -10,7 +10,7 @@
           :searchingPlaceholder="'搜尋信用卡名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="creditCardListFiltered.length > 0">
-          <div class="rounded-lg overflow-hidden p-0">
+          <div class="rounded-lg overflow-auto">
             <div :class="tailwindStyles.getTableClasses()">
               <div :class="tailwindStyles.getTheadClasses()">
                 <div :class="tailwindStyles.getTheadtrClasses()">
@@ -20,7 +20,7 @@
                   <div :class="tailwindStyles.getThClasses()">發卡銀行</div>
                   <div :class="tailwindStyles.getThClasses()">發卡機構</div>
                   <div :class="tailwindStyles.getThClasses()">結算貨幣</div>
-                  <div :class="tailwindStyles.getThClasses()">每月額度</div>
+                  <div :class="tailwindStyles.getThClasses()">本月額度</div>
                   <div :class="tailwindStyles.getThClasses()">本月結算</div>
                   <div :class="tailwindStyles.getThClasses()">消費提醒</div>
                   <div :class="tailwindStyles.getThClasses()">到期</div>
@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi.ts";
-import { IResponse, ICreditCardList, IAccountSearchingParams } from "@/models/index.ts";
+import { ICreditCardList, IAccountSearchingParams, IResponse } from "@/models/index.ts";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -110,7 +110,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function creditCardSearching() {
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
-    console.log("res:", res.data.data);
+    // console.log("fetchCreditCardList:", res.data.data);
     creditCardList.value = res.data.data;
     await creditCardListFilterEvent();
   } catch (error) {

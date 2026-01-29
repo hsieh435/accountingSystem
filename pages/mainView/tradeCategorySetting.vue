@@ -9,7 +9,7 @@
         :totalDataQuanity="tradeCategoryList.length"
         :showFilter="false" />
       <template v-if="tradeCategoryListFiltered.length > 0">
-        <div class="rounded-lg overflow-hidden p-0">
+        <div class="rounded-lg overflow-auto">
           <div :class="tailwindStyles.getTableClasses()">
             <div :class="tailwindStyles.getTheadClasses()">
               <div :class="tailwindStyles.getTheadtrClasses()">

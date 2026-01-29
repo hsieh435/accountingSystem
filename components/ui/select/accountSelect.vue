@@ -35,7 +35,7 @@ const oriAccountList = ref<any[]>([]);
 const isDisabled = computed(() => props.isDisable);
 
 onMounted(async () => {
-  // console.log("accountId:", accountId.value);
+  // console.log("props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
   }
@@ -110,7 +110,7 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     ...item,
     pkValue: item[config.pkField],
   }));
-
+  console.log("oriAccountList:", oriAccountList.value);
   return res.data.data.map((item: any) => ({
     label: item[config.nameField],
     value: item[config.pkField],

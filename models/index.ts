@@ -240,6 +240,15 @@ export interface ICreditCardRecordData {
   };
 }
 
+export interface ICreditCardLimitList {
+  no?: number;
+  creditcardId: string;
+  creditcardName?: string;
+  userId: string;
+  limitYearMonth: string;
+  creditPerMonth: number;
+}
+
 // 存款帳戶列表 interface
 export interface ICurrencyAccountList {
   no?: number;

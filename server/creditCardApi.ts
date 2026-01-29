@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { ICreditCardList, IAccountSearchingParams } from "@/models/index.ts";
+import { ICreditCardList, ICreditCardLimitList, IAccountSearchingParams } from "@/models/index.ts";
 
 export async function fetchCreditCardList(data: IAccountSearchingParams) {
   const response = await apiFetch("/api/creditCard/list", "POST", {
@@ -44,6 +44,13 @@ export async function fetchCreditCardDelete(creditCardId: string) {
 
 export async function fetchCreditCardLimit(data: { creditcardId: string; yearMonth: string; }) {
   const response = await apiFetch("/api/creditCard/limit", "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
+export async function fetchCreditCardLimitUpdate(data: ICreditCardLimitList) {
+  const response = await apiFetch("/api/creditCard/limitUpdate", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();

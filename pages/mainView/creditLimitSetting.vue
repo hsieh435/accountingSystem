@@ -15,7 +15,7 @@
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
         <template v-if="creditCardLimitFiltered.length > 0">
-          <div class="rounded-lg overflow-hidden p-0">
+          <div class="rounded-lg overflow-auto">
             <div :class="tailwindStyles.getTableClasses()">
               <div :class="tailwindStyles.getTheadClasses()">
                 <div :class="tailwindStyles.getTheadtrClasses()">
@@ -33,8 +33,13 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     {{ getCurrentYear(creditCard.limitYearMonth) }} / {{ getCurrentMonth(creditCard.limitYearMonth) }}
                   </div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(creditCard.limitCredit) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()"></div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <!-- {{ currencyFormat(creditCard.limitCredit) }} -->
+                    <UInputNumber v-model="creditCard.creditPerMonth" orientation="vertical" />
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData(creditCard)" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -49,9 +54,9 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
-import { fetchCreditCardLimit } from "@/server/creditCardApi.ts";
-import { ICreditCardList, IResponse } from "@/models/index.ts";
-import { getCurrentYear, getCurrentMonth, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { fetchCreditCardLimit, fetchCreditCardLimitUpdate } from "@/server/creditCardApi.ts";
+import { ICreditCardList, ICreditCardLimitList, IResponse } from "@/models/index.ts";
+import { getCurrentYear, getCurrentMonth, sliceArray } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
@@ -72,9 +77,9 @@ const searchCreditCard = reactive<{ creditcardId: string; yearMonth: string }>({
   creditcardId: "",
   yearMonth: ""
 });
-const creditCardLimit = ref<any[]>([]);
-const creditCardLimitFiltered = ref<any[]>([]);
-const tableData = ref<any[]>([]);
+const creditCardLimit = ref<ICreditCardLimitList[]>([]);
+const creditCardLimitFiltered = ref<ICreditCardLimitList[]>([]);
+const tableData = ref<ICreditCardLimitList[]>([]);
 
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
@@ -102,6 +107,19 @@ async function searchingLimit() {
 async function creditCardLimitFilterEvent() {
   creditCardLimitFiltered.value = creditCardLimit.value;
   tableData.value = sliceArray(creditCardLimitFiltered.value, currentPage.value, itemsPerPage.value);
+}
+
+
+
+async function removeCreditcardData(creditCard: ICreditCardLimitList) {
+  try {
+    const res: IResponse = await fetchCreditCardLimitUpdate(creditCard);
+    // console.log("fetchCreditCardLimitUpdate:", res.data.data);
+    messageToast({ message: res.data.message, icon: "success" });
+    await searchingLimit();
+  } catch (error) {
+    messageToast({ message: (error as Error).message, icon: "error" });
+  }
 }
 </script>
 <style lang="scss" scoped></style>

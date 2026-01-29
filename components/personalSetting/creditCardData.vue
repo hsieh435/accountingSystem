@@ -82,16 +82,22 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>信用額度：</span>
+            <span class="col-span-2 text-right">本月信用額度：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.creditPerMonth ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.creditPerMonth"
-              orientation="vertical" />
+              orientation="vertical"
+              :disabled="props.creditCardIdGot ? true : false" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditPerMonth">
             <span class="col-span-2 text-right"></span>
             <span class="col-span-4 text-red-500 mx-2">{{ creditPerMonthValidateText }}</span>
           </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">本月消費累計：</span>
+          <UInput class="col-span-3" v-model="dataParams.expenditureCurrentMonth" disabled />
         </div>
 
         <div class="w-full">
@@ -152,7 +158,7 @@ import {
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
-import { yearMonthDayTimeFormat, dataObjectValidate, getCurrentYear, getCurrentMonth } from "@/composables/tools.ts";
+import { yearMonthDayTimeFormat, dataObjectValidate, getDaysInMonth } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
@@ -192,6 +198,7 @@ watch(openCreditCardData, () => {
     Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.creditCardIdGot) {
       searchingCreditCardData();
+      // searchingcreditcardlimit();
     }
   }
 });
@@ -199,6 +206,7 @@ watch(openCreditCardData, () => {
 async function searchingCreditCardData() {
   try {
     const res: IResponse = await fetchCreditCardById(props.creditCardIdGot);
+    // console.log("fetchCreditCardById:", res.data.data);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -214,7 +222,7 @@ function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function settingExpirationDate(year: number, month: number) {
-  dataParams.expirationDate = `${year}-${month.toString().padStart(2, "0")}-01`;
+  dataParams.expirationDate = `${year}-${month.toString().padStart(2, "0")}-${getDaysInMonth(year, month).toString().padStart(2, "0")} 00:00:00`;
 }
 
 async function validateData() {

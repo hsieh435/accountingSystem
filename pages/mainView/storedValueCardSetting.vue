@@ -10,7 +10,7 @@
           :searchingPlaceholder="'搜尋儲值票名稱'"
           @tableSliceChange="settingTableSlice" />
         <template v-if="storedValueCardListFiltered.length > 0">
-          <div class="rounded-lg overflow-hidden p-0">
+          <div class="rounded-lg overflow-auto">
             <div :class="tailwindStyles.getTableClasses()">
               <div :class="tailwindStyles.getTheadClasses()">
                 <div :class="tailwindStyles.getTheadtrClasses()">
