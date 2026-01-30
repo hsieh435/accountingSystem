@@ -110,7 +110,7 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     ...item,
     pkValue: item[config.pkField],
   }));
-  console.log("oriAccountList:", oriAccountList.value);
+  // console.log("oriAccountList:", oriAccountList.value);
   return res.data.data.map((item: any) => ({
     label: item[config.nameField],
     value: item[config.pkField],

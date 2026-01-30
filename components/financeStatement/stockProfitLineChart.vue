@@ -20,7 +20,7 @@ const props = withDefaults(
 
 const lineChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
-let chartInstance: Chart | null = null;
+const chartInstance = ref<Chart | null>(null);
 
 onMounted(() => {
   // console.log("onMounted props:", props);
@@ -34,7 +34,6 @@ watch(() => props, () => {
 );
 
 async function searchingStockPrice() {
-  // console.log("searchingParams:", props.searchingParamsGot);
   try {
     const res: IResponse = await fetchStockRangeValue(props.searchingParamsGot);
     // console.log("fetchStockRangeValue:", res.data.data);
@@ -80,9 +79,9 @@ async function renderingChart() {
   ) as HTMLCanvasElement;
   // console.log("stockProfitLineChartStockNoIndex:", stockProfitLineChartStockNoIndex);
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (chartInstance.value) {
+    chartInstance.value.destroy();
+    chartInstance.value = null;
   }
 
   const scalesMax = getData(stockDataLineChart.value)
@@ -93,7 +92,7 @@ async function renderingChart() {
     : 0;
   let currentValue = 0;
 
-  chartInstance = new Chart(stockProfitLineChartStockNoIndex, {
+  chartInstance.value = new Chart(stockProfitLineChartStockNoIndex, {
     type: "line",
     data: {
       labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],

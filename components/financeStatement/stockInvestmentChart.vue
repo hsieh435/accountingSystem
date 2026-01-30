@@ -100,8 +100,7 @@ async function searchingEachStockStorageData() {
       stockAccountId: props.stockAccountIdGot,
       stockNo: props.stockNoGot,
     });
-    console.log("res:", res.data.data);
-    console.log(900000);
+    // console.log("fetchEachStockStorageData:", res.data.data);
     doughnutChartTitle.value = `${res.data.data.stockNo} / ${res.data.data.stockName} 投資損益`;
     for (let i = 0; i < res.data.data.length; i++) {
       stockTotalCost.value += res.data.data[i].tradeTotalPrice;

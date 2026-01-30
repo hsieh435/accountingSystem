@@ -181,6 +181,9 @@ const getDefaultDataParams = (): IStockAccountList => ({
   currency: "",
   startingAmount: 0,
   presentAmount: 0,
+  expenseExpenditureCurrentMonth: 0,
+  incomeExpenditureCurrentMonth: 0,
+  profitLossExpenditureCurrentMonth: 0,
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
@@ -207,6 +210,7 @@ watch(openStockAccountData, () => {
 async function searchingStockAccountData() {
   try {
     const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
+    // console.log("fetchStockAccountById:", res.data.data);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });

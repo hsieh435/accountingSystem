@@ -86,20 +86,23 @@ export interface IFinanceRecordSearchingParams {
 // 現金流列表 interface
 export interface ICashFlowList {
   no?: number;
-  cashflowId: string;
-  userId: string;
-  cashflowName: string;
   accountType: string;
+  alertValue: number;
+  cashflowId: string;
+  cashflowName: string;
+  createdDate: string;
   currency: string;
   currencyName?: string;
-  startingAmount: number;
-  presentAmount: number;
-  minimumValueAllowed: number;
-  alertValue: number;
-  openAlert: boolean;
   enable: boolean;
-  createdDate: string;
+  expenseExpenditureCurrentMonth: number;
+  incomeExpenditureCurrentMonth: number;
+  minimumValueAllowed: number;
   note: string;
+  openAlert: boolean;
+  presentAmount: number;
+  profitLossExpenditureCurrentMonth: number;
+  startingAmount: number;
+  userId: string;
 }
 
 // 現金收支紀錄 interface
@@ -148,6 +151,9 @@ export interface IStoredValueCardList {
   presentAmount: number;
   minimumValueAllowed: number;
   maximumValueAllowed: number;
+  expenseExpenditureCurrentMonth: number;
+  incomeExpenditureCurrentMonth: number;
+  profitLossExpenditureCurrentMonth: number;
   alertValue: number;
   openAlert: boolean;
   enable: boolean;
@@ -262,10 +268,13 @@ export interface ICurrencyAccountList {
   currencyName?: string;
   startingAmount: number;
   presentAmount: number;
+  expenseExpenditureCurrentMonth: number;
+  incomeExpenditureCurrentMonth: number;
+  profitLossExpenditureCurrentMonth: number;
+  isSalaryAccount: false;
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
-  isSalaryAccount: boolean;
   enable: boolean;
   createdDate: string;
   note: string;
@@ -317,6 +326,9 @@ export interface IStockAccountList {
   currencyName?: string;
   startingAmount: number;
   presentAmount: number;
+  expenseExpenditureCurrentMonth: number;
+  incomeExpenditureCurrentMonth: number;
+  profitLossExpenditureCurrentMonth: number;
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;

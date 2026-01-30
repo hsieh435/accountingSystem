@@ -20,6 +20,9 @@
                   <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">初始金額</div>
                   <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                  <div :class="tailwindStyles.getThClasses()">本月收入</div>
+                  <div :class="tailwindStyles.getThClasses()">本月支出</div>
+                  <div :class="tailwindStyles.getThClasses()">本月損益</div>
                   <div :class="tailwindStyles.getThClasses()">提醒金額</div>
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
@@ -39,6 +42,19 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(cashFlow.incomeExpenditureCurrentMonth) }}
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(cashFlow.expenseExpenditureCurrentMonth) }}
+                  </div>
+                  <div
+                    :class="[
+                      cashFlow.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      tailwindStyles.getTdClasses(),
+                    ]">
+                    {{ currencyFormat(cashFlow.profitLossExpenditureCurrentMonth) }}
+                  </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
@@ -105,7 +121,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function cashFlowSearching() {
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    // console.log("res:", res.data.data);
+    // console.log("fetchCashFlowList:", res.data.data);
     cashFlowList.value = res.data.data;
     await cashFlowListFilterEvent();
   } catch (error) {

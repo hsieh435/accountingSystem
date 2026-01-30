@@ -19,7 +19,11 @@
                   <div :class="tailwindStyles.getThClasses()">帳戶名稱</div>
                   <div :class="tailwindStyles.getThClasses()">銀行代號 / 銀行名稱</div>
                   <div :class="tailwindStyles.getThClasses()">目前金額</div>
+                  <div :class="tailwindStyles.getThClasses()">本月收入</div>
+                  <div :class="tailwindStyles.getThClasses()">本月支出</div>
+                  <div :class="tailwindStyles.getThClasses()">本月損益</div>
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
+                  <div :class="tailwindStyles.getThClasses()">提醒金額</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
@@ -36,8 +40,22 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(account.incomeExpenditureCurrentMonth) }}
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(account.expenseExpenditureCurrentMonth) }}
+                  </div>
+                  <div
+                    :class="[
+                      account.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      tailwindStyles.getTdClasses(),
+                    ]">
+                    {{ currencyFormat(account.profitLossExpenditureCurrentMonth) }}
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="account.openAlert" />
                   </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.alertValue) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <stockAccountData :stockAccountIGot="account.accountId" @dataReseaching="stockAccountSearching" />
@@ -100,11 +118,10 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 }
 
 async function stockAccountSearching() {
-  // console.log("searchingParams:", searchingParams);
 
   try {
     const res: IResponse = await fetchStockAccountList(searchingParams);
-    console.log("res:", res.data.data);
+    // console.log("fetchStockAccountList:", res.data.data);
     stockAccountList.value = res.data.data;
     await stockAccountListFilterEvent();
   } catch (error) {

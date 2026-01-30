@@ -79,7 +79,7 @@ async function settingAccountId(accountItem: IStockAccountList | null) {
 async function searchingStockStorage() {
   try {
     const res: IResponse = await fetchStockStorageProfitList(searchingParams.accountId);
-    console.log("res:", res.data.data);
+    console.log("fetchStockStorageProfitList:", res.data.data);
     accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
       label: `${item.stockNo} / ${item.stockName}`,
       content: item.stockNo,

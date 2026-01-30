@@ -22,6 +22,9 @@
                   <div :class="tailwindStyles.getThClasses()">目前金額</div>
                   <div :class="tailwindStyles.getThClasses()">最小儲值金額</div>
                   <div :class="tailwindStyles.getThClasses()">最大儲值金額</div>
+                  <div :class="tailwindStyles.getThClasses()">本月儲值金額</div>
+                  <div :class="tailwindStyles.getThClasses()">本月消費金額</div>
+                  <div :class="tailwindStyles.getThClasses()">本月損益</div>
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
@@ -42,6 +45,19 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(card.incomeExpenditureCurrentMonth) }}
+                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">
+                    {{ currencyFormat(card.expenseExpenditureCurrentMonth) }}
+                  </div>
+                  <div
+                    :class="[
+                      card.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      tailwindStyles.getTdClasses(),
+                    ]">
+                    {{ currencyFormat(card.profitLossExpenditureCurrentMonth) }}
+                  </div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />
                   </div>
@@ -65,11 +81,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import {
-  fetchStoredValueCardList,
-  fetchEnableStoredValueCard,
-  fetchDisableStoredValueCard,
-} from "@/server/storedValueCardApi.ts";
+import { fetchStoredValueCardList, fetchEnableStoredValueCard, fetchDisableStoredValueCard } from "@/server/storedValueCardApi.ts";
 import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index.ts";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
@@ -115,7 +127,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function storedValueCardSearching() {
   try {
     const res: IResponse = await fetchStoredValueCardList(searchingParams);
-    console.log("fetchStoredValueCardList:", res.data.data);
+    // console.log("fetchStoredValueCardList:", res.data.data);
     storedValueCardList.value = res.data.data;
     await storedValueCardListFilterEvent();
   } catch (error) {
