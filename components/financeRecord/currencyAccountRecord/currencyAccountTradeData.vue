@@ -152,7 +152,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
     tradeDatetime: "",
     accountUser: "",
     accountType: "",
-    transactionType: "income",
+    transactionType: "",
     tradeCategory: "",
     tradeAmount: 0,
     remainingAmount: 0,
@@ -164,7 +164,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
     oriTradeDatetime: "",
     oriTradeAmount: 0,
     oriRemainingAmount: 0,
-    oriTransactionType: "income",
+    oriTransactionType: "",
   },
 });
 const dataParams = reactive<IcurrencyAccountRecordData>(getDefaultDataParams());
@@ -267,6 +267,9 @@ async function validateData() {
   if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;
   }
+  if (!dataParams.updateData.transactionType) {
+    dataValidate.transactionType = false;
+  }
   if (!dataParams.updateData.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
@@ -296,6 +299,7 @@ async function currencyAccountRecordDataHandling() {
     )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
+    openTradeData.value = props.tradeIdGot.length > 0 ? true : false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

@@ -232,7 +232,7 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
     accountId: props.accountIdGot,
     tradeDatetime: "",
     accountUser: "",
-    transactionType: "income",
+    transactionType: "",
     tradeCategory: "",
     stockNo: "",
     stockName: "",
@@ -251,13 +251,11 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
     oriTradeDatetime: "",
     oriTradeAmount: 0,
     oriRemainingAmount: 0,
-    oriTransactionType: "income",
+    oriTransactionType: "",
   },
 });
 const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
-// const originalRemainingAmount = ref<number>(0);
-// const originalTradeAmount = ref<number>(0);
 const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -373,6 +371,9 @@ async function validateData() {
   if (!dataParams.updateData.accountId) {
     dataValidate.accountId = false;
   }
+  if (!dataParams.updateData.transactionType) {
+    dataValidate.transactionType = false;
+  }
   if (!dataParams.updateData.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
@@ -427,6 +428,7 @@ async function stockAccountRecordDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
+    openTradeData.value = props.tradeIdGot.length > 0 ? true : false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

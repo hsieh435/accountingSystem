@@ -32,8 +32,8 @@
                 @sendbackAccount="settingCashflowAccount" />
             </div>
           </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇收支</span>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowId">
+            <span class="col-start-3 col-span-4 text-red-500">請選擇金流</span>
           </div>
         </div>
 
@@ -159,7 +159,7 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
     userId: "",
     tradeDatetime: "",
     accountType: "cashFlow",
-    transactionType: "income",
+    transactionType: "",
     tradeCategory: "",
     tradeAmount: 0,
     remainingAmount: 0,
@@ -171,7 +171,7 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
     oriTradeDatetime: "",
     oriTradeAmount: 0,
     oriRemainingAmount: 0,
-    oriTransactionType: "income",
+    oriTransactionType: "",
   },
 });
 const dataParams = reactive<ICashFlowRecordData>(getDefaultDataParams());
@@ -273,10 +273,15 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultTradeValidate());
 
+  if (!dataParams.updateData.cashflowId) {
+    dataValidate.cashflowId = false;
+  }
+  if (!dataParams.updateData.transactionType) {
+    dataValidate.transactionType = false;
+  }
   if (!dataParams.updateData.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
     !isFinite(dataParams.updateData.tradeAmount) ||
@@ -290,13 +295,13 @@ async function validateData() {
 }
 
 async function cashFlowRecordDataHandling() {
-  console.log("dataParams:", dataParams);
   if (!(await validateData())) return;
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
     messageToast({ message: res.data.message, icon: res.data.returnCode === 0 ? "success" : "error" });
     emits("dataReseaching");
+    openTradeData.value = props.tradeIdGot.length > 0;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -318,6 +323,7 @@ async function deleteTradeRecord() {
 
   if (confirmResult) {
     emits("dataReseaching");
+    openTradeData.value = false;
   }
 }
 </script>

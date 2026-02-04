@@ -291,6 +291,7 @@ async function creditCardRecordDataHandling() {
     );
     messageToast({ message: res.data.message });
     emits("dataReseaching");
+    openTradeData.value = props.tradeIdGot.length > 0 ? true : false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

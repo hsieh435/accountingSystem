@@ -158,7 +158,7 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
     storedValueCardId: props.storedValueCardIdGot || "",
     accountType: "",
     tradeDatetime: "",
-    transactionType: "income",
+    transactionType: "",
     tradeCategory: "",
     tradeAmount: 0,
     remainingAmount: 0,
@@ -170,7 +170,7 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
     oriTradeDatetime: "",
     oriRemainingAmount: 0,
     oriTradeAmount: 0,
-    oriTransactionType: "income",
+    oriTransactionType: "",
   },
 });
 const dataParams = reactive<IStoredValueCardRecordData>(getDefaultDataParams());
@@ -271,6 +271,15 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultTradeValidate());
 
+  if (!dataParams.updateData.storedValueCardId) {
+    dataValidate.storedValueCardId = false;
+  }
+  if (!dataParams.updateData.transactionType) {
+    dataValidate.transactionType = false;
+  }
+  if (!dataParams.updateData.tradeCategory) {
+    dataValidate.tradeCategory = false;
+  }
   if (
     typeof dataParams.updateData.tradeAmount !== "number" ||
     !isFinite(dataParams.updateData.tradeAmount) ||
@@ -292,6 +301,7 @@ async function storedValueCardRecordDataHandling() {
     )(dataParams);
     messageToast({ message: res.data.message });
     emits("dataReseaching");
+    openTradeData.value = props.tradeIdGot.length > 0 ? true : false;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
