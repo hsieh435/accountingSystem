@@ -207,14 +207,14 @@ async function searchingStoredValueCardRecord() {
   }
 }
 
-function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
+async function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
   storedValueCardChosen.value = account || getDefaultStoredValueCard();
   dataParams.updateData.storedValueCardId = storedValueCardChosen.value.storedValueCardId;
   dataParams.updateData.currency = storedValueCardChosen.value.currency;
   dataParams.oriData.oriRemainingAmount = storedValueCardChosen.value.presentAmount;
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
 
-  settingRemainingAmount();
+  await settingRemainingAmount();
   if (
     openTradeData.value === true &&
     storedValueCardChosen.value.storedValueCardId.length > 0 &&
@@ -228,28 +228,30 @@ function settingStoredValueCardAccount(account: IStoredValueCardList | null) {
   }
 }
 
-function settingTradeDatetime(dateTime: string) {
+async function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
 }
 
-function settingTransactionType(type: string) {
+async function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
   if (dataParams.updateData.storedValueCardId.length > 0) {
-    settingRemainingAmount();
+    await settingRemainingAmount();
   }
 }
 
-function settingTradeCategory(tradeCategoryId: string) {
+async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-function settingRemainingAmount() {
+async function settingRemainingAmount() {
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
       storedValueCardChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
       storedValueCardChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
+  } else {
+    dataParams.oriData.oriRemainingAmount = dataParams.updateData.remainingAmount;
   }
 
   if (
@@ -264,7 +266,7 @@ function settingRemainingAmount() {
   }
 }
 
-function settingCurrency(currencyData: ICurrencyList) {
+async function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 

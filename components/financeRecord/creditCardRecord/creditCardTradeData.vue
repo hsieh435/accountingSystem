@@ -218,26 +218,26 @@ async function searchingcreditcardlimit() {
   }
 }
 
-function settingCreditCardAccount(account: ICreditCardList | null) {
+async function settingCreditCardAccount(account: ICreditCardList | null) {
   creditCardChosen.value = account || getDefaultCreditCard();
   dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
   dataParams.updateData.currency = creditCardChosen.value.currency || "";
-  searchingcreditcardlimit();
-  settingUsageAlert();
+  await searchingcreditcardlimit();
+  await settingUsageAlert();
 }
 
-function settingTradeDatetime(dateTime: string) {
+async function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
   dataParams.updateData.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
-  searchingcreditcardlimit();
-  settingUsageAlert();
+  await searchingcreditcardlimit();
+  await settingUsageAlert();
 }
 
-function settingTradeCategory(tradeCategoryId: string) {
+async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-function settingCurrency(currencyData: ICurrencyList) {
+async function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 

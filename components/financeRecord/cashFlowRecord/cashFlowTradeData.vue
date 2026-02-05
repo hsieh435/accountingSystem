@@ -208,19 +208,20 @@ async function searchingCashFlowRecord() {
   }
 }
 
-function settingCashflowAccount(account: ICashFlowList | null) {
+async function settingCashflowAccount(account: ICashFlowList | null) {
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
   dataParams.updateData.currency = cashFlowChosen.value.currency
-  dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount;;
+  dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount;
   // console.log("cashFlowChosen:", cashFlowChosen.value);
 
-  settingRemainingAmount();
+  await settingRemainingAmount();
 
   if (
     openTradeData.value === true &&
     cashFlowChosen.value.cashflowId.length > 0 &&
     cashFlowChosen.value.openAlert === true &&
+    dataParams.updateData.transactionType &&
     dataParams.oriData.oriRemainingAmount < cashFlowChosen.value.alertValue
   ) {
     messageToast({
@@ -230,29 +231,47 @@ function settingCashflowAccount(account: ICashFlowList | null) {
   }
 }
 
-function settingTradeDatetime(dateTime: string) {
+async function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
 }
 
-function settingTransactionType(type: string) {
+async function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
   if (dataParams.updateData.cashflowId.length > 0) {
-    settingRemainingAmount();
+    await settingRemainingAmount();
   }
 }
 
-function settingTradeCategory(tradeCategoryId: string) {
+async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
 async function settingRemainingAmount() {
   if (dataParams.updateData.transactionType === "income") {
+    // if (dataParams.oriData.oriTradeAmount === dataParams.updateData.tradeAmount) {
+    //   dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount + dataParams.updateData.tradeAmount;
+    // } else {
+    //   dataParams.oriData.oriRemainingAmount =
+    //     cashFlowChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
+    // }
     dataParams.oriData.oriRemainingAmount =
       cashFlowChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeAmount;
   } else if (dataParams.updateData.transactionType === "expense") {
+    // if (dataParams.oriData.oriTradeAmount === dataParams.updateData.tradeAmount) {
+    //   dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount - dataParams.updateData.tradeAmount;
+    // } else {
+    //   dataParams.oriData.oriRemainingAmount =
+    //     cashFlowChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
+    // }
     dataParams.oriData.oriRemainingAmount =
       cashFlowChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
+  } else {
+    dataParams.oriData.oriRemainingAmount = dataParams.updateData.remainingAmount;
   }
+  console.log("type:", dataParams.updateData.transactionType);
+  console.log("presentAmount:", cashFlowChosen.value.presentAmount);
+  console.log("oriTradeAmount:", dataParams.oriData.oriTradeAmount);
+  console.log("tradeAmount:", dataParams.updateData.tradeAmount);
 
   if (
     openTradeData.value === true &&
@@ -266,7 +285,7 @@ async function settingRemainingAmount() {
   }
 }
 
-function settingCurrency(currencyData: ICurrencyList) {
+async function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 

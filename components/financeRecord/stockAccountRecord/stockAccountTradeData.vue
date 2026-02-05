@@ -288,13 +288,13 @@ async function searchingStockAccountRecord() {
   }
 }
 
-function settingAccount(account: IStockAccountList | null) {
+async function settingAccount(account: IStockAccountList | null) {
   stockAccountChosen.value = account || getDefaultStockAccount();
   dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
   dataParams.updateData.currency = stockAccountChosen.value.currency || "";
   dataParams.oriData.oriRemainingAmount = stockAccountChosen.value.presentAmount;
   // console.log("stockAccountChosen:", stockAccountChosen.value);
-  settingRemainingAmount();
+  await settingRemainingAmount();
 
   if (
     openTradeData.value === true &&
@@ -309,27 +309,27 @@ function settingAccount(account: IStockAccountList | null) {
   }
 }
 
-function settingTradeDatetime(dateTime: string) {
+async function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
 }
 
-function settingTransactionType(type: string) {
+async function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
   if (dataParams.updateData.accountId) {
-    settingTotalPrice();
+    await settingTotalPrice();
   }
 }
 
-function settingStockNo(stockItem: IStockList) {
+async function settingStockNo(stockItem: IStockList) {
   dataParams.updateData.stockNo = stockItem.stockId;
   dataParams.updateData.stockName = stockItem.stockName;
 }
 
-function settingTradeCategory(tradeCategoryId: string) {
+async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-function settingTotalPrice() {
+async function settingTotalPrice() {
   dataParams.updateData.stockTotalPrice = dataParams.updateData.pricePerShare * dataParams.updateData.quantity;
   if (dataParams.updateData.transactionType === "income") {
     dataParams.updateData.tradeTotalPrice =
@@ -338,10 +338,10 @@ function settingTotalPrice() {
     dataParams.updateData.tradeTotalPrice =
       dataParams.updateData.stockTotalPrice + dataParams.updateData.handlingFee + dataParams.updateData.transactionTax;
   }
-  settingRemainingAmount();
+  await settingRemainingAmount();
 }
 
-function settingRemainingAmount() {
+async function settingRemainingAmount() {
 
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
@@ -361,7 +361,7 @@ function settingRemainingAmount() {
   }
 }
 
-function settingCurrency(currencyData: ICurrencyList) {
+async function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 

@@ -206,7 +206,7 @@ async function settingAccount(account: ICurrencyAccountList | null) {
   dataParams.updateData.currency = storedValueCardChosen.value.currency || "";
   dataParams.oriData.oriRemainingAmount = storedValueCardChosen.value.presentAmount;
   // console.log("storedValueCardChosen:", storedValueCardChosen.value);
-  settingRemainingAmount();
+  await settingRemainingAmount();
 
   if (
     openTradeData.value === true &&
@@ -221,14 +221,14 @@ async function settingAccount(account: ICurrencyAccountList | null) {
   }
 }
 
-function settingTradeDatetime(dateTime: string) {
+async function settingTradeDatetime(dateTime: string) {
   dataParams.updateData.tradeDatetime = dateTime;
 }
 
-function settingTransactionType(type: string) {
+async function settingTransactionType(type: string) {
   dataParams.updateData.transactionType = type;
   if (dataParams.updateData.accountId) {
-    settingRemainingAmount();
+    await settingRemainingAmount();
   }
 }
 
@@ -253,11 +253,11 @@ async function settingRemainingAmount() {
   }
 }
 
-function settingTradeCategory(tradeCategoryId: string) {
+async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.updateData.tradeCategory = tradeCategoryId;
 }
 
-function settingCurrency(currencyData: ICurrencyList) {
+async function settingCurrency(currencyData: ICurrencyList) {
   setStep.value = currencyData.minimumDenomination;
 }
 
