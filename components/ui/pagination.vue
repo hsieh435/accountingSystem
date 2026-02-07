@@ -20,7 +20,7 @@
 
         <div class="flex flex-row justify-start items-center">
           <span class="mx-1">前往第</span>
-          <UInputNumber style="width: 120px" v-model="pageTarget" :min="1" :max="totalPages" />
+          <UInputNumber style="width: 120px" v-model="pageTarget" orientation="vertical" :min="1" :max="totalPages" />
           <span class="mx-1">頁</span>
         </div>
       </template>

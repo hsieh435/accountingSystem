@@ -3,11 +3,9 @@
     <tradeCategoryData @dataReseaching="searchingTradeCategoryList" />
     <template v-if="tradeCategoryList.length > 0">
       <ui-pagination
-        :currentPage="1"
-        :dataPerpage="tradeCategoryList.length"
-        :pageArrayGot="[tradeCategoryList.length]"
         :totalDataQuanity="tradeCategoryList.length"
-        :showFilter="false" />
+        :showFilter="false"
+        @tableSliceChange="settingTableSlice"  />
       <template v-if="tradeCategoryListFiltered.length > 0">
         <div class="rounded-lg overflow-auto">
           <div :class="tailwindStyles.getTableClasses()">
@@ -77,6 +75,9 @@ definePageMeta({
 
 const tradeCategoryData = defineAsyncComponent(() => import("@/components/parameterSetting/tradeCategoryData.vue"));
 
+const currentPage = ref<number>(1);
+const itemsPerPage = ref<number>(20);
+
 const tradeCategoryList = ref<ITradeCategory[]>([]);
 const tradeCategoryListFiltered = ref<ITradeCategory[]>([]);
 const tableData = ref<ITradeCategory[]>([]);
@@ -84,6 +85,12 @@ const tableData = ref<ITradeCategory[]>([]);
 onMounted(async () => {
   await searchingTradeCategoryList();
 });
+
+async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
+  currentPage.value = sliceData.currentPage;
+  itemsPerPage.value = sliceData.itemsPerPage;
+  await tradeCategoryListFilterEvent();
+}
 
 async function searchingTradeCategoryList() {
   try {
@@ -98,7 +105,7 @@ async function searchingTradeCategoryList() {
 
 async function tradeCategoryListFilterEvent() {
   tradeCategoryListFiltered.value = tradeCategoryList.value;
-  tableData.value = sliceArray(tradeCategoryListFiltered.value);
+  tableData.value = sliceArray(tradeCategoryListFiltered.value, currentPage.value, itemsPerPage.value);
 }
 </script>
 <style lang="scss" scoped></style>
