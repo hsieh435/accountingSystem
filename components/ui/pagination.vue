@@ -61,6 +61,12 @@ import { ISortArray } from "@/models/index.ts";
 
 const props = withDefaults(
   defineProps<{
+    pageParams?: {
+      currentPage?: number;
+      dataPerPage?: number;
+      pageArrayGot?: number[];
+      totalDataQuanity?: number;
+    };
     currentPage?: number;
     dataPerpage?: number;
     pageArrayGot?: number[];
@@ -80,6 +86,12 @@ const props = withDefaults(
     // filterMethod?: IFilterArray[];
   }>(),
   {
+    pageParams: () => ({
+      currentPage: 1,
+      dataPerPage: 1,
+      pageArrayGot: [20, 30, 50],
+      totalDataQuanity: 0,
+    }),
     currentPage: 1,
     dataPerpage: 1,
     pageArrayGot: () => [20, 30, 50],
@@ -128,8 +140,6 @@ const filterValue = ref<string>("");
 const isCheckBoxPicked = ref<boolean>(false);
 
 onMounted(() => {
-  // 初始化頁數
-
   // console.log("onMounted props:", props);
   perPageArray.value = props.pageArrayGot.map((item) => {
     return { label: `${item} 筆 / 頁`, value: item };
