@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { fetchStockList } from "@/server/outerWebApi.ts";
+import { fetchStockList } from "@/server/outerApi.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({

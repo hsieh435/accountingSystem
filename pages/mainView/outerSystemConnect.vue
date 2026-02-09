@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerWebApi.ts";
+import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerApi.ts";
 import { IResponse } from "@/models/index.ts";
 import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
 

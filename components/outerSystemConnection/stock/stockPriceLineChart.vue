@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { watch, ref } from "vue";
-import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
+import { fetchStockRangeValue } from "@/server/outerApi.ts";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
@@ -66,8 +66,9 @@ const getData = (chartData: any[]) => {
 // CanvasRenderingContext2D
 async function renderingChart() {
   // console.log(props.chartType);
-  const stockPriceChartStockNo =
-    document.getElementById(`stockPriceChart${props.searchingParamsGot.stockNo}`) as HTMLCanvasElement;
+  const stockPriceChartStockNo = document.getElementById(
+    `stockPriceChart${props.searchingParamsGot.stockNo}`,
+  ) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();

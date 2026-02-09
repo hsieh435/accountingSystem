@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, watch, ref } from "vue";
-import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
+import { fetchStockRangeValue } from "@/server/outerApi.ts";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index.ts";
 import { currencyFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -27,10 +27,13 @@ onMounted(() => {
   searchingStockPrice();
 });
 
-watch(() => props, () => {
-  // console.log("watch props:", props);
-  // searchingStockPrice();
-  }, { deep: true },
+watch(
+  () => props,
+  () => {
+    // console.log("watch props:", props);
+    // searchingStockPrice();
+  },
+  { deep: true },
 );
 
 async function searchingStockPrice() {
@@ -71,7 +74,6 @@ const getData = (chartData: any[]) => {
   const data = chartData.map((v) => v.data);
   return data;
 };
-
 
 async function renderingChart() {
   const stockProfitLineChartStockNoIndex = document.getElementById(
@@ -127,7 +129,9 @@ async function renderingChart() {
                 currentValue = Number(tooltipItem.dataset.data[index]);
               });
               return (
-                "收盤價：" + currencyFormat(currentValue) + "\n" +
+                "收盤價：" +
+                currencyFormat(currentValue) +
+                "\n" +
                 "獲利：" +
                 (((currentValue - props.purchasePrice) / props.purchasePrice) * 100).toFixed(2) +
                 "%"

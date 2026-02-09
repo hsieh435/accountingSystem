@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchEachStockStorageData } from "@/server/stockStorageProfitApi.ts";
-import { fetchStockRangeValue } from "@/server/outerWebApi.ts";
+import { fetchStockRangeValue } from "@/server/outerApi.ts";
 import { IResponse } from "@/models/index.ts";
 import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -109,7 +109,6 @@ async function searchingEachStockStorageData() {
     stockAveragePrice.value = Math.round((stockTotalCost.value / stockTotalQuantity.value) * 100) / 100;
     stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
     stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
-
 
     emits("stockDataConsolidate", stockTotalCost.value, stockCurrentValue.value, stockCurrentProfit.value);
 

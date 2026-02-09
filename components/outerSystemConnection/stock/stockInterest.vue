@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchStockDividendResult } from "@/server/outerWebApi.ts";
+import { fetchStockDividendResult } from "@/server/outerApi.ts";
 import { IStockPriceSearchingParams, IResponse } from "@/models/index.ts";
 import { yearMonthDayTimeFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -62,8 +62,9 @@ async function searchingStockInterest() {
 
 async function renderingChart() {
   // console.log(props.chartType);
-  const earningsChartStockNo =
-    document.getElementById(`earningsChart${props.searchingParamsGot.stockNo}`) as HTMLCanvasElement;
+  const earningsChartStockNo = document.getElementById(
+    `earningsChart${props.searchingParamsGot.stockNo}`,
+  ) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();

@@ -26,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerWebApi.ts";
+import { fetchCurrencyLatestExRate, fetchCurrencyHistoryExRate } from "@/server/outerApi.ts";
 import { ICurrencyExRateSearchingParams, ICurrencyList, IResponse } from "@/models/index.ts";
 import { getCurrentYMD, getCurrentYear } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";

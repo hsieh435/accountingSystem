@@ -11,7 +11,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { fetchStockList } from "@/server/outerWebApi.ts";
+import { fetchStockList } from "@/server/outerApi.ts";
 import { IStockList, IResponse } from "@/models/index.ts";
 import { debounceFn } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";

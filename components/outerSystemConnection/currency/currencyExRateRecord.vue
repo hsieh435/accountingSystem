@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchCurrencyHistoryExRate } from "@/server/outerWebApi.ts";
+import { fetchCurrencyHistoryExRate } from "@/server/outerApi.ts";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
@@ -65,8 +65,9 @@ async function searchingCurrencyExRate() {
 }
 
 async function renderingChart() {
-  const currencyExRateRecordChartCurrencyId =
-    document.getElementById(`currencyExRateRecordChart${props.searchingParamsGot.currencyId}`) as HTMLCanvasElement;
+  const currencyExRateRecordChartCurrencyId = document.getElementById(
+    `currencyExRateRecordChart${props.searchingParamsGot.currencyId}`,
+  ) as HTMLCanvasElement;
 
   if (chartInstance) {
     chartInstance.destroy();
