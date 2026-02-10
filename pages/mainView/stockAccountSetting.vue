@@ -6,6 +6,8 @@
       <stockAccountData @dataReseaching="stockAccountSearching" />
       <template v-if="stockAccountList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="stockAccountList.length"
           :searchingPlaceholder="'搜尋帳戶名稱'"
           @tableSliceChange="settingTableSlice" />

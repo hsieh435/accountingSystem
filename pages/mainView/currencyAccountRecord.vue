@@ -9,6 +9,8 @@
       <currencyAccountTradeData @dataReseaching="searchingFinanceRecord" />
       <template v-if="currencyAccountRecord.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="currencyAccountRecordFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />

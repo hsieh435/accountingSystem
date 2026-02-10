@@ -6,6 +6,8 @@
       <storedValueCardData @dataReseaching="storedValueCardSearching" />
       <template v-if="storedValueCardList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="storedValueCardList.length"
           :searchingPlaceholder="'搜尋儲值票名稱'"
           @tableSliceChange="settingTableSlice" />

@@ -134,7 +134,7 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate, fetchCashFlowRecordDelete } from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCashFlow } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultCashFlow, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -156,14 +156,18 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
     cashflowId: "",
+    cashflowData: getDefaultCashFlow(),
     userId: "",
     tradeDatetime: "",
     accountType: "cashFlow",
     transactionType: "",
+    transactionCategoryData: getDefaultTransactionCategory(),
     tradeCategory: "",
+    tradeCategoryData: getDefaultTradeCategory(),
     tradeAmount: 0,
     remainingAmount: 0,
     currency: "",
+    currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
   },

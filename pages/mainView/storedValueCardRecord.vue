@@ -9,6 +9,8 @@
       <storedValueCardTradeData @dataReseaching="searchingFinanceRecord" />
       <template v-if="storedValueCardRecordList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="storedValueCardRecordListFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />

@@ -208,7 +208,7 @@ import {
   ICurrencyList,
   IResponse,
 } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultStockAccount } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultStockAccount, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

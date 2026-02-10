@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 // API response interface
 export interface IResponse {
   data?: any;
@@ -74,6 +76,11 @@ export interface IAccountSearchingParams {
   currencyId: string;
 }
 
+export interface ITransactionDate {
+  transactionCode: string;
+  transactionName: string;
+}
+
 // 搜尋收支紀錄參數 interface
 export interface IFinanceRecordSearchingParams {
   accountId: string;
@@ -111,17 +118,21 @@ export interface ICashFlowRecordList {
   tradeId: string;
   cashflowId: string;
   cashflowName?: string;
+  cashflowData?: ICashFlowList;
   enable?: boolean;
   userId: string;
   tradeDatetime: string;
   accountType: string;
   transactionType: string;
+  transactionCategoryData: ITransactionDate;
   transactionName?: string;
   tradeCategory: string;
+  tradeCategoryData: ITradeCategory;
   tradeName?: string;
   tradeAmount: number;
   remainingAmount: number;
   currency: string;
+  currencyData?: ICurrencyList;
   currencyName?: string;
   tradeDescription: string;
   tradeNote: string;

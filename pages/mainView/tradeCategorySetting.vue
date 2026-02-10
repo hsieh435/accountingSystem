@@ -3,6 +3,8 @@
     <tradeCategoryData @dataReseaching="searchingTradeCategoryList" />
     <template v-if="tradeCategoryList.length > 0">
       <ui-pagination
+        :currentPage="currentPage"
+        :dataPerpage="itemsPerPage"
         :totalDataQuanity="tradeCategoryList.length"
         :showFilter="false"
         @tableSliceChange="settingTableSlice"  />

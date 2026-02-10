@@ -9,6 +9,8 @@
       <cashFlowTradeData @dataReseaching="searchingFinanceRecord" />
       <template v-if="cashFlowRecord.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="cashFlowRecordFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />
@@ -113,7 +115,7 @@ async function searchingFinanceRecord() {
   // console.log("searchingParams:", searchingParams);
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
-    console.log("res:", res.data.data);
+    console.log("fetchCashFlowRecordList:", res.data.data);
     cashFlowRecord.value = res.data.data;
     await cashFlowRecordFilterEvent();
   } catch (error) {

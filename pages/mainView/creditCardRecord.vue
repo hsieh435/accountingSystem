@@ -8,6 +8,8 @@
       <creditCardTradeData @dataReseaching="searchingFinanceRecord" />
       <template v-if="creditCardRecord.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="creditCardRecordFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />

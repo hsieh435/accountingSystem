@@ -4,6 +4,9 @@ import {
   ICreditCardList,
   ICurrencyAccountList,
   IStockAccountList,
+  ICurrencyList,
+  ITradeCategory,
+  ITransactionDate,
 } from "@/models/index.ts";
 
 
@@ -40,6 +43,9 @@ export const getDefaultCashFlow = (): ICashFlowList => ({
   enable: false,
   createdDate: "",
   note: "",
+  expenseExpenditureCurrentMonth: 0,
+  incomeExpenditureCurrentMonth: 0,
+  profitLossExpenditureCurrentMonth: 0,
 });
 
 
@@ -59,6 +65,9 @@ export const getDefaultStoredValueCard = (): IStoredValueCardList => ({
   enable: false,
   createdDate: "",
   note: "",
+  expenseExpenditureCurrentMonth: 0,
+  incomeExpenditureCurrentMonth: 0,
+  profitLossExpenditureCurrentMonth: 0,
 });
 
 
@@ -102,6 +111,9 @@ export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
   enable: false,
   createdDate: "",
   note: "",
+  expenseExpenditureCurrentMonth: 0,
+  incomeExpenditureCurrentMonth: 0,
+  profitLossExpenditureCurrentMonth: 0,
 });
 
 
@@ -122,4 +134,37 @@ export const getDefaultStockAccount = (): IStockAccountList => ({
   enable: false,
   createdDate: "",
   note: "",
+  expenseExpenditureCurrentMonth: 0,
+  incomeExpenditureCurrentMonth: 0,
+  profitLossExpenditureCurrentMonth: 0,
 });
+
+
+
+export const getDefaultCurrency = (): ICurrencyList => ({
+  currencyCode: "",
+  currencyName: "",
+  currencySymbol: "",
+  minimumDenomination: 0,
+  sort: 0
+});
+
+
+
+export const getDefaultTradeCategory = (): ITradeCategory => ({
+  isCashflowAble: false,
+  isCreditcardAble: false,
+  isCuaccountAble: false,
+  isStaccountAble: false,
+  isStoredvaluecardAble: false,
+  sort: 0,
+  tradeCode: "",
+  tradeName: ""
+});
+
+
+
+export const getDefaultTransactionCategory= (): ITransactionDate => ({
+  transactionCode: "",
+  transactionName: "",
+})

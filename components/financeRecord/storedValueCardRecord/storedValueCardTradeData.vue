@@ -135,7 +135,7 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchStoredValueCardRecordById, fetchStoredValueCardRecordCreate, fetchStoredValueCardRecordUpdate, fetchStoredValueCardRecordDelete } from "@/server/storedValueCardRecordApi.ts";
 import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultStoredValueCard } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultStoredValueCard, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

@@ -11,6 +11,8 @@
     <div class="my-1 px-3">
       <template v-if="creditCardLimit.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="creditCardLimitFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />

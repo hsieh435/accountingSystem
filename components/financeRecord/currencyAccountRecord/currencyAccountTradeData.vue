@@ -128,7 +128,7 @@ import {
   fetchCurrencyAccountRecordDelete,
 } from "@/server/currencyAccountRecordApi.ts";
 import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCurrencyAccount } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultCurrencyAccount, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

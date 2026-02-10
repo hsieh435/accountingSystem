@@ -6,6 +6,8 @@
       <cashFlowData @dataReseaching="cashFlowSearching()" />
       <template v-if="cashFlowList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="cashFlowListFiltered.length"
           :showFilter="false"
           @tableSliceChange="settingTableSlice" />

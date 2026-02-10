@@ -6,6 +6,8 @@
       <currencyAccountsData @dataReseaching="currencyAccountSearching()" />
       <template v-if="currencyAccountList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="currencyAccountList.length"
           :searchingPlaceholder="'搜尋帳戶名稱'"
           @tableSliceChange="settingTableSlice" />

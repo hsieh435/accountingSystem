@@ -61,12 +61,6 @@ import { ISortArray } from "@/models/index.ts";
 
 const props = withDefaults(
   defineProps<{
-    pageParams?: {
-      currentPage?: number;
-      dataPerPage?: number;
-      pageArrayGot?: number[];
-      totalDataQuanity?: number;
-    };
     currentPage?: number;
     dataPerpage?: number;
     pageArrayGot?: number[];
@@ -86,12 +80,6 @@ const props = withDefaults(
     // filterMethod?: IFilterArray[];
   }>(),
   {
-    pageParams: () => ({
-      currentPage: 1,
-      dataPerPage: 1,
-      pageArrayGot: [20, 30, 50],
-      totalDataQuanity: 0,
-    }),
     currentPage: 1,
     dataPerpage: 1,
     pageArrayGot: () => [20, 30, 50],
@@ -190,6 +178,8 @@ watch(props, () => {
     itemsPerPage.value = perPageArray.value[0].value;
   }
   pageTarget.value = currentPage.value;
+}, {
+  deep: true,
 });
 
 watch([currentPage, itemsPerPage, keyWord], () => {

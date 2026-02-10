@@ -5,10 +5,10 @@
       <div class="relative bg-white rounded-3xl p-20">
         <div class="max-w-md mx-auto">
           <div>
-            <h1 class="text-2xl font-semibold">記帳系統登入</h1>
+            <h1 class="text-2xl font-semibold">Accounting System</h1>
           </div>
           <div class="divide-y divide-gray-200">
-            <div class="py-8 text-base leading-6 space-y-10 text-gray-700 text-lg leading-7">
+            <div class="text-base leading-6 space-y-10 text-gray-700 text-lg leading-7 py-8">
               <div class="relative">
                 <input
                   :class="inputClasses"

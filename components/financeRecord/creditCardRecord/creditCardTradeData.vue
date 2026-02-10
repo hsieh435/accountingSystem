@@ -119,7 +119,7 @@ import {
 import { fetchCreditCardLimit } from "@/server/creditCardApi.ts";
 import { fetchCreditCardMonthExpenditure } from "@/server/creditCardApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCreditCard } from "@/components/financeRecord/tradeDataTools.ts";
+import { getDefaultTradeValidate, getDefaultCreditCard, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
 import { yearMonthFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 

@@ -6,6 +6,8 @@
       <creditCardData @dataReseaching="creditCardSearching" />
       <template v-if="creditCardList.length > 0">
         <ui-pagination
+          :currentPage="currentPage"
+          :dataPerpage="itemsPerPage"
           :totalDataQuanity="creditCardList.length"
           :searchingPlaceholder="'搜尋信用卡名稱'"
           @tableSliceChange="settingTableSlice" />
