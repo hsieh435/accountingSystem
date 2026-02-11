@@ -34,11 +34,11 @@
               <div :class="tailwindStyles.getTbodyClasses()">
                 <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
                   <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.cashflowName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.cashflowData.cashflowName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionCategoryData.transactionName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeCategoryData.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.remainingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
@@ -46,6 +46,7 @@
                     <cashFlowTradeData
                       :cashflowIdGot="record.cashflowId"
                       :tradeIdGot="record.tradeId"
+                      :isEditable="record.cashflowData.enable"
                       @dataReseaching="searchingFinanceRecord" />
                   </div>
                 </div>
@@ -75,12 +76,8 @@ definePageMeta({
   subTitle: "現金收支",
 });
 
-const accountRecordSearching = defineAsyncComponent(
-  () => import("@/components/financeRecord/accountRecordSearching.vue"),
-);
-const cashFlowTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecord/cashFlowRecord/cashFlowTradeData.vue"),
-);
+const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecord/accountRecordSearching.vue"));
+const cashFlowTradeData = defineAsyncComponent(() => import("@/components/financeRecord/cashFlowRecord/cashFlowTradeData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

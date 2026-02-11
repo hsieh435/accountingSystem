@@ -29,8 +29,7 @@
               :disabled="props.tradeCodeGot.length > 0" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCode">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入交易代碼</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入交易代碼</span>
           </div>
         </div>
 
@@ -42,8 +41,7 @@
               v-model="dataParams.tradeName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeName">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入交易名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入交易名稱</span>
           </div>
         </div>
 
@@ -56,8 +54,7 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入排序</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入排序</span>
           </div>
         </div>
 
@@ -82,12 +79,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, watch } from "vue";
-import {
-  fetchTradeCategory,
-  fetchCreateTradeCategory,
-  fetchUpdateTradeCategory,
-  fetchDeleteTradeCategory,
-} from "@/server/parameterApi.ts";
+import { fetchTradeCategory, fetchCreateTradeCategory, fetchUpdateTradeCategory, fetchDeleteTradeCategory } from "@/server/parameterApi.ts";
 import { ITradeCategory, IResponse } from "@/models/index.ts";
 import { dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
@@ -116,12 +108,11 @@ const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultDataValidate
 
 watch(opentradecategorydata, () => {
   if (opentradecategorydata.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
     if (props.tradeCodeGot) {
       searchingTradeCategory();
     }
-  } else if (opentradecategorydata.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
   }
 });
 

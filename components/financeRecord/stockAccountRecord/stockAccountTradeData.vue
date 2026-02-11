@@ -11,7 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視證券帳戶收支'" />
-      <ui-buttonGroup showRemove :removeText="'刪除證券帳戶收支'" @dataRemove="deleteTradeRecord" />
+      <ui-buttonGroup :showRemove="props.isEditable" :removeText="'刪除證券帳戶收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增證券帳戶收支'" />
@@ -28,7 +28,7 @@
                 selectTargetId="isStaccountAble"
                 :accountIdGot="dataParams.updateData.accountId"
                 :sellectAll="false"
-                :isDisable="props.tradeIdGot ? true : false"
+                :isDisable="props.tradeIdGot ? true : props.isEditable"
                 @sendbackAccount="settingAccount" />
             </div>
           </div>
@@ -61,8 +61,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.transactionType">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-6 text-red-500 mx-2">請選擇買 / 賣</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇買 / 賣</span>
           </div>
         </div>
 
@@ -99,7 +98,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.stockNo && !props.tradeIdGot">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇股票</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇股票</span>
           </div>
         </div>
 
@@ -123,7 +122,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.pricePerShare || !dataValidate.quantity">
-            <span class="col-start-3 col-span-6 text-red-500">每股價格與股數需為正數</span>
+            <span class="col-span-4 col-end-7 text-red-500">每股價格與股數需為正數</span>
           </div>
         </div>
 
@@ -149,7 +148,7 @@
           <div
             class="flex justify-start items-center grid grid-cols-8"
             v-if="!dataValidate.handlingFee || !dataValidate.transactionTax">
-            <span class="col-start-3 col-span-4 text-red-500">手續費與交易稅不得為負</span>
+            <span class="col-span-4 col-end-7 text-red-500">手續費與交易稅不得為負</span>
           </div>
         </div>
 
@@ -177,16 +176,16 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-5" v-model="dataParams.updateData.tradeDescription" />
+          <UInput class="col-span-5" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-8">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-5" v-model="dataParams.updateData.tradeNote" />
+          <UTextarea class="col-span-5" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="stockAccountRecordDataHandling" />
+          <ui-buttonGroup :showSave="props.isEditable" @dataSave="stockAccountRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
@@ -201,14 +200,14 @@ import {
   fetchStockAccountRecordUpdate,
   fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
+import { IStockAccountRecordData, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
-  IStockAccountRecordData,
-  IStockAccountList,
-  IStockList,
-  ICurrencyList,
-  IResponse,
-} from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultStockAccount, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
+  getDefaultTradeValidate,
+  getDefaultStockAccount,
+  getDefaultCurrency,
+  getDefaultTradeCategory,
+  getDefaultTransactionCategory,
+} from "@/components/tradeParamsTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -219,9 +218,10 @@ const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string; isEditable?: boolean }>(), {
   tradeIdGot: "",
   accountIdGot: "",
+  isEditable: false,
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -230,10 +230,13 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
     accountId: props.accountIdGot,
+    accountData: getDefaultStockAccount(),
     tradeDatetime: "",
     accountUser: "",
     transactionType: "",
+    transactionCategoryData: getDefaultTransactionCategory(),
     tradeCategory: "",
+    tradeCategoryData: getDefaultTradeCategory(),
     stockNo: "",
     stockName: "",
     pricePerShare: 0,
@@ -244,6 +247,7 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
     tradeTotalPrice: 0,
     remainingAmount: 0,
     currency: "",
+    currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
   },
@@ -342,13 +346,16 @@ async function settingTotalPrice() {
 }
 
 async function settingRemainingAmount() {
-
   if (dataParams.updateData.transactionType === "income") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount - dataParams.oriData.oriTradeAmount + dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount -
+      dataParams.oriData.oriTradeAmount +
+      dataParams.updateData.tradeTotalPrice;
   } else if (dataParams.updateData.transactionType === "expense") {
     dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeTotalPrice;
+      stockAccountChosen.value.presentAmount +
+      dataParams.oriData.oriTradeAmount -
+      dataParams.updateData.tradeTotalPrice;
   }
 
   if (
@@ -434,17 +441,14 @@ async function stockAccountRecordDataHandling() {
   }
 }
 
-
-
 async function deleteTradeRecord() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除證券帳戶紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStockAccountRecordDelete,
     apiParams: {
       tradeId: props.tradeIdGot,
-      accountId: props.accountIdGot
+      accountId: props.accountIdGot,
     },
   });
 

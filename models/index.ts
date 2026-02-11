@@ -1,4 +1,3 @@
-import { Interface } from "readline";
 
 // API response interface
 export interface IResponse {
@@ -99,7 +98,7 @@ export interface ICashFlowList {
   cashflowName: string;
   createdDate: string;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   enable: boolean;
   expenseExpenditureCurrentMonth: number;
   incomeExpenditureCurrentMonth: number;
@@ -117,23 +116,19 @@ export interface ICashFlowRecordList {
   no?: number;
   tradeId: string;
   cashflowId: string;
-  cashflowName?: string;
-  cashflowData?: ICashFlowList;
-  enable?: boolean;
+  cashflowData: ICashFlowList;
   userId: string;
   tradeDatetime: string;
   accountType: string;
   transactionType: string;
   transactionCategoryData: ITransactionDate;
-  transactionName?: string;
   tradeCategory: string;
   tradeCategoryData: ITradeCategory;
   tradeName?: string;
   tradeAmount: number;
   remainingAmount: number;
   currency: string;
-  currencyData?: ICurrencyList;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -157,7 +152,7 @@ export interface IStoredValueCardList {
   accountType: string;
   storedValueCardName: string;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   startingAmount: number;
   presentAmount: number;
   minimumValueAllowed: number;
@@ -177,18 +172,17 @@ export interface IStoredValueCardRecordList {
   no?: number;
   tradeId: string;
   storedValueCardId: string;
-  storedValueCardName?: string;
-  enable?: boolean;
+  storedValueCardData: IStoredValueCardList;
   accountType: string;
   tradeDatetime: string;
   transactionType: string;
-  transactionName?: string;
+  transactionCategoryData: ITransactionDate;
   tradeCategory: string;
-  tradeName?: string;
+  tradeCategoryData: ITradeCategory;
   tradeAmount: number;
   remainingAmount: number;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   tradeDescription: string;
   tradeNote: string;
 }
@@ -215,7 +209,7 @@ export interface ICreditCardList {
   creditcardBankName: string;
   creditcardSchema: string;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   creditPerMonth: number;
   expirationDate: string;
   expenditureCurrentMonth: number;
@@ -231,16 +225,15 @@ export interface ICreditCardRecordList {
   no?: number;
   tradeId: string;
   creditCardId: string;
-  creditcardName?: string;
-  enable?: boolean;
+  creditcardData: ICreditCardList;
   tradeDatetime: string;
   userId: string;
   accountType: string;
   tradeCategory: string;
-  tradeName?: string;
+  tradeCategoryData: ITradeCategory;
   tradeAmount: number;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   remainingAmount: number;
   billMonth: string;
   tradeDescription: string;
@@ -276,7 +269,7 @@ export interface ICurrencyAccountList {
   accountBankCode: string;
   accountBankName: string;
   currency: string;
-  currencyName?: string;
+  currencyData: ICurrencyList;
   startingAmount: number;
   presentAmount: number;
   expenseExpenditureCurrentMonth: number;
@@ -296,21 +289,20 @@ export interface IcurrencyAccountRecordList {
   no?: number;
   tradeId: string;
   accountId: string;
-  accountName?: string;
-  enable?: boolean;
+  accountData: ICurrencyAccountList;
   tradeDatetime: string;
   accountUser: string;
   accountType: string;
   transactionType: string;
-  transactionName?: string;
   tradeCategory: string;
-  tradeName?: string;
   tradeAmount: number;
   remainingAmount: number;
   currency: string;
-  currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
+  currencyData: ICurrencyList;
+  transactionCategoryData: ITransactionDate;
+  tradeCategoryData: ITradeCategory;
 }
 
 // 存款帳戶收支紀錄新增、編輯 interface
@@ -335,6 +327,7 @@ export interface IStockAccountList {
   accountBankName: string;
   currency: string;
   currencyName?: string;
+  currencyData: ICurrencyList;
   startingAmount: number;
   presentAmount: number;
   expenseExpenditureCurrentMonth: number;
@@ -353,6 +346,7 @@ export interface IStockAccountRecordList {
   no?: number;
   tradeId: string;
   accountId: string;
+  accountData: IStockAccountList;
   tradeDatetime: string;
   accountUser: string;
   transactionType: string;
@@ -373,6 +367,9 @@ export interface IStockAccountRecordList {
   currencyName?: string;
   tradeDescription: string;
   tradeNote: string;
+  currencyData: ICurrencyList;
+  transactionCategoryData: ITransactionDate;
+  tradeCategoryData: ITradeCategory;
 }
 
 // 證券帳戶收支資料新增、編輯 interface

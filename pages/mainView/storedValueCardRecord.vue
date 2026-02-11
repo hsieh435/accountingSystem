@@ -34,11 +34,11 @@
               <div :class="tailwindStyles.getTbodyClasses()">
                 <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
                   <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.storedValueCardName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.storedValueCardData.storedValueCardName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionCategoryData.transactionName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeCategoryData.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.remainingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
@@ -46,8 +46,8 @@
                     <storedValueCardTradeData
                       :tradeIdGot="record.tradeId"
                       :storedValueCardIdGot="record.storedValueCardId"
+                      :isEditable="record.storedValueCardData.enable"
                       @dataReseaching="searchingFinanceRecord" />
-                    <!-- <ui-buttonGroup showRemove :removeText="'刪除儲值票卡收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>
@@ -76,12 +76,8 @@ definePageMeta({
   subTitle: "儲值票卡收支",
 });
 
-const accountRecordSearching = defineAsyncComponent(
-  () => import("@/components/financeRecord/accountRecordSearching.vue"),
-);
-const storedValueCardTradeData = defineAsyncComponent(
-  () => import("@/components/financeRecord/storedValueCardRecord/storedValueCardTradeData.vue"),
-);
+const accountRecordSearching = defineAsyncComponent(() => import("@/components/financeRecord/accountRecordSearching.vue"));
+const storedValueCardTradeData = defineAsyncComponent(() => import("@/components/financeRecord/storedValueCardRecord/storedValueCardTradeData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);
@@ -118,7 +114,7 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStoredValueCardRecordList(searchingParams);
-    console.log("fetchStoredValueCardRecordList:", res.data.data);
+    // console.log("fetchStoredValueCardRecordList:", res.data.data);
     storedValueCardRecordList.value = res.data.data;
     await storedValueCardRecordListFilterEvent();
   } catch (error) {

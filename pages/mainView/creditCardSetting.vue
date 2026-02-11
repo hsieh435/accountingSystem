@@ -41,7 +41,7 @@
                     {{ card.creditcardBankCode }} / {{ card.creditcardBankName }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.expenditureCurrentMonth) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">

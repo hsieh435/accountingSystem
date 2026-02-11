@@ -11,6 +11,23 @@ import {
 
 
 
+export const getDefaultAccountDataValidate = (): { [key: string]: boolean } => ({
+  cashflowName: true,
+  storedValueCardName: true,
+  creditcardName: true,
+  accountId: true,
+  accountName: true,
+  currency: true,
+  startingAmount: true,
+  minimumValueAllowed: true,
+  maximumValueAllowed: true,
+  alertValue: true,
+  creditcardSchema: true,
+  creditPerMonth: true,
+});
+
+
+
 export const getDefaultTradeValidate = (): { [key: string]: boolean } => ({
   cashflowId: true,
   storedValueCardId: true,
@@ -35,6 +52,7 @@ export const getDefaultCashFlow = (): ICashFlowList => ({
   cashflowName: "",
   accountType: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -56,6 +74,7 @@ export const getDefaultStoredValueCard = (): IStoredValueCardList => ({
   accountType: "",
   storedValueCardName: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -81,6 +100,7 @@ export const getDefaultCreditCard = (): ICreditCardList => ({
   creditcardBankName: "",
   creditcardSchema: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   creditPerMonth: 0,
   expirationDate: "",
   alertValue: 0,
@@ -101,7 +121,7 @@ export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
   accountBankCode: "",
   accountBankName: "",
   currency: "",
-  currencyName: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -126,6 +146,7 @@ export const getDefaultStockAccount = (): IStockAccountList => ({
   accountBankCode: "",
   accountBankName: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,

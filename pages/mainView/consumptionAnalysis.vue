@@ -92,23 +92,22 @@ definePageMeta({
 }
 .tabs ul {
   list-style-type: none;
-  padding-left: 0;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 10px;
+  padding-left: 0;
 }
 .tabs ul li {
+  text-align: center;
   box-sizing: border-box;
   flex: 1;
   width: 20%;
   padding: 0px 10px;
-  text-align: center;
 }
 .tabs ul li label {
-  transition: all 0.3s ease-in-out;
   color: rgb(146, 157, 175);
   padding: 5px auto;
   overflow: hidden;

@@ -72,6 +72,7 @@
               <tradeCategorySelect
                 accountType="isStoredvaluecardAble"
                 :tradeCategoryGot="dataParams.updateData.tradeCategory"
+                :isDisable="!props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
@@ -108,19 +109,19 @@
           <div class="w-fit">
             <dataBaseCurrencySelect
               :currencyIdGot="dataParams.updateData.currency"
-              isDisable
+              :isDisable="!props.isEditable"
               @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
         <div class="my-2">
@@ -133,9 +134,20 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchStoredValueCardRecordById, fetchStoredValueCardRecordCreate, fetchStoredValueCardRecordUpdate, fetchStoredValueCardRecordDelete } from "@/server/storedValueCardRecordApi.ts";
+import {
+  fetchStoredValueCardRecordById,
+  fetchStoredValueCardRecordCreate,
+  fetchStoredValueCardRecordUpdate,
+  fetchStoredValueCardRecordDelete,
+} from "@/server/storedValueCardRecordApi.ts";
 import { IStoredValueCardRecordData, IStoredValueCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultStoredValueCard, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
+import {
+  getDefaultTradeValidate,
+  getDefaultStoredValueCard,
+  getDefaultCurrency,
+  getDefaultTradeCategory,
+  getDefaultTransactionCategory,
+} from "@/components/tradeParamsTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -145,10 +157,14 @@ const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; storedValueCardIdGot?: string }>(), {
-  tradeIdGot: "",
-  storedValueCardIdGot: "",
-});
+const props = withDefaults(
+  defineProps<{ tradeIdGot?: string; storedValueCardIdGot?: string; isEditable?: boolean }>(),
+  {
+    tradeIdGot: "",
+    storedValueCardIdGot: "",
+    isEditable: false,
+  },
+);
 const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
@@ -156,13 +172,17 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
     storedValueCardId: props.storedValueCardIdGot || "",
+    storedValueCardData: getDefaultStoredValueCard(),
     accountType: "",
     tradeDatetime: "",
     transactionType: "",
+    transactionCategoryData: getDefaultTransactionCategory(),
     tradeCategory: "",
+    tradeCategoryData: getDefaultTradeCategory(),
     tradeAmount: 0,
     remainingAmount: 0,
     currency: "",
+    currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
   },
@@ -309,17 +329,14 @@ async function storedValueCardRecordDataHandling() {
   }
 }
 
-
-
 async function deleteTradeRecord() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除票卡記錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStoredValueCardRecordDelete,
     apiParams: {
       tradeId: props.tradeIdGot,
-      storedValueCardId: props.storedValueCardIdGot
+      storedValueCardId: props.storedValueCardIdGot,
     },
   });
 

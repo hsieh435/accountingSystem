@@ -36,11 +36,10 @@
                     {{ getCurrentYear(creditCard.limitYearMonth) }} / {{ getCurrentMonth(creditCard.limitYearMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <!-- {{ currencyFormat(creditCard.limitCredit) }} -->
                     <UInputNumber v-model="creditCard.creditPerMonth" orientation="vertical" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <ui-buttonGroup showRemove :removeText="'刪除信用卡'" @dataRemove="removeCreditcardData(creditCard)" />
+                    <ui-buttonGroup showSave :saveText="'修改額度'" @dataSave="adjustCreditCardLimit(creditCard)" />
                   </div>
                 </div>
               </div>
@@ -55,7 +54,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
+import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardLimit, fetchCreditCardLimitUpdate } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICreditCardLimitList, IResponse } from "@/models/index.ts";
 import { getCurrentYear, getCurrentMonth, sliceArray } from "@/composables/tools.ts";
@@ -83,6 +82,10 @@ const creditCardLimit = ref<ICreditCardLimitList[]>([]);
 const creditCardLimitFiltered = ref<ICreditCardLimitList[]>([]);
 const tableData = ref<ICreditCardLimitList[]>([]);
 
+onMounted(() => {
+  searchingLimit();
+});
+
 async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage: number }) {
   currentPage.value = sliceData.currentPage;
   itemsPerPage.value = sliceData.itemsPerPage;
@@ -98,7 +101,7 @@ async function settingAccountId(creditCard: ICreditCardList | null) {
 async function searchingLimit() {
   try {
     const res: IResponse = await fetchCreditCardLimit(searchCreditCard);
-    console.log("res:", res.data.data);
+    console.log("fetchCreditCardLimit:", res.data.data);
     creditCardLimit.value = res.data.data;
     await creditCardLimitFilterEvent();
   } catch (error) {
@@ -113,7 +116,8 @@ async function creditCardLimitFilterEvent() {
 
 
 
-async function removeCreditcardData(creditCard: ICreditCardLimitList) {
+async function adjustCreditCardLimit(creditCard: ICreditCardLimitList) {
+  console.log("creditCard:", creditCard);
   try {
     const res: IResponse = await fetchCreditCardLimitUpdate(creditCard);
     // console.log("fetchCreditCardLimitUpdate:", res.data.data);

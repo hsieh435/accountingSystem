@@ -29,8 +29,7 @@
               :disabled="props.currencyAccountIdGot ? true : false" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountId">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請填寫存款帳戶號碼</span>
+            <span class="col-span-4 col-end-7 text-red-500">請填寫存款帳戶號碼</span>
           </div>
         </div>
 
@@ -42,8 +41,7 @@
               v-model="dataParams.accountName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountName">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請填寫存款帳戶名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請填寫存款帳戶名稱</span>
           </div>
         </div>
 
@@ -72,8 +70,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇結算貨幣</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇結算貨幣</span>
           </div>
         </div>
 
@@ -93,8 +90,7 @@
                 orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
-              <span class="col-span-2 text-right"></span>
-              <span class="col-span-4 text-red-500 mx-2">{{ startingAmountValidateText }}</span>
+              <span class="col-span-4 col-end-7 text-red-500">{{ startingAmountValidateText }}</span>
             </div>
           </div>
         </template>
@@ -108,8 +104,7 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumValueAllowed">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ minimumValueAllowedValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ minimumValueAllowedValidateText }}</span>
           </div>
         </div>
 
@@ -122,14 +117,12 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ alertValueValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ alertValueValidateText }}</span>
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right">提醒：</span>
-          <USwitch v-model="dataParams.openAlert" />
+          <span class="col-span-2 text-right">提醒：</span><USwitch v-model="dataParams.openAlert" />
           <div class="flex justify-start items-center col-span-3">
             <UCheckbox label="薪資帳戶" v-model="dataParams.isSalaryAccount" size="xl" />
           </div>
@@ -164,7 +157,7 @@ import {
   fetchCurrencyAccountDelete,
 } from "@/server/currencyAccountApi.ts";
 import { ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
+import { getDefaultAccountDataValidate, getDefaultCurrency } from "@/components/tradeParamsTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -182,6 +175,7 @@ const getDefaultDataParams = (): ICurrencyAccountList => ({
   accountBankCode: "",
   accountBankName: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,
@@ -221,6 +215,7 @@ async function searchingCurrencyAccountData() {
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currencyData = currencyData;
   dataParams.currency = currencyData.currencyCode;
 }
 

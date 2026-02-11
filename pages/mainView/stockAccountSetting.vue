@@ -20,6 +20,7 @@
                   <div :class="tailwindStyles.getThClasses()">NO.</div>
                   <div :class="tailwindStyles.getThClasses()">帳戶名稱</div>
                   <div :class="tailwindStyles.getThClasses()">銀行代號 / 銀行名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">目前金額</div>
                   <div :class="tailwindStyles.getThClasses()">本月收入</div>
                   <div :class="tailwindStyles.getThClasses()">本月支出</div>
@@ -40,6 +41,7 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     {{ account.accountBankCode }} / {{ account.accountBankName }}
                   </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ account.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     {{ currencyFormat(account.incomeExpenditureCurrentMonth) }}

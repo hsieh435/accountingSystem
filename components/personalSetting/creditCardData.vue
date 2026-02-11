@@ -28,8 +28,7 @@
               v-model="dataParams.creditcardName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditcardName">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入信用卡名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入信用卡名稱</span>
           </div>
         </div>
 
@@ -59,8 +58,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditcardSchema">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇發卡機構</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇發卡機構</span>
           </div>
         </div>
 
@@ -75,8 +73,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇貨幣</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇貨幣</span>
           </div>
         </div>
 
@@ -90,8 +87,7 @@
               :disabled="props.creditCardIdGot ? true : false" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditPerMonth">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ creditPerMonthValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ creditPerMonthValidateText }}</span>
           </div>
         </div>
 
@@ -109,18 +105,15 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ alertValueValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ alertValueValidateText }}</span>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6 mb-2">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-start-3 col-end-6 text-left text-red-600">（ 每月消費額度累積提醒 ）</span>
+            <span class="col-span-4 col-end-7 text-red-500">（ 每月消費額度累積提醒 ）</span>
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right">提醒：</span>
-          <USwitch v-model="dataParams.openAlert" />
+          <span class="col-span-2 text-right">提醒：</span><USwitch v-model="dataParams.openAlert" />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
@@ -157,7 +150,7 @@ import {
   fetchCreditCardDelete,
 } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
+import { getDefaultAccountDataValidate, getDefaultCurrency } from "@/components/tradeParamsTools.ts";
 import { yearMonthDayTimeFormat, dataObjectValidate, getDaysInMonth } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -178,6 +171,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   creditcardBankName: "",
   creditcardSchema: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   creditPerMonth: 0,
   expenditureCurrentMonth: 0,
   expirationDate: "",
@@ -198,7 +192,6 @@ watch(openCreditCardData, () => {
     Object.assign(dataValidate, getDefaultAccountDataValidate());
     if (props.creditCardIdGot) {
       searchingCreditCardData();
-      // searchingcreditcardlimit();
     }
   }
 });
@@ -218,6 +211,7 @@ async function settingCreditcardSchema(schemaId: string) {
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currencyData = currencyData;
   dataParams.currency = currencyData.currencyCode;
 }
 
@@ -270,8 +264,6 @@ async function creditCardDataHandling() {
   }
 }
 
-
-
 async function removeCreditcardData() {
   const confirmResult = await showConfirmDialog({
     message: "即將刪除信用卡資料",
@@ -285,7 +277,5 @@ async function removeCreditcardData() {
     openCreditCardData.value = false;
   }
 }
-
-
 </script>
 <style lang="scss" scoped></style>

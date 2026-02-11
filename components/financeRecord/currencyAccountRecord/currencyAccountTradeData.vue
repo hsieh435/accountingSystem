@@ -11,7 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視銀行帳戶收支'" />
-      <ui-buttonGroup showRemove :removeText="'刪除銀行帳戶收支'" @dataRemove="deleteTradeRecord" />
+      <ui-buttonGroup :showRemove="props.isEditable" :removeText="'刪除銀行帳戶收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增銀行帳戶收支'" />
@@ -103,16 +103,16 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="currencyAccountRecordDataHandling" />
+          <ui-buttonGroup :showSave="props.isEditable" @dataSave="currencyAccountRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
@@ -128,7 +128,13 @@ import {
   fetchCurrencyAccountRecordDelete,
 } from "@/server/currencyAccountRecordApi.ts";
 import { IcurrencyAccountRecordData, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCurrencyAccount, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
+import {
+  getDefaultTradeValidate,
+  getDefaultCurrencyAccount,
+  getDefaultCurrency,
+  getDefaultTradeCategory,
+  getDefaultTransactionCategory,
+} from "@/components/tradeParamsTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -138,9 +144,10 @@ const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string; isEditable?: boolean }>(), {
   tradeIdGot: "",
   accountIdGot: "",
+  isEditable: false,
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -149,6 +156,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
     accountId: props.accountIdGot,
+    accountData: getDefaultCurrencyAccount(),
     tradeDatetime: "",
     accountUser: "",
     accountType: "",
@@ -157,8 +165,11 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
     tradeAmount: 0,
     remainingAmount: 0,
     currency: "",
+    currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
+    transactionCategoryData: getDefaultTransactionCategory(),
+    tradeCategoryData: getDefaultTradeCategory(),
   },
   oriData: {
     oriTradeDatetime: "",
@@ -242,7 +253,6 @@ async function settingRemainingAmount() {
       storedValueCardChosen.value.presentAmount + dataParams.oriData.oriTradeAmount - dataParams.updateData.tradeAmount;
   }
 
-
   if (
     openTradeData.value === true &&
     storedValueCardChosen.value.accountId.length > 0 &&
@@ -305,17 +315,14 @@ async function currencyAccountRecordDataHandling() {
   }
 }
 
-
-
 async function deleteTradeRecord() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除存款帳戶紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCurrencyAccountRecordDelete,
     apiParams: {
       tradeId: props.tradeIdGot,
-      accountId: props.accountIdGot
+      accountId: props.accountIdGot,
     },
   });
 
@@ -323,6 +330,5 @@ async function deleteTradeRecord() {
     emits("dataReseaching");
   }
 }
-
 </script>
 <style lang="scss" scoped></style>

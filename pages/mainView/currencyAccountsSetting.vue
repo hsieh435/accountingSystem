@@ -20,6 +20,7 @@
                   <div :class="tailwindStyles.getThClasses()">NO.</div>
                   <div :class="tailwindStyles.getThClasses()">帳戶名稱</div>
                   <div :class="tailwindStyles.getThClasses()">銀行代號 / 銀行名稱</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">目前金額</div>
                   <div :class="tailwindStyles.getThClasses()">本月收入</div>
                   <div :class="tailwindStyles.getThClasses()">本月支出</div>
@@ -41,6 +42,7 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     {{ account.accountBankCode }} / {{ account.accountBankName }}
                   </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ account.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     {{ currencyFormat(account.expenseExpenditureCurrentMonth) }}
@@ -82,11 +84,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import {
-  fetchCurrencyAccountList,
-  fetchEnableCurrencyAccount,
-  fetchDisableCurrencyAccount,
-} from "@/server/currencyAccountApi.ts";
+import { fetchCurrencyAccountList, fetchEnableCurrencyAccount, fetchDisableCurrencyAccount } from "@/server/currencyAccountApi.ts";
 import { IResponse, ICurrencyAccountList, IAccountSearchingParams } from "@/models/index.ts";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -100,9 +98,7 @@ definePageMeta({
 });
 
 const accountSearching = defineAsyncComponent(() => import("@/components/personalSetting/accountSearching.vue"));
-const currencyAccountsData = defineAsyncComponent(
-  () => import("@/components/personalSetting/currencyAccountsData.vue"),
-);
+const currencyAccountsData = defineAsyncComponent(() => import("@/components/personalSetting/currencyAccountsData.vue"));
 
 const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(20);

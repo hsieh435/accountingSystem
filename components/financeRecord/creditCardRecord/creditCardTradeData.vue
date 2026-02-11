@@ -11,7 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視信用卡花費'" />
-      <ui-buttonGroup showRemove :removeText="'刪除信用卡花費'" @dataRemove="deleteTradeRecord" />
+      <ui-buttonGroup :showRemove="props.isEditable" :removeText="'刪除信用卡花費'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增信用卡花費'" />
@@ -41,7 +41,9 @@
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
-              <dateTimeSelect :dateTimeGot="dataParams.updateData.tradeDatetime" @sendbackDateTime="settingTradeDatetime" />
+              <dateTimeSelect
+                :dateTimeGot="dataParams.updateData.tradeDatetime"
+                @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
@@ -101,7 +103,7 @@
         </div>
 
         <div class="my-2">
-          <ui-buttonGroup showSave @dataSave="creditCardRecordDataHandling" />
+          <ui-buttonGroup :showSave="props.isEditable" @dataSave="creditCardRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>
@@ -119,7 +121,12 @@ import {
 import { fetchCreditCardLimit } from "@/server/creditCardApi.ts";
 import { fetchCreditCardMonthExpenditure } from "@/server/creditCardApi.ts";
 import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCreditCard, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
+import {
+  getDefaultTradeValidate,
+  getDefaultCreditCard,
+  getDefaultCurrency,
+  getDefaultTradeCategory,
+} from "@/components/tradeParamsTools.ts";
 import { yearMonthFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -128,9 +135,10 @@ const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/u
 const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: string; isEditable?: boolean }>(), {
   tradeIdGot: "",
   creditCardIdGot: "",
+  isEditable: true,
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -138,13 +146,16 @@ const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): ICreditCardRecordData => ({
   updateData: {
     tradeId: props.tradeIdGot || "",
-    creditCardId: props.creditCardIdGot,
+    creditCardId: props.creditCardIdGot || "",
+    creditcardData: getDefaultCreditCard(),
     tradeDatetime: "",
     userId: "",
     accountType: "",
     tradeCategory: "",
+    tradeCategoryData: getDefaultTradeCategory(),
     tradeAmount: 0,
     currency: "",
+    currencyData: getDefaultCurrency(),
     billMonth: "",
     remainingAmount: 0,
     tradeDescription: "",
@@ -205,7 +216,6 @@ async function searchingCreditCardRecord() {
 }
 
 async function searchingcreditcardlimit() {
-
   try {
     const res: IResponse = await fetchCreditCardLimit({
       creditcardId: dataParams.updateData.creditCardId,
@@ -247,8 +257,7 @@ async function settingUsageAlert() {
   if (creditCardChosen.value.openAlert === true) {
     await creditcardmonthlyexpenditure();
     messageToast({
-      message:
-        `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
+      message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
       icon: "warning",
     });
   }
@@ -304,7 +313,7 @@ async function deleteTradeRecord() {
     executionApi: fetchCreditCardRecordDelete,
     apiParams: {
       tradeId: props.tradeIdGot,
-      creditCardId: props.creditCardIdGot
+      creditCardId: props.creditCardIdGot,
     },
   });
 

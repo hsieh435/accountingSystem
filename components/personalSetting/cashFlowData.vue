@@ -29,7 +29,7 @@
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowName">
             <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入現金流名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入現金流名稱</span>
           </div>
         </div>
 
@@ -44,8 +44,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currency">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請選擇貨幣</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇貨幣</span>
           </div>
         </div>
 
@@ -65,8 +64,7 @@
                 orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
-              <span class="col-span-2 text-right"></span>
-              <span class="col-span-4 text-red-500 mx-2">{{ startingAmountValidateText }}</span>
+              <span class="col-span-4 col-end-7 text-red-500">{{ startingAmountValidateText }}</span>
             </div>
           </div>
         </template>
@@ -80,8 +78,7 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumValueAllowed">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ minimumValueAllowedValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ minimumValueAllowedValidateText }}</span>
           </div>
         </div>
 
@@ -94,14 +91,12 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.alertValue">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ alertValueValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ alertValueValidateText }}</span>
           </div>
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right">提醒：</span>
-          <USwitch v-model="dataParams.openAlert" />
+          <span class="col-span-2 text-right">提醒：</span><USwitch v-model="dataParams.openAlert" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
@@ -128,7 +123,7 @@
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
 import { fetchCashFlowById, fetchCashFlowCreate, fetchCashFlowUpdate, fetchCashFlowDelete } from "@/server/cashFlowApi.ts";
 import { ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultAccountDataValidate } from "@/components/personalSetting/accountDataTools.ts";
+import { getDefaultAccountDataValidate, getDefaultCurrency } from "@/components/tradeParamsTools.ts";
 import { currencyFormat, yearMonthDayTimeFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
@@ -147,6 +142,7 @@ const getDefaultDataParams = (): ICashFlowList => ({
   accountType: "cashFlow",
   cashflowName: "",
   currency: "",
+  currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
   expenseExpenditureCurrentMonth: 0,
@@ -186,6 +182,7 @@ async function searchingCashflowData() {
 }
 
 function settingCurrency(currencyData: ICurrencyList) {
+  dataParams.currencyData = currencyData;
   dataParams.currency = currencyData.currencyCode;
 }
 

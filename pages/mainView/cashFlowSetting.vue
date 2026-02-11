@@ -41,7 +41,7 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.cashflowName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ cashFlow.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
@@ -123,7 +123,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function cashFlowSearching() {
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    // console.log("fetchCashFlowList:", res.data.data);
+    console.log("fetchCashFlowList:", res.data.data);
     cashFlowList.value = res.data.data;
     await cashFlowListFilterEvent();
   } catch (error) {

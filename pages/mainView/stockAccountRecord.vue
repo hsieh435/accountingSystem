@@ -23,14 +23,14 @@
                   <div :class="tailwindStyles.getThClasses()">交易時間</div>
                   <div :class="tailwindStyles.getThClasses()">收支</div>
                   <div :class="tailwindStyles.getThClasses()">項目</div>
+                  <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">股票</div>
-                  <div :class="tailwindStyles.getThClasses()">金額</div>
                   <div :class="tailwindStyles.getThClasses()">股數</div>
+                  <div :class="tailwindStyles.getThClasses()">金額</div>
                   <div :class="tailwindStyles.getThClasses()">手續費</div>
                   <div :class="tailwindStyles.getThClasses()">交易稅</div>
                   <div :class="tailwindStyles.getThClasses()">交易總額</div>
                   <div :class="tailwindStyles.getThClasses()">帳戶餘額</div>
-                  <div :class="tailwindStyles.getThClasses()">內容</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
@@ -38,22 +38,22 @@
                 <div :class="tailwindStyles.getTbodytrClasses()" v-for="record in tableData" :key="record.tradeId">
                   <div :class="tailwindStyles.getTdClasses()">{{ record.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(record.tradeDatetime) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.transactionCategoryData.transactionName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeCategoryData.tradeName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ record.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.stockNo + " " + record.stockName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.pricePerShare) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.quantity) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.handlingFee) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.transactionTax) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeTotalPrice) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.remainingAmount) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ record.tradeDescription }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.quantity) }} 股</div>
+                  <div :class="tailwindStyles.getTdClasses()">一股 {{ currencyFormat(record.pricePerShare) }} 元</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.handlingFee) }} 元</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.transactionTax) }} 元</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeTotalPrice) }} 元</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.remainingAmount) }} 元</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <stockAccountTradeData
                       :tradeIdGot="record.tradeId"
                       :accountIdGot="record.accountId"
+                      :isEditable="record.accountData.enable"
                       @dataReseaching="searchingFinanceRecord" />
-                    <!-- <ui-buttonGroup showRemove :removeText="'刪除證券帳戶收支'" v-if="record.enable" /> -->
                   </div>
                 </div>
               </div>

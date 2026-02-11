@@ -11,7 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視現金收支'" />
-      <ui-buttonGroup showRemove :removeText="'刪除現金收支'" @dataRemove="deleteTradeRecord" />
+      <ui-buttonGroup :showRemove="props.isEditable" :removeText="'刪除現金收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增現金收支'" />
@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.cashflowId">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇金流</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇金流</span>
           </div>
         </div>
 
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeDatetime">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇交易時間</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇交易時間</span>
           </div>
         </div>
 
@@ -61,7 +61,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.transactionType">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇收支</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇收支</span>
           </div>
         </div>
 
@@ -76,7 +76,7 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeCategory">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇收支項目</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇收支項目</span>
           </div>
         </div>
 
@@ -91,7 +91,7 @@
               @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
-            <span class="col-start-3 col-span-4 text-red-500">{{ tradeAmountValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ tradeAmountValidateText }}</span>
           </div>
         </div>
 
@@ -132,12 +132,22 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, watch } from "vue";
-import { fetchCashFlowRecordByTradeId, fetchCashFlowRecordCreate, fetchCashFlowRecordUpdate, fetchCashFlowRecordDelete } from "@/server/cashFlowRecordApi.ts";
+import {
+  fetchCashFlowRecordByTradeId,
+  fetchCashFlowRecordCreate,
+  fetchCashFlowRecordUpdate,
+  fetchCashFlowRecordDelete,
+} from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordData, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
-import { getDefaultTradeValidate, getDefaultCashFlow, getDefaultCurrency, getDefaultTradeCategory, getDefaultTransactionCategory } from "@/components/financeRecord/tradeDataTools.ts";
+import {
+  getDefaultTradeValidate,
+  getDefaultCashFlow,
+  getDefaultCurrency,
+  getDefaultTradeCategory,
+  getDefaultTransactionCategory,
+} from "@/components/tradeParamsTools.ts";
 import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
-
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
@@ -145,9 +155,10 @@ const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 
-const props = withDefaults(defineProps<{ tradeIdGot?: string; cashflowIdGot?: string }>(), {
+const props = withDefaults(defineProps<{ tradeIdGot?: string; cashflowIdGot?: string; isEditable?: boolean }>(), {
   tradeIdGot: "",
   cashflowIdGot: "",
+  isEditable: false,
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -215,7 +226,7 @@ async function searchingCashFlowRecord() {
 async function settingCashflowAccount(account: ICashFlowList | null) {
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
-  dataParams.updateData.currency = cashFlowChosen.value.currency
+  dataParams.updateData.currency = cashFlowChosen.value.currency;
   dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount;
   // console.log("cashFlowChosen:", cashFlowChosen.value);
 
@@ -330,17 +341,14 @@ async function cashFlowRecordDataHandling() {
   }
 }
 
-
-
 async function deleteTradeRecord() {
-
   const confirmResult = await showConfirmDialog({
     message: "即將刪除現金流紀錄",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowRecordDelete,
     apiParams: {
       tradeId: props.tradeIdGot,
-      cashflowId: props.cashflowIdGot
+      cashflowId: props.cashflowIdGot,
     },
   });
 

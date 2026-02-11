@@ -42,7 +42,7 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.storedValueCardName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ card.currencyName }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ card.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.startingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>

@@ -30,8 +30,7 @@
               type="search" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currencyCode">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入貨幣代碼</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入貨幣代碼</span>
           </div>
         </div>
 
@@ -44,8 +43,7 @@
               type="search" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currencyName">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入貨幣名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入貨幣名稱</span>
           </div>
         </div>
 
@@ -58,8 +56,7 @@
               type="search" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.currencySymbol">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入貨幣符號</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入貨幣符號</span>
           </div>
         </div>
 
@@ -72,8 +69,7 @@
               orientation="vertical" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.minimumDenomination">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入最小面額</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入最小面額</span>
           </div>
         </div>
 
@@ -87,8 +83,7 @@
               :step="1" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.sort">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入排序</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入排序</span>
           </div>
         </div>
 
@@ -102,12 +97,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, watch } from "vue";
-import {
-  fetchCurrencyByCurrencyCode,
-  fetchCurrencyCreate,
-  fetchCurrencyUpdate,
-  fetchCurrencyDelete,
-} from "@/server/parameterApi.ts";
+import { fetchCurrencyByCurrencyCode, fetchCurrencyCreate, fetchCurrencyUpdate, fetchCurrencyDelete } from "@/server/parameterApi.ts";
 import { ICurrencyList, IResponse } from "@/models/index.ts";
 import { dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
@@ -135,12 +125,11 @@ const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultDataValidate
 
 watch(opencurrencydata, () => {
   if (opencurrencydata.value === true) {
+    Object.assign(dataParams, getDefaultDataParams());
+    Object.assign(dataValidate, getDefaultDataValidate());
     if (props.currencyCodeGot) {
       searchingCurrencyData();
     }
-  } else if (opencurrencydata.value === false) {
-    Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultDataValidate());
   }
 });
 
