@@ -49,6 +49,13 @@ export async function fetchCreditCardLimit(data: { creditcardId: string; yearMon
   return await response.json();
 }
 
+export async function fetchCreditCardLimitCreate(data: ICreditCardLimitList) {
+  const response = await apiFetch("/api/creditCard/limitIncrease", "POST", {
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
 export async function fetchCreditCardLimitUpdate(data: ICreditCardLimitList) {
   const response = await apiFetch("/api/creditCard/limitUpdate", "POST", {
     body: JSON.stringify(data),
