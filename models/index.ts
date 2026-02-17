@@ -117,6 +117,8 @@ export interface ICashFlowRecordList {
   tradeId: string;
   cashflowId: string;
   cashflowData: ICashFlowList;
+  createdDatetime: string;
+  editedDatetime: string;
   userId: string;
   tradeDatetime: string;
   accountType: string;
@@ -185,6 +187,8 @@ export interface IStoredValueCardRecordList {
   currencyData: ICurrencyList;
   tradeDescription: string;
   tradeNote: string;
+  createdDatetime: string;
+  editedDatetime: string;
 }
 
 // 儲值票卡收支資料新增、編輯 interface
@@ -238,6 +242,8 @@ export interface ICreditCardRecordList {
   billMonth: string;
   tradeDescription: string;
   tradeNote: string;
+  createdDatetime: string;
+  editedDatetime: string;
 }
 
 // 信用卡收支資料新增、編輯 interface
@@ -303,6 +309,8 @@ export interface IcurrencyAccountRecordList {
   currencyData: ICurrencyList;
   transactionCategoryData: ITransactionDate;
   tradeCategoryData: ITradeCategory;
+  createdDatetime: string;
+  editedDatetime: string;
 }
 
 // 存款帳戶收支紀錄新增、編輯 interface
@@ -370,6 +378,8 @@ export interface IStockAccountRecordList {
   currencyData: ICurrencyList;
   transactionCategoryData: ITransactionDate;
   tradeCategoryData: ITradeCategory;
+  createdDatetime: string;
+  editedDatetime: string;
 }
 
 // 證券帳戶收支資料新增、編輯 interface
