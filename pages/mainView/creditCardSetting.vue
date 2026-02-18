@@ -112,7 +112,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function creditCardSearching() {
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
-    // console.log("fetchCreditCardList:", res.data.data);
+    console.log("fetchCreditCardList:", res.data.data);
     creditCardList.value = res.data.data;
     await creditCardListFilterEvent();
   } catch (error) {

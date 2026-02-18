@@ -181,6 +181,8 @@ const getDefaultDataParams = (): ICashFlowRecordData => ({
     currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
+    createdDatetime: "",
+    editedDatetime: "",
   },
   oriData: {
     oriTradeDatetime: "",

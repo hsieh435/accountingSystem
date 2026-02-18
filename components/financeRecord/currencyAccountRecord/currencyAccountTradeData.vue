@@ -170,6 +170,8 @@ const getDefaultDataParams = (): IcurrencyAccountRecordData => ({
     tradeNote: "",
     transactionCategoryData: getDefaultTransactionCategory(),
     tradeCategoryData: getDefaultTradeCategory(),
+    createdDatetime: "",
+    editedDatetime: "",
   },
   oriData: {
     oriTradeDatetime: "",

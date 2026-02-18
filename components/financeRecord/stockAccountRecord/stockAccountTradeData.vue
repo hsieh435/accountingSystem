@@ -250,6 +250,8 @@ const getDefaultDataParams = (): IStockAccountRecordData => ({
     currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
+    createdDatetime: "",
+    editedDatetime: "",
   },
   oriData: {
     oriTradeDatetime: "",

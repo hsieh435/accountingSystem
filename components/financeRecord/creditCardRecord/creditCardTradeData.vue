@@ -160,6 +160,8 @@ const getDefaultDataParams = (): ICreditCardRecordData => ({
     remainingAmount: 0,
     tradeDescription: "",
     tradeNote: "",
+    createdDatetime: "",
+    editedDatetime: "",
   },
   oriData: {
     oriTradeDatetime: "",

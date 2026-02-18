@@ -185,6 +185,8 @@ const getDefaultDataParams = (): IStoredValueCardRecordData => ({
     currencyData: getDefaultCurrency(),
     tradeDescription: "",
     tradeNote: "",
+    createdDatetime: "",
+    editedDatetime: "",
   },
   oriData: {
     oriTradeDatetime: "",
