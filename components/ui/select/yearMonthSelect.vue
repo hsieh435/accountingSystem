@@ -46,7 +46,7 @@ const maxDate = computed(() => {
 });
 
 onMounted(() => {
-  // console.log("onMounted props:", props);
+  console.log("onMounted props:", props);
   if (props.yearMonthGot) {
     const date = new Date(props.yearMonthGot);
     selectedYear.value = date.getFullYear();
@@ -57,9 +57,16 @@ onMounted(() => {
   emits("sendbackYearMonth", selectedYear.value, selectedMonth.value);
 });
 
-// watch(props, () => {
-//   console.log("watch props:", props);
-// });
+watch(props, () => {
+  console.log("watch props:", props);
+  if (props.yearMonthGot) {
+    const date = new Date(props.yearMonthGot);
+    selectedYear.value = date.getFullYear();
+    selectedMonth.value = date.getMonth() + 1;
+    selectedYearMonth.value.year = selectedYear.value;
+    selectedYearMonth.value.month = selectedMonth.value - 1;
+  }
+});
 
 watch(selectedYearMonth, () => {
   // console.log("watch selectedYearMonth:", selectedYearMonth.value.year, selectedYearMonth.value.month + 1);

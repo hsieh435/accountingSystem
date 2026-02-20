@@ -8,6 +8,8 @@
       partial-flow
       year-first
       format="yyyy/MM/dd HH:mm"
+      :min-date="props.minDateTime ? new Date(props.minDateTime) : undefined"
+      :max-date="props.maxDateTime ? new Date(props.maxDateTime) : undefined"
       locale="zh-TW"
       week-start="0"
       :day-names="['日', '一', '二', '三', '四', '五', '六']"
@@ -39,13 +41,20 @@ onMounted(async () => {
   dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
 });
 
-watch(
-  () => props,
-  () => {
-    // console.log("watch props:", props);
-    dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
-  },
-  {
+watch(() => props, () => {
+  console.log("watch props:", props);
+
+  dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
+
+  if (props.minDateTime && new Date(props.minDateTime).getTime() > dateTimeString.value) {
+    dateTimeString.value = new Date(props.minDateTime).getTime();
+  }
+
+  if (props.maxDateTime && new Date(props.maxDateTime).getTime() < dateTimeString.value) {
+    dateTimeString.value = new Date(props.maxDateTime).getTime();
+  }
+
+  }, {
     deep: true,
   },
 );

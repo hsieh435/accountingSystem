@@ -113,12 +113,17 @@
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
-          <span class="col-span-2 text-right">提醒：</span><USwitch v-model="dataParams.openAlert" />
+          <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>開始年月：</span>
+          <yearMonthSelect :yearMonthGot="dataParams.startDate" @sendbackYearMonth="settingStartDate" />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
-          <yearMonthComponent :yearMonthGot="dataParams.expirationDate" @sendbackYearMonth="settingExpirationDate" />
+          <yearMonthSelect :yearMonthGot="dataParams.expirationDate" @sendbackYearMonth="settingExpirationDate" />
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">提醒：</span><USwitch v-model="dataParams.openAlert" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
@@ -156,7 +161,7 @@ import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/ui/select/creditCardSchemaSelect.vue"));
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const yearMonthComponent = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
+const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
 
 const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
 const emits = defineEmits(["dataReseaching"]);
@@ -174,6 +179,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   currencyData: getDefaultCurrency(),
   creditPerMonth: 0,
   expenditureCurrentMonth: 0,
+  startDate: "",
   expirationDate: "",
   alertValue: 0,
   openAlert: false,
@@ -215,8 +221,13 @@ function settingCurrency(currencyData: ICurrencyList) {
   dataParams.currency = currencyData.currencyCode;
 }
 
+async function settingStartDate(year: number, month: number) {
+  dataParams.startDate = `${year}-${month}-01 00:00:00.000`;
+}
+
 async function settingExpirationDate(year: number, month: number) {
-  dataParams.expirationDate = `${year}-${month.toString().padStart(2, "0")}-${getDaysInMonth(year, month).toString().padStart(2, "0")} 00:00:00`;
+  dataParams.expirationDate =
+    `${year}-${month}-${getDaysInMonth(year, month).toString().padStart(2, "0")} 23:59:59.999`;
 }
 
 async function validateData() {

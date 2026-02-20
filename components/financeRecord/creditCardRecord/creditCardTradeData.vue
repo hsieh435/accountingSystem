@@ -43,6 +43,7 @@
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
                 :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :maxDateTime="creditCardExpirationDate"
                 @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
@@ -174,6 +175,7 @@ const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidat
 const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
 const spendCalculation = ref<number>(0);
 const limitCurrentMonth = ref<number>(0);
+const creditCardExpirationDate = ref<string>("");
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
 
@@ -183,6 +185,7 @@ watch(openTradeData, () => {
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(creditCardChosen, getDefaultCreditCard());
     tradeAmountValidateText.value = "";
+    creditCardExpirationDate.value = "";
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     }
@@ -223,17 +226,19 @@ async function searchingcreditcardlimit() {
       creditcardId: dataParams.updateData.creditCardId,
       yearMonth: yearMonthFormat(dataParams.updateData.tradeDatetime),
     });
-    // console.log("res:", res.data.data);
-    limitCurrentMonth.value = res.data.data[0].limitCredit || 0;
+    console.log("fetchCreditCardLimit:", res.data.data);
+    limitCurrentMonth.value = res.data.data[0]?.limitCredit || 0;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
 async function settingCreditCardAccount(account: ICreditCardList | null) {
+  console.log("account:", account);
   creditCardChosen.value = account || getDefaultCreditCard();
   dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
   dataParams.updateData.currency = creditCardChosen.value.currency || "";
+  creditCardExpirationDate.value = creditCardChosen.value.expirationDate || "";
   await searchingcreditcardlimit();
   await settingUsageAlert();
 }

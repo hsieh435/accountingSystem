@@ -6,7 +6,6 @@
         <accountSelect :selectTargetId="'isCreditcardAble'" :sellectAll="true" @sendbackAccount="settingAccountId" />
       </div>
       <ui-buttonGroup showSearch @dataSearch="searchingLimit()" />
-      <!-- <ui-buttonGroup showCreate :createText="'設定每月額度'" @dataCreate="increaseLimit()" :createDisable="!searchCreditCard.creditcardId" /> -->
     </div>
 
     <div class="my-1 px-3">
@@ -56,7 +55,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
-import { fetchCreditCardLimit, fetchCreditCardLimitCreate, fetchCreditCardLimitUpdate } from "@/server/creditCardApi.ts";
+import { fetchCreditCardLimit, fetchCreditCardLimitUpdate } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICreditCardLimitList, IResponse } from "@/models/index.ts";
 import { getCurrentYear, getCurrentMonth, sliceArray } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
@@ -114,19 +113,6 @@ async function creditCardLimitFilterEvent() {
   creditCardLimitFiltered.value = creditCardLimit.value;
   tableData.value = sliceArray(creditCardLimitFiltered.value, currentPage.value, itemsPerPage.value);
 }
-
-
-
-// async function increaseLimit() {
-//   try {
-//     const res: IResponse = await fetchCreditCardLimitCreate(searchCreditCard);
-//     // console.log("fetchCreditCardLimitCreate:", res.data.data);
-//     messageToast({ message: res.data.message, icon: "success" });
-//     await searchingLimit();
-//   } catch (error) {
-//     messageToast({ message: (error as Error).message, icon: "error" });
-//   }
-// }
 
 
 

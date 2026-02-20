@@ -215,6 +215,7 @@ export interface ICreditCardList {
   currency: string;
   currencyData: ICurrencyList;
   creditPerMonth: number;
+  startDate: string;
   expirationDate: string;
   expenditureCurrentMonth: number;
   alertValue: number;
