@@ -43,6 +43,7 @@
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
                 :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :isDisabled="!props.isEditable"
                 @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
@@ -57,6 +58,7 @@
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
                 :transactionType="dataParams.updateData.transactionType"
+                :isDisabled="!props.isEditable"
                 @sendbackTransactionType="settingTransactionType" />
             </div>
           </div>
@@ -72,6 +74,7 @@
               <tradeCategorySelect
                 accountType="isCashflowAble"
                 :tradeCategoryGot="dataParams.updateData.tradeCategory"
+                :isEditable="props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
@@ -88,6 +91,7 @@
               v-model="dataParams.updateData.tradeAmount"
               orientation="vertical"
               :min="0"
+              :disabled="!props.isEditable"
               @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
@@ -114,15 +118,15 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" />
+          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" />
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
-        <div class="my-2">
+        <div class="my-2" v-if="props.isEditable">
           <ui-buttonGroup showSave @dataSave="cashFlowRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
@@ -285,10 +289,10 @@ async function settingRemainingAmount() {
   } else {
     dataParams.oriData.oriRemainingAmount = dataParams.updateData.remainingAmount;
   }
-  console.log("type:", dataParams.updateData.transactionType);
-  console.log("presentAmount:", cashFlowChosen.value.presentAmount);
-  console.log("oriTradeAmount:", dataParams.oriData.oriTradeAmount);
-  console.log("tradeAmount:", dataParams.updateData.tradeAmount);
+  // console.log("type:", dataParams.updateData.transactionType);
+  // console.log("presentAmount:", cashFlowChosen.value.presentAmount);
+  // console.log("oriTradeAmount:", dataParams.oriData.oriTradeAmount);
+  // console.log("tradeAmount:", dataParams.updateData.tradeAmount);
 
   if (
     openTradeData.value === true &&

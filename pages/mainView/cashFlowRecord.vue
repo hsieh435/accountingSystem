@@ -86,7 +86,7 @@ const searchingParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
   currencyId: "",
   tradeCategory: "",
-  startingDate: getCurrentYear() + "-01-01 00:00:00.001",
+  startingDate: getCurrentYear() + "-01-01 00:00:00.000",
   endDate: getCurrentYear() + "-12-31 23:59:59.999",
 });
 const cashFlowRecord = ref<ICashFlowRecordList[]>([]);

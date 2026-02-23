@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   ssr: true, // 默認開啟 SSR，如果要禁用 SSR 可以設為 false
   app: {
     head: {
-      title: "記帳系統",
+      title: "Accounting System",
     },
   },
   compatibilityDate: "2025-05-15",

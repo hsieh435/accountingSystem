@@ -82,7 +82,7 @@ const searchingParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
   currencyId: "",
   tradeCategory: "",
-  startingDate: getCurrentYear() + "-01-01 00:00:00.001",
+  startingDate: getCurrentYear() + "-01-01 00:00:00.000",
   endDate: getCurrentYear() + "-12-31 23:59:59.999",
 });
 const creditCardRecord = ref<ICreditCardRecordList[]>([]);
@@ -100,18 +100,14 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  searchingParams.accountId = params.accountId;
-  searchingParams.currencyId = params.currencyId;
-  searchingParams.tradeCategory = params.tradeCategory;
-  searchingParams.startingDate = params.startingDate;
-  searchingParams.endDate = params.endDate;
+  Object.assign(searchingParams, params);
   await searchingFinanceRecord();
 }
 
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchingParams);
-    // console.log("fetchCreditCardRecordList:", res.data.data);
+    console.log("fetchCreditCardRecordList:", res.data.data);
     creditCardRecord.value = res.data.data;
     await creditCardRecordFilterEvent();
   } catch (error) {

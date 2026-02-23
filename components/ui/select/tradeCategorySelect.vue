@@ -1,5 +1,5 @@
 <template>
-  <select :class="tailwindStyles.getSelectClasses()" v-model="tradeCategoryId">
+  <select :class="tailwindStyles.getSelectClasses()" v-model="tradeCategoryId" :disabled="!props.isEditable">
     <option v-for="category in tradeCategoryListFiltered" :key="category.value" :value="category.value">
       {{ category.label }}
     </option>
@@ -12,10 +12,11 @@ import { fetchTradeCategoryList } from "@/server/parameterApi.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
-const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?: string; sellectAll?: boolean }>(), {
+const props = withDefaults(defineProps<{ accountType?: string; tradeCategoryGot?: string; sellectAll?: boolean; isEditable?: boolean }>(), {
   accountType: "",
   tradeCategoryGot: "",
   sellectAll: true,
+  isEditable: false,
 });
 const emits = defineEmits(["sendbackTradeCategory"]);
 

@@ -3,7 +3,7 @@
     <div class="bg-sky-200">
       <!-- <UNavigationMenu :items="navbarMenuList" contentOrientation="vertical" trailingIcon="i-lucide-arrow-down" /> -->
 
-      <nav class="flex border-t shadow-lg relative px-4">
+      <nav class="flex shadow-lg relative px-4">
         <ul
           class="flex absolute top-full left-0 relative py-2"
           v-for="(functionGroup, functionGroupIndex) in navbarMenuList"

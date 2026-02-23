@@ -5,13 +5,10 @@
       <accountSelect :selectTargetId="props.accountTypeId" :sellectAll="false" @sendbackAccount="settingAccountId" />
     </div>
 
-    <div class="flex items-center">
+    <!-- <div class="flex items-center">
       <span>貨幣：</span>
-      <dataBaseCurrencySelect
-        :currencyIdGot="searchParams.currencyId"
-        :isDisable="searchParams.accountId.length > 0"
-        @sendbackCurrencyData="settingCurrency" />
-    </div>
+      <dataBaseCurrencySelect :currencyIdGot="searchParams.currencyId" :isDisable="searchParams.accountId.length > 0" @sendbackCurrencyData="settingCurrency" />
+    </div> -->
 
     <div class="flex items-center">
       <span>收支類型：</span>
@@ -36,7 +33,7 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, reactive } from "vue";
-import { IFinanceRecordSearchingParams, ICurrencyList } from "@/models/index.ts";
+import { IFinanceRecordSearchingParams } from "@/models/index.ts";
 import { getCurrentYear } from "@/composables/tools.ts";
 
 const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName?: string }>(), {
@@ -46,7 +43,7 @@ const props = withDefaults(defineProps<{ accountTypeId?: string; accountTypeName
 const emits = defineEmits(["sendbackSearchingParams"]);
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
+// const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
@@ -54,30 +51,34 @@ const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
   currencyId: "",
   tradeCategory: "",
-  startingDate: getCurrentYear() + "-01-01 00:00:00.001",
+  startingDate: getCurrentYear() + "-01-01 00:00:00.000",
   endDate: getCurrentYear() + "-12-31 23:59:59.999",
 });
 
 async function settingAccountId(accountItem: any | null) {
-  // console.log("accountItem:", accountItem);
+  console.log("accountItem:", accountItem);
   searchParams.accountId = accountItem?.pkValue || "";
   searchParams.currencyId = accountItem?.currency || "";
+  // await searchingRecord();
 }
 
-async function settingCurrency(currencyData: ICurrencyList) {
-  searchParams.currencyId = currencyData.currencyCode;
-}
+// async function settingCurrency(currencyData: ICurrencyList) {
+//   searchParams.currencyId = currencyData.currencyCode;
+// }
 
 async function settingTradeCategory(tradeCategorySendback: string) {
   searchParams.tradeCategory = tradeCategorySendback;
+  // await searchingRecord();
 }
 
 async function settingSettingDate(dateSendback: string) {
-  searchParams.startingDate = dateSendback + " 00:00:00.001";
+  searchParams.startingDate = dateSendback + " 00:00:00.000";
+  // await searchingRecord();
 }
 
 async function settingEndDate(dateSendback: string) {
   searchParams.endDate = dateSendback + " 23:59:59.999";
+  // await searchingRecord();
 }
 
 async function searchingRecord() {

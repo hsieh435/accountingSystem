@@ -44,8 +44,7 @@ onMounted(async () => {
 watch(accountId, () => {
   if (accountId.value.length > 0) {
     const selectedItem = oriAccountList.value.find((item) => item.pkValue === accountId.value);
-    // console.log("accountId:", accountId.value);
-    // console.log("selectedItem:", selectedItem);
+    // console.log("accountId:", accountId.value, "selectedItem:", selectedItem);
     emits("sendbackAccount", selectedItem);
   } else {
     emits("sendbackAccount", null);
@@ -112,7 +111,8 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
   }));
   // console.log("oriAccountList:", oriAccountList.value);
   return res.data.data.map((item: any) => ({
-    label: item[config.nameField],
+    // label: item[config.nameField],
+    label: item[config.nameField] + "（" + item.currencyData.currencyName + "）",
     value: item[config.pkField],
   }));
 }
