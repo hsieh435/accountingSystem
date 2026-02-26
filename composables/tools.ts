@@ -42,7 +42,7 @@ export function jwtTokenEncoded(str: string) {
   };
 }
 
-// 西元年日期格式 yyyy / mm / dd hh:mm:ss 或 yyyy / mm / dd
+// 依照系統語言呈現西元年日期格式，時間以 24 小時制呈現
 export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTime: boolean = true): string {
   // const localDate = new Date();
   // 轉換為 UTC 字串
@@ -52,23 +52,25 @@ export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTi
   const date = new Date(dateString);
   if (isNaN(date.getTime()) || !dateString) return "";
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
+  // const year = date.getFullYear();
+  // const month = String(date.getMonth() + 1).padStart(2, "0");
+  // const day = String(date.getDate()).padStart(2, "0");
+  // const hours = String(date.getHours()).padStart(2, "0");
+  // const minutes = String(date.getMinutes()).padStart(2, "0");
+  // const seconds = String(date.getSeconds()).padStart(2, "0");
 
-  return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}:${seconds}` : `${year} / ${month} / ${day}`;
+  // return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}:${seconds}` : `${year} / ${month} / ${day}`;
+  return hasTime ? date.toLocaleString([], { hour12: false }) : date.toLocaleDateString();
 }
 
-// 取得日期格式 yyyy-mm-dd 或今日日期
+// 取得日期格式或今日日期
 export function getCurrentYMD(dateInput: string | number = ""): string {
   const date = dateInput ? new Date(dateInput) : new Date();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const dayofMonth = String(date.getDate()).padStart(2, "0");
+  // const month = String(date.getMonth() + 1).padStart(2, "0");
+  // const dayofMonth = String(date.getDate()).padStart(2, "0");
 
-  return `${date.getFullYear()}-${month}-${dayofMonth}`;
+  // return `${date.getFullYear()}-${month}-${dayofMonth}`;
+  return date.toLocaleDateString();
 }
 
 // 取得西元年月格式 yyyy-mm
@@ -115,7 +117,8 @@ export function dateMove(dateStr: string, days: number = 0): string {
 
 // 金額，三位一撇
 export function currencyFormat(numberGot: number) {
-  return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
+  // return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
+  return typeof numberGot === "number" ? new Intl.NumberFormat("").format(numberGot) : "";
 }
 
 // 數字，限制只能為正整數，並移除開頭 0

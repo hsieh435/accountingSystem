@@ -11,7 +11,7 @@
     }">
     <template v-if="props.tradeIdGot">
       <ui-buttonGroup showView :viewText="'檢視儲值票卡收支'" />
-      <ui-buttonGroup showRemove :removeText="'刪除儲值票卡收支'" @dataRemove="deleteTradeRecord" />
+      <ui-buttonGroup :showRemove="props.isEditable" :removeText="'刪除儲值票卡收支'" @dataRemove="deleteTradeRecord" />
     </template>
     <template v-if="!props.tradeIdGot">
       <ui-buttonGroup showCreate :createText="'新增儲值票卡收支'" />
@@ -43,6 +43,7 @@
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
                 :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :isDisabled="!props.isEditable"
                 @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
@@ -57,6 +58,7 @@
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
                 :transactionType="dataParams.updateData.transactionType"
+                :isDisabled="!props.isEditable"
                 @sendbackTransactionType="settingTransactionType" />
             </div>
           </div>
@@ -72,7 +74,7 @@
               <tradeCategorySelect
                 accountType="isStoredvaluecardAble"
                 :tradeCategoryGot="dataParams.updateData.tradeCategory"
-                :isDisable="!props.isEditable"
+                :isEditable="props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
@@ -90,6 +92,7 @@
               orientation="vertical"
               :min="0"
               :step="setStep"
+              :disabled="!props.isEditable"
               @update:modelValue="settingRemainingAmount()" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
@@ -107,10 +110,7 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect
-              :currencyIdGot="dataParams.updateData.currency"
-              :isDisable="!props.isEditable"
-              @sendbackCurrencyData="settingCurrency" />
+            <dataBaseCurrencySelect :currencyIdGot="dataParams.updateData.currency" isDisable @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
@@ -124,7 +124,7 @@
           <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
-        <div class="my-2">
+        <div class="my-2" v-if="props.isEditable">
           <ui-buttonGroup showSave @dataSave="storedValueCardRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>

@@ -24,7 +24,7 @@
                   <div :class="tailwindStyles.getThClasses()">項目</div>
                   <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">金額</div>
-                  <!-- <div :class="tailwindStyles.getThClasses()">剩餘額度</div> -->
+                  <!-- <div :class="tailwindStyles.getThClasses()">本月剩餘額度</div> -->
                   <div :class="tailwindStyles.getThClasses()">內容</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
@@ -43,6 +43,7 @@
                     <creditCardTradeData
                       :tradeIdGot="record.tradeId"
                       :creditCardIdGot="record.creditCardId"
+                      :isEditable="record.creditcardData.enable"
                       @dataReseaching="searchingFinanceRecord" />
                   </div>
                 </div>

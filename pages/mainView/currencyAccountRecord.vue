@@ -104,11 +104,12 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  searchingParams.accountId = params.accountId;
-  searchingParams.currencyId = params.currencyId;
-  searchingParams.tradeCategory = params.tradeCategory;
-  searchingParams.startingDate = params.startingDate;
-  searchingParams.endDate = params.endDate;
+  Object.assign(searchingParams, params);
+  // searchingParams.accountId = params.accountId;
+  // searchingParams.currencyId = params.currencyId;
+  // searchingParams.tradeCategory = params.tradeCategory;
+  // searchingParams.startingDate = params.startingDate;
+  // searchingParams.endDate = params.endDate;
   await searchingFinanceRecord();
 }
 

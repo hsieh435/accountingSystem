@@ -40,6 +40,7 @@
           <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
             <dateTimeSelect
               :dateTimeGot="dataParams.updateData.tradeDatetime"
+              :isDisabled="!props.isEditable"
               @sendbackDateTime="settingTradeDatetime" />
           </div>
         </div>
@@ -52,6 +53,7 @@
           <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
             <transactionTypeSelect
               :transactionType="dataParams.updateData.transactionType"
+              :isDisabled="!props.isEditable"
               @sendbackTransactionType="settingTransactionType" />
           </div>
         </div>
@@ -65,6 +67,7 @@
             <tradeCategorySelect
               accountType="isCuaccountAble"
               :tradeCategoryGot="dataParams.updateData.tradeCategory"
+              :isEditable="props.isEditable"
               @sendbackTradeCategory="settingTradeCategory" />
           </div>
         </div>
@@ -80,6 +83,7 @@
             orientation="vertical"
             :min="0"
             :step="setStep"
+              :disabled="!props.isEditable"
             @update:modelValue="settingRemainingAmount()" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
@@ -111,8 +115,8 @@
           <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
-        <div class="my-2">
-          <ui-buttonGroup :showSave="props.isEditable" @dataSave="currencyAccountRecordDataHandling" />
+        <div class="my-2" v-if="props.isEditable">
+          <ui-buttonGroup showSave @dataSave="currencyAccountRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>

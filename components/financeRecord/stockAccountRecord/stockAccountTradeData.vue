@@ -43,6 +43,7 @@
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
                 :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :isDisabled="!props.isEditable"
                 @sendbackDateTime="settingTradeDatetime" />
             </div>
           </div>
@@ -57,6 +58,7 @@
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
                 :transactionType="dataParams.updateData.transactionType"
+                :isDisabled="!props.isEditable"
                 @sendbackTransactionType="settingTransactionType" />
             </div>
           </div>
@@ -67,16 +69,17 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-8">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易項目：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支項目：</span>
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
                 accountType="isStaccountAble"
                 :tradeCategoryGot="dataParams.updateData.tradeCategory"
+                :isEditable="props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeCategory">
-            <span class="col-start-3 col-span-4 text-red-500">請選擇交易項目</span>
+            <span class="col-start-3 col-span-4 text-red-500">請選擇收支項目</span>
           </div>
         </div>
 
@@ -111,12 +114,14 @@
               orientation="vertical"
               :min="0"
               :step="0.01"
+              :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.updateData.quantity"
               orientation="vertical"
+              :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
           </div>
           <div
@@ -135,6 +140,7 @@
               orientation="vertical"
               :min="0"
               :step="setStep"
+              :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
             <UInputNumber
@@ -143,6 +149,7 @@
               orientation="vertical"
               :min="0"
               :step="setStep"
+              :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
           </div>
           <div
@@ -184,8 +191,8 @@
           <UTextarea class="col-span-5" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
         </div>
 
-        <div class="my-2">
-          <ui-buttonGroup :showSave="props.isEditable" @dataSave="stockAccountRecordDataHandling" />
+        <div class="my-2" v-if="props.isEditable">
+          <ui-buttonGroup showSave @dataSave="stockAccountRecordDataHandling" />
           <ui-buttonGroup showClose @dataClose="openTradeData = false" />
         </div>
       </div>

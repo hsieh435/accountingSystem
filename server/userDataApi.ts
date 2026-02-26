@@ -15,7 +15,6 @@ export async function fetchUserLogin(data: { userId: string; password: string })
 }
 
 export async function fetchUserDataChange(data: IUserData) {
-  // console.log("data:", data);
   const response = await apiFetch("/api/user/dataUpdate", "POST", {
     body: JSON.stringify(data),
   });

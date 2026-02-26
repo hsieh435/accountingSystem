@@ -114,18 +114,19 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 }
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
-  searchingParams.accountId = params.accountId;
-  searchingParams.currencyId = params.currencyId;
-  searchingParams.tradeCategory = params.tradeCategory;
-  searchingParams.startingDate = params.startingDate;
-  searchingParams.endDate = params.endDate;
+  Object.assign(searchingParams, params);
+  // searchingParams.accountId = params.accountId;
+  // searchingParams.currencyId = params.currencyId;
+  // searchingParams.tradeCategory = params.tradeCategory;
+  // searchingParams.startingDate = params.startingDate;
+  // searchingParams.endDate = params.endDate;
   await searchingFinanceRecord();
 }
 
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStockAccountRecordList(searchingParams);
-    console.log("res:", res.data.data);
+    console.log("fetchStockAccountRecordList:", res.data.data);
     stockAccountRecord.value = res.data.data;
     await stockAccountRecordFilterEvent();
   } catch (error) {

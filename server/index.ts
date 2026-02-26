@@ -20,7 +20,6 @@ watch(requestCount, () => {
 
 export async function apiFetch(url: string, method: string, options?: RequestInit) {
   requestCount.value++;
-  // console.log("userTimezone:", Intl.DateTimeFormat().resolvedOptions().timeZone);
   const userToken = localStorage.getItem("userToken");
 
   const response = await fetch(baseURL + url, {
@@ -29,7 +28,6 @@ export async function apiFetch(url: string, method: string, options?: RequestIni
     headers: {
       "Content-Type": "application/json",
       Authorization: userToken ? `Bearer ${decryptString(userToken || "")}` : "",
-      // "X-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   });
   // console.log("options:", options);
