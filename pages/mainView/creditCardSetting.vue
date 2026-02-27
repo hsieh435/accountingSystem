@@ -42,7 +42,7 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.creditcardSchema }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.currencyData.currencyName }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.creditPerMonth) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.limitCredit) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.expenditureCurrentMonth) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />

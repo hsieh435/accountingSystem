@@ -23,7 +23,7 @@ export const getDefaultAccountDataValidate = (): { [key: string]: boolean } => (
   maximumValueAllowed: true,
   alertValue: true,
   creditcardSchema: true,
-  creditPerMonth: true,
+  limitCredit: true,
 });
 
 
@@ -101,7 +101,8 @@ export const getDefaultCreditCard = (): ICreditCardList => ({
   creditcardSchema: "",
   currency: "",
   currencyData: getDefaultCurrency(),
-  creditPerMonth: 0,
+  limitCredit: 0,
+  startDate: "",
   expirationDate: "",
   alertValue: 0,
   expenditureCurrentMonth: 0,
@@ -137,9 +138,8 @@ export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
 });
 
 
-
 export const getDefaultStockAccount = (): IStockAccountList => ({
-  accountId:  "",
+  accountId: "",
   userId: "",
   accountType: "",
   accountName: "",
@@ -167,10 +167,8 @@ export const getDefaultCurrency = (): ICurrencyList => ({
   currencyName: "",
   currencySymbol: "",
   minimumDenomination: 0,
-  sort: 0
+  sort: 0,
 });
-
-
 
 export const getDefaultTradeCategory = (): ITradeCategory => ({
   isCashflowAble: false,
@@ -180,12 +178,12 @@ export const getDefaultTradeCategory = (): ITradeCategory => ({
   isStoredvaluecardAble: false,
   sort: 0,
   tradeCode: "",
-  tradeName: ""
+  tradeName: "",
 });
 
 
 
-export const getDefaultTransactionCategory= (): ITransactionDate => ({
+export const getDefaultTransactionCategory = (): ITransactionDate => ({
   transactionCode: "",
   transactionName: "",
-})
+});

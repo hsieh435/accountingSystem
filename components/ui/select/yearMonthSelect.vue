@@ -11,7 +11,8 @@
       :max-date="maxDate"
       format="yyyy/MM"
       locale="zh-TW"
-      :highlight="{ options: { highlightDisabled: true } }">
+      :highlight="{ options: { highlightDisabled: true } }"
+      :disabled="!props.isEditAble">
     </VueDatePicker>
   </div>
 </template>
@@ -21,8 +22,8 @@ import { getCurrentYear, getCurrentMonth } from "@/composables/tools.ts";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 const props = withDefaults(
-  defineProps<{ yearMonthGot?: string; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number }>(),
-  { yearMonthGot: "", maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0 },
+  defineProps<{ yearMonthGot?: string; maxYear?: number; maxMonth?: number; minYear?: number; minMonth?: number; isEditAble?: boolean }>(),
+  { yearMonthGot: "", maxYear: 0, maxMonth: 0, minYear: 0, minMonth: 0, isEditAble: true },
 );
 const emits = defineEmits(["sendbackYearMonth"]);
 

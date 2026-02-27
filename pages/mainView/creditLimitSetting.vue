@@ -36,7 +36,7 @@
                     {{ getCurrentYear(creditCard.limitYearMonth) }} / {{ getCurrentMonth(creditCard.limitYearMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <UInputNumber v-model="creditCard.creditPerMonth" orientation="vertical" />
+                    <UInputNumber v-model="creditCard.limitCredit" orientation="vertical" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <ui-buttonGroup showSave :saveText="'修改額度'" @dataSave="adjustCreditCardLimit(creditCard)" />

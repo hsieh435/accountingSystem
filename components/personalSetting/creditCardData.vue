@@ -79,19 +79,21 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">本月信用額度：</span>
+            <span class="col-span-2 text-right">
+              <span class="text-red-600 mx-1" v-if="!props.creditCardIdGot">∗</span>信用額度：
+            </span>
             <UInputNumber
-              :class="['col-span-3', dataValidate.creditPerMonth ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.creditPerMonth"
+              :class="['col-span-3', dataValidate.limitCredit ? '' : 'outline-1 outline-red-500']"
+              v-model="dataParams.limitCredit"
               orientation="vertical"
               :disabled="props.creditCardIdGot ? true : false" />
           </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.creditPerMonth">
-            <span class="col-span-4 col-end-7 text-red-500">{{ creditPerMonthValidateText }}</span>
+          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.limitCredit">
+            <span class="col-span-4 col-end-7 text-red-500">{{ limitCreditValidateText }}</span>
           </div>
         </div>
 
-        <div class="w-full flex justify-start items-center grid grid-cols-6">
+        <div class="w-full flex justify-start items-center grid grid-cols-6" v-if="props.creditCardIdGot">
           <span class="col-span-2 text-right">本月消費累計：</span>
           <UInput class="col-span-3" v-model="dataParams.expenditureCurrentMonth" disabled />
         </div>
@@ -114,12 +116,12 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>開始年月：</span>
-          <yearMonthSelect :yearMonthGot="dataParams.startDate" @sendbackYearMonth="settingStartDate" />
+          <yearMonthSelect :yearMonthGot="dataParams.startDate" :isEditAble="!props.creditCardIdGot" @sendbackYearMonth="settingStartDate" />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>到期年月：</span>
-          <yearMonthSelect :yearMonthGot="dataParams.expirationDate" @sendbackYearMonth="settingExpirationDate" />
+          <yearMonthSelect :yearMonthGot="dataParams.expirationDate" :isEditAble="!props.creditCardIdGot" @sendbackYearMonth="settingExpirationDate" />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
@@ -177,7 +179,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
   creditcardSchema: "",
   currency: "",
   currencyData: getDefaultCurrency(),
-  creditPerMonth: 0,
+  limitCredit: 0,
   expenditureCurrentMonth: 0,
   startDate: "",
   expirationDate: "",
@@ -189,7 +191,7 @@ const getDefaultDataParams = (): ICreditCardList => ({
 });
 const dataParams = reactive<ICreditCardList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
-const creditPerMonthValidateText = ref<string>("");
+const limitCreditValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
 watch(openCreditCardData, () => {
@@ -243,18 +245,18 @@ async function validateData() {
     dataValidate.currency = false;
   }
   if (
-    typeof dataParams.creditPerMonth !== "number" ||
-    !isFinite(dataParams.creditPerMonth) ||
-    dataParams.creditPerMonth <= 0
+    typeof dataParams.limitCredit !== "number" ||
+    !isFinite(dataParams.limitCredit) ||
+    dataParams.limitCredit <= 0
   ) {
-    dataValidate.creditPerMonth = false;
-    creditPerMonthValidateText.value = "請填寫信用卡信用額度";
+    dataValidate.limitCredit = false;
+    limitCreditValidateText.value = "請填寫信用卡信用額度";
   }
   if (typeof dataParams.alertValue !== "number" || !isFinite(dataParams.alertValue) || dataParams.alertValue < 0) {
     dataValidate.alertValue = false;
     alertValueValidateText.value = "請填寫提醒金額";
   }
-  if (dataParams.alertValue > dataParams.creditPerMonth) {
+  if (dataParams.alertValue > dataParams.limitCredit) {
     dataValidate.alertValue = false;
     alertValueValidateText.value = "提醒金額不得大於信用額度";
   }

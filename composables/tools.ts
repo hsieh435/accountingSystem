@@ -117,8 +117,8 @@ export function dateMove(dateStr: string, days: number = 0): string {
 
 // 金額，三位一撇
 export function currencyFormat(numberGot: number) {
-  // return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
-  return typeof numberGot === "number" ? new Intl.NumberFormat("").format(numberGot) : "";
+  return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
+  // return typeof numberGot === "number" ? new Intl.NumberFormat().format(numberGot) : "";
 }
 
 // 數字，限制只能為正整數，並移除開頭 0

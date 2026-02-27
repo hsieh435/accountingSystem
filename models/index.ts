@@ -214,7 +214,7 @@ export interface ICreditCardList {
   creditcardSchema: string;
   currency: string;
   currencyData: ICurrencyList;
-  creditPerMonth: number;
+  limitCredit: number;
   startDate: string;
   expirationDate: string;
   expenditureCurrentMonth: number;
@@ -263,7 +263,7 @@ export interface ICreditCardLimitList {
   creditcardName?: string;
   userId: string;
   limitYearMonth: string;
-  creditPerMonth: number;
+  limitCredit: number;
 }
 
 // 存款帳戶列表 interface
