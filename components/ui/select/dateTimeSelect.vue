@@ -42,7 +42,7 @@ onMounted(async () => {
 });
 
 watch(() => props, () => {
-  console.log("watch props:", props);
+  // console.log("watch props:", props);
 
   dateTimeString.value = props.dateTimeGot ? new Date(props.dateTimeGot).getTime() : getCurrentTimestamp();
 

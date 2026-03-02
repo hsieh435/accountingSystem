@@ -43,6 +43,7 @@
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
                 :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :minDateTime="creditCardStartDate"
                 :maxDateTime="creditCardExpirationDate"
                 :isDisabled="!props.isEditable"
                 @sendbackDateTime="settingTradeDatetime" />
@@ -104,7 +105,7 @@
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" 
+          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote"
               :disabled="!props.isEditable" />
         </div>
 
@@ -180,6 +181,7 @@ const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidat
 const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
 const spendCalculation = ref<number>(0);
 const limitCurrentMonth = ref<number>(0);
+const creditCardStartDate = ref<string>("");
 const creditCardExpirationDate = ref<string>("");
 const setStep = ref<number>(1);
 const tradeAmountValidateText = ref<string>("");
@@ -190,6 +192,7 @@ watch(openTradeData, () => {
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(creditCardChosen, getDefaultCreditCard());
     tradeAmountValidateText.value = "";
+    creditCardStartDate.value = "";
     creditCardExpirationDate.value = "";
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
@@ -243,6 +246,7 @@ async function settingCreditCardAccount(account: ICreditCardList | null) {
   creditCardChosen.value = account || getDefaultCreditCard();
   dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
   dataParams.updateData.currency = creditCardChosen.value.currency || "";
+  creditCardStartDate.value = creditCardChosen.value.startDate || "";
   creditCardExpirationDate.value = creditCardChosen.value.expirationDate || "";
   await searchingcreditcardlimit();
   await settingUsageAlert();
