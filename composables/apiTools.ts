@@ -27,37 +27,3 @@ export async function downloadFunction({
     errorMessageDialog({ message: (error as Error).message, icon: "error" });
   }
 }
-
-export async function mustValidatedColumnChecking(response: any, target: string = "") {
-  await resetOutline();
-
-  const columnNameArray = Object.keys(response.data.data);
-  const validFeedback: string[] = Object.values(response.data.data);
-  const range = document.getElementById(target) as HTMLElement;
-
-  if (range) {
-    for (let i = 0; i < columnNameArray.length; i++) {
-      const elements = range.querySelectorAll(`#${columnNameArray[i]}`);
-      elements.forEach((element) => {
-        const htmlElement = element as HTMLElement;
-        htmlElement.style.outline = "2px solid red";
-        htmlElement.setAttribute("title", validFeedback[i]);
-      });
-    }
-  } else {
-    for (let i = 0; i < columnNameArray.length; i++) {
-      const element = document.getElementById(columnNameArray[i]) as HTMLElement;
-      element.style.outline = "2px solid red";
-      element.setAttribute("title", validFeedback[i]);
-    }
-  }
-
-  errorMessageDialog({ message: "必填欄位資料錯誤" });
-}
-
-export async function resetOutline() {
-  document.querySelectorAll<HTMLElement>(".must_checked").forEach((el) => {
-    el.style.outline = "0px solid red";
-    el.title = "";
-  });
-}

@@ -6,7 +6,7 @@
       @sendbackSearchingParams="settingSearchingParams" />
 
     <div class="my-1 px-3">
-      <currencyAccountTradeData @dataReseaching="searchingFinanceRecord" />
+      <currencyAccountTradeData isEditable @dataReseaching="searchingFinanceRecord" />
       <template v-if="currencyAccountRecord.length > 0">
         <ui-pagination
           :currentPage="currentPage"

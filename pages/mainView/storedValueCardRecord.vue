@@ -6,7 +6,7 @@
       @sendbackSearchingParams="settingSearchingParams" />
 
     <div class="my-1 px-3">
-      <storedValueCardTradeData @dataReseaching="searchingFinanceRecord" />
+      <storedValueCardTradeData isEditable @dataReseaching="searchingFinanceRecord" />
       <template v-if="storedValueCardRecordList.length > 0">
         <ui-pagination
           :currentPage="currentPage"

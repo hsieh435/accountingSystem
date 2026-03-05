@@ -5,7 +5,7 @@
       :accountTypeName="'信用卡'"
       @sendbackSearchingParams="settingSearchingParams" />
     <div class="my-1 px-3">
-      <creditCardTradeData @dataReseaching="searchingFinanceRecord" />
+      <creditCardTradeData isEditable @dataReseaching="searchingFinanceRecord" />
       <template v-if="creditCardRecord.length > 0">
         <ui-pagination
           :currentPage="currentPage"

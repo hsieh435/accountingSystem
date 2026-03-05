@@ -44,38 +44,20 @@ export function jwtTokenEncoded(str: string) {
 
 // 依照系統語言呈現西元年日期格式，時間以 24 小時制呈現
 export function yearMonthDayTimeFormat(dateString: Date | string | number, hasTime: boolean = true): string {
-  // const localDate = new Date();
-  // 轉換為 UTC 字串
-  // const utcString = localDate.toISOString();
-  // console.log("UTC 時間:", utcString);
-
   const date = new Date(dateString);
   if (isNaN(date.getTime()) || !dateString) return "";
 
-  // const year = date.getFullYear();
-  // const month = String(date.getMonth() + 1).padStart(2, "0");
-  // const day = String(date.getDate()).padStart(2, "0");
-  // const hours = String(date.getHours()).padStart(2, "0");
-  // const minutes = String(date.getMinutes()).padStart(2, "0");
-  // const seconds = String(date.getSeconds()).padStart(2, "0");
-
-  // return hasTime ? `${year} / ${month} / ${day} ${hours}:${minutes}:${seconds}` : `${year} / ${month} / ${day}`;
   return hasTime ? date.toLocaleString([], { hour12: false }) : date.toLocaleDateString();
 }
 
 // 取得日期格式或今日日期
 export function getCurrentYMD(dateInput: string | number = ""): string {
   const date = dateInput ? new Date(dateInput) : new Date();
-  // const month = String(date.getMonth() + 1).padStart(2, "0");
-  // const dayofMonth = String(date.getDate()).padStart(2, "0");
-
-  // return `${date.getFullYear()}-${month}-${dayofMonth}`;
   return date.toLocaleDateString();
 }
 
 // 取得西元年月格式 yyyy-mm
 export function yearMonthFormat(dateString: string = "") {
-  // if (!dateString) return "";
   let date = dateString ? new Date(dateString) : new Date();
   if (isNaN(date.getFullYear()) || isNaN(date.getMonth())) return "";
 
@@ -118,7 +100,7 @@ export function dateMove(dateStr: string, days: number = 0): string {
 // 金額，三位一撇
 export function currencyFormat(numberGot: number) {
   return typeof numberGot === "number" ? new Intl.NumberFormat("zh-TW").format(numberGot) : "";
-  // return typeof numberGot === "number" ? new Intl.NumberFormat().format(numberGot) : "";
+  // return typeof numberGot === "number" ? new Intl.NumberFormat("").format(numberGot) : "";
 }
 
 // 數字，限制只能為正整數，並移除開頭 0
@@ -217,8 +199,7 @@ export function debounceFn(fn: Function, delay: number = 300) {
     // 每一次 debounce function 被觸發時，會先清除之前的 timer，避免觸發先前的 fn 函式
     // 因此只要在 delay 時間內觸發 debounce function，就會一直清除先前的 timer，避免 fn 一直被執行
     clearTimeout(timer);
-    // 清除之後，再重新計時
-    // 當 delay 時間到時，執行 fn
+    // 清除之後，再重新計時，delay 時間到時，執行 fn
     timer = setTimeout(() => {
       fn(...args);
     }, delay);

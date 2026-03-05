@@ -1,6 +1,8 @@
 <template>
   <select :class="tailwindStyles.getSelectClasses()" v-model="accountId" :disabled="isDisabled">
-    <option v-for="account in accountList" :key="account.value" :value="account.value">
+    <option value="">請選擇帳戶</option>
+    <option v-for="account in accountList" :key="account.value" :value="account.value"
+    :disabled="account.enable !== true">
       {{ account.label }}
     </option>
   </select>
@@ -29,7 +31,7 @@ const props = withDefaults(
 const emits = defineEmits(["sendbackAccount"]);
 
 const accountId = ref<string>("");
-const accountList = ref<{ label: string; value: string }[]>([]);
+const accountList = ref<{ label: string; value: string; enable: boolean }[]>([]);
 const searchingParams = reactive<IAccountSearchingParams>({ currencyId: "" });
 const oriAccountList = ref<any[]>([]);
 const isDisabled = computed(() => props.isDisable);
@@ -83,8 +85,8 @@ const accountTypeConfig = {
 async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchingParams);
-    accountList.value = props.sellectAll ? [{ label: "全部", value: "" }, ...list] : list;
-    accountId.value = props.sellectAll ? props.accountIdGot || "" : accountList.value[0]?.value || "";
+    accountList.value = props.sellectAll ? [{ label: "全部", value: "", enable: true }, ...list] : list;
+    accountId.value = props.sellectAll ? props.accountIdGot : "";
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -114,6 +116,7 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
     // label: item[config.nameField],
     label: item[config.nameField] + "（" + item.currencyData.currencyName + "）",
     value: item[config.pkField],
+    enable: item.enable,
   }));
 }
 </script>
