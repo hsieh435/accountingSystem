@@ -28,7 +28,7 @@
                 selectTargetId="isStaccountAble"
                 :accountIdGot="dataParams.updateData.accountId"
                 :sellectAll="false"
-                :isDisable="props.tradeIdGot ? true : props.isEditable"
+                :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingAccount" />
             </div>
           </div>

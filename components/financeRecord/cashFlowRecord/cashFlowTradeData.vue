@@ -231,7 +231,7 @@ async function settingCashflowAccount(account: ICashFlowList | null) {
   dataParams.updateData.cashflowId = cashFlowChosen.value.cashflowId;
   dataParams.updateData.currency = cashFlowChosen.value.currency;
   dataParams.oriData.oriRemainingAmount = cashFlowChosen.value.presentAmount;
-  // console.log("cashFlowChosen:", cashFlowChosen.value);
+  console.log("cashFlowChosen:", cashFlowChosen.value);
 
   await settingRemainingAmount();
 
@@ -336,6 +336,7 @@ async function cashFlowRecordDataHandling() {
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
+    console.log("res:", res);
     messageToast({ message: res.data.message, icon: res.data.returnCode === 0 ? "success" : "error" });
     emits("dataReseaching");
     openTradeData.value = props.tradeIdGot.length > 0;

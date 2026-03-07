@@ -37,7 +37,7 @@ const oriAccountList = ref<any[]>([]);
 const isDisabled = computed(() => props.isDisable);
 
 onMounted(async () => {
-  // console.log("props:", props);
+  console.log("props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
   }
@@ -86,7 +86,9 @@ async function loadAccountList() {
   try {
     const list = await getAccountListByType(props.selectTargetId, searchingParams);
     accountList.value = props.sellectAll ? [{ label: "全部", value: "", enable: true }, ...list] : list;
-    accountId.value = props.sellectAll ? props.accountIdGot : "";
+    accountId.value = props.accountIdGot || "";
+    // console.log("accountList:", accountList.value);
+    // console.log("accountId:", accountId.value);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
