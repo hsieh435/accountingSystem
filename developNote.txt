@@ -1,9 +1,8 @@
 
-1.API 研究
+1.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
 
-2.SQL語法
-
-3.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
+2.socket-io 應用
+參考網址：https://penueling.com/%e7%b7%9a%e4%b8%8a%e5%ad%b8%e7%bf%92/express-socket-io-%e6%8e%a8%e9%80%81%e8%a8%8a%e6%81%af%e8%87%b3%e5%89%8d%e7%ab%af/
 
 
 

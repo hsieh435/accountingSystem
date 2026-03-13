@@ -139,10 +139,8 @@ export interface ICashFlowRecordList {
 export interface ICashFlowRecordData {
   updateData: ICashFlowRecordList;
   oriData: {
-    oriTradeDatetime: string;
     oriTradeAmount: number;
     oriRemainingAmount: number;
-    oriTransactionType: string;
   };
 }
 
