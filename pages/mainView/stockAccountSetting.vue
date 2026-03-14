@@ -28,7 +28,8 @@
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
                   <div :class="tailwindStyles.getThClasses()">提醒金額</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
-                  <div :class="tailwindStyles.getThClasses()">操作</div>
+                   <div :class="tailwindStyles.getThClasses()">收支次數</div>
+                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
               <div :class="tailwindStyles.getTbodyClasses()">
@@ -61,6 +62,7 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.alertValue) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <stockAccountData :stockAccountIGot="account.accountId" @dataReseaching="stockAccountSearching" />
                   </div>

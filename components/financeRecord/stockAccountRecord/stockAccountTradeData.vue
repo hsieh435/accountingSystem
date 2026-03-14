@@ -26,7 +26,7 @@
             <div :class="['w-fit', dataValidate.accountId ? '' : 'outline-1 outline-red-500']">
               <accountSelect
                 selectTargetId="isStaccountAble"
-                :accountIdGot="dataParams.updateData.accountId"
+                :accountIdGot="dataParams.accountId"
                 :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingAccount" />
@@ -42,7 +42,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
-                :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :dateTimeGot="dataParams.tradeDatetime"
                 :isDisabled="!props.isEditable"
                 @sendbackDateTime="settingTradeDatetime" />
             </div>
@@ -57,7 +57,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
-                :transactionType="dataParams.updateData.transactionType"
+                :transactionType="dataParams.transactionType"
                 :isDisabled="!props.isEditable"
                 @sendbackTransactionType="settingTransactionType" />
             </div>
@@ -73,7 +73,7 @@
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
                 accountType="isStaccountAble"
-                :tradeCategoryGot="dataParams.updateData.tradeCategory"
+                :tradeCategoryGot="dataParams.tradeCategory"
                 :isEditable="props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
@@ -87,14 +87,11 @@
           <div class="w-full flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
             <template v-if="props.tradeIdGot">
-              <UInput
-                class="col-span-4"
-                :value="dataParams.updateData.stockNo + dataParams.updateData.stockName"
-                disabled />
+              <UInput class="col-span-4" :value="dataParams.stockNo + dataParams.stockName" disabled />
             </template>
             <template v-else>
               <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
-                <stockListSelect :stockNoGot="dataParams.updateData.stockNo" @sendbackStockNo="settingStockNo" />
+                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" />
               </div>
             </template>
           </div>
@@ -110,7 +107,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>每股價格：</span>
             <UInputNumber
               :class="['col-start-3 col-end-5', dataValidate.pricePerShare ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.updateData.pricePerShare"
+              v-model="dataParams.pricePerShare"
               orientation="vertical"
               :min="0"
               :step="0.01"
@@ -119,7 +116,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.updateData.quantity"
+              v-model="dataParams.quantity"
               orientation="vertical"
               :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
@@ -136,7 +133,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>手續費：</span>
             <UInputNumber
               :class="['col-start-3 col-end-5', dataValidate.handlingFee ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.updateData.handlingFee"
+              v-model="dataParams.handlingFee"
               orientation="vertical"
               :min="0"
               :step="setStep"
@@ -145,7 +142,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易稅：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.transactionTax ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.updateData.transactionTax"
+              v-model="dataParams.transactionTax"
               orientation="vertical"
               :min="0"
               :step="setStep"
@@ -161,21 +158,21 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">總價：</span>
-          <UInput class="col-span-2" :value="currencyFormat(dataParams.updateData.stockTotalPrice)" disabled />
+          <UInput class="col-span-2" :value="currencyFormat(dataParams.stockTotalPrice)" disabled />
           <span class="col-span-2 text-right">交易成本：</span>
-          <UInput class="col-span-2" :value="currencyFormat(dataParams.updateData.tradeTotalPrice)" disabled />
+          <UInput class="col-span-2" :value="currencyFormat(dataParams.tradeTotalPrice)" disabled />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">帳戶餘額：</span>
-          <UInput class="col-span-3" :value="currencyFormat(dataParams.oriData.oriRemainingAmount)" disabled />
+          <UInput class="col-span-3" :value="currencyFormat(oriRemainingAmount)" disabled />
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
             <dataBaseCurrencySelect
-              :currencyIdGot="dataParams.updateData.currency"
+              :currencyIdGot="dataParams.currency"
               isDisable
               @sendbackCurrencyData="settingCurrency" />
           </div>
@@ -183,12 +180,12 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-5" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
+          <UInput class="col-span-5" v-model="dataParams.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-8">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-5" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
+          <UTextarea class="col-span-5" v-model="dataParams.tradeNote" :disabled="!props.isEditable" />
         </div>
 
         <div class="my-2" v-if="props.isEditable">
@@ -207,7 +204,7 @@ import {
   fetchStockAccountRecordUpdate,
   fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
-import { IStockAccountRecordData, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { IStockAccountRecordList, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultStockAccount,
@@ -233,51 +230,50 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: str
 const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
-const getDefaultDataParams = (): IStockAccountRecordData => ({
-  updateData: {
-    tradeId: props.tradeIdGot || "",
-    accountId: props.accountIdGot,
-    accountData: getDefaultStockAccount(),
-    tradeDatetime: "",
-    accountUser: "",
-    transactionType: "",
-    transactionCategoryData: getDefaultTransactionCategory(),
-    tradeCategory: "",
-    tradeCategoryData: getDefaultTradeCategory(),
-    stockNo: "",
-    stockName: "",
-    pricePerShare: 0,
-    quantity: 0,
-    handlingFee: 0,
-    transactionTax: 0,
-    stockTotalPrice: 0,
-    tradeTotalPrice: 0,
-    remainingAmount: 0,
-    currency: "",
-    currencyData: getDefaultCurrency(),
-    tradeDescription: "",
-    tradeNote: "",
-    createdDatetime: "",
-    editedDatetime: "",
-  },
-  oriData: {
-    oriTradeDatetime: "",
-    oriTradeAmount: 0,
-    oriRemainingAmount: 0,
-    oriTransactionType: "",
-  },
+const getDefaultDataParams = (): IStockAccountRecordList => ({
+  tradeId: props.tradeIdGot || "",
+  accountId: props.accountIdGot,
+  accountData: getDefaultStockAccount(),
+  tradeDatetime: "",
+  accountUser: "",
+  transactionType: "",
+  transactionCategoryData: getDefaultTransactionCategory(),
+  tradeCategory: "",
+  tradeCategoryData: getDefaultTradeCategory(),
+  stockNo: "",
+  stockName: "",
+  pricePerShare: 0,
+  quantity: 0,
+  handlingFee: 0,
+  transactionTax: 0,
+  stockTotalPrice: 0,
+  tradeTotalPrice: 0,
+  remainingAmount: 0,
+  currency: "",
+  currencyData: getDefaultCurrency(),
+  tradeDescription: "",
+  tradeNote: "",
+  createdDatetime: "",
+  editedDatetime: "",
 });
-const dataParams = reactive<IStockAccountRecordData>(getDefaultDataParams());
-const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
+const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
 const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const setStep = ref<number>(1);
+const oriTradeAmount = ref<number>(0);
+const oriRemainingAmount = ref<number>(0);
+const oriTransactionType = ref<string>("");
 const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
     Object.assign(dataParams, getDefaultDataParams());
-    Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(stockAccountChosen, getDefaultStockAccount());
+    Object.assign(dataValidate, getDefaultTradeValidate());
+    setStep.value = 1;
+    oriTradeAmount.value = 0;
+    oriRemainingAmount.value = 0;
+    oriTransactionType.value = "";
     tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingStockAccountRecord();
@@ -292,10 +288,9 @@ async function searchingStockAccountRecord() {
       tradeId: props.tradeIdGot,
     });
     console.log("fetchStockAccountRecordById:", res.data.data);
-    Object.assign(dataParams.updateData, res.data.data);
-    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data.tradeTotalPrice;
-    dataParams.oriData.oriTransactionType = res.data.data.transactionType;
+    Object.assign(dataParams, res.data.data);
+    oriTradeAmount.value = res.data.data.tradeAmount;
+    oriTransactionType.value = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -303,9 +298,8 @@ async function searchingStockAccountRecord() {
 
 async function settingAccount(account: IStockAccountList | null) {
   stockAccountChosen.value = account || getDefaultStockAccount();
-  dataParams.updateData.accountId = stockAccountChosen.value.accountId || "";
-  dataParams.updateData.currency = stockAccountChosen.value.currency || "";
-  dataParams.oriData.oriRemainingAmount = stockAccountChosen.value.presentAmount;
+  dataParams.accountId = stockAccountChosen.value.accountId || "";
+  dataParams.currency = stockAccountChosen.value.currency || "";
   // console.log("stockAccountChosen:", stockAccountChosen.value);
   await settingRemainingAmount();
 
@@ -313,7 +307,7 @@ async function settingAccount(account: IStockAccountList | null) {
     openTradeData.value === true &&
     stockAccountChosen.value.accountId.length > 0 &&
     stockAccountChosen.value.openAlert === true &&
-    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.alertValue
+    oriRemainingAmount.value < stockAccountChosen.value.alertValue
   ) {
     messageToast({
       message: `帳戶餘額已低於 ${currencyFormat(stockAccountChosen.value.alertValue)} 元`,
@@ -323,54 +317,57 @@ async function settingAccount(account: IStockAccountList | null) {
 }
 
 async function settingTradeDatetime(dateTime: string) {
-  dataParams.updateData.tradeDatetime = dateTime;
+  dataParams.tradeDatetime = dateTime;
 }
 
 async function settingTransactionType(type: string) {
-  dataParams.updateData.transactionType = type;
-  if (dataParams.updateData.accountId) {
-    await settingTotalPrice();
+  dataParams.transactionType = type;
+  if (dataParams.transactionType.length > 0) {
+    await settingRemainingAmount();
   }
 }
 
-async function settingStockNo(stockItem: IStockList) {
-  dataParams.updateData.stockNo = stockItem.stockId;
-  dataParams.updateData.stockName = stockItem.stockName;
+async function settingTradeCategory(tradeCategoryId: string) {
+  dataParams.tradeCategory = tradeCategoryId;
 }
 
-async function settingTradeCategory(tradeCategoryId: string) {
-  dataParams.updateData.tradeCategory = tradeCategoryId;
+async function settingStockNo(stockItem: IStockList) {
+  dataParams.stockNo = stockItem.stockId;
+  dataParams.stockName = stockItem.stockName;
 }
 
 async function settingTotalPrice() {
-  dataParams.updateData.stockTotalPrice = dataParams.updateData.pricePerShare * dataParams.updateData.quantity;
-  if (dataParams.updateData.transactionType === "income") {
-    dataParams.updateData.tradeTotalPrice =
-      dataParams.updateData.stockTotalPrice - dataParams.updateData.handlingFee - dataParams.updateData.transactionTax;
-  } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.updateData.tradeTotalPrice =
-      dataParams.updateData.stockTotalPrice + dataParams.updateData.handlingFee + dataParams.updateData.transactionTax;
+  dataParams.stockTotalPrice = dataParams.pricePerShare * dataParams.quantity;
+  if (dataParams.transactionType === "income") {
+    dataParams.tradeTotalPrice = dataParams.stockTotalPrice - dataParams.handlingFee - dataParams.transactionTax;
+  } else if (dataParams.transactionType === "expense") {
+    dataParams.tradeTotalPrice = dataParams.stockTotalPrice + dataParams.handlingFee + dataParams.transactionTax;
   }
   await settingRemainingAmount();
 }
 
 async function settingRemainingAmount() {
-  if (dataParams.updateData.transactionType === "income") {
-    dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount -
-      dataParams.oriData.oriTradeAmount +
-      dataParams.updateData.tradeTotalPrice;
-  } else if (dataParams.updateData.transactionType === "expense") {
-    dataParams.oriData.oriRemainingAmount =
-      stockAccountChosen.value.presentAmount +
-      dataParams.oriData.oriTradeAmount -
-      dataParams.updateData.tradeTotalPrice;
+
+  oriRemainingAmount.value = stockAccountChosen.value.presentAmount;
+  if (dataParams.transactionType === "income") {
+    oriRemainingAmount.value =
+      stockAccountChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeTotalPrice;
+    if (oriTransactionType.value === "expense") {
+      oriRemainingAmount.value = oriRemainingAmount.value + oriTradeAmount.value * 2;
+    }
+  } else if (dataParams.transactionType === "expense") {
+    oriRemainingAmount.value =
+      stockAccountChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeTotalPrice;
+    if (oriTransactionType.value === "income") {
+      oriRemainingAmount.value = oriRemainingAmount.value - oriTradeAmount.value * 2;
+    }
   }
 
   if (
     openTradeData.value === true &&
     stockAccountChosen.value.accountId.length > 0 &&
-    dataParams.oriData.oriRemainingAmount < stockAccountChosen.value.minimumValueAllowed
+    stockAccountChosen.value.openAlert === true &&
+    oriRemainingAmount.value < stockAccountChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
@@ -384,50 +381,46 @@ async function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultTradeValidate());
 
-  if (!dataParams.updateData.accountId) {
+  if (!dataParams.accountId) {
     dataValidate.accountId = false;
   }
-  if (!dataParams.updateData.transactionType) {
+  if (!dataParams.transactionType) {
     dataValidate.transactionType = false;
   }
-  if (!dataParams.updateData.tradeDatetime) {
+  if (!dataParams.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
-  if (!dataParams.updateData.transactionType) {
+  if (!dataParams.transactionType) {
     dataValidate.transactionType = false;
   }
-  if (!dataParams.updateData.stockNo) {
+  if (!dataParams.stockNo) {
     dataValidate.stockNo = false;
   }
-  if (!dataParams.updateData.tradeCategory) {
+  if (!dataParams.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
   if (
-    typeof dataParams.updateData.pricePerShare !== "number" ||
-    !isFinite(dataParams.updateData.pricePerShare) ||
-    dataParams.updateData.pricePerShare < 0
+    typeof dataParams.pricePerShare !== "number" ||
+    !isFinite(dataParams.pricePerShare) ||
+    dataParams.pricePerShare < 0
   ) {
     dataValidate.pricePerShare = false;
   }
   if (
-    typeof dataParams.updateData.quantity !== "number" ||
-    !isFinite(dataParams.updateData.quantity) ||
-    dataParams.updateData.quantity < 0 ||
-    dataParams.updateData.quantity % 1 !== 0
+    typeof dataParams.quantity !== "number" ||
+    !isFinite(dataParams.quantity) ||
+    dataParams.quantity < 0 ||
+    dataParams.quantity % 1 !== 0
   ) {
     dataValidate.quantity = false;
   }
-  if (
-    typeof dataParams.updateData.handlingFee !== "number" ||
-    !isFinite(dataParams.updateData.handlingFee) ||
-    dataParams.updateData.handlingFee < 0
-  ) {
+  if (typeof dataParams.handlingFee !== "number" || !isFinite(dataParams.handlingFee) || dataParams.handlingFee < 0) {
     dataValidate.handlingFee = false;
   }
   if (
-    typeof dataParams.updateData.transactionTax !== "number" ||
-    !isFinite(dataParams.updateData.transactionTax) ||
-    dataParams.updateData.transactionTax < 0
+    typeof dataParams.transactionTax !== "number" ||
+    !isFinite(dataParams.transactionTax) ||
+    dataParams.transactionTax < 0
   ) {
     dataValidate.transactionTax = false;
   }

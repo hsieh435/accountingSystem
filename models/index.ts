@@ -1,4 +1,3 @@
-
 // API response interface
 export interface IResponse {
   data?: any;
@@ -101,6 +100,7 @@ export interface ICashFlowList {
   currencyData: ICurrencyList;
   enable: boolean;
   expenseExpenditureCurrentMonth: number;
+  frequency: number;
   incomeExpenditureCurrentMonth: number;
   minimumValueAllowed: number;
   note: string;
@@ -135,15 +135,6 @@ export interface ICashFlowRecordList {
   tradeNote: string;
 }
 
-// 現金流收支資料新增、編輯 interface
-export interface ICashFlowRecordData {
-  updateData: ICashFlowRecordList;
-  oriData: {
-    oriTradeAmount: number;
-    oriRemainingAmount: number;
-  };
-}
-
 // 儲值票卡列表 interface
 export interface IStoredValueCardList {
   no?: number;
@@ -158,6 +149,7 @@ export interface IStoredValueCardList {
   minimumValueAllowed: number;
   maximumValueAllowed: number;
   expenseExpenditureCurrentMonth: number;
+  frequency: number;
   incomeExpenditureCurrentMonth: number;
   profitLossExpenditureCurrentMonth: number;
   alertValue: number;
@@ -189,17 +181,6 @@ export interface IStoredValueCardRecordList {
   editedDatetime: string;
 }
 
-// 儲值票卡收支資料新增、編輯 interface
-export interface IStoredValueCardRecordData {
-  updateData: IStoredValueCardRecordList;
-  oriData: {
-    oriTradeDatetime: string;
-    oriTradeAmount: number;
-    oriRemainingAmount: number;
-    oriTransactionType: string;
-  };
-}
-
 // 信用卡列表 interface
 export interface ICreditCardList {
   no?: number;
@@ -216,6 +197,7 @@ export interface ICreditCardList {
   startDate: string;
   expirationDate: string;
   expenditureCurrentMonth: number;
+  frequency: number;
   alertValue: number;
   openAlert: boolean;
   enable: boolean;
@@ -262,6 +244,7 @@ export interface ICreditCardLimitList {
   userId: string;
   limitYearMonth: string;
   limitCredit: number;
+  totalSpent: number;
 }
 
 // 存款帳戶列表 interface
@@ -278,9 +261,10 @@ export interface ICurrencyAccountList {
   startingAmount: number;
   presentAmount: number;
   expenseExpenditureCurrentMonth: number;
+  frequency: number;
   incomeExpenditureCurrentMonth: number;
   profitLossExpenditureCurrentMonth: number;
-  isSalaryAccount: false;
+  isSalaryAccount: boolean;
   minimumValueAllowed: number;
   alertValue: number;
   openAlert: boolean;
@@ -312,17 +296,6 @@ export interface IcurrencyAccountRecordList {
   editedDatetime: string;
 }
 
-// 存款帳戶收支紀錄新增、編輯 interface
-export interface IcurrencyAccountRecordData {
-  updateData: IcurrencyAccountRecordList;
-  oriData: {
-    oriTradeDatetime: string;
-    oriTradeAmount: number;
-    oriRemainingAmount: number;
-    oriTransactionType: string;
-  };
-}
-
 // 證券帳戶列表 interface
 export interface IStockAccountList {
   no?: number;
@@ -338,6 +311,7 @@ export interface IStockAccountList {
   startingAmount: number;
   presentAmount: number;
   expenseExpenditureCurrentMonth: number;
+  frequency: number;
   incomeExpenditureCurrentMonth: number;
   profitLossExpenditureCurrentMonth: number;
   minimumValueAllowed: number;
@@ -379,17 +353,6 @@ export interface IStockAccountRecordList {
   tradeCategoryData: ITradeCategory;
   createdDatetime: string;
   editedDatetime: string;
-}
-
-// 證券帳戶收支資料新增、編輯 interface
-export interface IStockAccountRecordData {
-  updateData: IStockAccountRecordList;
-  oriData: {
-    oriTradeDatetime: string;
-    oriTradeAmount: number;
-    oriRemainingAmount: number;
-    oriTransactionType: string;
-  };
 }
 
 // 存股列表 interface

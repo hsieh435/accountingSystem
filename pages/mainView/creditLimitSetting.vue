@@ -24,7 +24,8 @@
                   <div :class="tailwindStyles.getThClasses()">NO.</div>
                   <div :class="tailwindStyles.getThClasses()">信用卡</div>
                   <div :class="tailwindStyles.getThClasses()">年 / 月</div>
-                  <div :class="tailwindStyles.getThClasses()">額度</div>
+                  <div :class="tailwindStyles.getThClasses()">信用額度</div>
+                  <div :class="tailwindStyles.getThClasses()">消費額度</div>
                   <div :class="tailwindStyles.getThClasses()">調整</div>
                 </div>
               </div>
@@ -38,6 +39,7 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     <UInputNumber v-model="creditCard.limitCredit" orientation="vertical" />
                   </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(creditCard.totalSpent) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <ui-buttonGroup showSave :saveText="'修改額度'" @dataSave="adjustCreditCardLimit(creditCard)" />
                   </div>
@@ -57,7 +59,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardLimit, fetchCreditCardLimitUpdate } from "@/server/creditCardApi.ts";
 import { ICreditCardList, ICreditCardLimitList, IResponse } from "@/models/index.ts";
-import { getCurrentYear, getCurrentMonth, sliceArray } from "@/composables/tools.ts";
+import { getCurrentYear, getCurrentMonth, currencyFormat, sliceArray } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 

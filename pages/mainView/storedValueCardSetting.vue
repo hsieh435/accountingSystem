@@ -29,6 +29,7 @@
                   <div :class="tailwindStyles.getThClasses()">本月損益</div>
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">收支次數</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
@@ -64,6 +65,7 @@
                     <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <storedValueCardData
                       :storedValueCardIdGot="card.storedValueCardId"
@@ -129,7 +131,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function storedValueCardSearching() {
   try {
     const res: IResponse = await fetchStoredValueCardList(searchingParams);
-    // console.log("fetchStoredValueCardList:", res.data.data);
+    console.log("fetchStoredValueCardList:", res.data.data);
     storedValueCardList.value = res.data.data;
     await storedValueCardListFilterEvent();
   } catch (error) {

@@ -37,7 +37,7 @@ const oriAccountList = ref<any[]>([]);
 const isDisabled = computed(() => props.isDisable);
 
 onMounted(async () => {
-  console.log("props:", props);
+  // console.log("props:", props);
   if (props.selectTargetId) {
     await loadAccountList();
   }

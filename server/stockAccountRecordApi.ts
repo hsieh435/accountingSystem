@@ -1,5 +1,5 @@
 import { apiFetch } from "@/server/index.ts";
-import { IStockAccountRecordData, IFinanceRecordSearchingParams } from "@/models/index.ts";
+import { IStockAccountRecordList, IFinanceRecordSearchingParams } from "@/models/index.ts";
 
 export async function fetchStockAccountRecordList(data: IFinanceRecordSearchingParams) {
   const response = await apiFetch("/api/stockAccountRecord/list", "POST", {
@@ -15,14 +15,14 @@ export async function fetchStockAccountRecordById(data: { tradeId: string; accou
   return await response.json();
 }
 
-export async function fetchStockAccountRecordCreate(data: IStockAccountRecordData) {
+export async function fetchStockAccountRecordCreate(data: IStockAccountRecordList) {
   const response = await apiFetch("/api/stockAccountRecord/create", "POST", {
     body: JSON.stringify(data),
   });
   return await response.json();
 }
 
-export async function fetchStockAccountRecordUpdate(data: IStockAccountRecordData) {
+export async function fetchStockAccountRecordUpdate(data: IStockAccountRecordList) {
   const response = await apiFetch("/api/stockAccountRecord/update", "POST", {
     body: JSON.stringify(data),
   });

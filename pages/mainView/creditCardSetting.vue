@@ -27,6 +27,7 @@
                   <div :class="tailwindStyles.getThClasses()">消費提醒</div>
                   <div :class="tailwindStyles.getThClasses()">到期</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">收支次數</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
@@ -49,6 +50,7 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ card.expirationDate.slice(0, 7) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
                   </div>

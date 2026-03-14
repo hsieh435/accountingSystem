@@ -28,6 +28,7 @@
                   <div :class="tailwindStyles.getThClasses()">提醒金額</div>
                   <div :class="tailwindStyles.getThClasses()">提醒</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">收支次數</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
@@ -62,6 +63,7 @@
                     <font-awesome-icon :icon="['fas', 'check']" v-if="cashFlow.openAlert" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
                   </div>
@@ -123,7 +125,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function cashFlowSearching() {
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    console.log("fetchCashFlowList:", res.data.data);
+    // console.log("fetchCashFlowList:", res.data.data);
     cashFlowList.value = res.data.data;
     await cashFlowListFilterEvent();
   } catch (error) {

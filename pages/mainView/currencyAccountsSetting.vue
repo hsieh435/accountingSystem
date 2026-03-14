@@ -29,6 +29,7 @@
                   <div :class="tailwindStyles.getThClasses()">提醒金額</div>
                   <div :class="tailwindStyles.getThClasses()">薪資帳戶</div>
                   <div :class="tailwindStyles.getThClasses()">建立時間</div>
+                  <div :class="tailwindStyles.getThClasses()">收支次數</div>
                   <div :class="tailwindStyles.getThClasses()">操作</div>
                 </div>
               </div>
@@ -65,6 +66,7 @@
                     <font-awesome-icon :icon="['fas', 'check']" v-if="account.isSalaryAccount" />
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <currencyAccountsData
                       :currencyAccountIdGot="account.accountId"

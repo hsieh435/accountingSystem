@@ -90,7 +90,6 @@ const searchingParams = reactive<IStockPriceSearchingParams>({
   startDate: dateMove(getCurrentYMD(), -30),
   endDate: getCurrentYMD(),
 });
-// dateMove(searchingParams.startDate, 1)
 
 const stockPriceParams = ref<IStockPriceSearchingParams>({
   stockNo: "",

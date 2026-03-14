@@ -99,11 +99,10 @@
           </div>
         </div>
 
-        <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right">現金餘額：</span>
-            <UInput class="col-span-3" :value="currencyFormat(oriRemainingAmount)" disabled />
-          </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-6">
+          <span class="col-span-2 text-right">現金餘額：</span>
+          <UInput class="col-span-3" :value="currencyFormat(oriRemainingAmount)" disabled />
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
@@ -165,31 +164,32 @@ const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): ICashFlowRecordList => ({
-    tradeId: props.tradeIdGot || "",
-    cashflowId: "",
-    cashflowData: getDefaultCashFlow(),
-    userId: "",
-    tradeDatetime: "",
-    accountType: "cashFlow",
-    transactionType: "",
-    transactionCategoryData: getDefaultTransactionCategory(),
-    tradeCategory: "",
-    tradeCategoryData: getDefaultTradeCategory(),
-    tradeAmount: 0,
-    remainingAmount: 0,
-    currency: "",
-    currencyData: getDefaultCurrency(),
-    tradeDescription: "",
-    tradeNote: "",
-    createdDatetime: "",
-    editedDatetime: "",
-  });
+  tradeId: props.tradeIdGot || "",
+  cashflowId: "",
+  cashflowData: getDefaultCashFlow(),
+  userId: "",
+  tradeDatetime: "",
+  accountType: "cashFlow",
+  transactionType: "",
+  transactionCategoryData: getDefaultTransactionCategory(),
+  tradeCategory: "",
+  tradeCategoryData: getDefaultTradeCategory(),
+  tradeAmount: 0,
+  remainingAmount: 0,
+  currency: "",
+  currencyData: getDefaultCurrency(),
+  tradeDescription: "",
+  tradeNote: "",
+  createdDatetime: "",
+  editedDatetime: "",
+});
 const dataParams = reactive<ICashFlowRecordList>(getDefaultDataParams());
-const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const cashFlowChosen = ref<ICashFlowList>(getDefaultCashFlow());
+const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const setStep = ref<number>(1);
 const oriTradeAmount = ref<number>(0);
 const oriRemainingAmount = ref<number>(0);
+const oriTransactionType = ref<string>("");
 const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
@@ -197,9 +197,11 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(cashFlowChosen, getDefaultCashFlow());
     Object.assign(dataValidate, getDefaultTradeValidate());
-    tradeAmountValidateText.value = "";
-    oriRemainingAmount.value = 0;
+    setStep.value = 1;
     oriTradeAmount.value = 0;
+    oriRemainingAmount.value = 0;
+    oriTransactionType.value = "";
+    tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingCashFlowRecord();
     }
@@ -212,10 +214,10 @@ async function searchingCashFlowRecord() {
       cashflowId: props.cashflowIdGot,
       tradeId: props.tradeIdGot,
     });
-    console.log("fetchCashFlowRecordByTradeId:", res.data.data);
+    // console.log("fetchCashFlowRecordByTradeId:", res.data.data);
     Object.assign(dataParams, res.data.data);
     oriTradeAmount.value = res.data.data.tradeAmount;
-    oriRemainingAmount.value = dataParams.remainingAmount;
+    oriTransactionType.value = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -225,9 +227,7 @@ async function settingCashflowAccount(account: ICashFlowList | null) {
   cashFlowChosen.value = account || getDefaultCashFlow();
   dataParams.cashflowId = cashFlowChosen.value.cashflowId;
   dataParams.currency = cashFlowChosen.value.currency;
-  oriRemainingAmount.value = cashFlowChosen.value.presentAmount;
   // console.log("cashFlowChosen:", cashFlowChosen.value);
-
   await settingRemainingAmount();
 
   if (
@@ -250,7 +250,7 @@ async function settingTradeDatetime(dateTime: string) {
 
 async function settingTransactionType(type: string) {
   dataParams.transactionType = type;
-  if (dataParams.cashflowId.length > 0) {
+  if (dataParams.transactionType.length > 0) {
     await settingRemainingAmount();
   }
 }
@@ -260,21 +260,26 @@ async function settingTradeCategory(tradeCategoryId: string) {
 }
 
 async function settingRemainingAmount() {
-  // console.log("oriRemainingAmount:", oriRemainingAmount.value);
-  // console.log("tradeAmount:", dataParams.tradeAmount);
+
+  oriRemainingAmount.value = cashFlowChosen.value.presentAmount;
   if (dataParams.cashflowId.length > 0 && dataParams.transactionType === "income") {
     oriRemainingAmount.value = cashFlowChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeAmount;
+    if (oriTransactionType.value === "expense") {
+      oriRemainingAmount.value = oriRemainingAmount.value + oriTradeAmount.value * 2;
+    }
   } else if (dataParams.cashflowId.length > 0 && dataParams.transactionType === "expense") {
     oriRemainingAmount.value = cashFlowChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeAmount;
-  } else {
-    // oriRemainingAmount.value = 0;
+    if (oriTransactionType.value === "income") {
+      oriRemainingAmount.value = oriRemainingAmount.value - oriTradeAmount.value * 2;
+    }
+  } else if (!dataParams.cashflowId || !dataParams.transactionType) {
+    oriRemainingAmount.value = 0;
   }
-  // console.log("type:", dataParams.transactionType);
-  console.log("oriRemainingAmount:", oriRemainingAmount.value);
 
   if (
     openTradeData.value === true &&
     cashFlowChosen.value.cashflowId.length > 0 &&
+    cashFlowChosen.value.openAlert === true &&
     oriRemainingAmount.value < cashFlowChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
@@ -300,11 +305,7 @@ async function validateData() {
   if (!dataParams.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (
-    typeof dataParams.tradeAmount !== "number" ||
-    !isFinite(dataParams.tradeAmount) ||
-    dataParams.tradeAmount < 0
-  ) {
+  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "交易金額不得為負";
   }
@@ -317,7 +318,7 @@ async function cashFlowRecordDataHandling() {
 
   try {
     const res: IResponse = await (props.tradeIdGot ? fetchCashFlowRecordUpdate : fetchCashFlowRecordCreate)(dataParams);
-    console.log("res:", res);
+    // console.log("res:", res);
     messageToast({ message: res.data.message, icon: res.data.returnCode === 0 ? "success" : "error" });
     emits("dataReseaching");
     openTradeData.value = props.tradeIdGot.length > 0;

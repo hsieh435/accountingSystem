@@ -138,6 +138,7 @@ export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
 });
 
 
+
 export const getDefaultStockAccount = (): IStockAccountList => ({
   accountId: "",
   userId: "",
@@ -169,6 +170,8 @@ export const getDefaultCurrency = (): ICurrencyList => ({
   minimumDenomination: 0,
   sort: 0,
 });
+
+
 
 export const getDefaultTradeCategory = (): ITradeCategory => ({
   isCashflowAble: false,
