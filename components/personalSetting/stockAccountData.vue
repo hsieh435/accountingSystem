@@ -173,6 +173,7 @@ const getDefaultDataParams = (): IStockAccountList => ({
   accountBankName: "",
   currency: "",
   currencyData: getDefaultCurrency(),
+  frequency: 0,
   startingAmount: 0,
   presentAmount: 0,
   expenseExpenditureCurrentMonth: 0,

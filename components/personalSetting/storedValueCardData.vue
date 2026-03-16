@@ -153,6 +153,7 @@ const getDefaultDataParams = (): IStoredValueCardList => ({
   storedValueCardName: "",
   currency: "",
   currencyData: getDefaultCurrency(),
+  frequency: 0,
   startingAmount: 0,
   presentAmount: 0,
   minimumValueAllowed: 0,

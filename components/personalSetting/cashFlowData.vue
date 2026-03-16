@@ -146,6 +146,7 @@ const getDefaultDataParams = (): ICashFlowList => ({
   startingAmount: 0,
   presentAmount: 0,
   expenseExpenditureCurrentMonth: 0,
+  frequency: 0,
   incomeExpenditureCurrentMonth: 0,
   profitLossExpenditureCurrentMonth: 0,
   minimumValueAllowed: 0,
