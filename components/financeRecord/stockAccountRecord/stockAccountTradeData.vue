@@ -163,9 +163,14 @@
           <UInput class="col-span-2" :value="currencyFormat(dataParams.tradeTotalPrice)" disabled />
         </div>
 
-        <div class="flex justify-start items-center grid grid-cols-8">
-          <span class="col-span-2 text-right">帳戶餘額：</span>
-          <UInput class="col-span-3" :value="currencyFormat(oriRemainingAmount)" disabled />
+        <div class="w-full">
+          <div class="w-full flex justify-start items-center grid grid-cols-8">
+            <span class="col-span-2 text-right">帳戶餘額：</span>
+            <UInput :class="['col-span-4', dataValidate.tradeTotalPrice ? '' : 'outline-1 outline-red-500']" :value="currencyFormat(oriRemainingAmount)" disabled />
+          </div>
+          <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeTotalPrice">
+            <span class="col-span-4 col-end-7 text-red-500">{{ tradeTotalPriceValidateText }}</span>
+          </div>
         </div>
 
         <div class="flex justify-start items-center grid grid-cols-8">
@@ -263,7 +268,7 @@ const setStep = ref<number>(1);
 const oriTradeAmount = ref<number>(0);
 const oriRemainingAmount = ref<number>(0);
 const oriTransactionType = ref<string>("");
-const tradeAmountValidateText = ref<string>("");
+const tradeTotalPriceValidateText = ref<string>("");
 
 watch(openTradeData, () => {
   if (openTradeData.value === true) {
@@ -274,7 +279,7 @@ watch(openTradeData, () => {
     oriTradeAmount.value = 0;
     oriRemainingAmount.value = 0;
     oriTransactionType.value = "";
-    tradeAmountValidateText.value = "";
+    tradeTotalPriceValidateText.value = "";
     if (props.tradeIdGot) {
       searchingStockAccountRecord();
     }
@@ -289,7 +294,7 @@ async function searchingStockAccountRecord() {
     });
     console.log("fetchStockAccountRecordById:", res.data.data);
     Object.assign(dataParams, res.data.data);
-    oriTradeAmount.value = res.data.data.tradeAmount;
+    oriTradeAmount.value = res.data.data.tradeTotalPrice;
     oriTransactionType.value = res.data.data.transactionType;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -300,7 +305,7 @@ async function settingAccount(account: IStockAccountList | null) {
   stockAccountChosen.value = account || getDefaultStockAccount();
   dataParams.accountId = stockAccountChosen.value.accountId || "";
   dataParams.currency = stockAccountChosen.value.currency || "";
-  // console.log("stockAccountChosen:", stockAccountChosen.value);
+  console.log("stockAccountChosen:", stockAccountChosen.value);
   await settingRemainingAmount();
 
   if (
@@ -363,15 +368,6 @@ async function settingRemainingAmount() {
     }
   }
 
-  if (
-    openTradeData.value === true &&
-    stockAccountChosen.value.accountId.length > 0 &&
-    stockAccountChosen.value.openAlert === true &&
-    oriRemainingAmount.value < stockAccountChosen.value.minimumValueAllowed
-  ) {
-    dataValidate.tradeAmount = false;
-    tradeAmountValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
-  }
 }
 
 async function settingCurrency(currencyData: ICurrencyList) {
@@ -423,6 +419,13 @@ async function validateData() {
     dataParams.transactionTax < 0
   ) {
     dataValidate.transactionTax = false;
+  }
+  if (dataParams.accountId.length > 0 && oriRemainingAmount.value < stockAccountChosen.value.minimumValueAllowed) {
+    dataValidate.tradeTotalPrice = false;
+    tradeTotalPriceValidateText.value = `現金流最低允許值為：${stockAccountChosen.value.minimumValueAllowed}`;
+  } else {
+    dataValidate.tradeTotalPrice = true;
+    tradeTotalPriceValidateText.value = "";
   }
 
   return dataObjectValidate(dataValidate);

@@ -26,7 +26,7 @@
             <div :class="['w-fit', dataValidate.creditCardId ? '' : 'outline-1 outline-red-500']">
               <accountSelect
                 selectTargetId="isCreditcardAble"
-                :accountIdGot="dataParams.updateData.creditCardId"
+                :accountIdGot="dataParams.creditCardId"
                 :sellectAll="false"
                 :isDisable="props.tradeIdGot ? true : false"
                 @sendbackAccount="settingCreditCardAccount" />
@@ -42,7 +42,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易時間：</span>
             <div :class="['w-fit', dataValidate.tradeDatetime ? '' : 'outline-1 outline-red-500']">
               <dateTimeSelect
-                :dateTimeGot="dataParams.updateData.tradeDatetime"
+                :dateTimeGot="dataParams.tradeDatetime"
                 :minDateTime="creditCardStartDate"
                 :maxDateTime="creditCardExpirationDate"
                 :isDisabled="!props.isEditable"
@@ -60,7 +60,7 @@
             <div :class="['w-fit', dataValidate.tradeCategory ? '' : 'outline-1 outline-red-500']">
               <tradeCategorySelect
                 accountType="isCreditcardAble"
-                :tradeCategoryGot="dataParams.updateData.tradeCategory"
+                :tradeCategoryGot="dataParams.tradeCategory"
                 :isEditable="props.isEditable"
                 @sendbackTradeCategory="settingTradeCategory" />
             </div>
@@ -74,7 +74,7 @@
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
             <dataBaseCurrencySelect
-              :currencyIdGot="dataParams.updateData.currency"
+              :currencyIdGot="dataParams.currency"
               isDisable
               @sendbackCurrencyData="settingCurrency" />
           </div>
@@ -85,7 +85,7 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>交易金額：</span>
             <UInputNumber
               :class="['col-span-3', dataValidate.tradeAmount ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.updateData.tradeAmount"
+              v-model="dataParams.tradeAmount"
               orientation="vertical"
               :min="0"
               :step="setStep"
@@ -99,12 +99,12 @@
 
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">說明：</span>
-          <UInput class="col-span-3" v-model="dataParams.updateData.tradeDescription" :disabled="!props.isEditable" />
+          <UInput class="col-span-3" v-model="dataParams.tradeDescription" :disabled="!props.isEditable" />
         </div>
 
         <div class="w-full flex justify-start items-start grid grid-cols-6">
           <span class="col-span-2 text-right my-1">附註：</span>
-          <UTextarea class="col-span-3" v-model="dataParams.updateData.tradeNote" :disabled="!props.isEditable" />
+          <UTextarea class="col-span-3" v-model="dataParams.tradeNote" :disabled="!props.isEditable" />
         </div>
 
         <div class="my-2">
@@ -125,7 +125,7 @@ import {
 } from "@/server/creditCardRecordApi.ts";
 import { fetchCreditCardLimit } from "@/server/creditCardApi.ts";
 import { fetchCreditCardMonthExpenditure } from "@/server/creditCardApi.ts";
-import { ICreditCardRecordData, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { ICreditCardRecordList, ICreditCardList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultCreditCard,
@@ -148,33 +148,26 @@ const props = withDefaults(defineProps<{ tradeIdGot?: string; creditCardIdGot?: 
 const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
-const getDefaultDataParams = (): ICreditCardRecordData => ({
-  updateData: {
-    tradeId: props.tradeIdGot || "",
-    creditCardId: props.creditCardIdGot || "",
-    creditcardData: getDefaultCreditCard(),
-    tradeDatetime: "",
-    userId: "",
-    accountType: "",
-    tradeCategory: "",
-    tradeCategoryData: getDefaultTradeCategory(),
-    tradeAmount: 0,
-    currency: "",
-    currencyData: getDefaultCurrency(),
-    billMonth: "",
-    remainingAmount: 0,
-    tradeDescription: "",
-    tradeNote: "",
-    createdDatetime: "",
-    editedDatetime: "",
-  },
-  oriData: {
-    oriTradeDatetime: "",
-    oriTradeAmount: 0,
-    oriCreditUsage: 0,
-  },
+const getDefaultDataParams = (): ICreditCardRecordList => ({
+  tradeId: props.tradeIdGot || "",
+  creditCardId: props.creditCardIdGot || "",
+  creditcardData: getDefaultCreditCard(),
+  tradeDatetime: "",
+  userId: "",
+  accountType: "",
+  tradeCategory: "",
+  tradeCategoryData: getDefaultTradeCategory(),
+  tradeAmount: 0,
+  currency: "",
+  currencyData: getDefaultCurrency(),
+  billMonth: "",
+  remainingAmount: 0,
+  tradeDescription: "",
+  tradeNote: "",
+  createdDatetime: "",
+  editedDatetime: "",
 });
-const dataParams = reactive<ICreditCardRecordData>(getDefaultDataParams());
+const dataParams = reactive<ICreditCardRecordList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const creditCardChosen = ref<ICreditCardList>(getDefaultCreditCard());
 const spendCalculation = ref<number>(0);
@@ -182,6 +175,7 @@ const limitCurrentMonth = ref<number>(0);
 const creditCardStartDate = ref<string>("");
 const creditCardExpirationDate = ref<string>("");
 const setStep = ref<number>(1);
+const oriTradeAmount = ref<number>(0);
 const tradeAmountValidateText = ref<string>("");
 
 watch(openTradeData, () => {
@@ -189,9 +183,10 @@ watch(openTradeData, () => {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(dataValidate, getDefaultTradeValidate());
     Object.assign(creditCardChosen, getDefaultCreditCard());
-    tradeAmountValidateText.value = "";
     creditCardStartDate.value = "";
     creditCardExpirationDate.value = "";
+    oriTradeAmount.value = 0;
+    tradeAmountValidateText.value = "";
     if (props.tradeIdGot) {
       searchingCreditCardRecord();
     }
@@ -201,8 +196,8 @@ watch(openTradeData, () => {
 async function creditcardmonthlyexpenditure() {
   try {
     const res: IResponse = await fetchCreditCardMonthExpenditure({
-      creditcardId: dataParams.updateData.creditCardId || "",
-      tradeDatetime: dataParams.updateData.billMonth || "",
+      creditcardId: dataParams.creditCardId || "",
+      tradeDatetime: dataParams.billMonth || "",
     });
     console.log("res:", res.data.data.tradeTotal);
     spendCalculation.value = res.data.data.tradeTotal || 0;
@@ -219,8 +214,7 @@ async function searchingCreditCardRecord() {
     });
     console.log("fetchCreditCardRecordById:", res.data.data);
     Object.assign(dataParams, res.data.data);
-    dataParams.oriData.oriTradeDatetime = res.data.data.tradeDatetime;
-    dataParams.oriData.oriTradeAmount = res.data.data.tradeAmount;
+    oriTradeAmount.value = res.data.data.tradeAmount;
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
@@ -229,8 +223,8 @@ async function searchingCreditCardRecord() {
 async function searchingcreditcardlimit() {
   try {
     const res: IResponse = await fetchCreditCardLimit({
-      creditcardId: dataParams.updateData.creditCardId,
-      yearMonth: yearMonthFormat(dataParams.updateData.tradeDatetime),
+      creditcardId: dataParams.creditCardId,
+      yearMonth: yearMonthFormat(dataParams.tradeDatetime),
     });
     console.log("fetchCreditCardLimit:", res.data.data);
     limitCurrentMonth.value = res.data.data[0]?.limitCredit || 0;
@@ -240,10 +234,10 @@ async function searchingcreditcardlimit() {
 }
 
 async function settingCreditCardAccount(account: ICreditCardList | null) {
-  console.log("account:", account);
+  // console.log("account:", account);
   creditCardChosen.value = account || getDefaultCreditCard();
-  dataParams.updateData.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
-  dataParams.updateData.currency = creditCardChosen.value.currency || "";
+  dataParams.creditCardId = creditCardChosen.value.creditcardId || getDefaultCreditCard().creditcardId;
+  dataParams.currency = creditCardChosen.value.currency || "";
   creditCardStartDate.value = creditCardChosen.value.startDate || "";
   creditCardExpirationDate.value = creditCardChosen.value.expirationDate || "";
   await searchingcreditcardlimit();
@@ -251,14 +245,14 @@ async function settingCreditCardAccount(account: ICreditCardList | null) {
 }
 
 async function settingTradeDatetime(dateTime: string) {
-  dataParams.updateData.tradeDatetime = dateTime;
-  dataParams.updateData.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
+  dataParams.tradeDatetime = dateTime;
+  dataParams.billMonth = dateTime ? new Date(dateTime).toISOString().slice(0, 7) + "-01" : "";
   await searchingcreditcardlimit();
   await settingUsageAlert();
 }
 
 async function settingTradeCategory(tradeCategoryId: string) {
-  dataParams.updateData.tradeCategory = tradeCategoryId;
+  dataParams.tradeCategory = tradeCategoryId;
 }
 
 async function settingCurrency(currencyData: ICurrencyList) {
@@ -266,12 +260,12 @@ async function settingCurrency(currencyData: ICurrencyList) {
 }
 
 async function settingUsageAlert() {
-  // getCurrentYear() === getCurrentYear(dataParams.updateData.tradeDatetime) &&
-  // getCurrentMonth() === getCurrentMonth(dataParams.updateData.tradeDatetime)
+  // getCurrentYear() === getCurrentYear(dataParams.tradeDatetime) &&
+  // getCurrentMonth() === getCurrentMonth(dataParams.tradeDatetime)
   if (creditCardChosen.value.openAlert === true) {
     await creditcardmonthlyexpenditure();
     messageToast({
-      message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${spendCalculation.value + dataParams.updateData.tradeAmount} 元`,
+      message: `警示金額 ${creditCardChosen.value.alertValue} 元，本月已花費 ${spendCalculation.value + dataParams.tradeAmount} 元`,
       icon: "warning",
     });
   }
@@ -280,24 +274,20 @@ async function settingUsageAlert() {
 async function validateData() {
   Object.assign(dataValidate, getDefaultTradeValidate());
 
-  if (!dataParams.updateData.creditCardId) {
+  if (!dataParams.creditCardId) {
     dataValidate.creditCardId = false;
   }
-  if (!dataParams.updateData.tradeDatetime) {
+  if (!dataParams.tradeDatetime) {
     dataValidate.tradeDatetime = false;
   }
-  if (!dataParams.updateData.tradeCategory) {
+  if (!dataParams.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (
-    typeof dataParams.updateData.tradeAmount !== "number" ||
-    !isFinite(dataParams.updateData.tradeAmount) ||
-    dataParams.updateData.tradeAmount < 0
-  ) {
+  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "確實填寫交易金額";
   }
-  if (spendCalculation.value + dataParams.updateData.tradeAmount > limitCurrentMonth.value) {
+  if (spendCalculation.value + dataParams.tradeAmount > limitCurrentMonth.value) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "本月交易金額超過信用額度";
   }

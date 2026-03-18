@@ -42,6 +42,7 @@ export const getDefaultTradeValidate = (): { [key: string]: boolean } => ({
   quantity: true,
   handlingFee: true,
   transactionTax: true,
+  tradeTotalPrice: true,
 });
 
 

@@ -270,7 +270,6 @@ async function settingRemainingAmount() {
   if (
     openTradeData.value === true &&
     currencyAccountChosen.value.accountId.length > 0 &&
-    currencyAccountChosen.value.openAlert === true &&
     oriRemainingAmount.value < currencyAccountChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;

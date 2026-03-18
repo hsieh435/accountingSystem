@@ -26,7 +26,7 @@
                   <div :class="tailwindStyles.getThClasses()">貨幣</div>
                   <div :class="tailwindStyles.getThClasses()">股票</div>
                   <div :class="tailwindStyles.getThClasses()">股數</div>
-                  <div :class="tailwindStyles.getThClasses()">金額</div>
+                  <div :class="tailwindStyles.getThClasses()">金額(元 / 股)</div>
                   <div :class="tailwindStyles.getThClasses()">手續費</div>
                   <div :class="tailwindStyles.getThClasses()">交易稅</div>
                   <div :class="tailwindStyles.getThClasses()">交易總額</div>
@@ -43,7 +43,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ record.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ record.stockNo + " " + record.stockName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.quantity) }} 股</div>
-                  <div :class="tailwindStyles.getTdClasses()">一股 {{ currencyFormat(record.pricePerShare) }} 元</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.pricePerShare) }} 元</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.handlingFee) }} 元</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.transactionTax) }} 元</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(record.tradeTotalPrice) }} 元</div>

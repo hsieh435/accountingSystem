@@ -227,16 +227,6 @@ export interface ICreditCardRecordList {
   editedDatetime: string;
 }
 
-// 信用卡收支資料新增、編輯 interface
-export interface ICreditCardRecordData {
-  updateData: ICreditCardRecordList;
-  oriData: {
-    oriTradeDatetime: string;
-    oriTradeAmount: number;
-    oriCreditUsage: number;
-  };
-}
-
 export interface ICreditCardLimitList {
   no?: number;
   creditcardId: string;

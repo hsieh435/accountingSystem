@@ -282,13 +282,13 @@ async function settingRemainingAmount() {
   if (
     openTradeData.value === true &&
     storedValueCardChosen.value.storedValueCardId.length > 0 &&
-    storedValueCardChosen.value.openAlert === true &&
     oriRemainingAmount.value < storedValueCardChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = `票卡最低允許值為：${currencyFormat(storedValueCardChosen.value.minimumValueAllowed)}`;
   } else {
     dataValidate.tradeAmount = true;
+    tradeAmountValidateText.value = "";
   }
 }
 

@@ -41,9 +41,17 @@ taskkill /pid xxxxx /f
 
 git ls-files | wc -l
 103
+127
 
 git ls-files | xargs cat | wc -l
 23794
+26043
+
+average
+231.1
+205.06
+
+
 
 npm uninstall package-name
 

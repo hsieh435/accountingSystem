@@ -279,7 +279,6 @@ async function settingRemainingAmount() {
   if (
     openTradeData.value === true &&
     cashFlowChosen.value.cashflowId.length > 0 &&
-    cashFlowChosen.value.openAlert === true &&
     oriRemainingAmount.value < cashFlowChosen.value.minimumValueAllowed
   ) {
     dataValidate.tradeAmount = false;
