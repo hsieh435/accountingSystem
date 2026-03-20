@@ -29,6 +29,9 @@ onMounted(async () => {
   accountId.value = props.accountIdGot;
   if (props.isAllStorage === true || (props.isAllStorage === false && accountId.value !== "")) {
     await searchingStockStorageList();
+  } else {
+    stockList.value = [];
+    stockNo.value = "";
   }
 });
 
@@ -37,6 +40,9 @@ watch(props, () => {
   accountId.value = props.accountIdGot;
   if (props.isAllStorage === true || (props.isAllStorage === false && accountId.value !== "")) {
     searchingStockStorageList();
+  } else {
+    stockList.value = [];
+    stockNo.value = "";
   }
 });
 

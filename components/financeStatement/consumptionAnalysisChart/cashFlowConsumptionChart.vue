@@ -34,11 +34,14 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
+import type { Ref } from "vue";
 import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi.ts";
 import { IFinanceRecordSearchingParams, ICashFlowRecordList, ICashFlowList, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
+
+type PieChartInstance = Chart<"pie", number[], string>;
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
@@ -47,8 +50,8 @@ const incomePieChartTitle = ref<string>("");
 const expensePieChartTitle = ref<string>("");
 const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
 const expenseDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const incomeChartInstance = ref<Chart | null>(null);
-const expenseChartInstance = ref<Chart | null>(null);
+const incomeChartInstance = ref<PieChartInstance | null>(null);
+const expenseChartInstance = ref<PieChartInstance | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -113,7 +116,7 @@ async function renderingChart(
   chartId: HTMLCanvasElement,
   usingData: { tradeName: string; tradeAmount: number }[],
   chartTitle: string,
-  chartInstanceRef: { value: Chart | null },
+  chartInstanceRef: Ref<PieChartInstance | null>,
 ) {
   // console.log("chartId:", chartId);
   // console.log("usingData:", usingData);
@@ -165,9 +168,9 @@ async function aggregateData(data: ICashFlowRecordList[], filterType: string) {
   }
 
   recordList.forEach((item: ICashFlowRecordList) => {
-    const { tradeName, tradeAmount } = item;
-    if (typeof tradeName === "string") {
-      resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;
+    if (typeof item.tradeCategoryData.tradeName === "string") {
+      resultMap[item.tradeCategoryData.tradeName] =
+        (resultMap[item.tradeCategoryData.tradeName] || 0) + item.tradeAmount;
     }
   });
 

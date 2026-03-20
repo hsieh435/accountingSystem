@@ -48,18 +48,14 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.minimumValueAllowed) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.maximumValueAllowed) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(card.incomeExpenditureCurrentMonth) }}
-                  </div>
-                  <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(card.expenseExpenditureCurrentMonth) }}
-                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.incomeSumCurrentMonth) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.expenseSumCurrentMonth) }}</div>
                   <div
                     :class="[
-                      card.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      card.profitLossSumCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
                       tailwindStyles.getTdClasses(),
                     ]">
-                    {{ currencyFormat(card.profitLossExpenditureCurrentMonth) }}
+                    {{ currencyFormat(card.profitLossSumCurrentMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="card.openAlert" />

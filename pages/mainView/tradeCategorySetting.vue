@@ -7,7 +7,7 @@
         :dataPerpage="itemsPerPage"
         :totalDataQuanity="tradeCategoryList.length"
         :showFilter="false"
-        @tableSliceChange="settingTableSlice"  />
+        @tableSliceChange="settingTableSlice" />
       <template v-if="tradeCategoryListFiltered.length > 0">
         <div class="rounded-lg overflow-auto">
           <div :class="tailwindStyles.getTableClasses()">

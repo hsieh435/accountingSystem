@@ -50,6 +50,8 @@ import { messageToast } from "@/composables/swalDialog.ts";
 import type { AccordionItem } from "@nuxt/ui";
 import { Chart } from "chart.js/auto";
 
+type DoughnutChartInstance = Chart<"doughnut", number[], string>;
+
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
   middleware: "auth",
@@ -70,7 +72,7 @@ const totalaccordion = ref<number>(0);
 const totalCostOverall = ref<number>(0);
 const currentValueOverall = ref<number>(0);
 const profitOverall = ref<number>(0);
-const stockStorageChart = ref<Chart | null>(null);
+const stockStorageChart = ref<DoughnutChartInstance | null>(null);
 
 async function settingAccountId(accountItem: IStockAccountList | null) {
   searchingParams.accountId = accountItem?.accountId || "";
@@ -79,7 +81,7 @@ async function settingAccountId(accountItem: IStockAccountList | null) {
 async function searchingStockStorage() {
   try {
     const res: IResponse = await fetchStockStorageProfitList(searchingParams.accountId);
-    console.log("fetchStockStorageProfitList:", res.data.data);
+    // console.log("fetchStockStorageProfitList:", res.data.data);
     accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
       label: `${item.stockNo} / ${item.stockName}`,
       content: item.stockNo,
@@ -111,7 +113,7 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
       stockStorageChart.value = null;
     }
 
-    stockStorageChart.value = new Chart(ctx, {
+    stockStorageChart.value = new Chart<"doughnut", number[], string>(ctx, {
       type: "doughnut",
       data: {
         labels: [

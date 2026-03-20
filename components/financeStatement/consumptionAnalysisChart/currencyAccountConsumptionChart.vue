@@ -45,6 +45,8 @@ import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
+type PieChartInstance = Chart<"pie", number[], string>;
+
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
@@ -52,8 +54,8 @@ const incomePieChartTitle = ref<string>("");
 const expensePieChartTitle = ref<string>("");
 const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
 const expenseDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-const incomeChartInstance = ref<Chart | null>(null);
-const expenseChartInstance = ref<Chart | null>(null);
+const incomeChartInstance = ref<PieChartInstance | null>(null);
+const expenseChartInstance = ref<PieChartInstance | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -96,43 +98,41 @@ async function settingSearchingParams() {
     const currencyAccountIncomeChart = document.getElementById("currencyAccountIncomeChart") as HTMLCanvasElement;
     const currencyAccountExpenseChart = document.getElementById("currencyAccountExpenseChart") as HTMLCanvasElement;
 
-    await renderingChart(
+    incomeChartInstance.value = await renderingChart(
       currencyAccountIncomeChart,
       incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
       incomePieChartTitle.value,
-      incomeChartInstance,
+      incomeChartInstance.value,
     );
-    await renderingChart(
+    expenseChartInstance.value = await renderingChart(
       currencyAccountExpenseChart,
       expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
       expensePieChartTitle.value,
-      expenseChartInstance,
+      expenseChartInstance.value,
     );
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-// Accept chartInstance as a ref and update it after destroying/creating
 async function renderingChart(
   chartId: HTMLCanvasElement,
   usingData: { tradeName: string; tradeAmount: number }[],
   chartTitle: string,
-  chartInstanceRef: { value: Chart | null },
+  chartInstance: PieChartInstance | null,
 ) {
   // console.log("chartId:", chartId);
   // console.log("usingData:", usingData);
   // console.log("chartTitle:", chartTitle);
 
-  if (chartInstanceRef.value) {
-    chartInstanceRef.value.destroy();
-    chartInstanceRef.value = null;
+  if (chartInstance) {
+    chartInstance.destroy();
   }
 
   const labels = usingData.map((item) => item.tradeName);
   const values = usingData.map((item) => item.tradeAmount);
 
-  chartInstanceRef.value = new Chart(chartId, {
+  return new Chart<"pie", number[], string>(chartId, {
     type: "pie",
     data: {
       labels: labels,
@@ -170,7 +170,8 @@ async function aggregateData(data: IcurrencyAccountRecordList[], filterType: str
   }
 
   recordList.forEach((item: IcurrencyAccountRecordList) => {
-    const { tradeName, tradeAmount } = item;
+    const tradeName = item.tradeCategoryData?.tradeName;
+    const { tradeAmount } = item;
     if (typeof tradeName === "string") {
       resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;
     }

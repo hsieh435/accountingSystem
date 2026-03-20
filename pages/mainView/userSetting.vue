@@ -29,8 +29,7 @@
               type="search" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userName">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入使用者姓名</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入使用者姓名</span>
           </div>
         </div>
 
@@ -44,8 +43,7 @@
               type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userOldPassword">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入舊密碼</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入舊密碼</span>
           </div>
         </div>
 
@@ -59,8 +57,7 @@
               type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.userNewPassword">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">請輸入新密碼</span>
+            <span class="col-span-4 col-end-7 text-red-500">請輸入新密碼</span>
           </div>
         </div>
 
@@ -74,8 +71,7 @@
               type="password" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.secondPassword">
-            <span class="col-span-2 text-right"></span>
-            <span class="col-span-4 text-red-500 mx-2">{{ secondPasswordValidateText }}</span>
+            <span class="col-span-4 col-end-7 text-red-500">{{ secondPasswordValidateText }}</span>
           </div>
         </div>
 
@@ -96,7 +92,6 @@ import { fetchUserDataChange } from "@/server/userDataApi.ts";
 import { setLocalStorageItem } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { encryptString } from "@/composables/crypto.ts";
-// import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({

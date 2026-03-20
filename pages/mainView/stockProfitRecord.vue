@@ -1,11 +1,11 @@
 <template>
   <div class="flex-col justify-start items-center">
-    <div class="bg-gray-100 flex items-center gap-x-5 px-3 py-1">
-      <div class="flex items-center">
+    <div class="bg-gray-100 flex flex-wrap items-center gap-x-5 px-3 py-1">
+      <div class="flex flex-wrap items-center">
         <span>證券帳戶：</span>
         <accountSelect :selectTargetId="'isStaccountAble'" :sellectAll="false" @sendbackAccount="settingAccount" />
       </div>
-      <div class="flex items-center">
+      <div class="flex flex-wrap items-center">
         <span>存股：</span>
         <stockStorageSelect
           :accountIdGot="searchingParams.stockAccountId"
@@ -24,7 +24,7 @@
             :searchingParamsGot="{
               stockNo: item.stockNo,
               stockName: item.stockName,
-              startDate: item.tradeDatetime,
+              startDate: getCurrentYMD(item.tradeDatetime),
               endDate: getCurrentYMD(),
             }"
             :purchasePrice="item.pricePerShare"
@@ -77,12 +77,12 @@ async function searchingStockStorage() {
 
   try {
     const res: IResponse = await fetchEachStockStorageData(searchingParams);
+    console.log("fetchEachStockStorageData:", res.data.data);
     stockPurchaseRecord.value = res.data.data;
     for (let i = 0; i < stockPurchaseRecord.value.length; i++) {
       stockPurchaseRecord.value[i].tradeDatetime = getCurrentYMD(stockPurchaseRecord.value[i].tradeDatetime);
       stockPurchaseRecord.value[i].index = i + 1;
     }
-    // console.log("stockPurchaseRecord:", stockPurchaseRecord.value);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

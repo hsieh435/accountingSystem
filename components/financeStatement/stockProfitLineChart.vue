@@ -11,6 +11,8 @@ import { currencyFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
+type LineChartInstance = Chart<"line", number[], string>;
+
 const props = withDefaults(
   defineProps<{ searchingParamsGot: IStockPriceSearchingParams; purchasePrice: number; indexGot: number }>(),
   {
@@ -20,10 +22,10 @@ const props = withDefaults(
 
 const lineChartTitle = ref<string>("");
 const stockDataLineChart = ref<{ label: string; data: number }[]>([]);
-const chartInstance = ref<Chart | null>(null);
+const chartInstance = ref<LineChartInstance | null>(null);
 
 onMounted(() => {
-  // console.log("onMounted props:", props);
+  console.log("onMounted props:", props);
   searchingStockPrice();
 });
 
@@ -94,7 +96,7 @@ async function renderingChart() {
     : 0;
   let currentValue = 0;
 
-  chartInstance.value = new Chart(stockProfitLineChartStockNoIndex, {
+  chartInstance.value = new Chart<"line", number[], string>(stockProfitLineChartStockNoIndex, {
     type: "line",
     data: {
       labels: getLabels(stockDataLineChart.value) ? getLabels(stockDataLineChart.value) : [],

@@ -3,7 +3,10 @@
     <div class="w-full bg-gray-100 flex flex-wrap justify-start items-center px-3 py-1">
       <div class="flex items-center me-3 my-1">
         <span>儲值票卡：</span>
-        <accountSelect :selectTargetId="'isStoredvaluecardAble'" :sellectAll="false" @sendbackAccount="settingAccountId" />
+        <accountSelect
+          :selectTargetId="'isStoredvaluecardAble'"
+          :sellectAll="false"
+          @sendbackAccount="settingAccountId" />
       </div>
 
       <span>時間區間：</span>
@@ -45,6 +48,8 @@ import { getCurrentYear, yearMonthDayTimeFormat } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
+type PieChartInstance = Chart<"pie", number[], string>;
+
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
 const dateSelect = defineAsyncComponent(() => import("@/components/ui/select/dateSelect.vue"));
 
@@ -52,9 +57,8 @@ const incomePieChartTitle = ref<string>("");
 const expensePieChartTitle = ref<string>("");
 const incomeDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
 const expenseDataPieChart = ref<{ tradeName: string; tradeAmount: number }[]>([]);
-// Use ref for chart instances so they persist and can be updated
-const incomeChartInstance = ref<Chart | null>(null);
-const expenseChartInstance = ref<Chart | null>(null);
+const incomeChartInstance = ref<PieChartInstance | null>(null);
+const expenseChartInstance = ref<PieChartInstance | null>(null);
 
 const searchParams = reactive<IFinanceRecordSearchingParams>({
   accountId: "",
@@ -98,43 +102,41 @@ async function settingSearchingParams() {
     const storedValueCardIncomeChart = document.getElementById("storedValueCardIncomeChart") as HTMLCanvasElement;
     const storedValueCardExpenseChart = document.getElementById("storedValueCardExpenseChart") as HTMLCanvasElement;
 
-    await renderingChart(
+    incomeChartInstance.value = await renderingChart(
       storedValueCardIncomeChart,
       incomeDataPieChart.value.length > 0 ? incomeDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
       incomePieChartTitle.value,
-      incomeChartInstance,
+      incomeChartInstance.value,
     );
-    await renderingChart(
+    expenseChartInstance.value = await renderingChart(
       storedValueCardExpenseChart,
       expenseDataPieChart.value.length > 0 ? expenseDataPieChart.value : [{ tradeName: "無資料", tradeAmount: 0 }],
       expensePieChartTitle.value,
-      expenseChartInstance,
+      expenseChartInstance.value,
     );
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
 }
 
-// Accept chartInstance as a ref and update it after destroying/creating
 async function renderingChart(
   chartId: HTMLCanvasElement,
   usingData: { tradeName: string; tradeAmount: number }[],
   chartTitle: string,
-  chartInstanceRef: { value: Chart | null },
+  chartInstance: PieChartInstance | null,
 ) {
   // console.log("chartId:", chartId);
   // console.log("usingData:", usingData);
   // console.log("chartTitle:", chartTitle);
 
-  if (chartInstanceRef.value) {
-    chartInstanceRef.value.destroy();
-    chartInstanceRef.value = null;
+  if (chartInstance) {
+    chartInstance.destroy();
   }
 
   const labels = usingData.map((item) => item.tradeName);
   const values = usingData.map((item) => item.tradeAmount);
 
-  chartInstanceRef.value = new Chart(chartId, {
+  return new Chart<"pie", number[], string>(chartId, {
     type: "pie",
     data: {
       labels: labels,
@@ -172,7 +174,8 @@ async function aggregateData(data: IStoredValueCardRecordList[], filterType: str
   }
 
   recordList.forEach((item: IStoredValueCardRecordList) => {
-    const { tradeName, tradeAmount } = item;
+    const tradeName = item.tradeCategoryData?.tradeName;
+    const { tradeAmount } = item;
     if (typeof tradeName === "string") {
       resultMap[tradeName] = (resultMap[tradeName] || 0) + tradeAmount;
     }

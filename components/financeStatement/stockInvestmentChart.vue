@@ -48,6 +48,8 @@ import { currencyFormat, dateMove, getCurrentYMD } from "@/composables/tools.ts"
 import { messageToast } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
+type DoughnutChartInstance = Chart<"doughnut", number[], string>;
+
 const props = withDefaults(defineProps<{ stockAccountIdGot?: string; stockNoGot?: string }>(), {
   stockAccountIdGot: "",
   stockNoGot: "",
@@ -61,7 +63,7 @@ const stockTotalQuantity = ref<number>(0);
 const stockAveragePrice = ref<number>(0);
 const stockCurrentValue = ref<number>(0);
 const stockCurrentProfit = ref<number>(0);
-const stockInvestmentChart = ref<Chart | null>(null);
+const stockInvestmentChart = ref<DoughnutChartInstance | null>(null);
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
@@ -100,8 +102,8 @@ async function searchingEachStockStorageData() {
       stockAccountId: props.stockAccountIdGot,
       stockNo: props.stockNoGot,
     });
-    // console.log("fetchEachStockStorageData:", res.data.data);
-    doughnutChartTitle.value = `${res.data.data.stockNo} / ${res.data.data.stockName} 投資損益`;
+    console.log("fetchEachStockStorageData:", res.data.data);
+    doughnutChartTitle.value = `${res.data.data[0].stockNo} / ${res.data.data[0].stockName} 投資損益`;
     for (let i = 0; i < res.data.data.length; i++) {
       stockTotalCost.value += res.data.data[i].tradeTotalPrice;
       stockTotalQuantity.value += res.data.data[i].quantity;
@@ -123,7 +125,7 @@ async function searchingEachStockStorageData() {
           stockInvestmentChart.value = null;
         }
 
-        stockInvestmentChart.value = new Chart(ctx, {
+        stockInvestmentChart.value = new Chart<"doughnut", number[], string>(ctx, {
           type: "doughnut",
           data: {
             labels: [stockCurrentProfit.value > 0 ? "獲利" : "虧損"],

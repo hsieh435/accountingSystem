@@ -45,18 +45,14 @@
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ account.currencyData.currencyName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.presentAmount) }}</div>
-                  <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(account.expenseExpenditureCurrentMonth) }}
-                  </div>
-                  <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(account.incomeExpenditureCurrentMonth) }}
-                  </div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.expenseSumCurrentMonth) }}</div>
+                  <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.incomeSumCurrentMonth) }}</div>
                   <div
                     :class="[
-                      account.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      account.profitLossSumCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
                       tailwindStyles.getTdClasses(),
                     ]">
-                    {{ currencyFormat(account.profitLossExpenditureCurrentMonth) }}
+                    {{ currencyFormat(account.profitLossSumCurrentMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
                     <font-awesome-icon :icon="['fas', 'check']" v-if="account.openAlert" />

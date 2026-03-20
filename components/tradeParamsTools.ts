@@ -63,9 +63,9 @@ export const getDefaultCashFlow = (): ICashFlowList => ({
   enable: false,
   createdDate: "",
   note: "",
-  expenseExpenditureCurrentMonth: 0,
-  incomeExpenditureCurrentMonth: 0,
-  profitLossExpenditureCurrentMonth: 0,
+  expenseSumCurrentMonth: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
 });
 
 
@@ -87,9 +87,9 @@ export const getDefaultStoredValueCard = (): IStoredValueCardList => ({
   enable: false,
   createdDate: "",
   note: "",
-  expenseExpenditureCurrentMonth: 0,
-  incomeExpenditureCurrentMonth: 0,
-  profitLossExpenditureCurrentMonth: 0,
+  expenseSumCurrentMonth: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
 });
 
 
@@ -137,9 +137,9 @@ export const getDefaultCurrencyAccount = (): ICurrencyAccountList => ({
   enable: false,
   createdDate: "",
   note: "",
-  expenseExpenditureCurrentMonth: 0,
-  incomeExpenditureCurrentMonth: 0,
-  profitLossExpenditureCurrentMonth: 0,
+  expenseSumCurrentMonth: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
 });
 
 
@@ -162,9 +162,9 @@ export const getDefaultStockAccount = (): IStockAccountList => ({
   enable: false,
   createdDate: "",
   note: "",
-  expenseExpenditureCurrentMonth: 0,
-  incomeExpenditureCurrentMonth: 0,
-  profitLossExpenditureCurrentMonth: 0,
+  expenseSumCurrentMonth: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
 });
 
 

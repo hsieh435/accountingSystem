@@ -10,9 +10,13 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-05-15",
   components: true,
-  css: ["@/assets/css/index.scss", "sweetalert2/dist/sweetalert2.min.css", "@vuepic/vue-datepicker/dist/main.css"],
+  css: [
+    "@/assets/css/index.scss",
+    "~/node_modules/sweetalert2/dist/sweetalert2.min.css",
+    "~/node_modules/@vuepic/vue-datepicker/dist/main.css",
+  ],
   devtools: { enabled: false },
-  modules: ["@nuxtjs/tailwindcss", "@vesp/nuxt-fontawesome", "@nuxt/ui"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/ui"],
   imports: {
     autoImport: true,
   },
@@ -20,4 +24,11 @@ export default defineNuxtConfig({
     transpile: ["@vuepic/vue-datepicker"],
   },
   plugins: ["@/plugins/fontawesome"],
+  vite: {
+    server: {
+      fs: {
+        allow: [".."], // allow serving files from one level up (covers node_modules)
+      },
+    },
+  },
 });
