@@ -37,7 +37,9 @@ export async function fetchDisableStockAccount(accountId: string) {
   return await response.json();
 }
 
-export async function fetchStockAccountDelete(accountId: string) {
-  const response = await apiFetch(`/api/stockAccount/delete/${accountId}`, "GET");
+export async function fetchStockAccountDelete(data: { accountId: string, currency: string }) {
+  const response = await apiFetch("/api/stockAccount/delete", "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }

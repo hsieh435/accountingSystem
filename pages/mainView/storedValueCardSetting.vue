@@ -65,6 +65,7 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     <storedValueCardData
                       :storedValueCardIdGot="card.storedValueCardId"
+                      :currencyIdGot="card.currency"
                       @dataReseaching="storedValueCardSearching" />
                   </div>
                 </div>

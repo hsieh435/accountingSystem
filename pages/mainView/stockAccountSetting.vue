@@ -60,7 +60,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(account.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(account.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <stockAccountData :stockAccountIGot="account.accountId" @dataReseaching="stockAccountSearching" />
+                    <stockAccountData :stockAccountIGot="account.accountId" :currencyIdGot="account.currency" @dataReseaching="stockAccountSearching" />
                   </div>
                 </div>
               </div>

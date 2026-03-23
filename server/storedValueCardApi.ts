@@ -27,8 +27,10 @@ export async function fetchStoredValueCardUpdate(data: IStoredValueCardList) {
   return await response.json();
 }
 
-export async function fetchStoredValueCardDelete(storedValueCardId: string) {
-  const response = await apiFetch(`/api/storedValueCard/delete/${storedValueCardId}`, "GET");
+export async function fetchStoredValueCardDelete(data: { storedValueCardId: string, currency: string }) {
+  const response = await apiFetch(`/api/storedValueCard/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
 

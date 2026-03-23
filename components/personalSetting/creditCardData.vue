@@ -165,7 +165,10 @@ const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/u
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
 
-const props = withDefaults(defineProps<{ creditCardIdGot?: string }>(), { creditCardIdGot: "" });
+const props = withDefaults(defineProps<{ creditCardIdGot?: string; currencyIdGot?: string; }>(), {
+  creditCardIdGot: "",
+  currencyIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
 
 const openCreditCardData = ref<boolean>(false);
@@ -283,7 +286,10 @@ async function removeCreditcardData() {
     message: "即將刪除信用卡資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCreditCardDelete,
-    apiParams: props.creditCardIdGot,
+    apiParams: {
+      creditcardId: props.creditCardIdGot,
+      currency: props.currencyIdGot,
+    },
   });
 
   if (confirmResult) {

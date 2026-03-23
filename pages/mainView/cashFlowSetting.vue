@@ -46,17 +46,17 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.startingAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.presentAmount) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(cashFlow.incomeExpenditureCurrentMonth) }}
+                    {{ currencyFormat(cashFlow.incomeSumCurrentMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    {{ currencyFormat(cashFlow.expenseExpenditureCurrentMonth) }}
+                    {{ currencyFormat(cashFlow.expenseSumCurrentMonth) }}
                   </div>
                   <div
                     :class="[
-                      cashFlow.profitLossExpenditureCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
+                      cashFlow.profitLossSumCurrentMonth >= 0 ? 'text-green-500' : 'text-red-500',
                       tailwindStyles.getTdClasses(),
                     ]">
-                    {{ currencyFormat(cashFlow.profitLossExpenditureCurrentMonth) }}
+                    {{ currencyFormat(cashFlow.profitLossSumCurrentMonth) }}
                   </div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.alertValue) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
@@ -65,7 +65,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(cashFlow.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(cashFlow.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" @dataReseaching="cashFlowSearching()" />
+                    <cashFlowData :cashflowIdIdGot="cashFlow.cashflowId" :currencyIdGot="cashFlow.currency" @dataReseaching="cashFlowSearching()" />
                   </div>
                 </div>
               </div>

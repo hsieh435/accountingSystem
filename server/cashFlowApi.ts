@@ -37,7 +37,9 @@ export async function fetchDisableCashFlow(cashFlowId: string) {
   return await response.json();
 }
 
-export async function fetchCashFlowDelete(cashflowId: string) {
-  const response = await apiFetch(`/api/cashFlow/delete/${cashflowId}`, "GET");
+export async function fetchCashFlowDelete(data: { cashflowId: string, currency: string }) {
+  const response = await apiFetch(`/api/cashFlow/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }

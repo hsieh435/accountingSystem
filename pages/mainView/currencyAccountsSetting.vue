@@ -66,6 +66,7 @@
                   <div :class="tailwindStyles.getTdClasses()">
                     <currencyAccountsData
                       :currencyAccountIdGot="account.accountId"
+                      :currencyIdGot="account.currency"
                       @dataReseaching="currencyAccountSearching()" />
                   </div>
                 </div>

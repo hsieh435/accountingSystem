@@ -142,7 +142,10 @@ import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ storedValueCardIdGot?: string }>(), { storedValueCardIdGot: "" });
+const props = withDefaults(defineProps<{ storedValueCardIdGot?: string; currencyIdGot?: string;  }>(), {
+  storedValueCardIdGot: "",
+  currencyIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
 
 const openStoredValueCardData = ref<boolean>(false);
@@ -274,7 +277,10 @@ async function removeStoredValueCardData() {
     message: "即將刪除儲值票卡資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStoredValueCardDelete,
-    apiParams: props.storedValueCardIdGot,
+    apiParams: {
+      storedValueCardId: props.storedValueCardIdGot,
+      currency: props.currencyIdGot,
+    },
   });
 
   if (confirmResult) {

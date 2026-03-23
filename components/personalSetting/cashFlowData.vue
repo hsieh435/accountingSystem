@@ -129,9 +129,9 @@ import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; isDisable?: boolean }>(), {
+const props = withDefaults(defineProps<{ cashflowIdIdGot?: string; currencyIdGot?: string; }>(), {
   cashflowIdIdGot: "",
-  isDisable: false,
+  currencyIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -145,10 +145,10 @@ const getDefaultDataParams = (): ICashFlowList => ({
   currencyData: getDefaultCurrency(),
   startingAmount: 0,
   presentAmount: 0,
-  expenseExpenditureCurrentMonth: 0,
+  expenseSumCurrentMonth: 0,
   frequency: 0,
-  incomeExpenditureCurrentMonth: 0,
-  profitLossExpenditureCurrentMonth: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
@@ -248,7 +248,10 @@ async function removeCashFlowData() {
     message: "即將刪除現金流資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCashFlowDelete,
-    apiParams: props.cashflowIdIdGot,
+    apiParams: {
+      cashflowId: props.cashflowIdIdGot,
+      currency: props.currencyIdGot,
+    },
   });
 
   if (confirmResult) {

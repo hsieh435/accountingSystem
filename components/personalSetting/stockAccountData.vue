@@ -160,7 +160,10 @@ import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ stockAccountIGot?: string }>(), { stockAccountIGot: "" });
+const props = withDefaults(defineProps<{ stockAccountIGot?: string; currencyIdGot?: string; }>(), {
+  stockAccountIGot: "",
+  currencyIdGot: "",
+});
 const emits = defineEmits(["dataReseaching"]);
 
 const openStockAccountData = ref<boolean>(false);
@@ -281,7 +284,10 @@ async function removeStockAccountData() {
     message: "即將刪除證券帳戶資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchStockAccountDelete,
-    apiParams: props.stockAccountIGot,
+    apiParams: {
+      accountId: props.stockAccountIGot,
+      currency: props.currencyIdGot,
+    },
   });
 
   if (confirmResult) {

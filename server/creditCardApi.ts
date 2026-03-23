@@ -37,8 +37,10 @@ export async function fetchDisableCreditCard(creditcardId: string) {
   return await response.json();
 }
 
-export async function fetchCreditCardDelete(creditCardId: string) {
-  const response = await apiFetch(`/api/creditCard/delete/${creditCardId}`, "GET");
+export async function fetchCreditCardDelete(data: { creditcardId: string; currency: string }) {
+  const response = await apiFetch(`/api/creditCard/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
 

@@ -52,7 +52,7 @@
                   <div :class="tailwindStyles.getTdClasses()">{{ yearMonthDayTimeFormat(card.createdDate) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ currencyFormat(card.frequency) }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
-                    <creditCardData :creditCardIdGot="card.creditcardId" @dataReseaching="creditCardSearching" />
+                    <creditCardData :creditCardIdGot="card.creditcardId" :currencyIdGot="card.currency" @dataReseaching="creditCardSearching" />
                   </div>
                 </div>
               </div>

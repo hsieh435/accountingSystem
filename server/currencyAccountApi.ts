@@ -27,17 +27,19 @@ export async function fetchCurrencyAccountUpdate(data: ICurrencyAccountList) {
   return await response.json();
 }
 
-export async function fetchEnableCurrencyAccount(currencyAccountId: string) {
-  const response = await apiFetch(`/api/currencyAccount/enable/${currencyAccountId}`, "GET");
+export async function fetchEnableCurrencyAccount(accountId: string) {
+  const response = await apiFetch(`/api/currencyAccount/enable/${accountId}`, "GET");
   return await response.json();
 }
 
-export async function fetchDisableCurrencyAccount(currencyAccountId: string) {
-  const response = await apiFetch(`/api/currencyAccount/disable/${currencyAccountId}`, "GET");
+export async function fetchDisableCurrencyAccount(accountId: string) {
+  const response = await apiFetch(`/api/currencyAccount/disable/${accountId}`, "GET");
   return await response.json();
 }
 
-export async function fetchCurrencyAccountDelete(currencyAccountId: string) {
-  const response = await apiFetch(`/api/currencyAccount/delete/${currencyAccountId}`, "GET");
+export async function fetchCurrencyAccountDelete(data: { accountId: string, currency: string }) {
+  const response = await apiFetch(`/api/currencyAccount/delete`, "POST", {
+    body: JSON.stringify(data),
+  });
   return await response.json();
 }
