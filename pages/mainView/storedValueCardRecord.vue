@@ -66,7 +66,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStoredValueCardRecordList } from "@/server/storedValueCardRecordApi.ts";
 import { IStoredValueCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
@@ -114,7 +114,7 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStoredValueCardRecordList(searchingParams);
-    // console.log("fetchStoredValueCardRecordList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "儲值票卡收支紀錄" });
     storedValueCardRecordList.value = res.data.data;
     await storedValueCardRecordListFilterEvent();
   } catch (error) {

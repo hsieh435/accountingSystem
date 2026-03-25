@@ -84,8 +84,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCashFlowList, fetchEnableCashFlow, fetchDisableCashFlow } from "@/server/cashFlowApi.ts";
 import { IResponse, ICashFlowList, IAccountSearchingParams } from "@/models/index.ts";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -125,7 +125,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function cashFlowSearching() {
   try {
     const res: IResponse = await fetchCashFlowList(searchingParams);
-    // console.log("fetchCashFlowList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "現金流資料" });
     cashFlowList.value = res.data.data;
     await cashFlowListFilterEvent();
   } catch (error) {

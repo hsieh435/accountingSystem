@@ -173,7 +173,6 @@ watch(openCashFlowData, () => {
 });
 
 async function searchingCashflowData() {
-  // console.log("props:", props);
   try {
     const res: IResponse = await fetchCashFlowById(props.cashflowIdIdGot);
     Object.assign(dataParams, res.data.data);

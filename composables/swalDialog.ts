@@ -41,24 +41,7 @@ export function messageToast({
   });
 }
 
-export function errorMessageDialog({
-  message,
-  icon = "error",
-  hasConfirmButton = false,
-}: {
-  message: string;
-  icon?: string;
-  hasConfirmButton?: boolean;
-}) {
-  Swal.fire({
-    icon: getSwalIcon(icon),
-    title: message,
-    showConfirmButton: hasConfirmButton,
-    confirmButtonText: "確定",
-    width: "auto",
-    color: "rgb(0, 0, 0)",
-  });
-}
+
 
 export async function showConfirmDialog({
   message,
@@ -96,11 +79,11 @@ export async function showConfirmDialog({
           messageToast({ message: res.data.message });
           return true;
         } else {
-          errorMessageDialog({ message: res.data.message });
+          messageToast({ message: res.data.message || "", icon: "warning" });
           return false;
         }
       } catch (error) {
-        errorMessageDialog({ message: (error as Error).message });
+        messageToast({ message: (error as Error).message, icon: "error" });
         return false;
       }
     } else if (typeof executionApi !== "function" && result.isConfirmed) {

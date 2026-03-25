@@ -110,7 +110,10 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 
@@ -266,12 +269,14 @@ async function settingRemainingAmount() {
 
   oriRemainingAmount.value = storedValueCardChosen.value.presentAmount;
   if (dataParams.storedValueCardId.length > 0 && dataParams.transactionType === "income") {
-    oriRemainingAmount.value = storedValueCardChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeAmount;
+    oriRemainingAmount.value =
+      storedValueCardChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeAmount;
     if (oriTransactionType.value === "expense") {
       oriRemainingAmount.value = oriRemainingAmount.value + oriTradeAmount.value * 2;
     }
   } else if (dataParams.storedValueCardId.length > 0 && dataParams.transactionType === "expense") {
-    oriRemainingAmount.value = storedValueCardChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeAmount;
+    oriRemainingAmount.value =
+      storedValueCardChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeAmount;
     if (oriTransactionType.value === "income") {
       oriRemainingAmount.value = oriRemainingAmount.value - oriTradeAmount.value * 2;
     }
@@ -308,11 +313,7 @@ async function validateData() {
   if (!dataParams.tradeCategory) {
     dataValidate.tradeCategory = false;
   }
-  if (
-    typeof dataParams.tradeAmount !== "number" ||
-    !isFinite(dataParams.tradeAmount) ||
-    dataParams.tradeAmount < 0
-  ) {
+  if (typeof dataParams.tradeAmount !== "number" || !isFinite(dataParams.tradeAmount) || dataParams.tradeAmount < 0) {
     dataValidate.tradeAmount = false;
     tradeAmountValidateText.value = "交易金額不得為負";
   }

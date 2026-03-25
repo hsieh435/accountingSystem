@@ -9,8 +9,8 @@
 import { ref, onMounted, watch } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi.ts";
 import { ISelectData, ICurrencyList, IResponse } from "@/models/index.ts";
-import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
+import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 const props = withDefaults(defineProps<{ currencyIdGot?: string; sellectAll?: boolean; isDisable?: boolean }>(), {
   currencyIdGot: "",
@@ -47,7 +47,6 @@ watch(props, async () => {
 watch(currencyId, () => {
   // console.log("onMounted watch:", props);
   // console.log("currencyId:", currencyId.value);
-  // emits("sendbackCurrencyData", currencyId.value);
   for (let i = 0; i < currencyList.value.length; i++) {
     if (currencyList.value[i].currencyCode === currencyId.value) {
       emits("sendbackCurrencyData", currencyList.value[i]);

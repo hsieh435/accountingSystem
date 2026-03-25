@@ -72,8 +72,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountRecordList } from "@/server/stockAccountRecordApi.ts";
 import { IStockAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -115,18 +115,13 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   Object.assign(searchingParams, params);
-  // searchingParams.accountId = params.accountId;
-  // searchingParams.currencyId = params.currencyId;
-  // searchingParams.tradeCategory = params.tradeCategory;
-  // searchingParams.startingDate = params.startingDate;
-  // searchingParams.endDate = params.endDate;
   await searchingFinanceRecord();
 }
 
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchStockAccountRecordList(searchingParams);
-    console.log("fetchStockAccountRecordList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "證券帳戶收支紀錄" });
     stockAccountRecord.value = res.data.data;
     await stockAccountRecordFilterEvent();
   } catch (error) {

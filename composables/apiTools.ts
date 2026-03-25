@@ -1,4 +1,4 @@
-import { errorMessageDialog } from "@/composables/swalDialog.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 export async function downloadFunction({
   downloadApi,
@@ -21,9 +21,9 @@ export async function downloadFunction({
       link.click();
       document.body.removeChild(link);
     } else {
-      errorMessageDialog({ message: res.data?.message || "下載失敗" });
+      messageToast({ message: res.data?.message || "下載失敗", icon: "warning" });
     }
   } catch (error) {
-    errorMessageDialog({ message: (error as Error).message, icon: "error" });
+    messageToast({ message: (error as Error).message, icon: "error" });
   }
 }

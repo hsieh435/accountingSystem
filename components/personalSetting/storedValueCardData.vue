@@ -142,7 +142,7 @@ import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
-const props = withDefaults(defineProps<{ storedValueCardIdGot?: string; currencyIdGot?: string;  }>(), {
+const props = withDefaults(defineProps<{ storedValueCardIdGot?: string; currencyIdGot?: string; }>(), {
   storedValueCardIdGot: "",
   currencyIdGot: "",
 });

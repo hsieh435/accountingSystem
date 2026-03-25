@@ -79,8 +79,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStockAccountList, fetchEnableStockAccount, fetchDisableStockAccount } from "@/server/stockAccountApi.ts";
 import { IResponse, IStockAccountList, IAccountSearchingParams } from "@/models/index.ts";
 import { yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -124,6 +124,7 @@ async function stockAccountSearching() {
   try {
     const res: IResponse = await fetchStockAccountList(searchingParams);
     // console.log("fetchStockAccountList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "證券帳戶資料" });
     stockAccountList.value = res.data.data;
     await stockAccountListFilterEvent();
   } catch (error) {

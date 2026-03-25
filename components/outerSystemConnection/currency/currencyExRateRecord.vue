@@ -7,7 +7,7 @@
 import { ref, watch } from "vue";
 import { fetchCurrencyHistoryExRate } from "@/server/outerApi.ts";
 import { ICurrencyExRateSearchingParams, IResponse } from "@/models/index.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import { Chart } from "chart.js/auto";
 
 const props = withDefaults(defineProps<{ searchingParamsGot: ICurrencyExRateSearchingParams }>(), {
@@ -29,36 +29,38 @@ watch(
 );
 
 let chartInstance: Chart | null = null;
-async function searchingCurrencyExRate() {
-  console.log("searchingParams:", props.searchingParamsGot);
 
+async function searchingCurrencyExRate() {
   try {
     const res: IResponse = await fetchCurrencyHistoryExRate(props.searchingParamsGot);
-    console.log("fetchCurrencyHistoryExRate:", res.data.data);
-    if (res.data.data.data.length > 0) {
-      dataLabels.value = res.data.data.data.map((exRate: any) => {
-        return exRate.date;
-      });
-      currencyCashBuyExRate.value = res.data.data.data.map((exRate: any) => {
-        return exRate.cash_buy;
-      });
-      currencyCashSellExRate.value = res.data.data.data.map((exRate: any) => {
-        return exRate.cash_sell;
-      });
-      currencySpotBuyExRate.value = res.data.data.data.map((exRate: any) => {
-        return exRate.spot_buy;
-      });
-      currencySpotSellExRate.value = res.data.data.data.map((exRate: any) => {
-        return exRate.spot_sell;
-      });
+    const historyData = res.data.data.data ?? [];
 
-      renderingChart();
-    } else {
+    showDataLengthMsg({
+      dataLength: historyData.length,
+      dataName: "匯率歷史資料",
+    });
+
+    if (historyData.length === 0) {
+      dataLabels.value = [];
+      currencyCashBuyExRate.value = [];
+      currencyCashSellExRate.value = [];
+      currencySpotBuyExRate.value = [];
+      currencySpotSellExRate.value = [];
+
       if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
       }
+      return;
     }
+
+    dataLabels.value = historyData.map((exRate: any) => exRate.date);
+    currencyCashBuyExRate.value = historyData.map((exRate: any) => exRate.cash_buy);
+    currencyCashSellExRate.value = historyData.map((exRate: any) => exRate.cash_sell);
+    currencySpotBuyExRate.value = historyData.map((exRate: any) => exRate.spot_buy);
+    currencySpotSellExRate.value = historyData.map((exRate: any) => exRate.spot_sell);
+
+    renderingChart();
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }

@@ -66,7 +66,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCashFlowRecordList } from "@/server/cashFlowRecordApi.ts";
 import { ICashFlowRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
@@ -112,7 +112,8 @@ async function searchingFinanceRecord() {
   // console.log("searchingParams:", searchingParams);
   try {
     const res: IResponse = await fetchCashFlowRecordList(searchingParams);
-    console.log("fetchCashFlowRecordList:", res.data.data);
+    // console.log("fetchCashFlowRecordList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "現金流紀錄" });
     cashFlowRecord.value = res.data.data;
     await cashFlowRecordFilterEvent();
   } catch (error) {

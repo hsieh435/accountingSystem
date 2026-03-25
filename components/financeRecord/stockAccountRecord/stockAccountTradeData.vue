@@ -166,7 +166,10 @@
         <div class="w-full">
           <div class="w-full flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right">帳戶餘額：</span>
-            <UInput :class="['col-span-4', dataValidate.tradeTotalPrice ? '' : 'outline-1 outline-red-500']" :value="currencyFormat(oriRemainingAmount)" disabled />
+            <UInput
+              :class="['col-span-4', dataValidate.tradeTotalPrice ? '' : 'outline-1 outline-red-500']"
+              :value="currencyFormat(oriRemainingAmount)"
+              disabled />
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.tradeTotalPrice">
             <span class="col-span-4 col-end-7 text-red-500">{{ tradeTotalPriceValidateText }}</span>

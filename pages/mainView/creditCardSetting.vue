@@ -71,8 +71,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardList, fetchEnableCreditCard, fetchDisableCreditCard } from "@/server/creditCardApi.ts";
 import { ICreditCardList, IAccountSearchingParams, IResponse } from "@/models/index.ts";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -114,7 +114,8 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function creditCardSearching() {
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
-    console.log("fetchCreditCardList:", res.data.data);
+    // console.log("fetchCreditCardList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "信用卡資料" });
     creditCardList.value = res.data.data;
     await creditCardListFilterEvent();
   } catch (error) {

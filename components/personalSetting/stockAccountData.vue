@@ -41,7 +41,7 @@
               v-model="dataParams.accountName" />
           </div>
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountName">
-                <span class="col-span-4 col-end-7 text-red-500">請填寫證券帳戶名稱</span>
+            <span class="col-span-4 col-end-7 text-red-500">請填寫證券帳戶名稱</span>
           </div>
         </div>
 

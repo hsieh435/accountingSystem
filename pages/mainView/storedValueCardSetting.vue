@@ -85,8 +85,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchStoredValueCardList, fetchEnableStoredValueCard, fetchDisableStoredValueCard } from "@/server/storedValueCardApi.ts";
 import { IResponse, IStoredValueCardList, IAccountSearchingParams } from "@/models/index.ts";
 import { currencyFormat, yearMonthDayTimeFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -128,7 +128,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function storedValueCardSearching() {
   try {
     const res: IResponse = await fetchStoredValueCardList(searchingParams);
-    console.log("fetchStoredValueCardList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "儲值票卡資料" });
     storedValueCardList.value = res.data.data;
     await storedValueCardListFilterEvent();
   } catch (error) {

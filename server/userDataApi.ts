@@ -4,7 +4,7 @@ import { IResponse, IUserData } from "@/models/index.ts";
 export async function fetchUserList() {
   const response = await apiFetch("/public/api/userList", "GET");
   const result = (await response.json()) as { data: number } as IResponse;
-  return result.data.data;
+  return result.data.data.length;
 }
 
 export async function fetchUserLogin(data: { userId: string; password: string }) {

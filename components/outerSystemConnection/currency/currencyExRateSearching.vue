@@ -51,7 +51,6 @@ async function settingStartDate(startDate: string) {
 }
 
 async function searchingCurrencyExRate() {
-  // emits("sendbackSearchingData", searchingParams);
 
   try {
     const res: IResponse = await fetchCurrencyLatestExRate(searchingParams.currencyId);

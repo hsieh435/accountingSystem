@@ -1,6 +1,6 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { fetchJwtVerification } from "@/server/generalApi.ts";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 import { decryptString } from "@/composables/crypto.ts";
 import { clearLocalStorageKey } from "@/composables/tools.ts";
 
@@ -22,7 +22,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         if (res.data.returnCode === 0) {
           navigateTo(to.fullPath);
         } else {
-          errorMessageDialog({ message: res.data.message || "" });
+          messageToast({ message: res.data.message || "", icon: "warning" });
           clearLocalStorageKey(true);
         }
       } catch (error) {

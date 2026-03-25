@@ -115,7 +115,6 @@ async function getAccountListByType(type: string, params: IAccountSearchingParam
   }));
   // console.log("oriAccountList:", oriAccountList.value);
   return res.data.data.map((item: any) => ({
-    // label: item[config.nameField],
     label: item[config.nameField] + "（" + item.currencyData.currencyName + "）",
     value: item[config.pkField],
     enable: item.enable,

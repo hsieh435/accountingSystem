@@ -19,8 +19,7 @@ const searchingParams = reactive<IAccountSearchingParams>({
 
 watch(searchingParams, () => {
   emits("sendbackSearchingParams", searchingParams);
-  },
-  {
+  }, {
     deep: true,
   },
 );

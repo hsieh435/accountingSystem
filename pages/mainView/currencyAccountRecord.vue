@@ -66,7 +66,7 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCurrencyAccountRecordList } from "@/server/currencyAccountRecordApi.ts";
 import { IcurrencyAccountRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
@@ -105,18 +105,13 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 
 async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
   Object.assign(searchingParams, params);
-  // searchingParams.accountId = params.accountId;
-  // searchingParams.currencyId = params.currencyId;
-  // searchingParams.tradeCategory = params.tradeCategory;
-  // searchingParams.startingDate = params.startingDate;
-  // searchingParams.endDate = params.endDate;
   await searchingFinanceRecord();
 }
 
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCurrencyAccountRecordList(searchingParams);
-    console.log("fetchCurrencyAccountRecordList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "存款帳戶收支紀錄" });
     currencyAccountRecord.value = res.data.data;
     await currencyAccountRecordFilterEvent();
   } catch (error) {

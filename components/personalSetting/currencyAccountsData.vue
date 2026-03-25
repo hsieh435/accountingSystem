@@ -165,7 +165,7 @@ const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/u
 
 const props = withDefaults(defineProps<{ currencyAccountIdGot?: string; currencyIdGot?: string; }>(), {
   currencyAccountIdGot: "",
-  currencyIdGot: ""
+  currencyIdGot: "",
 });
 const emits = defineEmits(["dataReseaching"]);
 
@@ -287,10 +287,10 @@ async function removeCurrencyAccountData() {
     message: "即將刪除存款帳戶資料",
     confirmButtonMsg: "確認刪除",
     executionApi: fetchCurrencyAccountDelete,
-    apiParams:{
+    apiParams: {
       accountId: props.currencyAccountIdGot,
       currency: props.currencyIdGot,
-    }
+    },
   });
 
   if (confirmResult) {

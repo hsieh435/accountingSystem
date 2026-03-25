@@ -83,7 +83,7 @@
             orientation="vertical"
             :min="0"
             :step="setStep"
-              :disabled="!props.isEditable"
+            :disabled="!props.isEditable"
             @update:modelValue="settingRemainingAmount()" />
         </div>
         <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.tradeAmount">
@@ -157,24 +157,24 @@ const emits = defineEmits(["dataReseaching"]);
 
 const openTradeData = ref<boolean>(false);
 const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
-    tradeId: props.tradeIdGot || "",
-    accountId: props.accountIdGot,
-    accountData: getDefaultCurrencyAccount(),
-    tradeDatetime: "",
-    accountUser: "",
-    accountType: "",
-    transactionType: "",
-    tradeCategory: "",
-    tradeAmount: 0,
-    remainingAmount: 0,
-    currency: "",
-    currencyData: getDefaultCurrency(),
-    tradeDescription: "",
-    tradeNote: "",
-    transactionCategoryData: getDefaultTransactionCategory(),
-    tradeCategoryData: getDefaultTradeCategory(),
-    createdDatetime: "",
-    editedDatetime: "",
+  tradeId: props.tradeIdGot || "",
+  accountId: props.accountIdGot,
+  accountData: getDefaultCurrencyAccount(),
+  tradeDatetime: "",
+  accountUser: "",
+  accountType: "",
+  transactionType: "",
+  tradeCategory: "",
+  tradeAmount: 0,
+  remainingAmount: 0,
+  currency: "",
+  currencyData: getDefaultCurrency(),
+  tradeDescription: "",
+  tradeNote: "",
+  transactionCategoryData: getDefaultTransactionCategory(),
+  tradeCategoryData: getDefaultTradeCategory(),
+  createdDatetime: "",
+  editedDatetime: "",
 });
 const dataParams = reactive<IcurrencyAccountRecordList>(getDefaultDataParams());
 const currencyAccountChosen = ref<ICurrencyAccountList>(getDefaultCurrencyAccount());
@@ -254,12 +254,14 @@ async function settingRemainingAmount() {
 
   oriRemainingAmount.value = currencyAccountChosen.value.presentAmount;
   if (dataParams.accountId.length > 0 && dataParams.transactionType === "income") {
-    oriRemainingAmount.value = currencyAccountChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeAmount;
+    oriRemainingAmount.value =
+      currencyAccountChosen.value.presentAmount - oriTradeAmount.value + dataParams.tradeAmount;
     if (oriTransactionType.value === "expense") {
       oriRemainingAmount.value = oriRemainingAmount.value + oriTradeAmount.value * 2;
     }
   } else if (dataParams.accountId.length > 0 && dataParams.transactionType === "expense") {
-    oriRemainingAmount.value = currencyAccountChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeAmount;
+    oriRemainingAmount.value =
+      currencyAccountChosen.value.presentAmount + oriTradeAmount.value - dataParams.tradeAmount;
     if (oriTransactionType.value === "income") {
       oriRemainingAmount.value = oriRemainingAmount.value - oriTradeAmount.value * 2;
     }

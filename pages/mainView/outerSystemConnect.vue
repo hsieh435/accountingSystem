@@ -18,7 +18,7 @@
 import { ref } from "vue";
 import { fetchFinMindTestConnection, fetchFinMindAccountInfo } from "@/server/outerApi.ts";
 import { IResponse } from "@/models/index.ts";
-import { messageToast, errorMessageDialog } from "@/composables/swalDialog.ts";
+import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -32,15 +32,15 @@ const finMindPassword = ref<string>("");
 
 async function connectingFinMind() {
   try {
-    const result: IResponse = await fetchFinMindTestConnection({
+    const res: IResponse = await fetchFinMindTestConnection({
       user_id: finMindAccount.value.trim(),
       password: finMindPassword.value.trim(),
     });
-    console.log("result:", result);
-    if (result.data.data.status === 200) {
+    console.log("res:", res);
+    if (res.data.data.status === 200) {
       messageToast({ message: "連線成功" });
     } else {
-      errorMessageDialog({ message: result.data.message });
+      messageToast({ message: res.data.message || "", icon: "warning" });
     }
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -48,15 +48,15 @@ async function connectingFinMind() {
   // console.log("Request Body:", JSON.stringify(payload));
 
   // try {
-  //   const result = await fetch("https://api.finmindtrade.com/api/v4/login", {
+  //   const res = await fetch("https://api.finmindtrade.com/api/v4/login", {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",
   //     },
   //     body: JSON.stringify({ user_id, password }),
   //   });
-  //   const jsonData = await result.json();
-  //   console.log("result:", result);
+  //   const jsonData = await res.json();
+  //   console.log("res:", res);
   //   console.log("jsonData:", jsonData);
   //   res.json(success({ data: jsonData, message: "查詢成功", req, res }));
   // } catch (err) {

@@ -108,7 +108,10 @@
         <div class="w-full flex justify-start items-center grid grid-cols-6">
           <span class="col-span-2 text-right">貨幣：</span>
           <div class="w-fit">
-            <dataBaseCurrencySelect :currencyIdGot="dataParams.currency" isDisable @sendbackCurrencyData="settingCurrency" />
+            <dataBaseCurrencySelect
+              :currencyIdGot="dataParams.currency"
+              isDisable
+              @sendbackCurrencyData="settingCurrency" />
           </div>
         </div>
 

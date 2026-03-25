@@ -48,8 +48,8 @@ import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchCurrencyList } from "@/server/parameterApi.ts";
 import { ICurrencyList, IResponse } from "@/models/index.ts";
 import { sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -80,7 +80,8 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function searchingCurrencyList() {
   try {
     const res: IResponse = await fetchCurrencyList();
-    console.log("fetchCurrencyList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "貨幣資料" });
+    // console.log("fetchCurrencyList:", res.data.data);
     currencyList.value = res.data.data;
     await currencyListFilterEvent();
   } catch (error) {

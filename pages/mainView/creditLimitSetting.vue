@@ -30,7 +30,10 @@
                 </div>
               </div>
               <div :class="tailwindStyles.getTbodyClasses()">
-                <div :class="tailwindStyles.getTbodytrClasses()" v-for="(creditCard, creditCardIndex) in tableData" :key="creditCardIndex">
+                <div
+                  :class="tailwindStyles.getTbodytrClasses()"
+                  v-for="(creditCard, creditCardIndex) in tableData"
+                  :key="creditCardIndex">
                   <div :class="tailwindStyles.getTdClasses()">{{ creditCard.no }}</div>
                   <div :class="tailwindStyles.getTdClasses()">{{ creditCard.creditcardName }}</div>
                   <div :class="tailwindStyles.getTdClasses()">
@@ -78,7 +81,7 @@ const itemsPerPage = ref<number>(20);
 
 const searchCreditCard = reactive<{ creditcardId: string; yearMonth: string }>({
   creditcardId: "",
-  yearMonth: ""
+  yearMonth: "",
 });
 const creditCardLimit = ref<ICreditCardLimitList[]>([]);
 const creditCardLimitFiltered = ref<ICreditCardLimitList[]>([]);

@@ -165,7 +165,7 @@ const creditCardSchemaSelect = defineAsyncComponent(() => import("@/components/u
 const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 const yearMonthSelect = defineAsyncComponent(() => import("@/components/ui/select/yearMonthSelect.vue"));
 
-const props = withDefaults(defineProps<{ creditCardIdGot?: string; currencyIdGot?: string; }>(), {
+const props = withDefaults(defineProps<{ creditCardIdGot?: string; currencyIdGot?: string }>(), {
   creditCardIdGot: "",
   currencyIdGot: "",
 });

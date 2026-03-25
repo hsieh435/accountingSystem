@@ -63,8 +63,8 @@ import { defineAsyncComponent, ref, reactive, onMounted } from "vue";
 import { fetchCreditCardRecordList } from "@/server/creditCardRecordApi.ts";
 import { ICreditCardRecordList, IFinanceRecordSearchingParams, IResponse } from "@/models/index.ts";
 import { getCurrentYear, yearMonthDayTimeFormat, currencyFormat, sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -108,7 +108,7 @@ async function settingSearchingParams(params: IFinanceRecordSearchingParams) {
 async function searchingFinanceRecord() {
   try {
     const res: IResponse = await fetchCreditCardRecordList(searchingParams);
-    console.log("fetchCreditCardRecordList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "信用卡紀錄" });
     creditCardRecord.value = res.data.data;
     await creditCardRecordFilterEvent();
   } catch (error) {

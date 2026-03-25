@@ -65,8 +65,8 @@ import { defineAsyncComponent, ref, onMounted } from "vue";
 import { fetchTradeCategoryList } from "@/server/parameterApi.ts";
 import { ITradeCategory, IResponse } from "@/models/index.ts";
 import { sliceArray } from "@/composables/tools.ts";
+import { messageToast, showDataLengthMsg } from "@/composables/swalDialog.ts";
 import * as tailwindStyles from "@/assets/css/tailwindStyles.ts";
-import { messageToast } from "@/composables/swalDialog.ts";
 
 declare function definePageMeta(meta: { [key: string]: string }): void;
 definePageMeta({
@@ -97,7 +97,8 @@ async function settingTableSlice(sliceData: { currentPage: number; itemsPerPage:
 async function searchingTradeCategoryList() {
   try {
     const res: IResponse = await fetchTradeCategoryList();
-    console.log("fetchTradeCategoryList:", res.data.data);
+    showDataLengthMsg({ dataLength: res.data.data.length, dataName: "交易類別資料" });
+    // console.log("fetchTradeCategoryList:", res.data.data);
     tradeCategoryList.value = res.data.data;
     await tradeCategoryListFilterEvent();
   } catch (error) {
