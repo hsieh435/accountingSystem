@@ -1,7 +1,5 @@
 
-1.public.stock_storage_list、public.stock_storage_detail 兩資料表重新規劃
-
-2.socket-io 應用
+1.socket-io 應用
 參考網址：https://penueling.com/%e7%b7%9a%e4%b8%8a%e5%ad%b8%e7%bf%92/express-socket-io-%e6%8e%a8%e9%80%81%e8%a8%8a%e6%81%af%e8%87%b3%e5%89%8d%e7%ab%af/
 
 
@@ -42,14 +40,17 @@ taskkill /pid xxxxx /f
 git ls-files | wc -l
 103
 127
+127
 
 git ls-files | xargs cat | wc -l
 23794
 26043
+26070
 
 average
 231.1
 205.06
+205.28
 
 
 
@@ -96,3 +97,5 @@ npm run cleanup
 
 
 於後端解析處理時區
+
+https://etrex.tw/free_chatbot_book/mac_dev/vscode.html

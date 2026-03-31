@@ -23,9 +23,9 @@
       </div>
       <div class="grid grid-cols-2">
         <span class="col-span-1 text-right">損益：</span>
-        <span :class="['col-span-1', stockCurrentProfit >= 0 ? 'text-red-500' : 'text-green-500']"
-          >{{ currencyFormat(stockCurrentProfit) }} 元</span
-        >
+        <span :class="['col-span-1', stockCurrentProfit >= 0 ? 'text-red-500' : 'text-green-500']">
+          {{ currencyFormat(stockCurrentProfit) }} 元
+        </span>
       </div>
       <div class="grid grid-cols-2">
         <span class="col-span-1 text-right">損益：</span>
@@ -66,7 +66,7 @@ const stockCurrentProfit = ref<number>(0);
 const stockInvestmentChart = ref<DoughnutChartInstance | null>(null);
 
 onMounted(async () => {
-  // console.log("onMounted props:", props);
+  console.log("onMounted props:", props);
   await searchingLatestStockPrice();
   await searchingEachStockStorageData();
 });
@@ -77,10 +77,10 @@ async function searchingLatestStockPrice() {
   try {
     const res: IResponse = await fetchStockRangeValue({
       stockNo: props.stockNoGot,
-      startDate: dateMove(getCurrentYMD(), -30),
+      startDate: dateMove(getCurrentYMD(), -1),
       endDate: getCurrentYMD(),
     });
-    // console.log("searchingLatestStockPrice:", res.data.data);
+    console.log("searchingLatestStockPrice:", res.data.data);
     if (res.data.data.data.length > 0) {
       stockLatestPrice.value = res.data.data.data[res.data.data.data.length - 1].close;
     }
@@ -116,9 +116,9 @@ async function searchingEachStockStorageData() {
 
     const stockData = res.data.data;
     if (stockData) {
-      const ctx = (document.getElementById(`stockInvestmentChart${props.stockNoGot}`) as HTMLCanvasElement).getContext(
-        "2d",
-      );
+      const ctx =
+        (document.getElementById(`stockInvestmentChart${props.stockNoGot}`) as HTMLCanvasElement).getContext("2d");
+
       if (ctx) {
         if (stockInvestmentChart.value) {
           stockInvestmentChart.value.destroy();

@@ -270,7 +270,6 @@ export interface IcurrencyAccountRecordList {
   accountId: string;
   accountData: ICurrencyAccountList;
   tradeDatetime: string;
-  accountUser: string;
   accountType: string;
   transactionType: string;
   tradeCategory: string;
@@ -319,7 +318,7 @@ export interface IStockAccountRecordList {
   accountId: string;
   accountData: IStockAccountList;
   tradeDatetime: string;
-  accountUser: string;
+  stockTransaction: string;
   transactionType: string;
   transactionName?: string;
   enable?: boolean;

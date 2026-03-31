@@ -54,7 +54,7 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-8">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>買 / 賣：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>收支：</span>
             <div :class="['col-span-2', dataValidate.transactionType ? '' : 'outline-1 outline-red-500']">
               <transactionTypeSelect
                 :transactionType="dataParams.transactionType"
@@ -63,7 +63,14 @@
             </div>
           </div>
           <div class="flex justify-start items-center grid grid-cols-8" v-if="!dataValidate.transactionType">
-            <span class="col-span-4 col-end-7 text-red-500">請選擇買 / 賣</span>
+            <span class="col-span-4 col-end-7 text-red-500">請選擇收支</span>
+          </div>
+        </div>
+
+        <div class="w-full flex justify-start items-center grid grid-cols-8">
+          <span class="col-span-2 text-right">股票進出：</span>
+          <div class="col-span-6">
+            <URadioGroup orientation="horizontal" variant="list" default-value="" :items="stockTransactionItems" v-model="dataParams.stockTransaction" :disabled="!props.isEditable" />
           </div>
         </div>
 
@@ -113,7 +120,7 @@
               :step="0.01"
               :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>購買股數：</span>
+            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股數：</span>
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.quantity"
@@ -157,9 +164,9 @@
         </div>
 
         <div class="w-full flex justify-start items-center grid grid-cols-8">
-          <span class="col-span-2 text-right">總價：</span>
+          <span class="col-span-2 text-right">股票總價：</span>
           <UInput class="col-span-2" :value="currencyFormat(dataParams.stockTotalPrice)" disabled />
-          <span class="col-span-2 text-right">交易成本：</span>
+          <span class="col-span-2 text-right">交易總額：</span>
           <UInput class="col-span-2" :value="currencyFormat(dataParams.tradeTotalPrice)" disabled />
         </div>
 
@@ -243,8 +250,8 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
   accountId: props.accountIdGot,
   accountData: getDefaultStockAccount(),
   tradeDatetime: "",
-  accountUser: "",
   transactionType: "",
+  stockTransaction: "",
   transactionCategoryData: getDefaultTransactionCategory(),
   tradeCategory: "",
   tradeCategoryData: getDefaultTradeCategory(),
@@ -266,6 +273,11 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
 });
 const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
 const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
+const stockTransactionItems = [
+  { label: "無", value: "NONE" },
+  { label: "進帳", value: "IN" },
+  { label: "出帳", value: "OUT" },
+];
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
 const setStep = ref<number>(1);
 const oriTradeAmount = ref<number>(0);

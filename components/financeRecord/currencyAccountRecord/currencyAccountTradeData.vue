@@ -161,7 +161,6 @@ const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
   accountId: props.accountIdGot,
   accountData: getDefaultCurrencyAccount(),
   tradeDatetime: "",
-  accountUser: "",
   accountType: "",
   transactionType: "",
   tradeCategory: "",

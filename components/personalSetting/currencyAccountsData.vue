@@ -20,7 +20,7 @@
       <div class="flex flex-col justify-center items-center gap-2">
         <span><span class="text-red-600 mx-1">∗</span>為必填欄位</span>
 
-        <div class="w-full">
+        <!-- <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>存款帳戶號碼：</span>
             <UInput
@@ -31,7 +31,7 @@
           <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountId">
             <span class="col-span-4 col-end-7 text-red-500">請填寫存款帳戶號碼</span>
           </div>
-        </div>
+        </div> -->
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
@@ -90,7 +90,7 @@
                 orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
-              <span class="col-span-4 col-end-7 text-red-500">{{ startingAmountValidateText }}</span>
+              <span class="col-span-4 col-end-7 text-red-500">請填寫帳戶初始金額</span>
             </div>
           </div>
         </template>
@@ -195,7 +195,6 @@ const getDefaultDataParams = (): ICurrencyAccountList => ({
 });
 const dataParams = reactive<ICurrencyAccountList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
-const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
@@ -226,9 +225,6 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultAccountDataValidate());
 
-  if (!dataParams.accountId) {
-    dataValidate.accountId = false;
-  }
   if (!dataParams.accountName) {
     dataValidate.accountName = false;
   }
@@ -241,7 +237,6 @@ async function validateData() {
     dataParams.startingAmount < 0
   ) {
     dataValidate.startingAmount = false;
-    startingAmountValidateText.value = "請填寫帳戶初始金額";
   }
   if (
     typeof dataParams.minimumValueAllowed !== "number" ||

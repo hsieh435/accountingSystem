@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="w-1/2 flex justify-center items-center px-3 py-1">
-          <canvas id="stockProfitChartOverall"></canvas>
+          <canvas ref="stockProfitChartCanvas"></canvas>
         </div>
       </div>
     </template>
@@ -36,13 +36,13 @@
         <stockInvestmentChart
           :stockAccountIdGot="searchingParams.accountId"
           :stockNoGot="item.content"
-          @stockDataConsolidate="caculateProfit" />
+          @stockDataConsolidate="calculateProfit" />
       </template>
     </UAccordion>
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, ref, reactive } from "vue";
+import { defineAsyncComponent, nextTick, reactive, ref } from "vue";
 import { fetchStockStorageProfitList } from "@/server/stockStorageProfitApi.ts";
 import { IStockAccountList, IStockStorageList, IResponse } from "@/models/index.ts";
 import { currencyFormat } from "@/composables/tools.ts";
@@ -73,15 +73,31 @@ const totalCostOverall = ref<number>(0);
 const currentValueOverall = ref<number>(0);
 const profitOverall = ref<number>(0);
 const stockStorageChart = ref<DoughnutChartInstance | null>(null);
+const stockProfitChartCanvas = ref<HTMLCanvasElement | null>(null);
+
+function resetProfitSummary() {
+  totalaccordion.value = 0;
+  totalCostOverall.value = 0;
+  currentValueOverall.value = 0;
+  profitOverall.value = 0;
+
+  if (stockStorageChart.value) {
+    stockStorageChart.value.destroy();
+    stockStorageChart.value = null;
+  }
+}
 
 async function settingAccountId(accountItem: IStockAccountList | null) {
   searchingParams.accountId = accountItem?.accountId || "";
 }
 
 async function searchingStockStorage() {
+  resetProfitSummary();
+  accordionItems.value = [];
+
   try {
     const res: IResponse = await fetchStockStorageProfitList(searchingParams.accountId);
-    // console.log("fetchStockStorageProfitList:", res.data.data);
+    console.log("fetchStockStorageProfitList:", res.data.data);
     accordionItems.value = res.data.data.map((item: IStockStorageList) => ({
       label: `${item.stockNo} / ${item.stockName}`,
       content: item.stockNo,
@@ -92,8 +108,8 @@ async function searchingStockStorage() {
   }
 }
 
-async function caculateProfit(totalCost: number, currentValue: number, profit: number) {
-  // console.log("data:", totalCost, currentValue, profit);
+async function calculateProfit(totalCost: number, currentValue: number, profit: number) {
+  // console.log("calculateProfit:", totalCost, currentValue, profit);
   totalCostOverall.value += totalCost;
   currentValueOverall.value += currentValue;
   profitOverall.value += profit;
@@ -101,12 +117,14 @@ async function caculateProfit(totalCost: number, currentValue: number, profit: n
 
   if (accordionItems.value.length === 0 || totalaccordion.value !== accordionItems.value.length) return;
 
+  await nextTick();
+
   // console.log("accordionItems:", accordionItems.value.length);
   // console.log("totalCostOverall:", totalCostOverall.value);
   // console.log("currentValueOverall:", currentValueOverall.value);
   // console.log("profitOverall:", profitOverall.value);
 
-  const ctx = (document.getElementById("stockProfitChartOverall") as HTMLCanvasElement).getContext("2d");
+  const ctx = stockProfitChartCanvas.value?.getContext("2d");
   if (ctx) {
     if (stockStorageChart.value) {
       stockStorageChart.value.destroy();

@@ -45,23 +45,6 @@ async function connectingFinMind() {
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
   }
-  // console.log("Request Body:", JSON.stringify(payload));
-
-  // try {
-  //   const res = await fetch("https://api.finmindtrade.com/api/v4/login", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ user_id, password }),
-  //   });
-  //   const jsonData = await res.json();
-  //   console.log("res:", res);
-  //   console.log("jsonData:", jsonData);
-  //   res.json(success({ data: jsonData, message: "查詢成功", req, res }));
-  // } catch (err) {
-  //   res.status(500).json(error({ message: "查詢失敗", req, res }));
-  // }
 }
 
 async function checkFinMindTokenStatus() {

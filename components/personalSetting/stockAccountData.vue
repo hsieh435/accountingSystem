@@ -22,19 +22,6 @@
 
         <div class="w-full">
           <div class="flex justify-start items-center grid grid-cols-6">
-            <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶號碼：</span>
-            <UInput
-              :class="['col-span-3', dataValidate.accountId ? '' : 'outline-1 outline-red-500']"
-              v-model="dataParams.accountId"
-              :disabled="props.stockAccountIGot ? true : false" />
-          </div>
-          <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.accountId">
-            <span class="col-span-4 col-end-7 text-red-500">請填寫證券帳戶號碼</span>
-          </div>
-        </div>
-
-        <div class="w-full">
-          <div class="flex justify-start items-center grid grid-cols-6">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>證券帳戶名稱：</span>
             <UInput
               :class="['col-span-3', dataValidate.accountName ? '' : 'outline-1 outline-red-500']"
@@ -90,7 +77,7 @@
                 orientation="vertical" />
             </div>
             <div class="flex justify-start items-center grid grid-cols-6" v-if="!dataValidate.startingAmount">
-              <span class="col-span-4 col-end-7 text-red-500">{{ startingAmountValidateText }}</span>
+              <span class="col-span-4 col-end-7 text-red-500">請填寫帳戶初始金額</span>
             </div>
           </div>
         </template>
@@ -191,7 +178,6 @@ const getDefaultDataParams = (): IStockAccountList => ({
 });
 const dataParams = reactive<IStockAccountList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());
-const startingAmountValidateText = ref<string>("");
 const minimumValueAllowedValidateText = ref<string>("");
 const alertValueValidateText = ref<string>("");
 
@@ -208,7 +194,7 @@ watch(openStockAccountData, () => {
 async function searchingStockAccountData() {
   try {
     const res: IResponse = await fetchStockAccountById(props.stockAccountIGot);
-    // console.log("fetchStockAccountById:", res.data.data);
+    console.log("fetchStockAccountById:", res.data.data);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
@@ -223,9 +209,6 @@ function settingCurrency(currencyData: ICurrencyList) {
 async function validateData() {
   Object.assign(dataValidate, getDefaultAccountDataValidate());
 
-  if (!dataParams.accountId) {
-    dataValidate.accountId = false;
-  }
   if (!dataParams.accountName) {
     dataValidate.accountName = false;
   }
@@ -238,7 +221,6 @@ async function validateData() {
     dataParams.startingAmount < 0
   ) {
     dataValidate.startingAmount = false;
-    startingAmountValidateText.value = "請填寫帳戶初始金額";
   }
   if (
     typeof dataParams.minimumValueAllowed !== "number" ||
@@ -248,7 +230,7 @@ async function validateData() {
     dataValidate.minimumValueAllowed = false;
     minimumValueAllowedValidateText.value = "請填寫帳戶最小允許金額";
   }
-  if (dataParams.minimumValueAllowed < dataParams.startingAmount) {
+  if (dataParams.minimumValueAllowed > dataParams.startingAmount) {
     dataValidate.minimumValueAllowed = false;
     minimumValueAllowedValidateText.value = "最小允許金額不得小於帳戶初始金額";
   }
