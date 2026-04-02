@@ -378,6 +378,7 @@ export interface IStockList {
   date: string;
   industryCategory: string;
   stockId: string;
+  stockNo: string;
   stockName: string;
   type: string;
 }

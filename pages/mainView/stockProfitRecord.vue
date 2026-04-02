@@ -7,10 +7,7 @@
       </div>
       <div class="flex flex-wrap items-center">
         <span>存股：</span>
-        <stockStorageSelect
-          :accountIdGot="searchingParams.stockAccountId"
-          sellectAll
-          @sendbackStockNo="settingStockNo" />
+        <stockStorageSelect :accountIdGot="searchingParams.stockAccountId" @sendbackStockNo="settingStockNo" />
       </div>
       <ui-buttonGroup
         showSearch
@@ -41,7 +38,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, reactive } from "vue";
 import { fetchEachStockStorageData } from "@/server/stockStorageProfitApi.ts";
-import { IStockAccountList, IStockAccountRecordList, IResponse } from "@/models/index.ts";
+import { IStockAccountList, IStockAccountRecordList, IStockList, IResponse } from "@/models/index.ts";
 import { getCurrentYMD } from "@/composables/tools.ts";
 import { messageToast } from "@/composables/swalDialog.ts";
 
@@ -68,8 +65,8 @@ async function settingAccount(accountItem: IStockAccountList | null) {
   searchingParams.stockAccountId = accountItem?.accountId || "";
 }
 
-async function settingStockNo(stockNo: string) {
-  searchingParams.stockNo = stockNo;
+async function settingStockNo(stockItem: IStockList) {
+  searchingParams.stockNo = stockItem.stockId;
 }
 
 async function searchingStockStorage() {

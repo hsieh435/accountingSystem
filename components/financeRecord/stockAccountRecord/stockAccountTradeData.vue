@@ -70,7 +70,13 @@
         <div class="w-full flex justify-start items-center grid grid-cols-8">
           <span class="col-span-2 text-right">股票進出：</span>
           <div class="col-span-6">
-            <URadioGroup orientation="horizontal" variant="list" default-value="" :items="stockTransactionItems" v-model="dataParams.stockTransaction" :disabled="!props.isEditable" />
+            <URadioGroup
+              orientation="horizontal"
+              variant="list"
+              default-value=""
+              :items="stockTransactionItems"
+              v-model="dataParams.stockTransaction"
+              :disabled="!props.isEditable" />
           </div>
         </div>
 
@@ -93,14 +99,19 @@
         <div class="w-full">
           <div class="w-full flex justify-start items-center grid grid-cols-8">
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
-            <template v-if="props.tradeIdGot">
-              <UInput class="col-span-4" :value="dataParams.stockNo + dataParams.stockName" disabled />
-            </template>
-            <template v-else>
-              <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
+            <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
+              <template v-if="props.isEditable">
+                <!-- <stockStorageSelect :accountIdGot="dataParams.accountId" :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" /> -->
                 <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" />
-              </div>
-            </template>
+              </template>
+              <!-- <template v-else-if="props.isEditable">
+                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" v-if="dataParams.stockTransaction === 'OUT'" />
+                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" v-else />
+              </template> -->
+              <template v-else-if="!props.isEditable">
+                <UInput class="col-span-4" :value="dataParams.stockNo + dataParams.stockName" disabled />
+              </template>
+            </div>
           </div>
           <div
             class="flex justify-start items-center grid grid-cols-8"
@@ -124,6 +135,8 @@
             <UInputNumber
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.quantity"
+              :min="0"
+              :max="stockquantityMaximum"
               orientation="vertical"
               :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
@@ -219,10 +232,11 @@ import {
   fetchStockAccountRecordUpdate,
   fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
-import { IStockAccountRecordList, IStockAccountList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { IStockAccountRecordList, IStockAccountList, IStockStorageList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultStockAccount,
+  getDefaultStockData,
   getDefaultCurrency,
   getDefaultTradeCategory,
   getDefaultTransactionCategory,
@@ -231,11 +245,12 @@ import { currencyFormat, dataObjectValidate } from "@/composables/tools.ts";
 import { messageToast, showConfirmDialog } from "@/composables/swalDialog.ts";
 
 const accountSelect = defineAsyncComponent(() => import("@/components/ui/select/accountSelect.vue"));
-const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
-const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
 const dateTimeSelect = defineAsyncComponent(() => import("@/components/ui/select/dateTimeSelect.vue"));
 const transactionTypeSelect = defineAsyncComponent(() => import("@/components/ui/select/transactionTypeSelect.vue"));
 const tradeCategorySelect = defineAsyncComponent(() => import("@/components/ui/select/tradeCategorySelect.vue"));
+const stockListSelect = defineAsyncComponent(() => import("@/components/ui/select/stockListSelect.vue"));
+const stockStorageSelect = defineAsyncComponent(() => import("@/components/ui/select/stockStorageSelect.vue"));
+const dataBaseCurrencySelect = defineAsyncComponent(() => import("@/components/ui/select/dataBaseCurrencySelect.vue"));
 
 const props = withDefaults(defineProps<{ tradeIdGot?: string; accountIdGot?: string; isEditable?: boolean }>(), {
   tradeIdGot: "",
@@ -251,7 +266,7 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
   accountData: getDefaultStockAccount(),
   tradeDatetime: "",
   transactionType: "",
-  stockTransaction: "",
+  stockTransaction: "NONE",
   transactionCategoryData: getDefaultTransactionCategory(),
   tradeCategory: "",
   tradeCategoryData: getDefaultTradeCategory(),
@@ -273,12 +288,14 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
 });
 const dataParams = reactive<IStockAccountRecordList>(getDefaultDataParams());
 const stockAccountChosen = ref<IStockAccountList>(getDefaultStockAccount());
+const stockChosen = ref<IStockStorageList | IStockList>(getDefaultStockData());
 const stockTransactionItems = [
   { label: "無", value: "NONE" },
   { label: "進帳", value: "IN" },
   { label: "出帳", value: "OUT" },
 ];
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
+const stockquantityMaximum = ref<number | undefined>(undefined);
 const setStep = ref<number>(1);
 const oriTradeAmount = ref<number>(0);
 const oriRemainingAmount = ref<number>(0);
@@ -289,6 +306,7 @@ watch(openTradeData, () => {
   if (openTradeData.value === true) {
     Object.assign(dataParams, getDefaultDataParams());
     Object.assign(stockAccountChosen, getDefaultStockAccount());
+    Object.assign(stockChosen, getDefaultStockData());
     Object.assign(dataValidate, getDefaultTradeValidate());
     setStep.value = 1;
     oriTradeAmount.value = 0;
@@ -300,6 +318,20 @@ watch(openTradeData, () => {
     }
   }
 });
+
+watch(
+  dataParams,
+  () => {
+    if (dataParams.stockTransaction === "IN" || dataParams.stockTransaction === "OUT") {
+      console.log("dataParams:", dataParams.stockTransaction);
+    } else if (dataParams.stockTransaction === "NONE") {
+      console.log("dataParams:", dataParams.stockTransaction);
+    }
+  },
+  {
+    deep: true,
+  },
+);
 
 async function searchingStockAccountRecord() {
   try {
@@ -352,6 +384,15 @@ async function settingTradeCategory(tradeCategoryId: string) {
 }
 
 async function settingStockNo(stockItem: IStockList) {
+  console.log("stockItem:", stockItem);
+  stockChosen.value = stockItem;
+  // stockquantityMaximum.value = stockItem.quantity;
+  // stockquantityMaximum.value = stockItem.quantity;
+  if (dataParams.tradeId) {
+    console.log(850000);
+  } else {
+    console.log(950000);
+  }
   dataParams.stockNo = stockItem.stockId;
   dataParams.stockName = stockItem.stockName;
 }

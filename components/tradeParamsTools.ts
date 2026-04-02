@@ -7,6 +7,7 @@ import {
   ICurrencyList,
   ITradeCategory,
   ITransactionDate,
+  IStockStorageList,
 } from "@/models/index.ts";
 
 
@@ -196,3 +197,11 @@ export const getDefaultTransactionCategory = (): ITransactionDate => ({
   transactionCode: "",
   transactionName: "",
 });
+
+export const getDefaultStockData = (): IStockStorageList => ({
+  stockAccountId: "",
+  stockName: "",
+  stockNo: "",
+  storageQuantity: 0,
+  userId: "",
+} as IStockStorageList);
