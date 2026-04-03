@@ -29,29 +29,26 @@ const loading = ref<boolean>(false);
 
 onMounted(async () => {
   // console.log("onMounted props:", props);
-  debounceSearchStocks(props.stockNoGot);
-  if (rawStockList.value.length > 0) {
-    stockSelected.value = props.stockNoGot;
-    const selectedItem = filteredStockList.value.find((item) => item.value === props.stockNoGot);
-    stockSelected.value = selectedItem?.value || "";
+  if (props.stockNoGot) {
+    debounceSearchStocks(props.stockNoGot);
   }
 });
 
-// watch(props, () => {
-//   console.log("watch props:", props);
-
-//   stockSelected.value = props.stockNoGot || "";
-//   if (stockSelected.value) {
-//     debounceSearchStocks(stockSelected.value);
-//   }
-// });
+watch(props, () => {
+  // console.log("watch props:", props);
+  if (props.stockNoGot) {
+    debounceSearchStocks(props.stockNoGot);
+  }
+});
 
 watch(stockSelected, () => {
+  const selectedItem = rawStockList.value.find((item) => item.stockId === stockSelected.value);
   // console.log("stockSelected:", stockSelected.value);
+  // console.log("selectedItem:", selectedItem);
 
-  if (stockSelected.value) {
-    const selectedItem = rawStockList.value.find((item) => item.stockId === stockSelected.value);
+  if (stockSelected.value && selectedItem) {
     // console.log("selectedItem:", selectedItem);
+    // console.log("compair:", stockSelected.value === selectedItem.stockId);
     emits("sendbackStockNo", selectedItem);
   } else {
     return;
@@ -76,6 +73,7 @@ const debounceSearchStocks = debounceFn(async (keyword: string) => {
         value: item.stockId,
         label: `${item.stockName}（${item.stockId}）`,
       }));
+      stockSelected.value = props.stockNoGot || "";
       // console.log("filteredStockList:", filteredStockList.value);
     } catch (error) {
       messageToast({ message: (error as Error).message, icon: "error" });

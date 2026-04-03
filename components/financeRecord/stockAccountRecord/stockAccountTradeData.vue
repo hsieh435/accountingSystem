@@ -109,7 +109,7 @@
                 <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" v-else />
               </template> -->
               <template v-else-if="!props.isEditable">
-                <UInput class="col-span-4" :value="dataParams.stockNo + dataParams.stockName" disabled />
+                <UInput class="col-span-4" :value="`${dataParams.stockName}（${dataParams.stockNo}）`" disabled />
               </template>
             </div>
           </div>
@@ -323,9 +323,9 @@ watch(
   dataParams,
   () => {
     if (dataParams.stockTransaction === "IN" || dataParams.stockTransaction === "OUT") {
-      console.log("dataParams:", dataParams.stockTransaction);
+      // console.log("dataParams:", dataParams.stockTransaction);
     } else if (dataParams.stockTransaction === "NONE") {
-      console.log("dataParams:", dataParams.stockTransaction);
+      // console.log("dataParams:", dataParams.stockTransaction);
     }
   },
   {
