@@ -1,6 +1,7 @@
 <template>
   <select :class="tailwindStyles.getSelectClasses()" v-model="stockNo">
-    <option value="" v-if="props.sellectAll">請選擇股票</option>
+    <option value="" v-if="props.sellectAll && stockList.length > 0">請選擇股票</option>
+    <option value="" v-if="props.sellectAll && stockList.length === 0">（無股票）</option>
     <option v-for="stock in stockList" :key="stock.value" :value="stock.value">
       {{ stock.label }}
     </option>
@@ -51,8 +52,10 @@ watch(props, () => {
 });
 
 watch(stockNo, () => {
-  // console.log("watch stockNo:", stockNo.value);
   const selectedItem = rawStockList.value.find((item) => item.stockNo === stockNo.value);
+  console.log("rawStockList:", rawStockList.value);
+  console.log("watch stockNo:", stockNo.value);
+  console.log("selectedItem:", selectedItem);
   if (stockNo.value && selectedItem) {
     selectedItem["stockId"] = selectedItem.stockNo;
     // console.log("selectedItem:", selectedItem);

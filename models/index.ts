@@ -309,6 +309,7 @@ export interface IStockAccountList {
   enable: boolean;
   createdDate: string;
   note: string;
+  stockStorage: IStockStorageList[];
 }
 
 // 證券帳戶收支紀錄 interface

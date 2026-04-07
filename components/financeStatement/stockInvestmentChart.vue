@@ -77,7 +77,7 @@ async function searchingLatestStockPrice() {
   try {
     const res: IResponse = await fetchStockRangeValue({
       stockNo: props.stockNoGot,
-      startDate: dateMove(getCurrentYMD(), -1),
+      startDate: dateMove(getCurrentYMD(), -10),
       endDate: getCurrentYMD(),
     });
     console.log("searchingLatestStockPrice:", res.data.data);
@@ -109,6 +109,8 @@ async function searchingEachStockStorageData() {
       stockTotalQuantity.value += res.data.data[i].quantity;
     }
     stockAveragePrice.value = Math.round((stockTotalCost.value / stockTotalQuantity.value) * 100) / 100;
+    console.log("stockLatestPrice:", stockLatestPrice.value);
+    console.log("stockTotalQuantity:", stockTotalQuantity.value);
     stockCurrentValue.value = Math.round(stockLatestPrice.value * stockTotalQuantity.value);
     stockCurrentProfit.value = stockCurrentValue.value - stockTotalCost.value;
 

@@ -101,13 +101,16 @@
             <span class="col-span-2 text-right"><span class="text-red-600 mx-1">∗</span>股票：</span>
             <div :class="['col-span-4', dataValidate.stockNo ? '' : 'outline-1 outline-red-500']">
               <template v-if="props.isEditable">
-                <!-- <stockStorageSelect :accountIdGot="dataParams.accountId" :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" /> -->
-                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" />
+                <template v-if="dataParams.stockTransaction === 'OUT'">
+                  <stockStorageSelect
+                    :accountIdGot="dataParams.accountId"
+                    :stockNoGot="dataParams.stockNo"
+                    @sendbackStockNo="settingStockNo" />
+                </template>
+                <template v-else>
+                  <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" />
+                </template>
               </template>
-              <!-- <template v-else-if="props.isEditable">
-                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" v-if="dataParams.stockTransaction === 'OUT'" />
-                <stockListSelect :stockNoGot="dataParams.stockNo" @sendbackStockNo="settingStockNo" v-else />
-              </template> -->
               <template v-else-if="!props.isEditable">
                 <UInput class="col-span-4" :value="`${dataParams.stockName}（${dataParams.stockNo}）`" disabled />
               </template>
@@ -136,7 +139,7 @@
               :class="['col-start-7 col-end-9', dataValidate.quantity ? '' : 'outline-1 outline-red-500']"
               v-model="dataParams.quantity"
               :min="0"
-              :max="stockquantityMaximum"
+              :max="stockQuantityMaximum"
               orientation="vertical"
               :disabled="!props.isEditable"
               @change="settingTotalPrice()" />
@@ -232,7 +235,14 @@ import {
   fetchStockAccountRecordUpdate,
   fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
-import { IStockAccountRecordList, IStockAccountList, IStockStorageList, IStockList, ICurrencyList, IResponse } from "@/models/index.ts";
+import {
+  IStockAccountRecordList,
+  IStockAccountList,
+  IStockStorageList,
+  IStockList,
+  ICurrencyList,
+  IResponse,
+} from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultStockAccount,
@@ -295,7 +305,7 @@ const stockTransactionItems = [
   { label: "出帳", value: "OUT" },
 ];
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultTradeValidate());
-const stockquantityMaximum = ref<number | undefined>(undefined);
+const stockQuantityMaximum = ref<number | undefined>(undefined);
 const setStep = ref<number>(1);
 const oriTradeAmount = ref<number>(0);
 const oriRemainingAmount = ref<number>(0);
@@ -322,7 +332,9 @@ watch(openTradeData, () => {
 watch(
   dataParams,
   () => {
-    if (dataParams.stockTransaction === "IN" || dataParams.stockTransaction === "OUT") {
+    if (dataParams.stockTransaction === "IN") {
+      // console.log("dataParams:", dataParams.stockTransaction);
+    } else if (dataParams.stockTransaction === "OUT") {
       // console.log("dataParams:", dataParams.stockTransaction);
     } else if (dataParams.stockTransaction === "NONE") {
       // console.log("dataParams:", dataParams.stockTransaction);
@@ -383,18 +395,20 @@ async function settingTradeCategory(tradeCategoryId: string) {
   dataParams.tradeCategory = tradeCategoryId;
 }
 
-async function settingStockNo(stockItem: IStockList) {
+async function settingStockNo(stockItem: IStockList | IStockStorageList) {
   console.log("stockItem:", stockItem);
+
+  const stockNo = (stockItem as IStockList).stockId || stockItem.stockNo || "";
+  dataParams.stockNo = (stockItem as IStockList).stockId || stockItem.stockNo || "";
+  dataParams.stockName = stockItem.stockName || "";
   stockChosen.value = stockItem;
-  // stockquantityMaximum.value = stockItem.quantity;
-  // stockquantityMaximum.value = stockItem.quantity;
-  if (dataParams.tradeId) {
-    console.log(850000);
+  // stockQuantityMaximum.value = stockItem.quantity;
+  if (dataParams.stockTransaction === "OUT") {
+    const storageItem = stockAccountChosen.value.stockStorage.find((item) => item.stockNo === stockNo);
+    stockQuantityMaximum.value = storageItem ? storageItem.storageQuantity : undefined;
   } else {
-    console.log(950000);
+    stockQuantityMaximum.value = undefined;
   }
-  dataParams.stockNo = stockItem.stockId;
-  dataParams.stockName = stockItem.stockName;
 }
 
 async function settingTotalPrice() {
