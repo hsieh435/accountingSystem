@@ -53,7 +53,7 @@
         </template>
       </template>
       <template v-else-if="creditCardLimit.length === 0">
-        <span :class="tailwindStyles.getNoDataClasses()">無交易資料</span>
+        <span :class="tailwindStyles.getNoDataClasses()">無額度資料</span>
       </template>
     </div>
   </div>
