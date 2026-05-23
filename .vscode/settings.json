@@ -3,6 +3,14 @@
     "activityBar.background": "#574738",
     "titleBar.activeBackground": "#574738",
     "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveBackground": "#5E4D3D",
+    "titleBar.inactiveForeground": "#FCFBFA",
+    "statusBar.background": "#5E4D3D",
+    "statusBar.foreground": "#FCFBFA",
+    "statusBar.debuggingBackground": "#5E4D3D",
+    "statusBar.debuggingForeground": "#FCFBFA",
+    "statusBar.noFolderBackground": "#5E4D3D",
+    "statusBar.noFolderForeground": "#FCFBFA"
   },
   // 存檔即自動格式化
   "editor.formatOnSave": true,
