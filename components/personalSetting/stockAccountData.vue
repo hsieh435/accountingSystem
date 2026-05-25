@@ -175,6 +175,7 @@ const getDefaultDataParams = (): IStockAccountList => ({
   enable: true,
   createdDate: "",
   note: "",
+  stockStorage: [],
 });
 const dataParams = reactive<IStockAccountList>(getDefaultDataParams());
 const dataValidate = reactive<{ [key: string]: boolean }>(getDefaultAccountDataValidate());

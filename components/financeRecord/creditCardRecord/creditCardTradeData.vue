@@ -154,7 +154,6 @@ const getDefaultDataParams = (): ICreditCardRecordList => ({
   creditcardData: getDefaultCreditCard(),
   tradeDatetime: "",
   userId: "",
-  accountType: "",
   tradeCategory: "",
   tradeCategoryData: getDefaultTradeCategory(),
   tradeAmount: 0,

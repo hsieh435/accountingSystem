@@ -121,7 +121,6 @@ export interface ICashFlowRecordList {
   editedDatetime: string;
   userId: string;
   tradeDatetime: string;
-  accountType: string;
   transactionType: string;
   transactionCategoryData: ITransactionDate;
   tradeCategory: string;
@@ -165,7 +164,6 @@ export interface IStoredValueCardRecordList {
   tradeId: string;
   storedValueCardId: string;
   storedValueCardData: IStoredValueCardList;
-  accountType: string;
   tradeDatetime: string;
   transactionType: string;
   transactionCategoryData: ITransactionDate;
@@ -213,7 +211,6 @@ export interface ICreditCardRecordList {
   creditcardData: ICreditCardList;
   tradeDatetime: string;
   userId: string;
-  accountType: string;
   tradeCategory: string;
   tradeCategoryData: ITradeCategory;
   tradeAmount: number;
@@ -270,7 +267,6 @@ export interface IcurrencyAccountRecordList {
   accountId: string;
   accountData: ICurrencyAccountList;
   tradeDatetime: string;
-  accountType: string;
   transactionType: string;
   tradeCategory: string;
   tradeAmount: number;
@@ -295,7 +291,6 @@ export interface IStockAccountList {
   accountBankCode: string;
   accountBankName: string;
   currency: string;
-  currencyName?: string;
   currencyData: ICurrencyList;
   startingAmount: number;
   presentAmount: number;

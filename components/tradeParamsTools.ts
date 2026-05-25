@@ -154,18 +154,19 @@ export const getDefaultStockAccount = (): IStockAccountList => ({
   accountBankName: "",
   currency: "",
   currencyData: getDefaultCurrency(),
-  frequency: 0,
   startingAmount: 0,
   presentAmount: 0,
+  expenseSumCurrentMonth: 0,
+  frequency: 0,
+  incomeSumCurrentMonth: 0,
+  profitLossSumCurrentMonth: 0,
   minimumValueAllowed: 0,
   alertValue: 0,
   openAlert: false,
   enable: false,
   createdDate: "",
   note: "",
-  expenseSumCurrentMonth: 0,
-  incomeSumCurrentMonth: 0,
-  profitLossSumCurrentMonth: 0,
+  stockStorage: [],
 });
 
 
