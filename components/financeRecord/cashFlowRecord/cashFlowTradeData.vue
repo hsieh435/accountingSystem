@@ -141,7 +141,7 @@ import {
   fetchCashFlowRecordUpdate,
   fetchCashFlowRecordDelete,
 } from "@/server/cashFlowRecordApi.ts";
-import { ICashFlowRecordList, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { transactionTypeString, ICashFlowRecordList, ICashFlowList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultCashFlow,
@@ -172,8 +172,7 @@ const getDefaultDataParams = (): ICashFlowRecordList => ({
   cashflowData: getDefaultCashFlow(),
   userId: "",
   tradeDatetime: "",
-  accountType: "cashFlow",
-  transactionType: "",
+  transactionType: "" as transactionTypeString,
   transactionCategoryData: getDefaultTransactionCategory(),
   tradeCategory: "",
   tradeCategoryData: getDefaultTradeCategory(),
@@ -251,7 +250,7 @@ async function settingTradeDatetime(dateTime: string) {
   dataParams.tradeDatetime = dateTime;
 }
 
-async function settingTransactionType(type: string) {
+async function settingTransactionType(type: transactionTypeString) {
   dataParams.transactionType = type;
   if (dataParams.transactionType.length > 0) {
     await settingRemainingAmount();

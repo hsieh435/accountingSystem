@@ -236,6 +236,7 @@ import {
   fetchStockAccountRecordDelete,
 } from "@/server/stockAccountRecordApi.ts";
 import {
+  transactionTypeString,
   IStockAccountRecordList,
   IStockAccountList,
   IStockStorageList,
@@ -275,7 +276,7 @@ const getDefaultDataParams = (): IStockAccountRecordList => ({
   accountId: props.accountIdGot,
   accountData: getDefaultStockAccount(),
   tradeDatetime: "",
-  transactionType: "",
+  transactionType: "" as transactionTypeString,
   stockTransaction: "NONE",
   transactionCategoryData: getDefaultTransactionCategory(),
   tradeCategory: "",
@@ -384,7 +385,7 @@ async function settingTradeDatetime(dateTime: string) {
   dataParams.tradeDatetime = dateTime;
 }
 
-async function settingTransactionType(type: string) {
+async function settingTransactionType(type: transactionTypeString) {
   dataParams.transactionType = type;
   if (dataParams.transactionType.length > 0) {
     await settingRemainingAmount();

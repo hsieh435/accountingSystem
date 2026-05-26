@@ -131,7 +131,7 @@ import {
   fetchCurrencyAccountRecordUpdate,
   fetchCurrencyAccountRecordDelete,
 } from "@/server/currencyAccountRecordApi.ts";
-import { IcurrencyAccountRecordList, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
+import { transactionTypeString, IcurrencyAccountRecordList, ICurrencyAccountList, ICurrencyList, IResponse } from "@/models/index.ts";
 import {
   getDefaultTradeValidate,
   getDefaultCurrencyAccount,
@@ -161,8 +161,7 @@ const getDefaultDataParams = (): IcurrencyAccountRecordList => ({
   accountId: props.accountIdGot,
   accountData: getDefaultCurrencyAccount(),
   tradeDatetime: "",
-  accountType: "",
-  transactionType: "",
+  transactionType: "" as transactionTypeString,
   tradeCategory: "",
   tradeAmount: 0,
   remainingAmount: 0,
@@ -238,7 +237,7 @@ async function settingTradeDatetime(dateTime: string) {
   dataParams.tradeDatetime = dateTime;
 }
 
-async function settingTransactionType(type: string) {
+async function settingTransactionType(type: transactionTypeString) {
   dataParams.transactionType = type;
   if (dataParams.transactionType.length > 0) {
     await settingRemainingAmount();

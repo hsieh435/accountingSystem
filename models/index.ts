@@ -111,6 +111,8 @@ export interface ICashFlowList {
   userId: string;
 }
 
+export type transactionTypeString = "" | "expense" | "income";
+
 // 現金收支紀錄 interface
 export interface ICashFlowRecordList {
   no?: number;
@@ -121,7 +123,7 @@ export interface ICashFlowRecordList {
   editedDatetime: string;
   userId: string;
   tradeDatetime: string;
-  transactionType: string;
+  transactionType: transactionTypeString;
   transactionCategoryData: ITransactionDate;
   tradeCategory: string;
   tradeCategoryData: ITradeCategory;
@@ -165,7 +167,7 @@ export interface IStoredValueCardRecordList {
   storedValueCardId: string;
   storedValueCardData: IStoredValueCardList;
   tradeDatetime: string;
-  transactionType: string;
+  transactionType: transactionTypeString;
   transactionCategoryData: ITransactionDate;
   tradeCategory: string;
   tradeCategoryData: ITradeCategory;
@@ -267,7 +269,7 @@ export interface IcurrencyAccountRecordList {
   accountId: string;
   accountData: ICurrencyAccountList;
   tradeDatetime: string;
-  transactionType: string;
+  transactionType: transactionTypeString;
   tradeCategory: string;
   tradeAmount: number;
   remainingAmount: number;
@@ -315,8 +317,7 @@ export interface IStockAccountRecordList {
   accountData: IStockAccountList;
   tradeDatetime: string;
   stockTransaction: string;
-  transactionType: string;
-  transactionName?: string;
+  transactionType: transactionTypeString;
   enable?: boolean;
   tradeCategory: string;
   tradeName?: string;
