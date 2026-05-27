@@ -114,7 +114,7 @@ async function settingSearchingParams(params: IAccountSearchingParams) {
 async function creditCardSearching() {
   try {
     const res: IResponse = await fetchCreditCardList(searchingParams);
-    // console.log("fetchCreditCardList:", res.data.data);
+    console.log("fetchCreditCardList:", res.data.data);
     showDataLengthMsg({ dataLength: res.data.data.length, dataName: "信用卡資料" });
     creditCardList.value = res.data.data;
     await creditCardListFilterEvent();

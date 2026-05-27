@@ -271,6 +271,9 @@ async function validateData() {
 async function creditCardDataHandling() {
   if (!(await validateData())) return;
 
+  console.log("creditCardIdGot:", props.creditCardIdGot);
+  console.log("dataParams:", dataParams);
+
   try {
     const res: IResponse = await (props.creditCardIdGot ? fetchCreditCardUpdate : fetchCreditCardCreate)(dataParams);
     messageToast({ message: res.data.message });

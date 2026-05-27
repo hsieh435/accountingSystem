@@ -138,7 +138,7 @@ async function searchingCurrencyData() {
 
   try {
     const res: IResponse = await fetchCurrencyByCurrencyCode(props.currencyCodeGot);
-    console.log("res:", res.data.data);
+    console.log("fetchCurrencyByCurrencyCode:", res.data.data);
     Object.assign(dataParams, res.data.data);
   } catch (error) {
     messageToast({ message: (error as Error).message, icon: "error" });
