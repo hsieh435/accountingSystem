@@ -14,11 +14,11 @@
     "noUnusedParameters": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
-    // "ignoreDeprecations": "6.0",
     "types": ["@types/node", "@nuxt/types"]
   },
   "exclude": ["node_modules", ".output", ".nuxt"]
