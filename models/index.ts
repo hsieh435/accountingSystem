@@ -88,10 +88,12 @@ export interface IFinanceRecordSearchingParams {
   endDate: string;
 }
 
+export type accountTypeString = "" | "cashFlow" | "storedValueCard" | "creditCard" | "currencyAccount" | "stockAccount";
+
 // 現金流列表 interface
 export interface ICashFlowList {
   no?: number;
-  accountType: string;
+  accountType: accountTypeString;
   alertValue: number;
   cashflowId: string;
   cashflowName: string;
@@ -141,7 +143,7 @@ export interface IStoredValueCardList {
   no?: number;
   storedValueCardId: string;
   userId: string;
-  accountType: string;
+  accountType: accountTypeString;
   storedValueCardName: string;
   currency: string;
   currencyData: ICurrencyList;
@@ -186,7 +188,7 @@ export interface ICreditCardList {
   no?: number;
   creditcardId: string;
   userId: string;
-  accountType: string;
+  accountType: accountTypeString;
   creditcardName: string;
   creditcardBankCode: string;
   creditcardBankName: string;
@@ -241,7 +243,7 @@ export interface ICurrencyAccountList {
   no?: number;
   accountId: string;
   userId: string;
-  accountType: string;
+  accountType: accountTypeString;
   accountName: string;
   accountBankCode: string;
   accountBankName: string;
@@ -288,7 +290,7 @@ export interface IStockAccountList {
   no?: number;
   accountId: string;
   userId: string;
-  accountType: string;
+  accountType: accountTypeString;
   accountName: string;
   accountBankCode: string;
   accountBankName: string;
